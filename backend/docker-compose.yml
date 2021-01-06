@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+  api:
+    build: .
+    ports:
+    - 8080:8080
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ""
+      DB_DATABASE: postgres
+      DB_MIGRATIONS: /migrations
+    depends_on:
+      - db
