@@ -1,21 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+import { BookProvider } from './src/context/BookContext';
+import { HomeScreen } from './src/screens/HomeScreen';
 
 const App: React.FC = () => {
+  const [fontsLoaded] = useFonts({
+    'Gotham-Bold': require('./assets/fonts/gotham-rounded/GothamRounded-Bold.otf'),
+    'Gotham-Medium': require('./assets/fonts/gotham-rounded/GothamRounded-Medium.otf'),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading/>;
+  }
   return (
-    <View style={styles.container}>
-      <Text>TODO</Text>
-    </View>
+    <BookProvider>
+      <HomeScreen />
+    </BookProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-// eslint-disable-next-line import/no-default-export
 export default App;
+// eslint-disable-next-line import/no-default-export
