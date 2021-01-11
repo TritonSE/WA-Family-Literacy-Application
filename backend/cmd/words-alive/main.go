@@ -28,8 +28,10 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(15 * time.Second))
 
-    r.Get("/books", bookController.GetBookList);
-    r.Get("/books/:id", bookController.GetBookByID);
+    r.Route("/books", func(r chi.Router) {
+		r.Get("/{id}", bookController.GetBookByID)
+		r.Get("/", bookController.GetBookList)
+	})
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatalf("error starting http server: %v", err)

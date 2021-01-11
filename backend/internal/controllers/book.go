@@ -3,9 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"github.com/go-chi/chi"
 
 	"github.com/TritonSE/words-alive/internal/database"
-	"github.com/TritonSE/words-alive/internal/models"
+	//"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookController struct {
@@ -24,6 +25,7 @@ func (c *BookController) GetBookList (rw http.ResponseWriter, req *http.Request)
 }
 
 func (c *BookController) GetBookByID (rw http.ResponseWriter, req *http.Request) {
+    /*
     var book models.Book
 
     if err := json.NewDecoder(req.Body).Decode(&book); err != nil {
@@ -31,8 +33,11 @@ func (c *BookController) GetBookByID (rw http.ResponseWriter, req *http.Request)
 		rw.Write([]byte("bad input!"))
 		return
 	}
+    */
 
-    book, err := c.Books.FetchBookByID(req.Context(), book.ID)
+    var bookID string = chi.URLParam(req, "id")
+
+    book, err := c.Books.FetchBookByID(req.Context(), bookID)
     if err != nil {
 		rw.WriteHeader(500)
 		rw.Write([]byte("error"))
