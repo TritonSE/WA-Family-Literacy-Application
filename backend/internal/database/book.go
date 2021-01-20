@@ -18,7 +18,7 @@ type BookDatabase struct {
  */
 func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error) {
     // Only need image, id for the main page
-    rows, err := db.Conn.QueryEx(ctx, "SELECT id, title, author, image, created_at FROM books", nil)
+    rows, err := db.Conn.QueryEx(ctx, "SELECT id, title, author, image, created_at FROM books ORDER BY title", nil)
     if err != nil {
 		return nil, errors.Wrap(err, "error on SELECT FROM books in FetchBookList")
 	}
