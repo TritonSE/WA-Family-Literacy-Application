@@ -34,7 +34,9 @@ func TestMain(m *testing.M) {
 
 
 func TestGetBooks(t *testing.T) {
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a','b','c','d','e');")
+    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a','third','c','d','e');")
+    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a1','first','c1','d1','e1');")
+    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a2','second','c2','d2','e2');")
 
 	ts := httptest.NewServer(r)
 	defer ts.Close()
@@ -51,25 +53,28 @@ func TestGetBooks(t *testing.T) {
 
 	err = json.Unmarshal(body, &response)
 	require.NoError(t, err)
-	require.Len(t, response, 1)
+	require.Len(t, response, 3)
     for _, book := range response {
         fmt.Printf("Title: %s\n", book.Title)
     }
 }
 
-/*
-// Expected to fail for now
 func TestGetBookByID(t *testing.T) {
-    req := httptest.NewRequest("GET", "/books/catcher", nil)
-	rr := httptest.NewRecorder()
+    conn.Exec("INSERT INTO books (id, title, author, image, created_at) " +
+              "VALUES ('catcher', 'catcher in the rye', 'a', 'i', '2000');")
 
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) VALUES ('catcher', 'catcher in the rye', 'a', 'i', '2000');")
+	ts := httptest.NewServer(r)
+	defer ts.Close()
 
-    c.GetBookByID(rr, req)
-	require.Equal(t, 200, rr.Code)
+	req, err := http.NewRequest("GET", ts.URL + "/books/catcher", nil)
+	res, err := http.DefaultClient.Do(req)
+	require.NoError(t, err)
+
+	body, err := ioutil.ReadAll(res.Body)
+	require.NoError(t, err)
 
     var response models.Book
-	err := json.Unmarshal(rr.Body.Bytes(), &response)
+	err = json.Unmarshal(body, &response)
 	require.NoError(t, err)
+    fmt.Printf("Title: %s\n", response.Title)
 }
-*/

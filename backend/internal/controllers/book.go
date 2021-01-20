@@ -25,15 +25,6 @@ func (c *BookController) GetBookList (rw http.ResponseWriter, req *http.Request)
 }
 
 func (c *BookController) GetBookByID (rw http.ResponseWriter, req *http.Request) {
-    /*
-    var book models.Book
-
-    if err := json.NewDecoder(req.Body).Decode(&book); err != nil {
-		rw.WriteHeader(400)
-		rw.Write([]byte("bad input!"))
-		return
-	}
-    */
 
     var bookID string = chi.URLParam(req, "id")
 
