@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"net/http"
 	"os"
+	"io/ioutil"
 	//"strings"
 	"testing"
     "fmt"
@@ -43,7 +44,12 @@ func TestGetBooks(t *testing.T) {
 	require.NoError(t, err)
 
 	var response []models.Book
-	err = json.Unmarshal(string(res.Body).Bytes(), &response)
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	require.NoError(t, err)
+
+	err = json.Unmarshal(body, &response)
 	require.NoError(t, err)
 	require.Len(t, response, 1)
     for _, book := range response {
