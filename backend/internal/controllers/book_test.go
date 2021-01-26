@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	//"strings"
 	"testing"
-    "fmt"
 )
 
 var conn = database.GetConnection()
@@ -34,9 +33,9 @@ func TestMain(m *testing.M) {
 
 
 func TestGetBooks(t *testing.T) {
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a','third','c','d','e');")
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a1','first','c1','d1','e1');")
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a2','second','c2','d2','e2');")
+    // conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a','third','c','d','e');")
+    // conn.Exec("INSERT INTO books (id, title, author, image, created_at) values ('a1','first','c1','d1','e1');")
+    conn.Exec("INSERT INTO books (title, author) values ('a2','second');")
 
 	ts := httptest.NewServer(r)
 	defer ts.Close()
@@ -53,15 +52,11 @@ func TestGetBooks(t *testing.T) {
 
 	err = json.Unmarshal(body, &response)
 	require.NoError(t, err)
-	require.Len(t, response, 3)
-    for _, book := range response {
-        fmt.Printf("Title: %s\n", book.Title)
-    }
 }
 
-func TestGetBookByID(t *testing.T) {
-    conn.Exec("INSERT INTO books (id, title, author, image, created_at) " +
-              "VALUES ('catcher', 'catcher in the rye', 'a', 'i', '2000');")
+func TestGetBookDetailsByID(t *testing.T) {
+    conn.Exec("INSERT INTO books (id, title, author, image)" +
+              "VALUES ('catcher', 'catcher in the rye', 'a', 'i');")
 
 	ts := httptest.NewServer(r)
 	defer ts.Close()
@@ -73,8 +68,7 @@ func TestGetBookByID(t *testing.T) {
 	body, err := ioutil.ReadAll(res.Body)
 	require.NoError(t, err)
 
-    var response models.Book
+    var response models.BookDetails
 	err = json.Unmarshal(body, &response)
 	require.NoError(t, err)
-    fmt.Printf("Title: %s\n", response.Title)
 }

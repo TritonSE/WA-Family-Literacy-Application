@@ -27,7 +27,7 @@ func GetRouter() (chi.Router) {
 	r.Use(middleware.Timeout(15 * time.Second))
 
     r.Route("/books", func(r chi.Router) {
-		r.Get("/{id}", bookController.GetBookByID)
+		r.Get("/{id}", bookController.GetBookDetailsByID)
 		r.Get("/", bookController.GetBookList)
 	})
 

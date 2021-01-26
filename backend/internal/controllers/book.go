@@ -24,16 +24,16 @@ func (c *BookController) GetBookList (rw http.ResponseWriter, req *http.Request)
 	json.NewEncoder(rw).Encode(books)
 }
 
-func (c *BookController) GetBookByID (rw http.ResponseWriter, req *http.Request) {
+func (c *BookController) GetBookDetailsByID (rw http.ResponseWriter, req *http.Request) {
 
     var bookID string = chi.URLParam(req, "id")
 
-    book, err := c.Books.FetchBookByID(req.Context(), bookID)
+    book_details, err := c.Books.FetchBookDetailsByID(req.Context(), bookID)
     if err != nil {
 		rw.WriteHeader(500)
 		rw.Write([]byte("error"))
 		return
     }
 
-    json.NewEncoder(rw).Encode(book)
+    json.NewEncoder(rw).Encode(book_details)
 }

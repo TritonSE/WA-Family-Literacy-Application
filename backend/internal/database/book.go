@@ -47,17 +47,17 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
  * Fetch a full book including all read/explore/learn content
  * For use after a user has selected a book to read
  */
-func (db *BookDatabase) FetchBookByID (ctx context.Context, id string) (models.Book, error) {
+func (db *BookDatabase) FetchBookDetailsByID (ctx context.Context, id string) (models.BookDetails, error) {
 
-    var book models.Book
+    var book models.BookDetails
 
     /*
     err := db.Conn.QueryRowEx(ctx, "SELECT * FROM books WHERE id = $1", nil, id).Scan(
             &book.ID, &book.Title, &book.Author, &book.Image, &book.Read, &book.Explore,
             &book.Learn, &book.Created_At)
     */
-    err := db.Conn.QueryRowEx(ctx, "SELECT id, title, author, image, created_at FROM books WHERE id = $1", nil, id).Scan(
-            &book.ID, &book.Title, &book.Author, &book.Image, &book.Created_At)
+    err := db.Conn.QueryRowEx(ctx, "SELECT read_video, read_body, explore_video, explore_body, learn_video, learn_body FROM books WHERE id = $1", nil, id).Scan(
+            &book.Read_Video, &book.Read_Body, &book.Explore_Video, &book.Explore_Body, &book.Learn_Video, &book.Learn_Body)
 
     if err != nil {
         return book, errors.Wrap(err, "error on SELECT FROM books in FetchBookByID")

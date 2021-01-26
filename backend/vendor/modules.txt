@@ -2,7 +2,7 @@
 ## explicit
 # github.com/cockroachdb/apd v1.1.0
 ## explicit
-# github.com/davecgh/go-spew v1.1.0
+# github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/denisenkom/go-mssqldb v0.9.0
 ## explicit
@@ -16,6 +16,11 @@ github.com/go-chi/chi/middleware
 ## explicit
 # github.com/jackc/fake v0.0.0-20150926172116-812a484cc733
 ## explicit
+# github.com/jackc/pgio v1.0.0
+github.com/jackc/pgio
+# github.com/jackc/pgtype v1.6.2
+## explicit
+github.com/jackc/pgtype
 # github.com/jackc/pgx v3.6.2+incompatible
 ## explicit
 github.com/jackc/pgx
@@ -63,5 +68,8 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
+# golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
+golang.org/x/xerrors
+golang.org/x/xerrors/internal
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 gopkg.in/yaml.v3
