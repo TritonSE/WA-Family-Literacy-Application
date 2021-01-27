@@ -39,7 +39,24 @@ const App: React.FC = () => {
       <NavigationContainer>
       <Tab.Navigator
         initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
+            // 
+            if (route.name === 'Home') {
+              iconName = 'home img';
+            } else if (route.name === 'Settings') {
+              iconName = 'settings img';
+            }
+            else if (route.name === 'Chat') {
+              iconName = 'chat img';
+            }
+
+            // TODO figure out how to render svg here
+            return <p>{iconName}</p>;
+          },
+        })}
         tabBarOptions={{
           activeTintColor: '#B8B8B8',
           activeBackgroundColor: '#E89228',
