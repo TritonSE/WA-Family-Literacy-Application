@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
@@ -14,7 +13,7 @@ function HomeScreen() {
   );
 }
 
-function ChatScreen({ navigation }) {
+function ChatScreen() {
   return(
     <View>
       <Text>Chat</Text>
@@ -30,67 +29,73 @@ function Settings() {
   );
 }
 
-const Stack = createStackNavigator();
-
-
 const App: React.FC = () => {
   return (
-    // <View style={styles.navbarContainer}>
-      <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+    <NavigationContainer>
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          let icon;
+          let tint = focused ? '#E89228' : '#B8B8B8';
+          let width;
+          let height;
 
-            // 
-            if (route.name === 'Home') {
-              iconName = 'home img';
-            } else if (route.name === 'Settings') {
-              iconName = 'settings img';
-            }
-            else if (route.name === 'Chat') {
-              iconName = 'chat img';
-            }
+          if (route.name === 'Home') {
+            icon = require('./assets/images/Home.png');
+            width = 29;
+            height = 23.5;
+          } else if (route.name === 'Settings') {
+            icon = require('./assets/images/Cog.png');
+            width = 26;
+            height = 26;
+          }
+          else if (route.name === 'Chat') {
+            icon = require('./assets/images/Chat_bubble.png');
+            width = 22;
+            height = 22;
+          }
 
-            // TODO figure out how to render svg here
-            return <p>{iconName}</p>;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: '#B8B8B8',
-          activeBackgroundColor: '#E89228',
-          // tabStyle: styles.navbarContainer,
-          style: styles.navbarContainer,
-          // activeTintColor: styles.activeColor
-        }}
-      >
-        <Tab.Screen name="Chat" component={ChatScreen}/>
-        <Tab.Screen name="Home" component={HomeScreen}/>
-        <Tab.Screen name="Settings" component={Settings}/>
-      </Tab.Navigator>
-    </NavigationContainer>
-    // </View>
+          return <Image style={{width:width, height:height, tintColor: tint}} source={icon} />;
+        }
+      })}
+      tabBarOptions={{
+        showLabel: false,
+        activeBackgroundColor: '#f9ead3',
+        style: styles.navbarContainer,
+        tabStyle: styles.tab,
+      }}
+    >
+      <Tab.Screen name="Chat" component={ChatScreen}/>
+      <Tab.Screen name="Home" component={HomeScreen}/>
+      <Tab.Screen name="Settings" component={Settings}/>
+    </Tab.Navigator>
+  </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  activeColor: {
-    backgroundColor: '#E89228',
-    opacity: 0.2,
-    cornerRadius: 5, 
-    // width: '50%',
-    textAlign: 'center'
-  }, 
 
   navbarContainer : {
-    width: '75%',
-    alignContent: 'center',
-    marginLeft: 0,
-    marginRight: 0,
-  }
+    backgroundColor: '#FFFFFF',
+          height: 60,
+          padding: 4.5,
+          paddingLeft: 50,
+          paddingRight: 50,
+          shadowColor: 'black'
+  },
 
-  ,container: {
+  tab : {
+    //justifyContent: 'center',
+    alignItems: 'center',
+    //margin: 5,
+    alignContent: 'center',
+    width: 89,
+    height: 51,
+    borderRadius: 5
+  },
+
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
