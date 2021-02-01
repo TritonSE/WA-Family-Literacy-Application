@@ -4,12 +4,12 @@ CREATE TABLE books(
 	id text PRIMARY KEY DEFAULT gen_random_uuid(),
 	title text NOT NULL,
 	author text NOT NULL,
-	image text,
-	read_video text,
+	image text,             -- image link
+	read_video text,        -- video link
 	read_body text,
-	explore_video text,
+	explore_video text,     -- video link
 	explore_body text,
-	learn_video text,
+	learn_video text,       -- video link
 	learn_body text,
 	created_at timestamptz NOT NULL DEFAULT now()
 );

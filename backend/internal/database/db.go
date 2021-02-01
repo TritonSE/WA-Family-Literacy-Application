@@ -32,6 +32,7 @@ func GetConnection() *pgx.Conn {
 	return conn
 }
 
+// Brings the database to the most up-to-date version
 func Migrate(migrationsDir string) {
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbPort, _ := strconv.ParseUint(getEnv("DB_PORT", "5432"), 10, 16)

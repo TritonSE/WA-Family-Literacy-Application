@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
+// Sets up the router
 func GetRouter() (chi.Router) {
 	database.Migrate("../../migrations")
 
@@ -27,7 +28,10 @@ func GetRouter() (chi.Router) {
 	r.Use(middleware.Timeout(15 * time.Second))
 
     r.Route("/books", func(r chi.Router) {
+        // "localhost:8080/books/{id}
 		r.Get("/{id}", bookController.GetBookDetailsByID)
+
+        // "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
 	})
 

@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+    // Get router and start server
 	r := controllers.GetRouter()
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatalf("error starting http server: %v", err)

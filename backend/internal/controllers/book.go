@@ -13,6 +13,7 @@ type BookController struct {
 	Books database.BookDatabase
 }
 
+// Fetches a list of all books sorted by title for the main page (/books)
 func (c *BookController) GetBookList (rw http.ResponseWriter, req *http.Request) {
     books, err := c.Books.FetchBookList(req.Context())
 	if err != nil {
@@ -24,6 +25,7 @@ func (c *BookController) GetBookList (rw http.ResponseWriter, req *http.Request)
 	json.NewEncoder(rw).Encode(books)
 }
 
+// Fetches all contents of a book for reading (/book/{id})
 func (c *BookController) GetBookDetailsByID (rw http.ResponseWriter, req *http.Request) {
 
     var bookID string = chi.URLParam(req, "id")

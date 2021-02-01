@@ -51,13 +51,10 @@ func (db *BookDatabase) FetchBookDetailsByID (ctx context.Context, id string) (m
 
     var book models.BookDetails
 
-    /*
-    err := db.Conn.QueryRowEx(ctx, "SELECT * FROM books WHERE id = $1", nil, id).Scan(
-            &book.ID, &book.Title, &book.Author, &book.Image, &book.Read, &book.Explore,
-            &book.Learn, &book.Created_At)
-    */
-    err := db.Conn.QueryRowEx(ctx, "SELECT read_video, read_body, explore_video, explore_body, learn_video, learn_body FROM books WHERE id = $1", nil, id).Scan(
-            &book.Read_Video, &book.Read_Body, &book.Explore_Video, &book.Explore_Body, &book.Learn_Video, &book.Learn_Body)
+    err := db.Conn.QueryRowEx(ctx, "SELECT id, title, author, image, read_video, read_body, explore_video, " +
+            "explore_body, learn_video, learn_body, created_at FROM books WHERE id = $1", nil, id).Scan(
+            &book.ID, &book.Title, &book.Author, &book.Image, &book.Read_Video, &book.Read_Body,
+            &book.Explore_Video, &book.Explore_Body, &book.Learn_Video, &book.Learn_Body, &book.Created_At)
 
     if err != nil {
         return book, errors.Wrap(err, "error on SELECT FROM books in FetchBookByID")
