@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
@@ -9,8 +9,11 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
   return (
     <FlatList
       data={books}
-      renderItem={({ item, index }) => <BookCard book={item} index={index} />}
-      horizontal
+      renderItem={({ item, index }) => 
+      <View style={(index=== 0) ? styles.imageFirst : ((index === 4) ? styles.imageLast : styles.image)}>
+        <BookCard book={item}/>
+      </View> }
+      horizontal={true}
       ItemSeparatorComponent={
                     () => <View style={{ width: 13 }}/>
                 }
@@ -18,3 +21,24 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  imageFirst: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+    marginLeft: 17,
+  },
+  imageLast: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+    marginRight: 17,
+  }
+})

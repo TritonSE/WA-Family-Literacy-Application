@@ -19,5 +19,6 @@ const App: React.FC = () => {
     </BookProvider>
   );
 };
-export default App;
+
 // eslint-disable-next-line import/no-default-export
+export default App;
