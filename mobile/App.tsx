@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from './src/screens/HomeScreen'
-import { Settings } from './src/screens/Settings'
-import { ChatScreen } from './src/screens/ChatScreen'
+import { HomeScreen } from './src/screens/HomeScreen';
+import { Settings } from './src/screens/Settings';
+import { ChatScreen } from './src/screens/ChatScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +16,7 @@ const App: React.FC = () => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused }) => {
             let icon;
-            let tint = focused ? '#E89228' : '#B8B8B8';
+            const tint = focused ? '#E89228' : '#B8B8B8';
             let width;
             let height;
 
@@ -28,19 +28,14 @@ const App: React.FC = () => {
               icon = require('./assets/images/Cog.png');
               width = 26;
               height = 26;
-            }
-            else if (route.name === 'Chat') {
+            } else if (route.name === 'Chat') {
               icon = require('./assets/images/Chat_bubble.png');
               width = 22;
               height = 22;
             }
 
-            return <Image style={{
-              width: width,
-              height: height,
-              tintColor: tint
-            }} source={icon} />;
-          }
+            return <Image style={{ width: width, height: height, tintColor: tint }} source={icon} />;
+          },
         })}
         tabBarOptions={{
           showLabel: false,
@@ -63,20 +58,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     height: 60,
     padding: 4.5,
-    paddingLeft: 50,
-    paddingRight: 50,
+    paddingLeft: 47,
+    paddingRight: 47,
+    shadowColor: '#000000',
+    shadowOpacity: 0.16,
+    shadowRadius: 6,
+    shadowOffset: {
+      height: 2,
+      width: 0,
+    },
   },
 
   tab: {
     height: 51,
-    borderRadius: 5
+    borderRadius: 5,
   },
 
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });
 
 // eslint-disable-next-line import/no-default-export
