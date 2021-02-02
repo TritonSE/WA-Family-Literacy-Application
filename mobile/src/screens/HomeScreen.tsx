@@ -2,18 +2,24 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { ColumnBookList } from '../components/ColumnBookList';
-import { BookList } from '../components/BookList';
+import { HorizontalBookList } from '../components/HorizontalBookList';
 import { BookContext } from '../context/BookContext';
 import { TextStyles } from '../styles/TextStyles';
+import { Colors } from '../styles/Colors';
 
+/**
+ * Renders the homescreen for the app. Currently displays heading, new books, all books. 
+ */
 export const HomeScreen: React.FC = () => {
+  // get books from backend
   const booksCtx = useContext(BookContext);
   useEffect(booksCtx.fetchBooks, []);
   const newBooks = booksCtx.books
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
+  // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling 
   const VirtualizedView: React.FC = (props) => {
     return (
       <FlatList
@@ -33,20 +39,20 @@ export const HomeScreen: React.FC = () => {
 
       <View style={styles.heading}>
         <Svg height="100%" width="100%" viewBox="0 0 1 1">
-          <Circle cx="0.5" cy="-0.3" r="0.8" stroke="#E89228" fill="#E89228" />
+          <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
         </Svg>
       </View>
 
-      <View>
-        <Text style={styles.text}>New Books for You</Text>
+      <View style={styles.textPadding}>
+        <Text style={TextStyles.h3}>New Books for You</Text>
       </View>
 
       <View>
-        <BookList books={newBooks} />
+        <HorizontalBookList books={newBooks} />
       </View>
 
-      <View>
-        <Text style={styles.text}>All Books </Text>
+      <View style={styles.textPadding}>
+        <Text style={TextStyles.h3}>All Books </Text>
       </View>
 
       <View style={styles.allBooks}>
@@ -58,14 +64,13 @@ export const HomeScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  text: {
-    ...TextStyles.h3,
+  textPadding: {
     paddingTop: 33,
     paddingBottom: 19,
     paddingLeft: 17,
   },
   heading: {
-    color: '#E89228',
+    color: Colors.orange,
     height: 400,
   },
   allBooks: {

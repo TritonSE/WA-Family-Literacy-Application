@@ -5,7 +5,7 @@ import { Book } from '../models/Book';
 type BookCardProps = { book: Book, size?: number };
 
 /**
- * Renders the image of a book in a rounded square. Size is both width and height
+ * Renders the image of a book in a rounded square. Size is both width and height.
  */
 export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
   const imageSize = { width: size, height: size };

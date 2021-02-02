@@ -5,6 +5,9 @@ import { BookCard } from './BookCard';
 
 type ColumnBookListProps = { books: Book[] };
 
+/**
+ * Renders a vertical list of books with 3 books per row.
+ */
 export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
   return (
     <FlatList

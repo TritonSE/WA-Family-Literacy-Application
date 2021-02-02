@@ -3,13 +3,17 @@ import { FlatList, View, StyleSheet } from 'react-native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
-type BookListProps = { books: Book[] };
+type HorizontalBookListProps = { books: Book[] };
 
-export const BookList: React.FC<BookListProps> = ({ books }) => {
+/**
+ * Renders a scrollable horizontal list of 5 books
+ */
+export const HorizontalBookList: React.FC<HorizontalBookListProps> = ({ books }) => {
   return (
     <FlatList
       data={books}
       renderItem={({ item, index }) => (
+        // this ensures that the first and last book have the correct spacing
         <View
           style={(index === 0) ? styles.imageFirst :
             ((index === 4) ? styles.imageLast :
