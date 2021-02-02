@@ -10,12 +10,12 @@ import (
 )
 
 // Sets up the router
-func GetRouter() (chi.Router) {
+func GetRouter() chi.Router {
 	database.Migrate("../../migrations")
 
 	log.Print("Starting HTTP server")
 
-    dbConn := database.GetConnection()
+	dbConn := database.GetConnection()
 
 	bookDB := database.BookDatabase{Conn: dbConn}
 
@@ -27,11 +27,11 @@ func GetRouter() (chi.Router) {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(15 * time.Second))
 
-    r.Route("/books", func(r chi.Router) {
-        // "localhost:8080/books/{id}
+	r.Route("/books", func(r chi.Router) {
+		// "localhost:8080/books/{id}
 		r.Get("/{id}", bookController.GetBookDetailsByID)
 
-        // "localhost:8080/books/
+		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
 	})
 
