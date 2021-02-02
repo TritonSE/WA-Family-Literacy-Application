@@ -8,7 +8,7 @@ import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
 
 /**
- * Renders the homescreen for the app. Currently displays heading, new books, all books. 
+ * Renders the homescreen for the app. Currently displays heading, new books, all books.
  */
 export const HomeScreen: React.FC = () => {
   // get books from backend
@@ -19,7 +19,7 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
-  // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling 
+  // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
     return (
       <FlatList
