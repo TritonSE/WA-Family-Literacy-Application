@@ -163,18 +163,6 @@ export const BookProvider: React.FC = ({ children }) => {
         image: 'https://placekitten.com/200/305',
         created_at: '1000',
       },
-      {
-        id: 'y',
-        title: 'bar',
-        image: 'https://placekitten.com/200/306',
-        created_at: '1000',
-      },
-      {
-        id: 'z',
-        title: 'bar',
-        image: 'https://placekitten.com/200/307',
-        created_at: '1000',
-      },
 
     ];
     dispatch({ type: 'BOOKS_LOADED', payload: books });

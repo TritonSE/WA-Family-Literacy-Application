@@ -9,14 +9,19 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
   return (
     <FlatList
       data={books}
-      renderItem={({ item, index }) => 
-      <View style={(index=== 0) ? styles.imageFirst : ((index === 4) ? styles.imageLast : styles.image)}>
-        <BookCard book={item}/>
-      </View> }
-      horizontal={true}
+      renderItem={({ item, index }) => (
+        <View
+          style={(index === 0) ? styles.imageFirst :
+            ((index === 4) ? styles.imageLast :
+              styles.image)}
+        >
+          <BookCard book={item}/>
+        </View>
+      )}
+      horizontal
       ItemSeparatorComponent={
-                    () => <View style={{ width: 13 }}/>
-                }
+        () => <View style={{ width: 13 }}/>
+      }
       keyExtractor={book => book.id}
     />
   );
@@ -40,5 +45,5 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 5,
     marginRight: 17,
-  }
-})
+  },
+});
