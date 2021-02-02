@@ -1,10 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { ColumnBookList } from '../components/ColumnBookList';
 import { BookList } from '../components/BookList';
 import { BookContext } from '../context/BookContext';
-import { Heading } from '../components/Heading';
 import { TextStyles } from '../styles/TextStyles';
 
 export const HomeScreen: React.FC = () => {
@@ -15,7 +14,7 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
-  const VirtualizedView = (props: any) => {
+  const VirtualizedView: React.FC = (props) => {
     return (
       <FlatList
         data={[]}
@@ -51,7 +50,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.allBooks}>
-        <ColumnBookList books={allBooks}/>
+        <ColumnBookList books={allBooks} />
       </View>
 
     </VirtualizedView>

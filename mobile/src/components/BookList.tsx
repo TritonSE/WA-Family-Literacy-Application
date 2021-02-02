@@ -3,7 +3,7 @@ import { FlatList, View, StyleSheet } from 'react-native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
-type BookListProps = {books: Book[] };
+type BookListProps = { books: Book[] };
 
 export const BookList: React.FC<BookListProps> = ({ books }) => {
   return (
@@ -15,12 +15,12 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
             ((index === 4) ? styles.imageLast :
               styles.image)}
         >
-          <BookCard book={item}/>
+          <BookCard book={item} />
         </View>
       )}
       horizontal
       ItemSeparatorComponent={
-        () => <View style={{ width: 13 }}/>
+        () => <View style={{ width: 13 }} />
       }
       keyExtractor={book => book.id}
     />

@@ -11,7 +11,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
   const imageSize = { width: size, height: size };
   return (
     <View style={styles.container}>
-      <Image source={{ uri: book.image }} style={[styles.image, imageSize]}/>
+      <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
     </View>
   );
 };

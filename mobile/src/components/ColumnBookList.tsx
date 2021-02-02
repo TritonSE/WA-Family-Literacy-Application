@@ -1,11 +1,9 @@
 import React from 'react';
-import { FlatList, StyleSheet, Dimensions, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
 type ColumnBookListProps = { books: Book[] };
-
-const { width } = Dimensions.get('window');
 
 export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
   return (
@@ -13,7 +11,7 @@ export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
       data={books}
       renderItem={({ item }) => (
         <View style={styles.bookCard}>
-          <BookCard book={item} size={120}/>
+          <BookCard book={item} size={120} />
         </View>
       )}
       numColumns={3}
