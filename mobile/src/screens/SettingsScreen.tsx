@@ -2,12 +2,12 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 /**
- * Middle tab on navbar for homescreen displaying books
+ * Right tab on navbar for settings menu
  */
-export const HomeScreen: React.FC = () => {
+export const SettingsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text>Settings</Text>
     </View>
   );
 };
