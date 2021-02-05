@@ -100,6 +100,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
-    "global-require": "off"
+    "global-require": "off",
+    "no-nested-ternary": "off"
   }
 }
