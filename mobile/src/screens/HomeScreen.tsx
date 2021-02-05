@@ -77,5 +77,4 @@ const styles = StyleSheet.create({
     marginLeft: 17,
     marginRight: 17,
   },
-
 });
