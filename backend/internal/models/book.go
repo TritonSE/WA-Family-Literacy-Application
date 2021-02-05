@@ -1,29 +1,33 @@
 package models
 
 import (
-	"github.com/jackc/pgtype"
+	"time"
 )
+
+type TabContent struct {
+	Video *string `json:"video"`
+	// TODO once we have real testing data make Body a string.
+	// Leave as *string for now to pass unit tests
+	Body *string `json:"body"`
+}
 
 // Contains the contents of a book (all book information)
 type BookDetails struct {
-	ID            string             `json:"id"`
-	Title         string             `json:"title"`
-	Author        string             `json:"author"`
-	Image         *string            `json:"image"`         // image link
-	Read_Video    *string            `json:"read_video"`    // youtube link
-	Read_Body     *string            `json:"read_body"`     // markdown
-	Explore_Video *string            `json:"explore_video"` // youtube link
-	Explore_Body  *string            `json:"explore_body"`  // markdown
-	Learn_Video   *string            `json:"learn_video"`   // youtube link
-	Learn_Body    *string            `json:"learn_body"`    // markdown
-	Created_At    pgtype.Timestamptz `json:"created_at"`    // Following ISO 8601
+	ID        string      `json:"id"`
+	Title     string      `json:"title"`
+	Author    string      `json:"author"`
+	Image     *string     `json:"image"` // image link
+	Read      *TabContent `json:"read"`
+	Explore   *TabContent `json:"explore"`
+	Learn     *TabContent `json:"learn"`
+	CreatedAt time.Time   `json:"created_at"` // Following ISO 8601
 }
 
 // For main page listings
 type Book struct {
-	ID         string             `json:"id"`
-	Title      string             `json:"title"`
-	Author     string             `json:"author"`
-	Image      *string            `json:"image"`      // image link
-	Created_At pgtype.Timestamptz `json:"created_at"` // Following ISO 8601
+	ID        string    `json:"id"`
+	Title     string    `json:"title"`
+	Author    string    `json:"author"`
+	Image     *string   `json:"image"`      // image link
+	CreatedAt time.Time `json:"created_at"` // Following ISO 8601
 }
