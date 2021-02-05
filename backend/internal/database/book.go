@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/TritonSE/words-alive/internal/models"
 	"github.com/jackc/pgx"
@@ -51,24 +52,20 @@ func (db *BookDatabase) FetchBookDetailsByID(ctx context.Context,
 	id string) (models.BookDetails, error) {
 
 	var book models.BookDetails
-	var read, explore, learn models.TabContent
 
 	var query string = "SELECT id, title, author, image, read_video, read_body, " +
 		"explore_video, explore_body, learn_video, learn_body," +
 		"created_at FROM books WHERE id = $1"
 
 	err := db.Conn.QueryRowEx(ctx, query, nil, id).Scan(
-		&book.ID, &book.Title, &book.Author, &book.Image, &read.Video,
-		&read.Body, &explore.Video, &explore.Body,
-		&learn.Video, &learn.Body, &book.CreatedAt)
+		&book.ID, &book.Title, &book.Author, &book.Image, &book.Read.Video,
+		&book.Read.Body, &book.Explore.Video, &book.Explore.Body,
+		&book.Learn.Video, &book.Learn.Body, &book.CreatedAt)
 
 	if err != nil {
+		fmt.Printf("Error: %s\n", err)
 		return book, errors.Wrap(err, "error on SELECT FROM books in FetchBookByID")
 	}
-
-	book.Read = &read
-	book.Explore = &explore
-	book.Learn = &learn
 
 	return book, nil
 }

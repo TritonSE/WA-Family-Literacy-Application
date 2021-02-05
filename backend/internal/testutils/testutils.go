@@ -9,7 +9,10 @@ import (
 )
 
 // Sends http request, converts data from json, and stores to response
-func SendHttpRequest(req *http.Request, response interface{}, t *testing.T) {
+func MakeHttpRequest(method string, url string, response interface{}, t *testing.T) {
+
+	req, err := http.NewRequest(method, url, nil)
+	require.NoError(t, err)
 
 	res, err := http.DefaultClient.Do(req)
 	require.NoError(t, err)

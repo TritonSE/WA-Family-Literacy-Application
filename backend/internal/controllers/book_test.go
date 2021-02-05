@@ -6,7 +6,6 @@ import (
 	"github.com/TritonSE/words-alive/internal/models"
 	"github.com/TritonSE/words-alive/internal/testutils"
 	"github.com/stretchr/testify/require"
-	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -26,8 +25,9 @@ func TestMain(m *testing.M) {
 	conn.Exec("INSERT INTO books (title, author) values ('c','c1');")
 	conn.Exec("INSERT INTO books (title, author) values ('a','a1');")
 	conn.Exec("INSERT INTO books (title, author) values ('b','b1');")
-	conn.Exec("INSERT INTO books (id, title, author)" +
-		"VALUES ('catcher', 'catcher in the rye', 'a');")
+	conn.Exec("INSERT INTO books (id, title, author, read_body, " +
+		"explore_body, learn_body) VALUES ('catcher'," +
+		"'catcher in the rye', 'a', 'r', 'e', 'l');")
 
 	// Close the server
 	defer ts.Close()
@@ -37,11 +37,8 @@ func TestMain(m *testing.M) {
 // Test for the book list function
 func TestGetBooks(t *testing.T) {
 
-	req, err := http.NewRequest("GET", ts.URL+"/books", nil)
-	require.NoError(t, err)
-
 	var response []models.Book
-	testutils.SendHttpRequest(req, &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books", &response, t)
 
 	// Check for correct number of elements, and sort alphabetically
 	require.Len(t, response, 4)
@@ -53,11 +50,8 @@ func TestGetBooks(t *testing.T) {
 // Test for the book details function
 func TestGetBookDetailsByID(t *testing.T) {
 
-	req, err := http.NewRequest("GET", ts.URL+"/books/catcher", nil)
-	require.NoError(t, err)
-
 	var response models.BookDetails
-	testutils.SendHttpRequest(req, &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher", &response, t)
 
 	// Check title
 	require.Equal(t, "catcher in the rye", response.Title)

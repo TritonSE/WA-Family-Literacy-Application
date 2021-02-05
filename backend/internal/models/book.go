@@ -6,21 +6,19 @@ import (
 
 type TabContent struct {
 	Video *string `json:"video"`
-	// TODO once we have real testing data make Body a string.
-	// Leave as *string for now to pass unit tests
-	Body *string `json:"body"`
+	Body  string  `json:"body"`
 }
 
 // Contains the contents of a book (all book information)
 type BookDetails struct {
-	ID        string      `json:"id"`
-	Title     string      `json:"title"`
-	Author    string      `json:"author"`
-	Image     *string     `json:"image"` // image link
-	Read      *TabContent `json:"read"`
-	Explore   *TabContent `json:"explore"`
-	Learn     *TabContent `json:"learn"`
-	CreatedAt time.Time   `json:"created_at"` // Following ISO 8601
+	ID        string     `json:"id"`
+	Title     string     `json:"title"`
+	Author    string     `json:"author"`
+	Image     *string    `json:"image"` // image link
+	Read      TabContent `json:"read"`
+	Explore   TabContent `json:"explore"`
+	Learn     TabContent `json:"learn"`
+	CreatedAt time.Time  `json:"created_at"` // Following ISO 8601
 }
 
 // For main page listings

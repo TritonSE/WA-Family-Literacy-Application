@@ -15,11 +15,11 @@ type BookController struct {
 func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) {
 	books, err := c.Books.FetchBookList(req.Context())
 	if err != nil {
-		WriteResponse(rw, http.StatusInternalServerError, books)
+		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	WriteResponse(rw, http.StatusOK, books)
+	writeResponse(rw, http.StatusOK, books)
 }
 
 // Fetches all contents of a book for reading (/book/{id})
@@ -29,9 +29,9 @@ func (c *BookController) GetBookDetailsByID(rw http.ResponseWriter, req *http.Re
 
 	bookDetails, err := c.Books.FetchBookDetailsByID(req.Context(), bookID)
 	if err != nil {
-		WriteResponse(rw, http.StatusInternalServerError, bookDetails)
+		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	WriteResponse(rw, http.StatusOK, bookDetails)
+	writeResponse(rw, http.StatusOK, bookDetails)
 }
