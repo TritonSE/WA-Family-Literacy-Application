@@ -5,6 +5,7 @@ import { StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './src/screens/HomeScreen';
+import { APIProvider } from './src/context/APIContext';
 import { BookProvider } from './src/context/BookContext';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
@@ -21,7 +22,8 @@ const App: React.FC = () => {
     return <AppLoading/>;
   }
   return (
-    <BookProvider>
+    <APIProvider>
+     <BookProvider>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
@@ -50,7 +52,8 @@ const App: React.FC = () => {
           <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
-    </BookProvider>
+     </BookProvider>
+    </APIProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, { createContext, useReducer, useContext } from 'react';
 import { APIContext } from './APIContext';
 import { Book } from '../models/Book';
 
@@ -16,17 +16,13 @@ export const BookContext = createContext<BookState>(initialState);
 
 export const BookProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
-  
+  const client = useContext(APIContext);
   function fetchBooks(): void {
-    
-    const apiCtx = useContext(APIContext)
-    const apiClient = apiCtx.APIClient
-    apiClient.get("/books").then( (res) => {
-      dispatch({ type: 'BOOKS_LOADED', payload: res });
+    client.getBooks().then((res) => {
+      dispatch({ type: 'BOOKS_LOADED', payload: res.data });
+    }).catch((err) => {
+      console.log(err);
     });
-    
   }
 
   return (
