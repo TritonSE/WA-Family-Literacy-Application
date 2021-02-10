@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/TritonSE/words-alive/internal/database"
 	"log"
 	"net/http"
 
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+	database.Migrate("./migrations")
+
 	// Get router and start server
 	r := controllers.GetRouter()
 	if err := http.ListenAndServe(":8080", r); err != nil {
