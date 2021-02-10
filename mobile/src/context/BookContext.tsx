@@ -19,7 +19,7 @@ export const BookProvider: React.FC = ({ children }) => {
   const client = useContext(APIContext);
   function fetchBooks(): void {
     client.getBooks().then((res) => {
-      dispatch({ type: 'BOOKS_LOADED', payload: res.data });
+      dispatch({ type: 'BOOKS_LOADED', payload: res });
     }).catch((err) => {
       console.log(err);
     });
