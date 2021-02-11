@@ -9,14 +9,10 @@ class WordsAliveAPI {
     }
 
     async getBooks(): Promise<Book[]> {
-      try {
       const res = await this.client.get('/books');
       console.log("res");
       console.log(res.data);
-      return res.data;
-      } catch(err) {
-        console.log(err);
-      }
+      return res.data
     }
 }
 
