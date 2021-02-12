@@ -11,8 +11,6 @@ import (
 
 // Sets up the router
 func GetRouter() chi.Router {
-	database.Migrate("./migrations")
-
 	log.Print("Starting HTTP server")
 
 	dbConn := database.GetConnection()
