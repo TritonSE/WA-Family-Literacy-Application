@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
+
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 

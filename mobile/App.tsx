@@ -5,6 +5,7 @@ import { StyleSheet, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 import { HomeScreen } from './src/screens/HomeScreen';
 import { BookProvider } from './src/context/BookContext';
 import { SettingsScreen } from './src/screens/SettingsScreen';

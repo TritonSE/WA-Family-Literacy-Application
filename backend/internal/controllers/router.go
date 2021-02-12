@@ -4,9 +4,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+
+	"github.com/TritonSE/words-alive/internal/database"
 )
 
 // Sets up the router
