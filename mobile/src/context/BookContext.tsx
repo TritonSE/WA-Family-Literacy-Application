@@ -21,7 +21,35 @@ export const BookProvider: React.FC = ({ children }) => {
     client.getBooks().then((res) => {
       dispatch({ type: 'BOOKS_LOADED', payload: res });
     }).catch((err) => {
-      console.log(err);
+      const empty: Book[] = [];
+      const books: Book[] = [
+        {
+          id: 'a',
+          title: 'foo',
+          image: 'https://placekitten.com/200/300',
+          createdAt: '10000',
+        },
+        {
+          id: 'b',
+          title: 'bar',
+          image: 'https://placekitten.com/200/301',
+          createdAt: '1500',
+        },
+        {
+          id: 'c',
+          title: 'bar',
+          image: 'https://placekitten.com/200/302',
+          createdAt: '2000',
+        },
+        {
+          id: 'd',
+          title: 'bar',
+          image: 'https://placekitten.com/200/303',
+          createdAt: '3000',
+        },
+      ];
+
+      dispatch({ type: 'BOOKS_LOADED', payload: books });
     });
   }
 

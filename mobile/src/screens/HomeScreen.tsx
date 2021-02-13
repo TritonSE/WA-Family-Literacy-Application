@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import React, { useContext, useEffect, } from 'react';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { ColumnBookList } from '../components/ColumnBookList';
 import { HorizontalBookList } from '../components/HorizontalBookList';
@@ -19,6 +19,21 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
+  let newBooksRender;
+  let colBooksRender;
+  let booksLoaded:boolean = newBooks.length > 0;
+
+  if (booksLoaded) {
+    newBooksRender = <HorizontalBookList books={newBooks} />;
+    colBooksRender = <ColumnBookList books={allBooks} />;
+  } else {
+    newBooksRender = <ActivityIndicator/>;
+    colBooksRender = <ActivityIndicator/>;
+  }
+
+
+
+
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
     return (
@@ -33,7 +48,7 @@ export const HomeScreen: React.FC = () => {
       />
     );
   };
-
+  
   return (
     <VirtualizedView>
 
@@ -48,7 +63,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View>
-        <HorizontalBookList books={newBooks} />
+        {newBooksRender}
       </View>
 
       <View style={styles.textPadding}>
@@ -56,7 +71,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.allBooks}>
-        <ColumnBookList books={allBooks} />
+        {colBooksRender}  
       </View>
 
     </VirtualizedView>

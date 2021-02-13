@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Book } from '../models/Book';
 
 class WordsAliveAPI {
@@ -10,9 +10,11 @@ class WordsAliveAPI {
 
     async getBooks(): Promise<Book[]> {
       const res = await this.client.get('/books');
-      console.log("res");
-      console.log(res.data);
-      return res.data
+      return res.data;
+    }
+
+    changeURL(newURL: string): void {
+      this.client = axios.create({ baseURL: newURL });
     }
 }
 
