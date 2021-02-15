@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/go-chi/chi"
 	"net/http"
+    "fmt"
 
 	"github.com/TritonSE/words-alive/internal/database"
 )
@@ -26,8 +27,21 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 func (c *BookController) GetBookDetailsByID(rw http.ResponseWriter, req *http.Request) {
 
 	var bookID string = chi.URLParam(req, "id")
+	var lang string = chi.URLParam(req, "lang")
 
-	bookDetails, err := c.Books.FetchBookDetailsByID(req.Context(), bookID)
+    fmt.Printf("Id: %s, lang: %s\n", bookID, lang)
+    valid, err := c.Books.CheckBookID(req.Context(), bookID, lang)
+    if err != nil {
+        writeResponse(rw, http.StatusInternalServerError, "error")
+        return
+    }
+
+    if !valid {
+        writeResponse(rw, http.StatusNotFound, "error")
+        return
+    }
+
+	bookDetails, err := c.Books.FetchBookDetailsByID(req.Context(), bookID, lang)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
