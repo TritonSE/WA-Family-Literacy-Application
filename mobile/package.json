@@ -6,6 +6,8 @@
     "@react-navigation/native": "^5.9.2",
     "expo": "^40.0.0",
     "expo-app-loading": "^1.0.1",
+    "expo-font": "~8.4.0",
+    "i18n-js": "^3.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
@@ -13,9 +15,9 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
-    "react-native-web": "~0.13.12",
     "react-native-svg": "12.1.0",
-    "expo-font": "~8.4.0"
+    "react-native-web": "~0.13.12",
+    "expo-localization": "~9.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

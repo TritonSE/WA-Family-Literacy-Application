@@ -6,6 +6,7 @@ import { HorizontalBookList } from '../components/HorizontalBookList';
 import { BookContext } from '../context/BookContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
+import { I18nContext } from '../context/I18nContext';
 
 /**
  * Renders the homescreen for the app. Currently displays heading, new books, all books.
@@ -18,6 +19,8 @@ export const HomeScreen: React.FC = () => {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
   const allBooks = booksCtx.books;
+
+    const i18nCtx = useContext(I18nContext);
 
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
@@ -44,7 +47,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.textPadding}>
-        <Text style={TextStyles.h3}>New Books for You</Text>
+        <Text style={TextStyles.h3}>{i18nCtx.t('newBooks')}</Text>
       </View>
 
       <View>
@@ -52,7 +55,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.textPadding}>
-        <Text style={TextStyles.h3}>All Books </Text>
+        <Text style={TextStyles.h3}>{i18nCtx.t('allBooks')}</Text>
       </View>
 
       <View style={styles.allBooks}>

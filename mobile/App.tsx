@@ -9,6 +9,7 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { BookProvider } from './src/context/BookContext';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
+import { I18nProvider } from './src/context/I18nContext'
 
 const Tab = createBottomTabNavigator();
 
@@ -23,38 +24,40 @@ const App: React.FC = () => {
   }
   return (
     <SafeAreaProvider>
-      <BookProvider>
-        <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-          <NavigationContainer>
-            <Tab.Navigator
-              initialRouteName="Home"
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ color }) => {
-                  const TabIcons = {
-                    Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('./assets/images/Home.png')} />,
-                    Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('./assets/images/Chat_bubble.png')} />,
-                    Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('./assets/images/Cog.png')} />,
-                  };
+      <I18nProvider>
+        <BookProvider>
+          <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+            <NavigationContainer>
+              <Tab.Navigator
+                initialRouteName="Home"
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ color }) => {
+                    const TabIcons = {
+                      Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('./assets/images/Home.png')} />,
+                      Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('./assets/images/Chat_bubble.png')} />,
+                      Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('./assets/images/Cog.png')} />,
+                    };
 
-                  return TabIcons[route.name];
-                },
-              })}
-              tabBarOptions={{
-                showLabel: false,
-                activeBackgroundColor: '#F9EAD3',
-                activeTintColor: '#E89228',
-                inactiveTintColor: '#B8B8B8',
-                style: styles.navbarContainer,
-                tabStyle: styles.tab,
-              }}
-            >
-              <Tab.Screen name="Chat" component={ChatScreen} />
-              <Tab.Screen name="Home" component={HomeScreen} />
-              <Tab.Screen name="Settings" component={SettingsScreen} />
-            </Tab.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-      </BookProvider>
+                    return TabIcons[route.name];
+                  },
+                })}
+                tabBarOptions={{
+                  showLabel: false,
+                  activeBackgroundColor: '#F9EAD3',
+                  activeTintColor: '#E89228',
+                  inactiveTintColor: '#B8B8B8',
+                  style: styles.navbarContainer,
+                  tabStyle: styles.tab,
+                }}
+              >
+                <Tab.Screen name="Chat" component={ChatScreen} />
+                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
+        </BookProvider>
+      </I18nProvider>
     </SafeAreaProvider>
 
   );
