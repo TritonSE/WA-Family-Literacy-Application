@@ -9,7 +9,7 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { BookProvider } from './src/context/BookContext';
 import { SettingsScreen } from './src/screens/SettingsScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
-import { I18nProvider } from './src/context/I18nContext'
+import { I18nProvider } from './src/context/I18nContext';
 
 const Tab = createBottomTabNavigator();
 

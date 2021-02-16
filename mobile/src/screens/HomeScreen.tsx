@@ -20,7 +20,7 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
-    const i18nCtx = useContext(I18nContext);
+  const i18nCtx = useContext(I18nContext);
 
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
