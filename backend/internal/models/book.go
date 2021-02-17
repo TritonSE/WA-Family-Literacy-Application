@@ -28,5 +28,5 @@ type Book struct {
 	Author    string    `json:"author"`
 	Image     *string   `json:"image"`      // image link
 	CreatedAt time.Time `json:"created_at"` // Following ISO 8601
-	Languages []string  `json:"languages"`  // Array of languages
+	Languages []string  `json:"languages"`  // Array of languages (ISO 639-1)
 }

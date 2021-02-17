@@ -35,7 +35,7 @@ func (c *BookController) GetBookDetailsByID(rw http.ResponseWriter, req *http.Re
 		return
 	}
 
-    // Send 404 error if book does not exist
+	// Send 404 error if book does not exist
 	if !valid {
 		writeResponse(rw, http.StatusNotFound, "error")
 		return
