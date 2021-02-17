@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/TritonSE/words-alive/internal/models"
 	"github.com/jackc/pgx"
 	"github.com/pkg/errors"
+
+	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookDatabase struct {

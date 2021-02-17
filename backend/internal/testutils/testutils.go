@@ -2,10 +2,11 @@ package testutils
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 // Sends http request, converts data from json, and stores to response

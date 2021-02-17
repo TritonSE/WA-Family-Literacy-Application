@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"github.com/go-chi/chi"
 	"net/http"
+
+	"github.com/go-chi/chi"
 
 	"github.com/TritonSE/words-alive/internal/database"
 )
