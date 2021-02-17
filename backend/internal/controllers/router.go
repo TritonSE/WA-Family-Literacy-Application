@@ -4,9 +4,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+
+	"github.com/TritonSE/words-alive/internal/database"
 )
 
 // Sets up the router
@@ -30,9 +31,9 @@ func GetRouter() chi.Router {
 	r.Route("/books", func(r chi.Router) {
 		// "localhost:8080/books/{id}
 		r.Route("/{id}", func(r chi.Router) {
-                //bookController.GetBookDetailsByID)
-            r.Get("/{lang}", bookController.GetBookDetailsByID)
-        })
+			//bookController.GetBookDetailsByID)
+			r.Get("/{lang}", bookController.GetBookDetailsByID)
+		})
 
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)

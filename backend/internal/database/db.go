@@ -3,12 +3,13 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"github.com/jackc/pgx"
-	"github.com/jackc/pgx/stdlib"
-	"github.com/pressly/goose"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/stdlib"
+	"github.com/pressly/goose"
 )
 
 func GetConnection() *pgx.Conn {
