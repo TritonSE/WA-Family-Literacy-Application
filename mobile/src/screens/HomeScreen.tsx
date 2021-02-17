@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { ColumnBookList } from '../components/ColumnBookList';
@@ -21,8 +21,9 @@ export const HomeScreen: React.FC = () => {
 
   let newBooksRender;
   let colBooksRender;
-  let booksLoaded:boolean = newBooks.length > 0;
+  const booksLoaded: boolean = newBooks.length > 0;
 
+  // only load books if array is non-empty. Else load acitivty indicator
   if (booksLoaded) {
     newBooksRender = <HorizontalBookList books={newBooks} />;
     colBooksRender = <ColumnBookList books={allBooks} />;
@@ -30,9 +31,6 @@ export const HomeScreen: React.FC = () => {
     newBooksRender = <ActivityIndicator/>;
     colBooksRender = <ActivityIndicator/>;
   }
-
-
-
 
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
@@ -48,7 +46,7 @@ export const HomeScreen: React.FC = () => {
       />
     );
   };
-  
+
   return (
     <VirtualizedView>
 
@@ -71,7 +69,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.allBooks}>
-        {colBooksRender}  
+        {colBooksRender}
       </View>
 
     </VirtualizedView>

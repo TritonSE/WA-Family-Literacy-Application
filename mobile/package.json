@@ -18,7 +18,8 @@
     "react-native-screens": "~2.15.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "expo-constants": "~9.3.3"
+    "expo-constants": "~9.3.3",
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -27,7 +28,6 @@
     "@types/react-native": "~0.63.2",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
-    "axios": "^0.21.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "eslint": "^7.16.0",
     "eslint-config-airbnb": "^18.2.1",
