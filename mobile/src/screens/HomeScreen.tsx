@@ -19,18 +19,18 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const allBooks = booksCtx.books;
 
-  let newBooksRender;
-  let colBooksRender;
-  const booksLoaded: boolean = newBooks.length > 0;
+  // let newBooksRender;
+  // let colBooksRender;
+  // const booksLoaded: boolean = newBooks.length > 0;
 
-  // only load books if array is non-empty. Else load acitivty indicator
-  if (booksLoaded) {
-    newBooksRender = <HorizontalBookList books={newBooks} />;
-    colBooksRender = <ColumnBookList books={allBooks} />;
-  } else {
-    newBooksRender = <ActivityIndicator/>;
-    colBooksRender = <ActivityIndicator/>;
-  }
+  // // only load books if array is non-empty. Else load acitivty indicator
+  // if (booksLoaded) {
+  //   newBooksRender = <HorizontalBookList books={newBooks} />;
+  //   colBooksRender = <ColumnBookList books={allBooks} />;
+  // } else {
+  //   newBooksRender = <ActivityIndicator/>;
+  //   colBooksRender = <ActivityIndicator/>;
+  // }
 
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
@@ -61,7 +61,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View>
-        {newBooksRender}
+        { booksCtx.loading ? <ActivityIndicator/> : <HorizontalBookList books={newBooks}/> }
       </View>
 
       <View style={styles.textPadding}>
@@ -69,7 +69,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.allBooks}>
-        {colBooksRender}
+        { booksCtx.loading ? <ActivityIndicator/> : <ColumnBookList books={allBooks}/> }
       </View>
 
     </VirtualizedView>
