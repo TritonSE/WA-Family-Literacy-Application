@@ -1,14 +1,16 @@
 package controllers_test
 
 import (
+	"net/http/httptest"
+	"os"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+
 	"github.com/TritonSE/words-alive/internal/controllers"
 	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/TritonSE/words-alive/internal/models"
 	"github.com/TritonSE/words-alive/internal/testutils"
-	"github.com/stretchr/testify/require"
-	"net/http/httptest"
-	"os"
-	"testing"
 )
 
 var conn = database.GetConnection()
