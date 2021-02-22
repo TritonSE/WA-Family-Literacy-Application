@@ -1,9 +1,9 @@
 import React, { createContext } from 'react';
 import Constants from 'expo-constants';
-import { WordsAliveAPI } from '../classes/WordsAliveAPI';
+import { WordsAliveAPI } from '../api/WordsAliveAPI';
 
 // set baseURL using environment varibales -- use export BASE_URL=<name>
-const baseURL = Constants.manifest.extra.BASE_URL || 'https://localhost:8080';
+const baseURL = Constants.manifest.extra.BASE_URL || 'http://localhost:8080';
 
 const initialState: WordsAliveAPI = new WordsAliveAPI(baseURL);
 

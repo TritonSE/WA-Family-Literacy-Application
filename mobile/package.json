@@ -45,7 +45,7 @@
     "ios": "expo start --ios",
     "web": "expo web",
     "eject": "expo eject",
-    "dev": "export BASE_URL=http://localhost:8080 && npm start"
+    "dev": "BASE_URL=http://localhost:8080 npm start"
   },
   "private": true
 }

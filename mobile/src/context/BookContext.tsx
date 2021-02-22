@@ -11,7 +11,7 @@ type BookState = {
 const initialState: BookState = {
   books: [],
   fetchBooks: () => {},
-  loading: true,
+  loading: false,
 };
 
 export const BookContext = createContext<BookState>(initialState);
@@ -22,12 +22,11 @@ export const BookProvider: React.FC = ({ children }) => {
 
   // loads books. If error, logs erorr and returns a loading indicator of true
   function fetchBooks(): void {
+    dispatch({ type: 'API_CALL_STARTED' });
     client.getBooks().then((res) => {
-      dispatch({ type: 'BOOKS_LOADED', payload: res, loading: false });
+      dispatch({ type: 'API_RETURNED', payload: res });
     }).catch((err) => {
       console.log(err);
-      // if books not found, continue indicating loading
-      dispatch({ type: 'ERROR', payload: null, loading: true });
     });
   }
 
@@ -44,14 +43,16 @@ export const BookProvider: React.FC = ({ children }) => {
   );
 };
 
-type BookAction = {type: string, payload: Book[], loading: boolean };
+type BookAction
+  = { type: 'API_CALL_STARTED' }
+  | { type: 'API_RETURNED', payload: Book[] };
 
 const reducer = (state: BookState, action: BookAction): BookState => {
   switch (action.type) {
-    case 'BOOKS_LOADED':
-      return { ...state, books: action.payload, loading: action.loading };
-    case 'ERROR':
-      return { ...state, loading: action.loading };
+    case 'API_CALL_STARTED':
+      return { ...state, loading: true };
+    case 'API_RETURNED':
+      return { ...state, books: action.payload, loading: false };
     default:
       return state;
   }

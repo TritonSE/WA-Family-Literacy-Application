@@ -9,6 +9,7 @@ class WordsAliveAPI {
       this.client = axios.create({ baseURL: baseURL });
     }
 
+    // makes a call to the database and returns an array of all books
     async getBooks(): Promise<Book[]> {
       const res = await this.client.get('/books');
       return res.data;
