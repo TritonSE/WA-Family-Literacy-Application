@@ -20,7 +20,7 @@ export const BookProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const client = useContext(APIContext);
 
-  // loads books. If error, logs erorr and returns a loading indicator of true
+  // loads books. If error, logs error and returns a loading indicator of true
   function fetchBooks(): void {
     dispatch({ type: 'API_CALL_STARTED' });
     client.getBooks().then((res) => {
@@ -44,8 +44,8 @@ export const BookProvider: React.FC = ({ children }) => {
 };
 
 type BookAction
-  = { type: 'API_CALL_STARTED' }
-  | { type: 'API_RETURNED', payload: Book[] };
+ = { type: 'API_CALL_STARTED' }
+ | { type: 'API_RETURNED', payload: Book[] };
 
 const reducer = (state: BookState, action: BookAction): BookState => {
   switch (action.type) {
