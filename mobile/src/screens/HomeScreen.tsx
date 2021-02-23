@@ -8,6 +8,7 @@ import { BookContext } from '../context/BookContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
 import { I18nContext } from '../context/I18nContext';
+import { LoadingCircle } from '../components/LoadingCircle';
 
 /**
  * Renders the homescreen for the app. Currently displays heading, new books, all books.
@@ -52,7 +53,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View>
-        <HorizontalBookList books={newBooks} />
+        { booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/> }
       </View>
 
       <View style={styles.textPadding}>
@@ -60,7 +61,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.allBooks}>
-        <ColumnBookList books={allBooks} />
+        { booksCtx.loading ? <LoadingCircle/> : <ColumnBookList books={allBooks}/> }
       </View>
 
     </VirtualizedView>
