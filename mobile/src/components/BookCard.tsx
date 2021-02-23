@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Book } from '../models/Book';
+import { useNavigation } from '@react-navigation/native';
 
 type BookCardProps = { book: Book, size?: number };
 
@@ -9,9 +10,14 @@ type BookCardProps = { book: Book, size?: number };
  */
 export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
   const imageSize = { width: size, height: size };
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
+      <TouchableOpacity onPress={() => navigation.navigate('Book', {
+        id: book.id
+      })}>
+        <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
+      </TouchableOpacity>
     </View>
   );
 };
