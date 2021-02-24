@@ -1,26 +1,34 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MarkdownView } from 'react-native-markdown-view'
 import { TextStyles } from '../styles/TextStyles';
 import { BookViewBody } from '../components/BookViewBody';
+import { APIContext } from '../context/APIContext';
 
 /**
- * Left tab on navbar for chatting with volunteers
+ * Individual book view displaying book details
  */
 export const BookScreen: React.FC = () => {
   const route = useRoute();
   const id = route.params.id;
 
-  const title = 'Title';
-  const author = 'Author';
-  const image = 'https://placekitten.com/200/300';
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [image, setImage] = useState('');
+
+  const client = useContext(APIContext);
+  client.getBook(id).then((res) => {
+    setTitle(res.title);
+    setAuthor(res.author);
+    setImage(res.image);
+  }).catch((err) => {
+    console.log(err);
+  })
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text>Individual Book View</Text>
-        <Text>Book Id: {id}</Text>
         <View style={styles.imgContainer}>
           <Image source={{ uri: image }} style={styles.image} />
         </View>

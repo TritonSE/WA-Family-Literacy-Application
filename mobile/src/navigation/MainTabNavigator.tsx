@@ -1,16 +1,16 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SettingsScreen } from './SettingsScreen';
-import { ChatScreen } from './ChatScreen';
-import { HomeNavScreen } from './HomeNavScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { ChatScreen } from '../screens/ChatScreen';
+import { HomeStackNavigator } from './HomeStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
 /**
  * Main bottom tab navigator
  */
-export const MainScreen: React.FC = () => {
+export const MainTabNavigator: React.FC = () => {
   return (
       <Tab.Navigator
         initialRouteName="Home"
@@ -35,7 +35,7 @@ export const MainScreen: React.FC = () => {
         }}
       >
         <Tab.Screen name="Chat" component={ChatScreen} />
-        <Tab.Screen name="Home" component={HomeNavScreen} />
+        <Tab.Screen name="Home" component={HomeStackNavigator} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
 

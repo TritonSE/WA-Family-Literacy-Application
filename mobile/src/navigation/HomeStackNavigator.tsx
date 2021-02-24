@@ -1,15 +1,15 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen } from './HomeScreen';
-import { BookScreen } from './BookScreen';
+import { HomeScreen } from '../screens/HomeScreen';
+import { BookScreen } from '../screens/BookScreen';
 
 const Stack = createStackNavigator();
 
 /**
  * Home tab navigator
  */
-export const HomeNavScreen: React.FC = () => {
+export const HomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} options={{
@@ -19,12 +19,20 @@ export const HomeNavScreen: React.FC = () => {
         headerTransparent: true,
         headerBackTitleVisible: false,
         headerBackImage: () => (
-           <Image style={{width: 25, height: 25, marginLeft: 25}} source={require('../../assets/images/Arrow_left.png')} />
+           <Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} />
         ),
         headerTitle: "",
       }} />
     </Stack.Navigator>
-
   );
 };
 
+const styles = StyleSheet.create({
+
+  backButton: {
+    width: 25,
+    height: 25,
+    marginLeft: 25,
+  },
+
+});

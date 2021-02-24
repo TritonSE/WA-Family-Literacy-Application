@@ -3,9 +3,10 @@ import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { APIProvider } from './src/context/APIContext';
 import { BookProvider } from './src/context/BookContext';
 import { I18nProvider } from './src/context/I18nContext';
-import { MainScreen } from './src/screens/MainScreen';
+import { MainTabNavigator } from './src/navigation/MainTabNavigator';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -17,18 +18,19 @@ const App: React.FC = () => {
     return <AppLoading />;
   }
   return (
-    <SafeAreaProvider>
-      <I18nProvider>
-        <BookProvider>
-          <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-            <NavigationContainer>
-              <MainScreen />
-            </NavigationContainer>
-          </SafeAreaView>
-        </BookProvider>
-      </I18nProvider>
-    </SafeAreaProvider>
-
+    <APIProvider>
+      <SafeAreaProvider>
+        <I18nProvider>
+          <BookProvider>
+            <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+              <NavigationContainer>
+                <MainTabNavigator />
+              </NavigationContainer>
+            </SafeAreaView>
+          </BookProvider>
+        </I18nProvider>
+      </SafeAreaProvider>
+    </APIProvider>
   );
 };
 

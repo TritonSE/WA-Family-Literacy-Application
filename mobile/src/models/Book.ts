@@ -1,6 +1,7 @@
 export type Book = {
     id: string
     title: string
+    author: string
     image?: string
     read?: TabContent
     explore?: TabContent
