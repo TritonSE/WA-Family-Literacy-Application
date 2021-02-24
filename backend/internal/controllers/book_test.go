@@ -55,6 +55,11 @@ func TestMain(m *testing.M) {
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
 		"('catcher', 'en', 'catcher_rv', 'catcher_rb', 'catcher_ev', " +
 		" 'catcher_eb', 'catcher_lv', 'catcher_lb')")
+
+	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES " +
+		"('catcher', 'es', 'catcher_es_rv', 'catcher_es_rb', 'catcher_es_ev', " +
+		" 'catcher_es_eb', 'catcher_es_lv', 'catcher_es_lb')")
 	// Close the server
 	defer ts.Close()
 	os.Exit(m.Run())
@@ -74,11 +79,30 @@ func TestGetBooks(t *testing.T) {
 }
 
 // Test for the book details function
-func TestGetBookDetailsByID(t *testing.T) {
+func TestGetBookDetails(t *testing.T) {
 
 	var response models.BookDetails
 	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/en", &response, t)
 
-	// Check title
+	// Check title and content
+	require.Equal(t, "catcher in the rye", response.Title)
 	require.Equal(t, "catcher_rb", response.Read.Body)
+}
+
+// Test for non-existent language
+func TestGetBookNullLang(t *testing.T) {
+
+	var response string
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/fr", &response, t)
+
+	require.Equal(t, "book does not exist in specified language", response)
+}
+
+// Test for non-existent book
+func TestGetNullBook(t *testing.T) {
+
+	var response string
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/nonexistent/en", &response, t)
+
+	require.Equal(t, "book not found", response)
 }

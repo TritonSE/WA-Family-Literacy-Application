@@ -29,11 +29,8 @@ func GetRouter() chi.Router {
 	r.Use(middleware.Timeout(15 * time.Second))
 
 	r.Route("/books", func(r chi.Router) {
-		// "localhost:8080/books/{id}
-		r.Route("/{id}", func(r chi.Router) {
-			//bookController.GetBookDetailsByID)
-			r.Get("/{lang}", bookController.GetBookDetailsByID)
-		})
+		// "localhost:8080/books/{id}/{lang}
+		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)

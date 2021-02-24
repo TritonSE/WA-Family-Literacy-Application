@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -24,26 +25,24 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 }
 
 // Fetches all contents of a book for reading (/book/{id})
-func (c *BookController) GetBookDetailsByID(rw http.ResponseWriter, req *http.Request) {
+func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Request) {
 
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 
-	valid, err := c.Books.CheckBookID(req.Context(), bookID, lang)
+	bookDetails, wrongLang, err := c.Books.FetchBookDetails(req.Context(), bookID, lang)
 	if err != nil {
+		fmt.Printf("Error: %s\n", err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	// Send 404 error if book does not exist
-	if !valid {
-		writeResponse(rw, http.StatusNotFound, "error")
-		return
-	}
-
-	bookDetails, err := c.Books.FetchBookDetailsByID(req.Context(), bookID, lang)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
+	if bookDetails == nil {
+		if wrongLang {
+			writeResponse(rw, http.StatusNotFound, "book does not exist in specified language")
+		} else {
+			writeResponse(rw, http.StatusNotFound, "book not found")
+		}
 		return
 	}
 
