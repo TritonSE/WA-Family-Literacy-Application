@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -32,7 +31,6 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 	bookDetails, wrongLang, err := c.Books.FetchBookDetails(req.Context(), bookID, lang)
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
