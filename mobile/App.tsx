@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
     'Gotham-Bold': require('./assets/fonts/gotham-rounded/GothamRounded-Bold.otf'),
     'Gotham-Medium': require('./assets/fonts/gotham-rounded/GothamRounded-Medium.otf'),
+    'Gotham-Light': require('./assets/fonts/gotham-rounded/GothamRounded-Light.otf'),
   });
 
   if (!fontsLoaded) {

@@ -12,17 +12,23 @@ const Stack = createStackNavigator();
 export const HomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} options={{
-        headerShown: false,
-      }} />
-      <Stack.Screen name="Book" component={BookScreen} options={{
-        headerTransparent: true,
-        headerBackTitleVisible: false,
-        headerBackImage: () => (
-           <Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} />
-        ),
-        headerTitle: "",
-      }} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerShown: false,
+        }} />
+      <Stack.Screen
+        name="Book"
+        component={BookScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} />
+          ),
+          headerTitle: '',
+        }} />
     </Stack.Navigator>
   );
 };

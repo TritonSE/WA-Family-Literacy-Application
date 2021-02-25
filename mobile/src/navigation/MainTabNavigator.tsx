@@ -12,32 +12,32 @@ const Tab = createBottomTabNavigator();
  */
 export const MainTabNavigator: React.FC = () => {
   return (
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color }) => {
-            const TabIcons = {
-              Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />,
-              Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />,
-              Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />,
-            };
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
+          const TabIcons = {
+            Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />,
+            Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />,
+            Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />,
+          };
 
-            return TabIcons[route.name];
-          },
-        })}
-        tabBarOptions={{
-          showLabel: false,
-          activeBackgroundColor: '#F9EAD3',
-          activeTintColor: '#E89228',
-          inactiveTintColor: '#B8B8B8',
-          style: styles.navbarContainer,
-          tabStyle: styles.tab,
-        }}
-      >
-        <Tab.Screen name="Chat" component={ChatScreen} />
-        <Tab.Screen name="Home" component={HomeStackNavigator} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+          return TabIcons[route.name];
+        },
+      })}
+      tabBarOptions={{
+        showLabel: false,
+        activeBackgroundColor: '#F9EAD3',
+        activeTintColor: '#E89228',
+        inactiveTintColor: '#B8B8B8',
+        style: styles.navbarContainer,
+        tabStyle: styles.tab,
+      }}
+    >
+      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
 
   );
 };

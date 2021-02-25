@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Book } from '../models/Book';
 import { useNavigation } from '@react-navigation/native';
+import { Book } from '../models/Book';
 
 type BookCardProps = { book: Book, size?: number };
 
@@ -14,7 +14,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.navigate('Book', {
-        id: book.id
+        id: book.id,
       })}>
         <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
       </TouchableOpacity>
