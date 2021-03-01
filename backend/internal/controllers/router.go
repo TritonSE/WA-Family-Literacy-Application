@@ -34,8 +34,8 @@ func GetRouter() chi.Router {
 	})
 
 	r.Route("/books", func(r chi.Router) {
-		// "localhost:8080/books/{id}
-		r.Get("/{id}", bookController.GetBookDetailsByID)
+		// "localhost:8080/books/{id}/{lang}
+		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
