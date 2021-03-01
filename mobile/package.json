@@ -4,8 +4,13 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
+    "axios": "^0.21.1",
     "expo": "^40.0.0",
     "expo-app-loading": "^1.0.1",
+    "expo-constants": "~9.3.3",
+    "expo-font": "~8.4.0",
+    "expo-localization": "~9.1.0",
+    "i18n-js": "^3.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
@@ -13,9 +18,8 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
-    "react-native-web": "~0.13.12",
     "react-native-svg": "12.1.0",
-    "expo-font": "~8.4.0"
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -40,7 +44,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "dev": "BASE_URL=http://localhost:8080 npm start"
   },
   "private": true
 }
