@@ -23,7 +23,7 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 	writeResponse(rw, http.StatusOK, books)
 }
 
-// Fetches all contents of a book for reading (/book/{id})
+// Fetches contents of a book for reading (/book/{id}/{lang})
 func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Request) {
 
 	var bookID string = chi.URLParam(req, "id")
