@@ -25,13 +25,11 @@ export const TextStyles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Gotham-Light',
   },
-
   caption2: {
     fontSize: 14,
     fontFamily: 'Gotham-Medium',
     fontWeight: 'normal',
   },
-
   mdRegular: {
     fontFamily: 'Gotham-Light',
   },
