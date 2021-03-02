@@ -39,6 +39,8 @@ func GetRouter() chi.Router {
 
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
+
+		r.Post("/", bookController.CreateBook)
 	})
 
 	return r

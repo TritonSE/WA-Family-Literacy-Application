@@ -1,6 +1,7 @@
 package controllers_test
 
 import (
+	"encoding/json"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -69,7 +70,7 @@ func TestMain(m *testing.M) {
 func TestGetBooks(t *testing.T) {
 
 	var response []models.Book
-	testutils.MakeHttpRequest("GET", ts.URL+"/books", &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books", nil, &response, t)
 
 	// Check for correct number of elements, and sort alphabetically
 	require.Len(t, response, 4)
@@ -82,7 +83,7 @@ func TestGetBooks(t *testing.T) {
 func TestGetBookDetails(t *testing.T) {
 
 	var response models.BookDetails
-	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/en", &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/en", nil, &response, t)
 
 	// Check title and content
 	require.Equal(t, "catcher in the rye", response.Title)
@@ -93,7 +94,7 @@ func TestGetBookDetails(t *testing.T) {
 func TestGetBookNullLang(t *testing.T) {
 
 	var response string
-	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/fr", &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/catcher/fr", nil, &response, t)
 
 	require.Equal(t, "book does not exist in specified language", response)
 }
@@ -102,7 +103,25 @@ func TestGetBookNullLang(t *testing.T) {
 func TestGetNullBook(t *testing.T) {
 
 	var response string
-	testutils.MakeHttpRequest("GET", ts.URL+"/books/nonexistent/en", &response, t)
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/nonexistent/en", nil, &response, t)
 
 	require.Equal(t, "book not found", response)
+}
+
+func TestCreateBook(t *testing.T) {
+	var book = database.APICreateBook{
+		Title:  "Harry Potter",
+		Author: "JK Rowling",
+		Image:  nil,
+	}
+	reqJSON, err := json.Marshal(book)
+	require.NoError(t, err)
+	var jsonString = []byte(reqJSON)
+
+	var response models.Book
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &response, t)
+	require.Equal(t, "Harry Potter", response.Title)
+	require.Equal(t, "JK Rowling", response.Author)
+	require.Equal(t, []string{}, response.Languages)
+
 }

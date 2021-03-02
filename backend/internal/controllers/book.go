@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi"
 
 	"github.com/TritonSE/words-alive/internal/database"
+	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookController struct {
@@ -45,4 +47,24 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 	}
 
 	writeResponse(rw, http.StatusOK, bookDetails)
+}
+
+func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
+	var newBook database.APICreateBook
+	var createdBook models.Book
+	err := json.NewDecoder(req.Body).Decode(&newBook)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	createdBook, err = c.Books.InsertBook(req.Context(), newBook)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, createdBook)
+
 }

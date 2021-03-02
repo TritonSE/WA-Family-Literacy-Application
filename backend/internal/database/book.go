@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx"
 	"github.com/pkg/errors"
@@ -11,6 +12,12 @@ import (
 
 type BookDatabase struct {
 	Conn *pgx.Conn
+}
+
+type APICreateBook struct {
+	Title  string  `json:"title"`
+	Author string  `json:"author"`
+	Image  *string `json:"image"`
 }
 
 /*
@@ -36,6 +43,7 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
 		var book models.Book
 		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
 			&book.CreatedAt, &book.Languages); err != nil {
+			fmt.Print(err)
 			return nil, errors.Wrap(err, "error scanning result of"+
 				" SELECT FROM books in FetchBookList")
 		}
@@ -90,4 +98,23 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 	}
 
 	return &book, false, nil
+}
+
+func (db *BookDatabase) InsertBook(ctx context.Context, book APICreateBook) (models.Book, error) {
+	var newBook models.Book
+	var query string = "INSERT INTO books (title, author, image) VALUES ($1, $2, $3) RETURNING " +
+		"id, title, author, image, created_at;"
+	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).Scan(&newBook.ID,
+		&newBook.Title, &newBook.Author, &newBook.Image, &newBook.CreatedAt)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+
+		return newBook, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
+	}
+
+	newBook.Languages = []string{}
+
+	return newBook, nil
+
 }
