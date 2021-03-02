@@ -43,4 +43,9 @@ export const TextStyles = StyleSheet.create({
     fontFamily: 'Gotham-Light',
     minWidth: 16,
   },
+  caption3: {
+    fontSize: 14,
+    fontFamily: 'Gotham-Light',
+    fontWeight: 'normal',
+  },
 });
