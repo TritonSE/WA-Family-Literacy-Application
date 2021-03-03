@@ -20,6 +20,14 @@ type APICreateBook struct {
 	Image  *string `json:"image"`
 }
 
+type APICreateBookContents struct {
+	ID       string            `json:"id"`
+	Language string            `json:"language"`
+	Read     models.TabContent `json:"read"`
+	Explore  models.TabContent `json:"explore"`
+	Learn    models.TabContent `json:"learn"`
+}
+
 /*
  * Get book list for the main page
  * Only need to show previews (no read/explore/learn)
@@ -116,5 +124,22 @@ func (db *BookDatabase) InsertBook(ctx context.Context, book APICreateBook) (mod
 	newBook.Languages = []string{}
 
 	return newBook, nil
+
+}
+
+func (db *BookDatabase) InsetBookDetails(ctx context.Context, book APICreateBookContents) (models.BookDetails, error) {
+	var newBookDetail *models.BookDetails
+	var query string = "INSERT INTO book_contents (id, lang, read_video, read_body " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) " +
+		"RETURNING id, lang"
+	db.Conn.QueryRowEx(ctx, query, nil, book.ID, book.Language, book.Read.Video, book.Read.Body,
+		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body)
+
+	newBookDetail, wrongLang, err := db.FetchBookDetails(ctx, book.ID, book.Language)
+	if wrongLang == true || err != nil {
+		fmt.Printf("Error: %s\n", err)
+
+		return *newBookDetail, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
+	}
 
 }
