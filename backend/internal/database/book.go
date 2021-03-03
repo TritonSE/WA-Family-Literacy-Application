@@ -21,8 +21,7 @@ type APICreateBook struct {
 }
 
 type APICreateBookContents struct {
-	ID       string            `json:"id"`
-	Language string            `json:"language"`
+	Language string            `json:"lang"`
 	Read     models.TabContent `json:"read"`
 	Explore  models.TabContent `json:"explore"`
 	Learn    models.TabContent `json:"learn"`
@@ -127,19 +126,32 @@ func (db *BookDatabase) InsertBook(ctx context.Context, book APICreateBook) (mod
 
 }
 
-func (db *BookDatabase) InsetBookDetails(ctx context.Context, book APICreateBookContents) (models.BookDetails, error) {
-	var newBookDetail *models.BookDetails
-	var query string = "INSERT INTO book_contents (id, lang, read_video, read_body " +
+func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string, book APICreateBookContents) (models.BookDetails, error) {
+	var newBookDetail models.BookDetails
+	var query string = "INSERT INTO book_contents (id, lang, read_video, read_body, " +
 		"explore_video, explore_body, learn_video, learn_body) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) " +
 		"RETURNING id, lang"
-	db.Conn.QueryRowEx(ctx, query, nil, book.ID, book.Language, book.Read.Video, book.Read.Body,
-		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body)
 
-	newBookDetail, wrongLang, err := db.FetchBookDetails(ctx, book.ID, book.Language)
-	if wrongLang == true || err != nil {
+	// scan called here without argument to free up connection
+	// https://stackoverflow.com/questions/47706147/how-to-reuse-a-single-postgres-db-connection-for-row-inserts-in-go
+	err := db.Conn.QueryRowEx(ctx, query, nil, id, book.Language, book.Read.Video, book.Read.Body,
+		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body).Scan()
+
+	query = "SELECT books.id, title, author, image, " +
+		"created_at, read_video, read_body, explore_video, explore_body, " +
+		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
+		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
+
+	err = db.Conn.QueryRowEx(ctx, query, nil, id, book.Language).
+		Scan(&newBookDetail.ID, &newBookDetail.Title, &newBookDetail.Author, &newBookDetail.Image, &newBookDetail.CreatedAt,
+			&newBookDetail.Read.Video, &newBookDetail.Read.Body, &newBookDetail.Explore.Video,
+			&newBookDetail.Explore.Body, &newBookDetail.Learn.Video, &newBookDetail.Learn.Body)
+	if err != nil {
 		fmt.Printf("Error: %s\n", err)
-
-		return *newBookDetail, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
+		return newBookDetail, errors.Wrap(err, "error on query for book details")
 	}
 
+	return newBookDetail, nil
 }
+
+// func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()

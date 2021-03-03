@@ -66,5 +66,27 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	writeResponse(rw, http.StatusOK, createdBook)
+}
+
+func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
+	var newBookDetail database.APICreateBookContents
+	var createdBookDetail models.BookDetails
+
+	var bookID string = chi.URLParam(req, "id")
+
+	err := json.NewDecoder(req.Body).Decode(&newBookDetail)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	createdBookDetail, err = c.Books.InsertBookDetails(req.Context(), bookID, newBookDetail)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, createdBookDetail)
 
 }

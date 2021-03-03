@@ -41,6 +41,8 @@ func GetRouter() chi.Router {
 		r.Get("/", bookController.GetBookList)
 
 		r.Post("/", bookController.CreateBook)
+
+		r.Post("/{id}", bookController.CreateBookDetail)
 	})
 
 	return r

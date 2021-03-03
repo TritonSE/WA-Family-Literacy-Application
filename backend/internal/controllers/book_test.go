@@ -108,20 +108,46 @@ func TestGetNullBook(t *testing.T) {
 	require.Equal(t, "book not found", response)
 }
 
-func TestCreateBook(t *testing.T) {
+func TestCreateBookandBookDetails(t *testing.T) {
 	var book = database.APICreateBook{
 		Title:  "Harry Potter",
 		Author: "JK Rowling",
 		Image:  nil,
 	}
+
+	var bookDetails = database.APICreateBookContents{
+		Language: "en",
+		Read: models.TabContent{
+			Video: nil,
+			Body:  "read_body",
+		},
+		Explore: models.TabContent{
+			Video: nil,
+			Body:  "explore_body",
+		},
+		Learn: models.TabContent{
+			Video: nil,
+			Body:  "learn_body",
+		},
+	}
+
+	var response models.Book
+	var response2 models.BookDetails
 	reqJSON, err := json.Marshal(book)
 	require.NoError(t, err)
 	var jsonString = []byte(reqJSON)
 
-	var response models.Book
 	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &response, t)
+
 	require.Equal(t, "Harry Potter", response.Title)
 	require.Equal(t, "JK Rowling", response.Author)
 	require.Equal(t, []string{}, response.Languages)
+
+	reqJSON, err = json.Marshal(bookDetails)
+	require.NoError(t, err)
+	jsonString = []byte(reqJSON)
+
+	testutils.MakeHttpRequest("POST",
+		ts.URL+"/books/"+response.ID, jsonString, &response2, t)
 
 }
