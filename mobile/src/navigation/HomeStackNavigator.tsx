@@ -11,7 +11,10 @@ const Stack = createStackNavigator();
  */
 export const HomeStackNavigator: React.FC = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        cardStyle: { backgroundColor: 'white' }
+      }}>
       <Stack.Screen
         name="Home"
         component={HomeScreen}

@@ -23,6 +23,10 @@ export const TextStyles = StyleSheet.create({
     fontFamily: 'Gotham-Light',
     fontWeight: 'normal',
   },
+  body2: {
+    fontSize: 12,
+    fontFamily: 'Gotham-Light',
+  },
 
   caption2: {
     fontSize: 14,

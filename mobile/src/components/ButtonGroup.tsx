@@ -30,7 +30,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
       <View style={{ flexDirection: 'row' }}>
         {buttons.map(res => {
           return (
-            <View key={res.key} >
+            <View key={res.key}>
               <TouchableOpacity
                 style={[styles.button, activeButton === res.key ? styles.buttonActive : styles.buttonInactive]}
                 onPress={() => {
@@ -51,6 +51,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
 const styles = StyleSheet.create({
   button: {
     textAlign: 'center',
+    justifyContent: 'center',
     width: 72,
     height: 26,
     borderWidth: 1,
