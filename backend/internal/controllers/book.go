@@ -23,14 +23,24 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 	writeResponse(rw, http.StatusOK, books)
 }
 
-// Fetches all contents of a book for reading (/book/{id})
-func (c *BookController) GetBookDetailsByID(rw http.ResponseWriter, req *http.Request) {
+// Fetches contents of a book for reading (/book/{id}/{lang})
+func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Request) {
 
 	var bookID string = chi.URLParam(req, "id")
+	var lang string = chi.URLParam(req, "lang")
 
-	bookDetails, err := c.Books.FetchBookDetailsByID(req.Context(), bookID)
+	bookDetails, wrongLang, err := c.Books.FetchBookDetails(req.Context(), bookID, lang)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if bookDetails == nil {
+		if wrongLang {
+			writeResponse(rw, http.StatusNotFound, "book does not exist in specified language")
+		} else {
+			writeResponse(rw, http.StatusNotFound, "book not found")
+		}
 		return
 	}
 
