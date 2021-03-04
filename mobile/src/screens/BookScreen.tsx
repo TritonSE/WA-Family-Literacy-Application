@@ -4,8 +4,10 @@ import { useRoute } from '@react-navigation/native';
 import { MarkdownView } from 'react-native-markdown-view';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
+import { LanguageButtons } from '../components/LanguageButtons';
 import { APIContext } from '../context/APIContext';
 import { LoadingCircle } from '../components/LoadingCircle';
+import { I18nContext } from '../context/I18nContext';
 
 /**
  * Individual book view displaying book details
@@ -13,10 +15,15 @@ import { LoadingCircle } from '../components/LoadingCircle';
 export const BookScreen: React.FC = () => {
   // get book id from route params
   const route = useRoute();
-  const id = route.params.id;
+  const { id } = route.params;
+  const { langs } = route.params;
+
+  const client = useContext(APIContext);
+  const i18nCtx = useContext(I18nContext);
 
   // book screen states
   const [loading, setLoading] = useState(true);
+  const [language, setLanguage] = useState(i18nCtx.locale.substring(0, 2));
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [image, setImage] = useState('');
@@ -25,13 +32,21 @@ export const BookScreen: React.FC = () => {
   const [activeButton, setActiveButton] = useState('btn-1');
   const [tabContent, setTabContent] = useState(null);
 
-  const client = useContext(APIContext);
-
   // fetches book details
   useEffect(
     () => {
-      setLoading(true)
-      client.getBook(id).then((res) => {
+      setLoading(true);
+      let lang;
+
+      if (langs.indexOf(language) > -1) {
+        lang = language;
+      } else if (langs.indexOf('en') > -1) {
+        lang = 'en';
+      } else {
+        lang = langs[0];
+      }
+
+      client.getBook(id, lang).then((res) => {
         setTitle(res.title);
         setAuthor(res.author);
         setImage(res.image);
@@ -45,39 +60,57 @@ export const BookScreen: React.FC = () => {
         console.log(err);
       });
     },
-    []
+    [language],
   );
 
   // sets tab content
   useEffect(
     () => {
       if (tabContent) {
-        setTabBody(tabContent[activeButton]['body']);
-        setTabVideo(tabContent[activeButton]['video']);
+        setTabBody(tabContent[activeButton].body);
+        setTabVideo(tabContent[activeButton].video);
       }
     },
-    [activeButton, tabContent]
+    [activeButton, tabContent],
   );
 
   return (
     loading ? <View style={styles.loadingCircle}><LoadingCircle /></View> :
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.imgContainer}>
-            <Image source={{ uri: image }} style={styles.image} />
+      (
+        <ScrollView>
+          <View style={styles.container}>
+            {langs.length > 1 && (
+            <LanguageButtons
+              langs={langs}
+              defaultActive={language}
+              onBtnChange={(lang) => {
+                setLanguage(lang);
+              }}
+            />
+            )}
+
+            <View style={styles.imgContainer}>
+              <Image source={{ uri: image }} style={styles.image} />
+            </View>
+            <Text style={[TextStyles.h1, styles.title]}>{title}</Text>
+            <Text style={[TextStyles.body1, styles.author]}>By {author}</Text>
+            <ButtonGroup
+              btn1="Read"
+              btn2="Explore"
+              btn3="Learn"
+              onBtnChange={(btn) => {
+                setActiveButton(btn);
+              }}
+            />
+            <View style={{ marginLeft: 30, marginRight: 30, marginBottom: 10 }}>
+              <Text>{tabVideo}</Text>
+              <MarkdownView styles={{ text: { fontFamily: 'Gotham-Light' } }}>
+                {tabBody}
+              </MarkdownView>
+            </View>
           </View>
-          <Text style={[TextStyles.h1, styles.title]}>{title}</Text>
-          <Text style={[TextStyles.body1, styles.author]}>By {author}</Text>
-          <ButtonGroup btn1='Read' btn2='Explore' btn3='Learn' onBtnChange={(btn) => {
-            setActiveButton(btn)
-          }} />
-          <View style={{ marginLeft: 30, marginRight: 30 }}>
-            <MarkdownView styles={{ text: { fontFamily: 'Gotham-Light' } }}>
-              {tabBody}
-            </MarkdownView>
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )
   );
 };
 
@@ -86,12 +119,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 100,
+    paddingTop: 80,
   },
   loadingCircle: {
     flex: 1,
     alignContent: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   image: {
     width: 253,

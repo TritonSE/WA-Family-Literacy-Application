@@ -7,6 +7,7 @@ export type Book = {
     explore?: TabContent
     learn?: TabContent
     createdAt: string
+    languages: string[]
 };
 
 type TabContent = {

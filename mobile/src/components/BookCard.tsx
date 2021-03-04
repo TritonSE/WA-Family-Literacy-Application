@@ -15,7 +15,9 @@ export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.navigate('Book', {
         id: book.id,
-      })}>
+        langs: book.languages,
+      })}
+      >
         <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
       </TouchableOpacity>
     </View>

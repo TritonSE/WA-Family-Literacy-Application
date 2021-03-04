@@ -13,14 +13,16 @@ export const HomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: { backgroundColor: 'white' }
-      }}>
+        cardStyle: { backgroundColor: 'white' },
+      }}
+    >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
         options={{
           headerShown: false,
-        }} />
+        }}
+      />
       <Stack.Screen
         name="Book"
         component={BookScreen}
@@ -31,7 +33,8 @@ export const HomeStackNavigator: React.FC = () => {
             <Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} />
           ),
           headerTitle: '',
-        }} />
+        }}
+      />
     </Stack.Navigator>
   );
 };

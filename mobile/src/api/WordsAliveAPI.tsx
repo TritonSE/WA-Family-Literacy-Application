@@ -16,8 +16,8 @@ class WordsAliveAPI {
     }
 
     // returns an individual book by id
-    async getBook(id: string): Promise<Book> {
-      const res = await this.client.get(`/books/${id}`);
+    async getBook(id: string, lang: string): Promise<Book> {
+      const res = await this.client.get(`/books/${id}/${lang}`);
       return res.data;
     }
 }

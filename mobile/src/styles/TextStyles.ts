@@ -32,6 +32,6 @@ export const TextStyles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Gotham-Medium',
     fontWeight: 'normal',
-  }
+  },
 
 });
