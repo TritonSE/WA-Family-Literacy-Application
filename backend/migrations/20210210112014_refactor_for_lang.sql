@@ -19,9 +19,6 @@ CREATE TABLE book_contents(
     PRIMARY KEY (id, lang)
 );
 
-ALTER TABLE book_contents ADD CONSTRAINT books_id FOREIGN key (id) REFERENCES books(id);
-
-
 -- +goose StatementEnd
 
 -- +goose Down

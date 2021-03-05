@@ -168,4 +168,17 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 	return nil
 }
 
+func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
+	var query string = "DELETE from books WHERE id = $1 RETURNING title"
+	var title string
+
+	err := db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&title)
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return errors.Wrap(err, "error on delete from book_contents")
+	}
+
+	return nil
+}
+
 // func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()

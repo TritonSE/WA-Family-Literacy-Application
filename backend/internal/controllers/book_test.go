@@ -62,10 +62,6 @@ func TestMain(m *testing.M) {
 		"('catcher', 'es', 'catcher_es_rv', 'catcher_es_rb', 'catcher_es_ev', " +
 		" 'catcher_es_eb', 'catcher_es_lv', 'catcher_es_lb')")
 
-	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
-		"explore_video, explore_body, learn_video, learn_body) VALUES " +
-		"('delete_me', 'en', 'delete_rv', 'delete_rb', 'delete_ev', " +
-		" 'delete_eb', 'delete_lv', 'delete_lb')")
 	// Close the server
 	defer ts.Close()
 	os.Exit(m.Run())
@@ -82,6 +78,7 @@ func TestGetBooks(t *testing.T) {
 	require.Equal(t, "a", response[0].Title)
 	require.Equal(t, "b", response[1].Title)
 	require.Equal(t, "c", response[2].Title)
+
 }
 
 // Test for the book details function
@@ -113,49 +110,49 @@ func TestGetNullBook(t *testing.T) {
 	require.Equal(t, "book not found", response)
 }
 
-func TestCreateBookandBookDetails(t *testing.T) {
-	var book = database.APICreateBook{
-		Title:  "Harry Potter",
-		Author: "JK Rowling",
-		Image:  nil,
-	}
+// func TestCreateBookandBookDetails(t *testing.T) {
+// 	var book = database.APICreateBook{
+// 		Title:  "Harry Potter",
+// 		Author: "JK Rowling",
+// 		Image:  nil,
+// 	}
 
-	var bookDetails = database.APICreateBookContents{
-		Language: "en",
-		Read: models.TabContent{
-			Video: nil,
-			Body:  "read_body",
-		},
-		Explore: models.TabContent{
-			Video: nil,
-			Body:  "explore_body",
-		},
-		Learn: models.TabContent{
-			Video: nil,
-			Body:  "learn_body",
-		},
-	}
+// 	var bookDetails = database.APICreateBookContents{
+// 		Language: "en",
+// 		Read: models.TabContent{
+// 			Video: nil,
+// 			Body:  "read_body",
+// 		},
+// 		Explore: models.TabContent{
+// 			Video: nil,
+// 			Body:  "explore_body",
+// 		},
+// 		Learn: models.TabContent{
+// 			Video: nil,
+// 			Body:  "learn_body",
+// 		},
+// 	}
 
-	var response models.Book
-	var response2 models.BookDetails
-	reqJSON, err := json.Marshal(book)
-	require.NoError(t, err)
-	var jsonString = []byte(reqJSON)
+// 	var response models.Book
+// 	var response2 models.BookDetails
+// 	reqJSON, err := json.Marshal(book)
+// 	require.NoError(t, err)
+// 	var jsonString = []byte(reqJSON)
 
-	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &response, t)
+// 	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &response, t)
 
-	require.Equal(t, "Harry Potter", response.Title)
-	require.Equal(t, "JK Rowling", response.Author)
-	require.Equal(t, []string{}, response.Languages)
+// 	require.Equal(t, "Harry Potter", response.Title)
+// 	require.Equal(t, "JK Rowling", response.Author)
+// 	require.Equal(t, []string{}, response.Languages)
 
-	reqJSON, err = json.Marshal(bookDetails)
-	require.NoError(t, err)
-	jsonString = []byte(reqJSON)
+// 	reqJSON, err = json.Marshal(bookDetails)
+// 	require.NoError(t, err)
+// 	jsonString = []byte(reqJSON)
 
-	testutils.MakeHttpRequest("POST",
-		ts.URL+"/books/"+response.ID, jsonString, &response2, t)
+// 	testutils.MakeHttpRequest("POST",
+// 		ts.URL+"/books/"+response.ID, jsonString, &response2, t)
 
-}
+// }
 
 // currently, thebook details is not enforcing the id
 func TestBookDetailsErrorWithInvalidID(t *testing.T) {
@@ -191,7 +188,32 @@ func TestBookDetailsErrorWithInvalidID(t *testing.T) {
 func TestBookDetailDelete(t *testing.T) {
 	var response interface{}
 	testutils.MakeHttpRequest("DELETE",
-		ts.URL+"/books/delete_me/en", nil, &response, t)
+		ts.URL+"/books/c_id/en", nil, &response, t)
 
 	require.Equal(t, nil, response)
+}
+
+func TestBookDelete(t *testing.T) {
+	var response interface{}
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/c_id", nil, &response, t)
+
+	require.Equal(t, nil, response)
+}
+
+func TestBookDeleteOnInvalidId(t *testing.T) {
+	var response string
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", nil, &response, t)
+	require.Equal(t, "error", response)
+}
+
+func TestBookDetailDeleteOnInvalidId(t *testing.T) {
+	var response string
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", nil, &response, t)
+	require.Equal(t, "error", response)
+}
+
+func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
+	var response string
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", nil, &response, t)
+	require.Equal(t, "error", response)
 }

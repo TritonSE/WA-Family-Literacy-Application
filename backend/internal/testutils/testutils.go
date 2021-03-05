@@ -3,7 +3,7 @@ package testutils
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -25,12 +25,10 @@ func MakeHttpRequest(method string, url string, reqBody []byte, response interfa
 
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	require.NoError(t, err)
-
-	err = json.Unmarshal(body, response)
-	require.NoError(t, err)
-
-	// err = json.NewDecoder(res.Body).Decode(response)
-	// require.NoError(t, err)
+	err = json.NewDecoder(res.Body).Decode(response)
+	if err == io.EOF {
+		response = nil
+	} else {
+		require.NoError(t, err)
+	}
 }

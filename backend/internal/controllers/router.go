@@ -45,6 +45,8 @@ func GetRouter() chi.Router {
 		r.Post("/{id}", bookController.CreateBookDetail)
 
 		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
+
+		r.Delete("/{id}", bookController.DeleteBook)
 	})
 
 	return r
