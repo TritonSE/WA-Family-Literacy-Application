@@ -88,5 +88,19 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 	}
 
 	writeResponse(rw, http.StatusOK, createdBookDetail)
+}
+
+func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+	var lang string = chi.URLParam(req, "lang")
+
+	err := c.Books.DeleteBookContent(req.Context(), bookID, lang)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusNoContent, nil)
 
 }

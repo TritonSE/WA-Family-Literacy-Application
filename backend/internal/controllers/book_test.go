@@ -61,6 +61,11 @@ func TestMain(m *testing.M) {
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
 		"('catcher', 'es', 'catcher_es_rv', 'catcher_es_rb', 'catcher_es_ev', " +
 		" 'catcher_es_eb', 'catcher_es_lv', 'catcher_es_lb')")
+
+	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES " +
+		"('delete_me', 'en', 'delete_rv', 'delete_rb', 'delete_ev', " +
+		" 'delete_eb', 'delete_lv', 'delete_lb')")
 	// Close the server
 	defer ts.Close()
 	os.Exit(m.Run())
@@ -150,4 +155,43 @@ func TestCreateBookandBookDetails(t *testing.T) {
 	testutils.MakeHttpRequest("POST",
 		ts.URL+"/books/"+response.ID, jsonString, &response2, t)
 
+}
+
+// currently, thebook details is not enforcing the id
+func TestBookDetailsErrorWithInvalidID(t *testing.T) {
+	var badBookDetails = database.APICreateBookContents{
+
+		Language: "en",
+		Read: models.TabContent{
+			Video: nil,
+			Body:  "read_body",
+		},
+		Explore: models.TabContent{
+			Video: nil,
+			Body:  "explore_body",
+		},
+		Learn: models.TabContent{
+			Video: nil,
+			Body:  "learn_body",
+		},
+	}
+	var response string
+
+	reqJSON, err := json.Marshal(badBookDetails)
+	require.NoError(t, err)
+	var jsonString = []byte(reqJSON)
+
+	testutils.MakeHttpRequest("POST",
+		ts.URL+"/books/nonexistant", jsonString, &response, t)
+
+	require.Equal(t, "error", response)
+
+}
+
+func TestBookDetailDelete(t *testing.T) {
+	var response interface{}
+	testutils.MakeHttpRequest("DELETE",
+		ts.URL+"/books/delete_me/en", nil, &response, t)
+
+	require.Equal(t, nil, response)
 }

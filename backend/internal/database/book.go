@@ -154,4 +154,18 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string, book A
 	return newBookDetail, nil
 }
 
+func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
+	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2 RETURNING id"
+	var returnedID string
+
+	err := db.Conn.QueryRowEx(ctx, query, nil, id, lang).Scan(&returnedID)
+
+	if err != nil || returnedID != id {
+		fmt.Printf("Error: %s\n", err)
+		return errors.Wrap(err, "error on delete from book_contents")
+	}
+
+	return nil
+}
+
 // func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()
