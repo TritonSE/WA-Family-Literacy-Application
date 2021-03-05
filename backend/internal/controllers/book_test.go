@@ -195,7 +195,7 @@ func TestBookDetailDelete(t *testing.T) {
 
 func TestBookDelete(t *testing.T) {
 	var response interface{}
-	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/c_id", nil, &response, t)
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher", nil, &response, t)
 
 	require.Equal(t, nil, response)
 }
@@ -216,4 +216,14 @@ func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
 	var response string
 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", nil, &response, t)
 	require.Equal(t, "error", response)
+}
+
+func TestUpdateBook(t *testing.T) {
+	// convert this into update books b/c all three can be nil
+	var updatedBook = database.APICreateBook{
+		Title:  "updated_title",
+		Author: nil,
+		Image:  nil,
+	}
+
 }

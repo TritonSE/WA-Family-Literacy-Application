@@ -32,3 +32,9 @@ func MakeHttpRequest(method string, url string, reqBody []byte, response interfa
 		require.NoError(t, err)
 	}
 }
+
+func makeJSONBody(body struct{}, t *testing.T) []byte {
+	reqJSON, err := json.Marshal(body)
+	require.NoError(t, err)
+	return []byte(reqJSON)
+}

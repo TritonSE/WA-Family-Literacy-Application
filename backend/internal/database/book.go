@@ -155,30 +155,76 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string, book A
 }
 
 func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
-	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2 RETURNING id"
-	var returnedID string
+	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2"
 
-	err := db.Conn.QueryRowEx(ctx, query, nil, id, lang).Scan(&returnedID)
+	commandTag, err := db.Conn.Exec(query, id, lang)
 
-	if err != nil || returnedID != id {
-		fmt.Printf("Error: %s\n", err)
-		return errors.Wrap(err, "error on delete from book_contents")
-	}
-
-	return nil
-}
-
-func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
-	var query string = "DELETE from books WHERE id = $1 RETURNING title"
-	var title string
-
-	err := db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&title)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return errors.Wrap(err, "error on delete from book_contents")
 	}
 
+	if commandTag.RowsAffected() != 1 {
+		fmt.Printf("Error: %s\n", commandTag)
+		return errors.New("No row found to delete")
+	}
+
+	query = "SELECT COUNT(*) FROM book_contents WHERE id = $1"
+	var count int
+	err = db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&count)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return errors.Wrap(err, "error reading back data in delete from book_contents")
+	}
+
+	if count == 0 {
+		err = db.DeleteBook(ctx, id)
+		if err != nil {
+			return errors.Wrap(err, "error on deleting book with no language")
+		}
+	}
+
 	return nil
+}
+
+func (db *BookDatabase) DeleteBookWithID(ctx context.Context, id string) error {
+	var query string = "DELETE from books WHERE id = $1"
+
+	commandTag, err := db.Conn.Exec(query, id)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return errors.Wrap(err, "error on delete from book")
+	}
+
+	if commandTag.RowsAffected() != 1 {
+		return errors.New("No row found to delete")
+	}
+
+	return nil
+}
+
+func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
+	updates APICreateBook) (models.Book, error) {
+	var updatedBook models.Book
+	var query string = "UPDATE books " +
+		"SET title = COALESCE($1, title), " +
+		"author = COALESCE($2, author), " +
+		"image = COALESCE($3, image), " +
+		"WHERE id = $4 " +
+		"RETURNING id, title, author, image"
+	err := db.Conn.QueryRowEx(ctx, query, nil, updates.Title, updates.Author,
+		updates.Image, id).Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Image,
+		&updatedBook.CreatedAt)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return updatedBook, errors.Wrap(err, "error on update book")
+	}
+
+	return updatedBook, nil
+
 }
 
 // func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()

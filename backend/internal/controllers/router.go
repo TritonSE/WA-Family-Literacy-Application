@@ -47,6 +47,8 @@ func GetRouter() chi.Router {
 		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
 
 		r.Delete("/{id}", bookController.DeleteBook)
+
+		r.Patch("/{id}", bookController.UpdateBook)
 	})
 
 	return r
