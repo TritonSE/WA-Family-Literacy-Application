@@ -125,16 +125,18 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 	return &book, false, nil
 }
 
-func (db *BookDatabase) InsertBook(ctx context.Context, book APICreateBook) (models.Book, error) {
+func (db *BookDatabase) InsertBook(ctx context.Context,
+	book APICreateBook) (models.Book, error) {
 	var newBook models.Book
-	var query string = "INSERT INTO books (title, author, image) VALUES ($1, $2, $3) RETURNING " +
-		"id, title, author, image, created_at;"
-	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).Scan(&newBook.ID,
-		&newBook.Title, &newBook.Author, &newBook.Image, &newBook.CreatedAt)
+	var query string = "INSERT INTO books (title, author, image) " +
+		"VALUES ($1, $2, $3) " +
+		"RETURNING id, title, author, image, created_at"
+	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).
+		Scan(&newBook.ID, &newBook.Title, &newBook.Author,
+			&newBook.Image, &newBook.CreatedAt)
 
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
-
 		return newBook, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
 
@@ -144,16 +146,21 @@ func (db *BookDatabase) InsertBook(ctx context.Context, book APICreateBook) (mod
 
 }
 
-func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string, book APICreateBookContents) (models.BookDetails, error) {
+func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
+	book APICreateBookContents) (models.BookDetails, error) {
 	var newBookDetail models.BookDetails
-	var query string = "INSERT INTO book_contents (id, lang, read_video, read_body, " +
-		"explore_video, explore_body, learn_video, learn_body) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) " +
+	var query string = "INSERT INTO book_contents " +
+		"(id, lang, read_video, read_body, explore_video, explore_body " +
+		"learn_video, learn_body) " +
+		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8) " +
 		"RETURNING id, lang"
 
 	// scan called here without argument to free up connection
 	// https://stackoverflow.com/questions/47706147/how-to-reuse-a-single-postgres-db-connection-for-row-inserts-in-go
-	err := db.Conn.QueryRowEx(ctx, query, nil, id, book.Language, book.Read.Video, book.Read.Body,
-		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body).Scan()
+	err := db.Conn.QueryRowEx(ctx, query, nil, id, book.Language,
+		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
+		book.Learn.Video, book.Learn.Body).
+		Scan()
 
 	query = "SELECT books.id, title, author, image, " +
 		"created_at, read_video, read_body, explore_video, explore_body, " +
@@ -161,9 +168,12 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string, book A
 		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
 
 	err = db.Conn.QueryRowEx(ctx, query, nil, id, book.Language).
-		Scan(&newBookDetail.ID, &newBookDetail.Title, &newBookDetail.Author, &newBookDetail.Image, &newBookDetail.CreatedAt,
-			&newBookDetail.Read.Video, &newBookDetail.Read.Body, &newBookDetail.Explore.Video,
-			&newBookDetail.Explore.Body, &newBookDetail.Learn.Video, &newBookDetail.Learn.Body)
+		Scan(&newBookDetail.ID, &newBookDetail.Title, &newBookDetail.Author,
+			&newBookDetail.Image, &newBookDetail.CreatedAt,
+			&newBookDetail.Read.Video, &newBookDetail.Read.Body,
+			&newBookDetail.Explore.Video, &newBookDetail.Explore.Body,
+			&newBookDetail.Learn.Video, &newBookDetail.Learn.Body)
+
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return newBookDetail, errors.Wrap(err, "error on query for book details")
@@ -196,6 +206,7 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 		return errors.Wrap(err, "error reading back data in delete from book_contents")
 	}
 
+	// if no more books remain in book_contents table with selected id, delete book in books table
 	if count == 0 {
 		err = db.DeleteBookWithID(ctx, id)
 		if err != nil {
@@ -230,15 +241,18 @@ func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
 		"SET title = COALESCE($1, title), " +
 		"author = COALESCE($2, author), " +
 		"image = COALESCE($3, image) " +
-		"WHERE id = $4 RETURNING id, title, author, image, created_at"
+		"WHERE id = $4 " +
+		"RETURNING id, title, author, image, created_at"
 	err := db.Conn.QueryRowEx(ctx, query, nil, updates.Title, updates.Author,
-		updates.Image, id).Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Author, &updatedBook.Image,
-		&updatedBook.CreatedAt)
+		updates.Image, id).
+		Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Author,
+			&updatedBook.Image, &updatedBook.CreatedAt)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on update book")
 	}
 
+	// to get languages Array
 	query = "SELECT lang FROM book_contents WHERE id = $1"
 	rows, err := db.Conn.QueryEx(ctx, query, nil, id)
 
@@ -255,6 +269,7 @@ func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
 		updatedBook.Languages = append(updatedBook.Languages, lang)
 	}
 
+	// runs if rows.Next() fails
 	if rows.Err() != nil {
 		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on row iteration in update book")
@@ -279,9 +294,11 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 		"WHERE id = $8 AND lang = $9 " +
 		"RETURNING lang"
 
-	err := db.Conn.QueryRowEx(ctx, query, nil, book.Language, book.Read.Video, book.Read.Body,
-		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body,
-		id, lang).Scan(&updatedLanguage)
+	err := db.Conn.QueryRowEx(ctx, query, nil, book.Language,
+		book.Read.Video, book.Read.Body,
+		book.Explore.Video, book.Explore.Body,
+		book.Learn.Video, book.Learn.Body, id, lang).
+		Scan(&updatedLanguage)
 
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
@@ -293,11 +310,13 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
 		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
 
-	err = db.Conn.QueryRowEx(ctx, query, nil, id, updatedLanguage).Scan(&updatedBookDetails.ID,
-		&updatedBookDetails.Title, &updatedBookDetails.Author, &updatedBookDetails.Image,
-		&updatedBookDetails.CreatedAt, &updatedBookDetails.Read.Video, &updatedBookDetails.Read.Body,
-		&updatedBookDetails.Explore.Video, &updatedBookDetails.Explore.Body, &updatedBookDetails.Learn.Video,
-		&updatedBookDetails.Learn.Body)
+	err = db.Conn.QueryRowEx(ctx, query, nil, id, updatedLanguage).
+		Scan(&updatedBookDetails.ID, &updatedBookDetails.Title,
+			&updatedBookDetails.Author, &updatedBookDetails.Image,
+			&updatedBookDetails.CreatedAt,
+			&updatedBookDetails.Read.Video, &updatedBookDetails.Read.Body,
+			&updatedBookDetails.Explore.Video, &updatedBookDetails.Explore.Body,
+			&updatedBookDetails.Learn.Video, &updatedBookDetails.Learn.Body)
 
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
@@ -308,5 +327,3 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 	return updatedBookDetails, nil
 
 }
-
-// func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()
