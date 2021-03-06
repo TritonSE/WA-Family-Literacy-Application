@@ -133,3 +133,10 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	writeResponse(rw, http.StatusOK, resBook)
 
 }
+
+func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+	var lang string = chi.URLParam(req, "lang")
+	var reqBookDetails database.APIUpdateBookDetails
+	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
+}

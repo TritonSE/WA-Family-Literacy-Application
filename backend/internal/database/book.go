@@ -27,10 +27,21 @@ type APICreateBookContents struct {
 	Learn    models.TabContent `json:"learn"`
 }
 
+type APIUpdateTabContents struct {
+	Video *string `json:"video"`
+	Body  *string `json:"body"`
+}
+
 type APIUpdateBook struct {
 	Title  *string `json:"title"`
 	Author *string `json:"author"`
 	Image  *string `json:"image"`
+}
+
+type APIUpdateBookDetails struct {
+	Read    APIUpdateTabContents  `json:"read"`
+	Explore APICreateBookContents `json:"explore"`
+	Learn   APICreateBookContents `json:"learn"`
 }
 
 /*
@@ -250,6 +261,14 @@ func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
 
 	return updatedBook, nil
 
+}
+
+func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
+	lang string) (models.BookDetails, error) {
+	var updatedBookDetails models.BookDetails
+	var query string = "UPDATE book_contents " +
+		" SET lang = COALESCE($1, lang), " +
+		"read_video = C"
 }
 
 // func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()
