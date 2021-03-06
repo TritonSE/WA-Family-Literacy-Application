@@ -1,7 +1,6 @@
 package controllers_test
 
 import (
-	"encoding/json"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -22,15 +21,19 @@ var ts = httptest.NewServer(r)
 func TestMain(m *testing.M) {
 	database.Migrate("../../migrations")
 
-	_, _ = conn.Exec("TRUNCATE books")
-	_, _ = conn.Exec("TRUNCATE book_contents")
+	_, _ = conn.Exec("DELETE FROM books")
+	_, _ = conn.Exec("DELETE FROM book_contents")
 
 	// Populate database
 	conn.Exec("INSERT INTO books (id, title, author) values ('c_id', 'c','c1');")
 	conn.Exec("INSERT INTO books (id, title, author) values ('a_id', 'a','a1');")
 	conn.Exec("INSERT INTO books (id, title, author) values ('b_id', 'b','b1');")
+	conn.Exec("INSERT INTO books (id, title, author) VALUES ('d_id'," +
+		"'d', 'd1');")
 	conn.Exec("INSERT INTO books (id, title, author) VALUES ('catcher'," +
 		"'catcher in the rye', 'a');")
+	conn.Exec("INSERT INTO books (id, title, author) VALUES ('update_me'," +
+		"'not_updated', 'update_author');")
 
 	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
@@ -41,6 +44,11 @@ func TestMain(m *testing.M) {
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
 		"('b_id', 'en', 'b_en_rv', 'b_en_rb', 'b_en_ev', 'b_en_eb', " +
 		"'b_en_lv', 'b_en_lb')")
+
+	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES " +
+		"('d_id', 'en', 'd_en_rv', 'd_en_rb', 'd_en_ev', 'd_en_eb', " +
+		"'d_en_lv', 'd_en_lb')")
 
 	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
@@ -62,6 +70,11 @@ func TestMain(m *testing.M) {
 		"('catcher', 'es', 'catcher_es_rv', 'catcher_es_rb', 'catcher_es_ev', " +
 		" 'catcher_es_eb', 'catcher_es_lv', 'catcher_es_lb')")
 
+	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES " +
+		"('update_me', 'en', 'updt_en_rv', 'updt_en_rb', 'updt_en_ev', " +
+		" 'updt_en_eb', 'updt_en_lv', 'updt_en_lb')")
+
 	// Close the server
 	defer ts.Close()
 	os.Exit(m.Run())
@@ -74,7 +87,7 @@ func TestGetBooks(t *testing.T) {
 	testutils.MakeHttpRequest("GET", ts.URL+"/books", nil, &response, t)
 
 	// Check for correct number of elements, and sort alphabetically
-	require.Len(t, response, 4)
+	require.Len(t, response, 6)
 	require.Equal(t, "a", response[0].Title)
 	require.Equal(t, "b", response[1].Title)
 	require.Equal(t, "c", response[2].Title)
@@ -173,10 +186,7 @@ func TestBookDetailsErrorWithInvalidID(t *testing.T) {
 		},
 	}
 	var response string
-
-	reqJSON, err := json.Marshal(badBookDetails)
-	require.NoError(t, err)
-	var jsonString = []byte(reqJSON)
+	var jsonString = testutils.MakeJSONBody(badBookDetails, t)
 
 	testutils.MakeHttpRequest("POST",
 		ts.URL+"/books/nonexistant", jsonString, &response, t)
@@ -195,7 +205,7 @@ func TestBookDetailDelete(t *testing.T) {
 
 func TestBookDelete(t *testing.T) {
 	var response interface{}
-	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher", nil, &response, t)
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/d_id", nil, &response, t)
 
 	require.Equal(t, nil, response)
 }
@@ -219,11 +229,16 @@ func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
 }
 
 func TestUpdateBook(t *testing.T) {
-	// convert this into update books b/c all three can be nil
-	var updatedBook = database.APICreateBook{
-		Title:  "updated_title",
+	var str = "updated_title"
+	var updatedBook = database.APIUpdateBook{
+		Title:  &str,
 		Author: nil,
 		Image:  nil,
 	}
+	jsonStr := testutils.MakeJSONBody(updatedBook, t)
+	var response models.Book
+	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update_me", jsonStr, &response, t)
+	require.Equal(t, "updated_title", response.Title)
+	require.Equal(t, "update_author", response.Author)
 
 }

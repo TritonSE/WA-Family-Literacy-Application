@@ -119,7 +119,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
-	var reqBook database.APICreateBook
+	var reqBook database.APIUpdateBook
 	var resBook models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 
@@ -130,6 +130,6 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
 	resBook, err = c.Books.UpdateBookWithID(req.Context(), bookID, reqBook)
 
-	writeResponse(rw, http.StatusNoContent, resBook)
+	writeResponse(rw, http.StatusOK, resBook)
 
 }

@@ -27,6 +27,12 @@ type APICreateBookContents struct {
 	Learn    models.TabContent `json:"learn"`
 }
 
+type APIUpdateBook struct {
+	Title  *string `json:"title"`
+	Author *string `json:"author"`
+	Image  *string `json:"image"`
+}
+
 /*
  * Get book list for the main page
  * Only need to show previews (no read/explore/learn)
@@ -179,7 +185,7 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 	}
 
 	if count == 0 {
-		err = db.DeleteBook(ctx, id)
+		err = db.DeleteBookWithID(ctx, id)
 		if err != nil {
 			return errors.Wrap(err, "error on deleting book with no language")
 		}
@@ -206,21 +212,40 @@ func (db *BookDatabase) DeleteBookWithID(ctx context.Context, id string) error {
 }
 
 func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
-	updates APICreateBook) (models.Book, error) {
+	updates APIUpdateBook) (models.Book, error) {
 	var updatedBook models.Book
 	var query string = "UPDATE books " +
 		"SET title = COALESCE($1, title), " +
 		"author = COALESCE($2, author), " +
-		"image = COALESCE($3, image), " +
-		"WHERE id = $4 " +
-		"RETURNING id, title, author, image"
+		"image = COALESCE($3, image) " +
+		"WHERE id = $4 RETURNING id, title, author, image, created_at"
 	err := db.Conn.QueryRowEx(ctx, query, nil, updates.Title, updates.Author,
-		updates.Image, id).Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Image,
+		updates.Image, id).Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Author, &updatedBook.Image,
 		&updatedBook.CreatedAt)
-
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on update book")
+	}
+
+	query = "SELECT lang FROM book_contents WHERE id = $1"
+	rows, err := db.Conn.QueryEx(ctx, query, nil, id)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return updatedBook, errors.Wrap(err, "error on selecting languages on update book")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var lang string
+		rows.Scan(&lang)
+		updatedBook.Languages = append(updatedBook.Languages, lang)
+	}
+
+	if rows.Err() != nil {
+		fmt.Printf("Error: %s\n", err)
+		return updatedBook, errors.Wrap(err, "error on row iteration in update book")
 	}
 
 	return updatedBook, nil
