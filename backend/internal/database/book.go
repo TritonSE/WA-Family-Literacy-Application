@@ -39,9 +39,10 @@ type APIUpdateBook struct {
 }
 
 type APIUpdateBookDetails struct {
-	Read    APIUpdateTabContents  `json:"read"`
-	Explore APICreateBookContents `json:"explore"`
-	Learn   APICreateBookContents `json:"learn"`
+	Language *string              `json:"language"`
+	Read     APIUpdateTabContents `json:"read"`
+	Explore  APIUpdateTabContents `json:"explore"`
+	Learn    APIUpdateTabContents `json:"learn"`
 }
 
 /*
@@ -264,11 +265,48 @@ func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
 }
 
 func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
-	lang string) (models.BookDetails, error) {
+	lang string, book APIUpdateBookDetails) (models.BookDetails, error) {
 	var updatedBookDetails models.BookDetails
+	var updatedLanguage string
 	var query string = "UPDATE book_contents " +
 		" SET lang = COALESCE($1, lang), " +
-		"read_video = C"
+		"read_video = COALESCE($2, read_video), " +
+		"read_body = COALESCE($3, read_body), " +
+		"explore_video = COALESCE($4, explore_video), " +
+		"explore_body = COALESCE($5, explore_body), " +
+		"learn_video = COALESCE($6, learn_video), " +
+		"learn_body = COALESCE($7, learn_body) " +
+		"WHERE id = $8 AND lang = $9 " +
+		"RETURNING lang"
+
+	err := db.Conn.QueryRowEx(ctx, query, nil, book.Language, book.Read.Video, book.Read.Body,
+		book.Explore.Video, book.Explore.Body, book.Learn.Video, book.Learn.Body,
+		id, lang).Scan(&updatedLanguage)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return updatedBookDetails, errors.Wrap(err, "error on updating book_contents")
+	}
+
+	query = "SELECT books.id, title, author, image, " +
+		"created_at, read_video, read_body, explore_video, explore_body, " +
+		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
+		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
+
+	err = db.Conn.QueryRowEx(ctx, query, nil, id, updatedLanguage).Scan(&updatedBookDetails.ID,
+		&updatedBookDetails.Title, &updatedBookDetails.Author, &updatedBookDetails.Image,
+		&updatedBookDetails.CreatedAt, &updatedBookDetails.Read.Video, &updatedBookDetails.Read.Body,
+		&updatedBookDetails.Explore.Video, &updatedBookDetails.Explore.Body, &updatedBookDetails.Learn.Video,
+		&updatedBookDetails.Learn.Body)
+
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return updatedBookDetails, errors.Wrap(err, "error on reading back from book_contents on update book_details")
+
+	}
+
+	return updatedBookDetails, nil
+
 }
 
 // func (db* BookDatabase) DeleteBook(ctx context.Context, id string) ()

@@ -138,5 +138,21 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 	var reqBookDetails database.APIUpdateBookDetails
+	var resBookDetails models.BookDetails
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	resBookDetails, err = c.Books.UpdateBookDetails(req.Context(), bookID, lang, reqBookDetails)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, resBookDetails)
+
 }
