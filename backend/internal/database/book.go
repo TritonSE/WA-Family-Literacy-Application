@@ -125,6 +125,11 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 	return &book, false, nil
 }
 
+/*
+ * Inserts a book into the books table
+ * MUST be called on the first instance a book is inserted into the database
+ * and has no associated language
+ */
 func (db *BookDatabase) InsertBook(ctx context.Context,
 	book APICreateBook) (models.Book, error) {
 	var newBook models.Book
@@ -146,6 +151,10 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 
 }
 
+/*
+ * Inserts a books details into the book_contents table. Returns the
+ * complete books details
+ */
 func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 	book APICreateBookContents) (models.BookDetails, error) {
 	var newBookDetail models.BookDetails
@@ -154,8 +163,6 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 		"learn_video, learn_body) " +
 		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
 
-	// scan called here without argument to free up connection
-	// https://stackoverflow.com/questions/47706147/how-to-reuse-a-single-postgres-db-connection-for-row-inserts-in-go
 	commandTag, err := db.Conn.Exec(query, id, book.Language,
 		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
 		book.Learn.Video, book.Learn.Body)
@@ -185,6 +192,11 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 	return newBookDetail, nil
 }
 
+/*
+ * Deletes a language entry of a book in the book_contents table. If book has
+ * no other remaining languages in book_contents table, deletes the book from the
+ * books table
+ */
 func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
 	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2"
 
@@ -211,7 +223,7 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 
 	// if no more books remain in book_contents table with selected id, delete book in books table
 	if count == 0 {
-		err = db.DeleteBookWithID(ctx, id)
+		err = db.DeleteBook(ctx, id)
 		if err != nil {
 			return errors.Wrap(err, "error on deleting book with no language")
 		}
@@ -220,7 +232,10 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 	return nil
 }
 
-func (db *BookDatabase) DeleteBookWithID(ctx context.Context, id string) error {
+/*
+ * Deletes a book from the books table
+ */
+func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
 	var query string = "DELETE from books WHERE id = $1"
 
 	commandTag, err := db.Conn.Exec(query, id)
@@ -237,7 +252,10 @@ func (db *BookDatabase) DeleteBookWithID(ctx context.Context, id string) error {
 	return nil
 }
 
-func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
+/*
+ * Updates a book in the books table
+ */
+func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
 	updates APIUpdateBook) (models.Book, error) {
 	var updatedBook models.Book
 	var query string = "UPDATE books " +
@@ -282,6 +300,9 @@ func (db *BookDatabase) UpdateBookWithID(ctx context.Context, id string,
 
 }
 
+/*
+ * Updates a row in the book_contents table
+ */
 func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 	lang string, book APIUpdateBookDetails) (models.BookDetails, error) {
 	var updatedBookDetails models.BookDetails

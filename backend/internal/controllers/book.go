@@ -51,49 +51,48 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
-	var newBook database.APICreateBook
-	var createdBook models.Book
-	err := json.NewDecoder(req.Body).Decode(&newBook)
+	var reqBook database.APICreateBook
+	var resBook models.Book
+	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	createdBook, err = c.Books.InsertBook(req.Context(), newBook)
+	resBook, err = c.Books.InsertBook(req.Context(), reqBook)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, createdBook)
+	writeResponse(rw, http.StatusOK, resBook)
 }
 
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
-	var newBookDetail database.APICreateBookContents
-	var createdBookDetail models.BookDetails
+	var reqBookDetail database.APICreateBookContents
+	var resBookDetail models.BookDetails
 
 	var bookID string = chi.URLParam(req, "id")
 
-	err := json.NewDecoder(req.Body).Decode(&newBookDetail)
+	err := json.NewDecoder(req.Body).Decode(&reqBookDetail)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	createdBookDetail, err = c.Books.InsertBookDetails(req.Context(), bookID, newBookDetail)
+	resBookDetail, err = c.Books.InsertBookDetails(req.Context(), bookID, reqBookDetail)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, createdBookDetail)
+	writeResponse(rw, http.StatusOK, resBookDetail)
 }
 
-// deletes an entry from the book_contents entry. If no more entries of the book
-// remain, deletes the book from the books table (/books/{id}/{lang})
+// deletes an entry from the book_contents entry (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
@@ -113,7 +112,7 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 
-	err := c.Books.DeleteBookWithID(req.Context(), bookID)
+	err := c.Books.DeleteBook(req.Context(), bookID)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -135,7 +134,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	resBook, err = c.Books.UpdateBookWithID(req.Context(), bookID, reqBook)
+	resBook, err = c.Books.UpdateBook(req.Context(), bookID, reqBook)
 
 	writeResponse(rw, http.StatusOK, resBook)
 

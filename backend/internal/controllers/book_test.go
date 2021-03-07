@@ -1,7 +1,6 @@
 package controllers_test
 
 import (
-	"encoding/json"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -148,24 +147,20 @@ func TestCreateBookandBookDetails(t *testing.T) {
 		},
 	}
 
-	var response models.Book
-	var response2 models.BookDetails
-	reqJSON, err := json.Marshal(book)
-	require.NoError(t, err)
-	var jsonString = []byte(reqJSON)
+	var createdBook models.Book
+	var createdBookDetails models.BookDetails
+	var jsonString = testutils.MakeJSONBody(book, t)
 
-	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &response, t)
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &createdBook, t)
 
-	require.Equal(t, "Harry Potter", response.Title)
-	require.Equal(t, "JK Rowling", response.Author)
-	require.Equal(t, []string{}, response.Languages)
+	require.Equal(t, "Harry Potter", createdBook.Title)
+	require.Equal(t, "JK Rowling", createdBook.Author)
+	require.Equal(t, []string{}, createdBook.Languages)
 
-	reqJSON, err = json.Marshal(bookDetails)
-	require.NoError(t, err)
-	jsonString = []byte(reqJSON)
+	jsonString = testutils.MakeJSONBody(bookDetails, t)
 
 	testutils.MakeHttpRequest("POST",
-		ts.URL+"/books/"+response.ID, jsonString, &response2, t)
+		ts.URL+"/books/"+createdBook.ID, jsonString, &createdBookDetails, t)
 
 }
 
