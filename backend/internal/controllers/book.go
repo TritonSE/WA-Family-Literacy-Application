@@ -49,6 +49,7 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 	writeResponse(rw, http.StatusOK, bookDetails)
 }
 
+// Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	var newBook database.APICreateBook
 	var createdBook models.Book
@@ -68,6 +69,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	writeResponse(rw, http.StatusOK, createdBook)
 }
 
+// Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var newBookDetail database.APICreateBookContents
 	var createdBookDetail models.BookDetails
@@ -90,6 +92,8 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 	writeResponse(rw, http.StatusOK, createdBookDetail)
 }
 
+// deletes an entry from the book_contents entry. If no more entries of the book
+// remain, deletes the book from the books table (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
@@ -104,6 +108,8 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 	writeResponse(rw, http.StatusNoContent, nil)
 
 }
+
+// deletes a book from the books table (/books/{id})
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 
@@ -117,6 +123,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	writeResponse(rw, http.StatusNoContent, nil)
 }
 
+// updates the book from the books table (/books{id})
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var reqBook database.APIUpdateBook
@@ -134,6 +141,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+// updates a book in the book_contents table (/books{id}/{lang})
 func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")

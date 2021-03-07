@@ -124,6 +124,7 @@ func TestGetNullBook(t *testing.T) {
 	require.Equal(t, "book not found", response)
 }
 
+// Test if creating a book and its corresponding contents works
 func TestCreateBookandBookDetails(t *testing.T) {
 	var book = database.APICreateBook{
 		Title:  "Harry Potter",
@@ -168,6 +169,7 @@ func TestCreateBookandBookDetails(t *testing.T) {
 
 }
 
+// Test if inserting into book_contents with an id not in books throws an error
 func TestBookDetailsErrorWithInvalidID(t *testing.T) {
 	var badBookDetails = database.APICreateBookContents{
 
@@ -195,6 +197,7 @@ func TestBookDetailsErrorWithInvalidID(t *testing.T) {
 
 }
 
+// Test if deleting from book_contents works
 func TestBookDetailDelete(t *testing.T) {
 	var response interface{}
 	testutils.MakeHttpRequest("DELETE",
@@ -203,6 +206,7 @@ func TestBookDetailDelete(t *testing.T) {
 	require.Equal(t, nil, response)
 }
 
+// Testif deleting book works
 func TestBookDelete(t *testing.T) {
 	var response interface{}
 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/d_id", nil, &response, t)
@@ -210,24 +214,28 @@ func TestBookDelete(t *testing.T) {
 	require.Equal(t, nil, response)
 }
 
+// Testing if delete on an invalid id returns an error
 func TestBookDeleteOnInvalidId(t *testing.T) {
 	var response string
 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", nil, &response, t)
 	require.Equal(t, "error", response)
 }
 
+// Test if book detail delete on an invalid id returns an error
 func TestBookDetailDeleteOnInvalidId(t *testing.T) {
 	var response string
 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", nil, &response, t)
 	require.Equal(t, "error", response)
 }
 
+// Test book detail on invalid language returns an error
 func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
 	var response string
 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", nil, &response, t)
 	require.Equal(t, "error", response)
 }
 
+// Test if updating entry in books work
 func TestUpdateBook(t *testing.T) {
 	var str = "updated_title"
 	var updatedBook = database.APIUpdateBook{
@@ -243,6 +251,7 @@ func TestUpdateBook(t *testing.T) {
 
 }
 
+// Test if updating entry in book_contents works
 func TestUpdateBookDetails(t *testing.T) {
 	var read_vid string = "new_read_video"
 	var updatedBook = database.APIUpdateBookDetails{
@@ -261,9 +270,9 @@ func TestUpdateBookDetails(t *testing.T) {
 		},
 	}
 
-	jsoonStr := testutils.MakeJSONBody(updatedBook, t)
+	jsonStr := testutils.MakeJSONBody(updatedBook, t)
 	var response models.BookDetails
 	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update_me/en",
-		jsoonStr, &response, t)
+		jsonStr, &response, t)
 	require.Equal(t, "new_read_video", *response.Read.Video)
 }

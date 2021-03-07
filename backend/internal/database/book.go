@@ -150,17 +150,20 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 	book APICreateBookContents) (models.BookDetails, error) {
 	var newBookDetail models.BookDetails
 	var query string = "INSERT INTO book_contents " +
-		"(id, lang, read_video, read_body, explore_video, explore_body " +
+		"(id, lang, read_video, read_body, explore_video, explore_body, " +
 		"learn_video, learn_body) " +
-		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8) " +
-		"RETURNING id, lang"
+		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
 
 	// scan called here without argument to free up connection
 	// https://stackoverflow.com/questions/47706147/how-to-reuse-a-single-postgres-db-connection-for-row-inserts-in-go
-	err := db.Conn.QueryRowEx(ctx, query, nil, id, book.Language,
+	commandTag, err := db.Conn.Exec(query, id, book.Language,
 		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
-		book.Learn.Video, book.Learn.Body).
-		Scan()
+		book.Learn.Video, book.Learn.Body)
+
+	if err != nil || commandTag.RowsAffected() != 1 {
+		fmt.Printf("Error: %s\n", err)
+		return newBookDetail, errors.Wrap(err, "error on INSERT INTO book_contents in InsertBookDetails")
+	}
 
 	query = "SELECT books.id, title, author, image, " +
 		"created_at, read_video, read_body, explore_video, explore_body, " +
