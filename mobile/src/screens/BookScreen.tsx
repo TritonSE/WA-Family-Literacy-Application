@@ -2,18 +2,19 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MarkdownView } from 'react-native-markdown-view';
+import YoutubePlayer from 'react-native-youtube-iframe';
+import { LoadingCircle } from '../components/LoadingCircle';
+import { APIContext } from '../context/APIContext';
+import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
 import { LanguageButtons } from '../components/LanguageButtons';
-import { APIContext } from '../context/APIContext';
-import { LoadingCircle } from '../components/LoadingCircle';
-import { I18nContext } from '../context/I18nContext';
 
 /**
  * Individual book view displaying book details
  */
 export const BookScreen: React.FC = () => {
-  // get book id from route params
+  // get book id and langs from route params
   const route = useRoute();
   const { id } = route.params;
   const { langs } = route.params;
@@ -29,10 +30,21 @@ export const BookScreen: React.FC = () => {
   const [image, setImage] = useState('');
   const [tabBody, setTabBody] = useState('');
   const [tabVideo, setTabVideo] = useState('');
-  const [activeButton, setActiveButton] = useState('btn-1');
+  const [activeButton, setActiveButton] = useState('');
   const [tabContent, setTabContent] = useState(null);
 
-  // fetches book details
+  const markdownStyles = {
+    heading: { fontFamily: 'Gotham-Light' },
+    paragraph: { fontFamily: 'Gotham-Light' },
+    strong: { fontFamily: 'Gotham-Bold' },
+    listItemNumber: { fontFamily: 'Gotham-Light' },
+    listItemOrderedContent: { fontFamily: 'Gotham-Light' },
+    listItemUnorderedContent: { fontFamily: 'Gotham-Light' },
+    tableHeaderCellContent: { fontFamily: 'Gotham-Light' },
+    em: { fontFamily: 'Gotham-Italic' },
+  };
+
+  // fetches book details on language change
   useEffect(
     () => {
       setLoading(true);
@@ -42,14 +54,18 @@ export const BookScreen: React.FC = () => {
         lang = language;
       } else if (langs.indexOf('en') > -1) {
         lang = 'en';
+        setLanguage(lang);
       } else {
-        lang = langs[0];
+        const [first] = langs;
+        lang = first;
+        setLanguage(lang);
       }
 
       client.getBook(id, lang).then((res) => {
         setTitle(res.title);
         setAuthor(res.author);
         setImage(res.image);
+        setActiveButton('btn-1');
         setTabContent({
           'btn-1': res.read,
           'btn-2': res.explore,
@@ -63,12 +79,19 @@ export const BookScreen: React.FC = () => {
     [language],
   );
 
-  // sets tab content
+  // sets tab content on tab button change
   useEffect(
     () => {
       if (tabContent) {
+        setTabVideo(null);
+        if (tabContent[activeButton].video) {
+          const regEx = '^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?.com|youtu.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)';
+          const matches = tabContent[activeButton].video.match(regEx);
+          if (matches) {
+            setTabVideo(matches[1]);
+          }
+        }
         setTabBody(tabContent[activeButton].body);
-        setTabVideo(tabContent[activeButton].video);
       }
     },
     [activeButton, tabContent],
@@ -79,7 +102,6 @@ export const BookScreen: React.FC = () => {
       (
         <ScrollView>
           <View style={styles.container}>
-            {langs.length > 1 && (
             <LanguageButtons
               langs={langs}
               defaultActive={language}
@@ -87,8 +109,6 @@ export const BookScreen: React.FC = () => {
                 setLanguage(lang);
               }}
             />
-            )}
-
             <View style={styles.imgContainer}>
               <Image source={{ uri: image }} style={styles.image} />
             </View>
@@ -102,9 +122,17 @@ export const BookScreen: React.FC = () => {
                 setActiveButton(btn);
               }}
             />
-            <View style={{ marginLeft: 30, marginRight: 30, marginBottom: 10 }}>
-              <Text>{tabVideo}</Text>
-              <MarkdownView styles={{ text: { fontFamily: 'Gotham-Light' } }}>
+            <View style={styles.tabContentContainer}>
+              {tabVideo && (
+              <View style={styles.video}>
+                <YoutubePlayer
+                  height={180}
+                  width={320}
+                  videoId={tabVideo}
+                />
+              </View>
+              )}
+              <MarkdownView styles={markdownStyles}>
                 {tabBody}
               </MarkdownView>
             </View>
@@ -119,7 +147,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 80,
+    paddingTop: 70,
+  },
+  tabContentContainer: {
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 10,
   },
   loadingCircle: {
     flex: 1,
@@ -136,6 +169,10 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowOpacity: 0.35,
     shadowOffset: { width: 0, height: 3 },
+  },
+  video: {
+    alignSelf: 'center',
+    marginBottom: 30,
   },
   title: {
     paddingTop: 35,

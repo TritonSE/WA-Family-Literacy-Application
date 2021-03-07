@@ -1,3 +1,5 @@
+import { Language } from './Languages';
+
 export type Book = {
     id: string
     title: string
@@ -7,7 +9,7 @@ export type Book = {
     explore?: TabContent
     learn?: TabContent
     createdAt: string
-    languages: string[]
+    languages: Language[]
 };
 
 type TabContent = {

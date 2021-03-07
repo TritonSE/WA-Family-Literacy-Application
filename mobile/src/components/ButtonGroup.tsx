@@ -51,9 +51,8 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
 
 const styles = StyleSheet.create({
   button: {
-    textAlign: 'center',
     justifyContent: 'center',
-    width: 72,
+    width: 74,
     height: 26,
     borderWidth: 1,
     borderRadius: 5,
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
 
   buttonTextActive: {
     color: 'white',
+    textAlign: 'center',
   },
 
   buttonInactive: {
@@ -81,5 +81,6 @@ const styles = StyleSheet.create({
 
   buttonTextInactive: {
     color: Colors.orange,
+    textAlign: 'center',
   },
 });

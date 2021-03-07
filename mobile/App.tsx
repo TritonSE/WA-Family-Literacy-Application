@@ -13,6 +13,7 @@ const App: React.FC = () => {
     'Gotham-Bold': require('./assets/fonts/gotham-rounded/GothamRounded-Bold.otf'),
     'Gotham-Medium': require('./assets/fonts/gotham-rounded/GothamRounded-Medium.otf'),
     'Gotham-Light': require('./assets/fonts/gotham-rounded/GothamRounded-Light.otf'),
+    'Gotham-Italic': require('./assets/fonts/gotham-rounded/GothamRounded-Italic.otf'),
   });
 
   if (!fontsLoaded) {

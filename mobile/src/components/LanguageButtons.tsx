@@ -2,26 +2,27 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
+import { Languages } from '../models/Languages';
 
 // button labels and callback function for passing key of active button to parent
 type LanguageButtonsProps = { langs: string[], defaultActive: string, onBtnChange };
 
 /**
- * Renders an inline group of three button tabs
+ * Renders buttons on language selector
  */
 export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, defaultActive, onBtnChange }) => {
   const [activeButton, setActiveButton] = useState(defaultActive);
 
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={styles.container}>
       {langs.map((res, idx) => {
         return (
-          <View key={idx}>
+          <View key={res} style={{ width: '33.33%' }}>
             <TouchableOpacity
               style={[styles.button,
                 activeButton === res ? styles.buttonActive : styles.buttonInactive,
-                idx === 0 && styles.leftBtn,
-                idx === langs.length - 1 && styles.rightBtn,
+                (idx % 3) === 0 && styles.leftBtn,
+                (idx === langs.length - 1 || (idx % 3 === 2)) && styles.rightBtn,
               ]}
               onPress={() => {
                 setActiveButton(res);
@@ -29,7 +30,7 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
               }}
             >
               <Text style={[activeButton === res ? styles.buttonTextActive : styles.buttonTextInactive, TextStyles.caption2]}>
-                {res}
+                {Languages[res]}
               </Text>
             </TouchableOpacity>
           </View>
@@ -40,16 +41,26 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: 252,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignContent: 'center',
+    marginBottom: 35,
+  },
+
   button: {
     textAlign: 'center',
     justifyContent: 'center',
-    width: 72,
     height: 26,
     borderWidth: 1,
     borderColor: Colors.orange,
     marginLeft: -0.5,
     marginRight: -0.5,
-    marginBottom: 35,
+    marginBottom: -0.5,
+    marginTop: -0.5,
   },
 
   leftBtn: {
@@ -68,6 +79,7 @@ const styles = StyleSheet.create({
 
   buttonTextActive: {
     color: 'white',
+    textAlign: 'center',
   },
 
   buttonInactive: {
@@ -76,5 +88,6 @@ const styles = StyleSheet.create({
 
   buttonTextInactive: {
     color: Colors.orange,
+    textAlign: 'center',
   },
 });

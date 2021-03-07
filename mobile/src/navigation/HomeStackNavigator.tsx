@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 25,
     height: 25,
-    marginLeft: 25,
+    marginLeft: 20,
   },
 
 });
