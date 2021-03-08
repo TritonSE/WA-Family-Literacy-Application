@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { BookScreenRouteProps } from '../navigation/HomeStackNavigator';
 import { LoadingCircle } from '../components/LoadingCircle';
 import { APIContext } from '../context/APIContext';
 import { I18nContext } from '../context/I18nContext';
@@ -15,9 +16,8 @@ import { LanguageButtons } from '../components/LanguageButtons';
  */
 export const BookScreen: React.FC = () => {
   // get book id and langs from route params
-  const route = useRoute();
-  const { id } = route.params;
-  const { langs } = route.params;
+  const route = useRoute<BookScreenRouteProps>();
+  const { id, langs } = route.params;
 
   const client = useContext(APIContext);
   const i18nCtx = useContext(I18nContext);

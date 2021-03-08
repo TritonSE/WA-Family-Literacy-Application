@@ -1,10 +1,19 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { HomeScreen } from '../screens/HomeScreen';
 import { BookScreen } from '../screens/BookScreen';
+import { Language } from '../models/Languages';
 
-const Stack = createStackNavigator();
+type HomeStackParams = {
+  Home: undefined;
+  Book: { id: string, langs: Language[] };
+};
+
+export type BookScreenRouteProps = RouteProp<HomeStackParams, 'Book'>;
+
+const Stack = createStackNavigator<HomeStackParams>();
 
 /**
  * Home tab navigator
