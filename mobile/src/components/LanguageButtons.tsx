@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
-import { Languages } from '../models/Languages';
+import { Language, Languages } from '../models/Languages';
 
 // button labels and callback function for passing key of active button to parent
-type LanguageButtonsProps = { langs: string[], defaultActive: string, onBtnChange };
+type LanguageButtonsProps = { langs: Language[], defaultActive: string, onBtnChange };
 
 /**
  * Renders buttons on language selector

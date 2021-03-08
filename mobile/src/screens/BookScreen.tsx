@@ -100,7 +100,7 @@ export const BookScreen: React.FC = () => {
   return (
     loading ? <View style={styles.loadingCircle}><LoadingCircle /></View> :
       (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <LanguageButtons
               langs={langs}
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 70,
+    marginTop: 100,
   },
   tabContentContainer: {
     marginLeft: 30,
