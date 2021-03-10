@@ -4,11 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { HomeScreen } from '../screens/HomeScreen';
 import { BookScreen } from '../screens/BookScreen';
-import { Language } from '../models/Languages';
+import { Book } from '../models/Book';
 
 type HomeStackParams = {
   Home: undefined;
-  Book: { id: string, langs: Language[] };
+  Book: { book: Book };
 };
 
 export type BookScreenRouteProps = RouteProp<HomeStackParams, 'Book'>;

@@ -5,11 +5,19 @@ export type Book = {
     title: string
     author: string
     image?: string
+    languages: Language[]
+    createdAt: string
+};
+
+export type BookDetails = {
+    id: string
+    title: string
+    author: string
+    image?: string
     read?: TabContent
     explore?: TabContent
     learn?: TabContent
     createdAt: string
-    languages: Language[]
 };
 
 type TabContent = {

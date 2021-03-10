@@ -34,4 +34,13 @@ export const TextStyles = StyleSheet.create({
     fontWeight: 'normal',
   },
 
+  mdRegular: {
+    fontFamily: 'Gotham-Light',
+  },
+  mdStrong: {
+    fontFamily: 'Gotham-Bold',
+  },
+  mdEm: {
+    fontFamily: 'Gotham-Italic',
+  },
 });

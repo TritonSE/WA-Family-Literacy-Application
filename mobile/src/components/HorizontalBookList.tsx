@@ -1,6 +1,6 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
-
+import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
@@ -10,18 +10,24 @@ type HorizontalBookListProps = { books: Book[] };
  * Renders a scrollable horizontal list of 5 books
  */
 export const HorizontalBookList: React.FC<HorizontalBookListProps> = ({ books }) => {
+  const navigation = useNavigation();
   return (
     <FlatList
       data={books}
       renderItem={({ item, index }) => (
         // this ensures that the first and last book have the correct spacing
-        <View
-          style={(index === 0) ? styles.imageFirst :
-            ((index === 4) ? styles.imageLast :
-              styles.image)}
+        <TouchableOpacity onPress={() => navigation.navigate('Book', {
+          book: item,
+        })}
         >
-          <BookCard book={item} />
-        </View>
+          <View
+            style={(index === 0) ? styles.imageFirst :
+              ((index === 4) ? styles.imageLast :
+                styles.image)}
+          >
+            <BookCard book={item} />
+          </View>
+        </TouchableOpacity>
       )}
       horizontal
       ItemSeparatorComponent={

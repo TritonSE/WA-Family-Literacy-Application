@@ -5,32 +5,39 @@ import { TextStyles } from '../styles/TextStyles';
 import { Language, Languages } from '../models/Languages';
 
 // button labels and callback function for passing key of active button to parent
-type LanguageButtonsProps = { langs: Language[], defaultActive: string, onBtnChange };
+type LanguageButtonsProps = { langs: Language[], defaultActive: Language, onBtnChange };
+
+const LANGS_PER_ROW = 3;
 
 /**
  * Renders buttons on language selector
  */
 export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, defaultActive, onBtnChange }) => {
   const [activeButton, setActiveButton] = useState(defaultActive);
-
   return (
     <View style={styles.container}>
-      {langs.map((res, idx) => {
+      {langs.map((lang, idx) => {
+        const btnStyle = [
+          styles.button,
+          activeButton === lang ? styles.buttonActive : styles.buttonInactive,
+          (idx % LANGS_PER_ROW) === 0 && styles.leftBtn,
+          (idx === langs.length - 1 || (idx % LANGS_PER_ROW === 2)) && styles.rightBtn,
+        ];
+        const labelStyle = [
+          activeButton === lang ? styles.buttonTextActive : styles.buttonTextInactive,
+          TextStyles.caption2,
+        ];
         return (
-          <View key={res} style={{ width: '33.33%' }}>
+          <View key={lang} style={{ width: '33.33%' }}>
             <TouchableOpacity
-              style={[styles.button,
-                activeButton === res ? styles.buttonActive : styles.buttonInactive,
-                (idx % 3) === 0 && styles.leftBtn,
-                (idx === langs.length - 1 || (idx % 3 === 2)) && styles.rightBtn,
-              ]}
+              style={btnStyle}
               onPress={() => {
-                setActiveButton(res);
-                onBtnChange(res);
+                setActiveButton(lang);
+                onBtnChange(lang);
               }}
             >
-              <Text style={[activeButton === res ? styles.buttonTextActive : styles.buttonTextInactive, TextStyles.caption2]}>
-                {Languages[res]}
+              <Text style={labelStyle}>
+                {Languages[lang]}
               </Text>
             </TouchableOpacity>
           </View>
@@ -78,12 +85,12 @@ const styles = StyleSheet.create({
   },
 
   buttonTextActive: {
-    color: 'white',
+    color: Colors.white,
     textAlign: 'center',
   },
 
   buttonInactive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
   },
 
   buttonTextInactive: {

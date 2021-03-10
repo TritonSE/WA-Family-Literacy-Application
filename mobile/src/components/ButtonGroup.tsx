@@ -4,25 +4,25 @@ import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
 // button labels and callback function for passing key of active button to parent
-type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange };
+type ButtonGroupProps = { btn1: [string, string], btn2: [string, string], btn3: [string, string], onBtnChange };
 
 /**
  * Renders an inline group of three button tabs
  */
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBtnChange }) => {
-  const [activeButton, setActiveButton] = useState('btn-1');
+  const [activeButton, setActiveButton] = useState('read');
   const buttons = [
     {
-      key: 'btn-1',
-      label: btn1,
+      key: btn1[0],
+      label: btn1[1],
     },
     {
-      key: 'btn-2',
-      label: btn2,
+      key: btn2[0],
+      label: btn2[1],
     },
     {
-      key: 'btn-3',
-      label: btn3,
+      key: btn3[0],
+      label: btn3[1],
     },
   ];
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: Colors.orange,
-    shadowColor: 'black',
+    shadowColor: Colors.shadowColor,
     shadowOpacity: 0.16,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
   },
 
   buttonTextActive: {
-    color: 'white',
+    color: Colors.white,
     textAlign: 'center',
   },
 
   buttonInactive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
   },
 
   buttonTextInactive: {

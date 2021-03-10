@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
-
+import { Dimensions, FlatList, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
 
@@ -12,13 +12,19 @@ const { width } = Dimensions.get('window');
  * Renders a vertical list of books with 3 books per row.
  */
 export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
+  const navigation = useNavigation();
   return (
     <FlatList
       data={books}
       renderItem={({ item }) => (
-        <View style={styles.bookCard}>
-          <BookCard book={item} size={0.28 * width} />
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Book', {
+          book: item,
+        })}
+        >
+          <View style={styles.bookCard}>
+            <BookCard book={item} size={0.28 * width} />
+          </View>
+        </TouchableOpacity>
       )}
       numColumns={3}
       scrollEnabled={false}
