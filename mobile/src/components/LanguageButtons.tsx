@@ -5,7 +5,7 @@ import { TextStyles } from '../styles/TextStyles';
 import { Language, Languages } from '../models/Languages';
 
 // button labels and callback function for passing key of active button to parent
-type LanguageButtonsProps = { langs: Language[], defaultActive: Language, onBtnChange };
+type LanguageButtonsProps = { langs: Language[], defaultActive: Language, onBtnChange: (lang: Language) => void };
 
 const LANGS_PER_ROW = 3;
 
@@ -21,7 +21,7 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
           styles.button,
           activeButton === lang ? styles.buttonActive : styles.buttonInactive,
           (idx % LANGS_PER_ROW) === 0 && styles.leftBtn,
-          (idx === langs.length - 1 || (idx % LANGS_PER_ROW === 2)) && styles.rightBtn,
+          (idx === langs.length - 1 || (idx % LANGS_PER_ROW === LANGS_PER_ROW - 1)) && styles.rightBtn,
         ];
         const labelStyle = [
           activeButton === lang ? styles.buttonTextActive : styles.buttonTextInactive,

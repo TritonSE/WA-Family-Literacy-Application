@@ -14,9 +14,9 @@ export type BookDetails = {
     title: string
     author: string
     image?: string
-    read?: TabContent
-    explore?: TabContent
-    learn?: TabContent
+    read: TabContent
+    explore: TabContent
+    learn: TabContent
     createdAt: string
 };
 

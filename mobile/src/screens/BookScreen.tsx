@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import { BookScreenRouteProps } from '../navigation/HomeStackNavigator';
+import * as WebBrowser from 'expo-web-browser';
+import { HomeStackParams } from '../navigation/HomeStackNavigator';
 import { LoadingCircle } from '../components/LoadingCircle';
 import { APIContext } from '../context/APIContext';
 import { I18nContext } from '../context/I18nContext';
@@ -11,13 +12,18 @@ import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
 import { LanguageButtons } from '../components/LanguageButtons';
 import { Colors } from '../styles/Colors';
+import { BookDetails } from '../models/Book';
+import { Language } from '../models/Languages';
+
+type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
+
+type Tab = 'read' | 'explore' | 'learn';
 
 /**
  * Individual book view displaying book details
  */
-export const BookScreen: React.FC = () => {
+export const BookScreen: React.FC<BookScreenProps> = ({ route }) => {
   // get book id and langs from route params
-  const route = useRoute<BookScreenRouteProps>();
   const { book } = route.params;
   const langs = book.languages;
 
@@ -31,9 +37,9 @@ export const BookScreen: React.FC = () => {
 
   // book screen states
   const [loading, setLoading] = useState(true);
-  const [bookDetails, setBookDetails] = useState(null);
-  const [language, setLanguage] = useState(defaultLang);
-  const [activeButton, setActiveButton] = useState('read');
+  const [bookDetails, setBookDetails] = useState<BookDetails | null>(null);
+  const [language, setLanguage] = useState<Language>(defaultLang);
+  const [activeButton, setActiveButton] = useState<Tab>('read');
 
   const markdownStyles = {
     heading: TextStyles.mdRegular,
@@ -59,6 +65,11 @@ export const BookScreen: React.FC = () => {
     [language],
   );
 
+  const handleMarkdownLink = async (url: string): Promise<any> => {
+    const response = await WebBrowser.openBrowserAsync(url);
+    return response;
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -75,9 +86,9 @@ export const BookScreen: React.FC = () => {
         <Text style={[TextStyles.h1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>
         <ButtonGroup
-          btn1={['read', 'Read']}
-          btn2={['explore', 'Explore']}
-          btn3={['learn', 'Learn']}
+          btn1="read"
+          btn2="explore"
+          btn3="learn"
           onBtnChange={(btn) => {
             setActiveButton(btn);
           }}
@@ -93,7 +104,7 @@ export const BookScreen: React.FC = () => {
                 />
               </View>
             )}
-            <MarkdownView styles={markdownStyles}>
+            <MarkdownView styles={markdownStyles} onLinkPress={handleMarkdownLink}>
               {bookDetails[activeButton].body}
             </MarkdownView>
           </View>
@@ -111,8 +122,9 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   tabContentContainer: {
-    marginLeft: 30,
-    marginRight: 30,
+    width: '100%',
+    paddingLeft: 30,
+    paddingRight: 30,
     marginBottom: 10,
   },
   loadingCircle: {
@@ -132,8 +144,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
   video: {
-    alignSelf: 'center',
+    width: '100%',
     marginBottom: 30,
+    alignItems: 'center',
   },
   title: {
     paddingTop: 35,

@@ -1,17 +1,14 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 import { HomeScreen } from '../screens/HomeScreen';
 import { BookScreen } from '../screens/BookScreen';
 import { Book } from '../models/Book';
 
-type HomeStackParams = {
+export type HomeStackParams = {
   Home: undefined;
   Book: { book: Book };
 };
-
-export type BookScreenRouteProps = RouteProp<HomeStackParams, 'Book'>;
 
 const Stack = createStackNavigator<HomeStackParams>();
 
