@@ -11,7 +11,6 @@ type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange 
  * Renders an inline group of three button tabs
  */
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBtnChange }) => {
-  const [activeButton, setActiveButton] = useState('read');
 
   const i18nCtx = useContext(I18nContext);
 
@@ -29,6 +28,8 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
       label: i18nCtx.t(btn3),
     },
   ];
+
+  const [activeButton, setActiveButton] = useState(buttons[0].key);
 
   return (
     <View style={{ flexDirection: 'row' }}>
