@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi"
+
 	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/TritonSE/words-alive/internal/models"
 )
@@ -64,4 +66,58 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	writeResponse(rw, http.StatusCreated, newUser)
+}
+
+func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
+    var userID string = chi.URLParam(req, "id")
+
+    newUser, err := c.Users.FetchUserByID(req.Context(), userID)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, newUser)
+}
+
+func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
+    var userID string = chi.URLParam(req, "id")
+
+	var user models.User
+
+	if err := json.NewDecoder(req.Body).Decode(&user); err != nil {
+		writeResponse(rw, http.StatusBadRequest, "bad input!")
+		return
+	}
+
+	uid, ok := req.Context().Value("user").(string)
+	if !ok {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println("unable to get user from request context")
+		return
+	}
+	if uid != user.ID || uid != userID {
+		writeResponse(rw, http.StatusForbidden, "Token does not match request body")
+		return
+	}
+
+	duplicate, err := c.Users.FetchUserByEmail(req.Context(), user.Email)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+	if duplicate != nil {
+		// we have created a user with this email before
+		writeResponse(rw, http.StatusBadRequest, "user with email already exists")
+		return
+	}
+
+    err = c.Users.UpdateUser(req.Context(), userID, user)
+    if err != nil {
+        writeResponse(rw, http.StatusInternalServerError, "error")
+        return
+    }
+
+    writeResponse(rw, http.StatusOK, "updated")
 }
