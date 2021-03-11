@@ -11,7 +11,6 @@ type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange 
  * Renders an inline group of three button tabs
  */
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBtnChange }) => {
-
   const i18nCtx = useContext(I18nContext);
 
   const buttons = [
