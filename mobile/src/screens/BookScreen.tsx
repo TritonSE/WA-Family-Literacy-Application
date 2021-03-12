@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -18,6 +18,8 @@ import { Language } from '../models/Languages';
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
 type Tab = 'read' | 'explore' | 'learn';
+
+const { width } = Dimensions.get('screen');
 
 /**
  * Individual book view displaying book details
@@ -41,15 +43,19 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route }) => {
   const [language, setLanguage] = useState<Language>(defaultLang);
   const [activeButton, setActiveButton] = useState<Tab>('read');
 
+  const tabContentWidth = 0.83 * width;
+
   const markdownStyles = {
     heading: TextStyles.mdRegular,
     paragraph: TextStyles.mdRegular,
     strong: TextStyles.mdStrong,
-    listItemNumber: TextStyles.mdRegular,
+    listItemNumber: TextStyles.listItem,
+    listItemBullet: TextStyles.listItem,
     listItemOrderedContent: TextStyles.mdRegular,
     listItemUnorderedContent: TextStyles.mdRegular,
     tableHeaderCellContent: TextStyles.mdRegular,
     em: TextStyles.mdEm,
+    imageWrapper: { width: tabContentWidth },
   };
 
   // fetches book details on language change
@@ -98,8 +104,8 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route }) => {
             {bookDetails[activeButton].video && (
               <View style={styles.video}>
                 <YoutubePlayer
-                  height={180}
-                  width={320}
+                  height={9 / 16 * tabContentWidth}
+                  width={tabContentWidth}
                   videoId={bookDetails[activeButton].video.match(videoIdRegEx)[1]}
                 />
               </View>

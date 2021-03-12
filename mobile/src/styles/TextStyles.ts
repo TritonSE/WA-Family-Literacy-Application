@@ -43,4 +43,8 @@ export const TextStyles = StyleSheet.create({
   mdEm: {
     fontFamily: 'Gotham-Italic',
   },
+  listItem: {
+    fontFamily: 'Gotham-Light',
+    minWidth: 16,
+  },
 });
