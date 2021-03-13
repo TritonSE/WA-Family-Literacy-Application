@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import * as WebBrowser from 'expo-web-browser';
@@ -31,6 +32,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   const client = useContext(APIContext);
   const i18nCtx = useContext(I18nContext);
+  const insets = useSafeAreaInsets();
 
   const locale = i18nCtx.locale.substring(0, 2);
   const defaultLang = langs.includes(locale) ? locale : langs.includes('en') ? 'en' : langs[0];
@@ -78,7 +80,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   return (
     <ScrollView>
-      <TouchableOpacity onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></TouchableOpacity>
+      <TouchableOpacity style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></TouchableOpacity>
       <View style={styles.container}>
         <LanguageButtons
           langs={langs}
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 15,
   },
   tabContentContainer: {
     width: '100%',
@@ -142,8 +144,8 @@ const styles = StyleSheet.create({
   backButton: {
     width: 25,
     height: 25,
-    marginLeft: 20,
-    marginTop: 30,
+    marginLeft: 25,
+    marginTop: 10,
   },
   image: {
     width: 253,
