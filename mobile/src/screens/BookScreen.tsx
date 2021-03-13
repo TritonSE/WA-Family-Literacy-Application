@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -24,7 +24,7 @@ const { width } = Dimensions.get('screen');
 /**
  * Individual book view displaying book details
  */
-export const BookScreen: React.FC<BookScreenProps> = ({ route }) => {
+export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => {
   // get book id and langs from route params
   const { book } = route.params;
   const langs = book.languages;
@@ -78,6 +78,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route }) => {
 
   return (
     <ScrollView>
+      <TouchableOpacity onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></TouchableOpacity>
       <View style={styles.container}>
         <LanguageButtons
           langs={langs}
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
+    marginTop: 20,
   },
   tabContentContainer: {
     width: '100%',
@@ -137,6 +138,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
+  },
+  backButton: {
+    width: 25,
+    height: 25,
+    marginLeft: 20,
+    marginTop: 30,
   },
   image: {
     width: 253,

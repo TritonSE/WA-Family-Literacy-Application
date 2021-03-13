@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HomeScreen } from '../screens/HomeScreen';
 import { BookScreen } from '../screens/BookScreen';
@@ -33,24 +32,9 @@ export const HomeStackNavigator: React.FC = () => {
         name="Book"
         component={BookScreen}
         options={{
-          headerTransparent: true,
-          headerBackTitleVisible: false,
-          headerBackImage: () => (
-            <Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} />
-          ),
-          headerTitle: '',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-
-  backButton: {
-    width: 25,
-    height: 25,
-    marginLeft: 20,
-  },
-
-});
