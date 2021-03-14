@@ -110,7 +110,6 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 			&newBook.Image, &newBook.CreatedAt)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return newBook, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
 
@@ -137,7 +136,6 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 		book.Learn.Video, book.Learn.Body)
 
 	if err != nil || commandTag.RowsAffected() != 1 {
-		fmt.Printf("Error: %s\n", err)
 		return newBookDetail, errors.Wrap(err, "error on INSERT INTO book_contents in InsertBookDetails")
 	}
 
@@ -154,7 +152,6 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 			&newBookDetail.Learn.Video, &newBookDetail.Learn.Body)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return newBookDetail, errors.Wrap(err, "error on query for book details")
 	}
 
@@ -172,12 +169,10 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 	commandTag, err := db.Conn.Exec(query, id, lang)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return errors.Wrap(err, "error on delete from book_contents")
 	}
 
 	if commandTag.RowsAffected() != 1 {
-		fmt.Printf("Error: %s\n", commandTag)
 		return errors.New("No row found to delete")
 	}
 
@@ -186,7 +181,6 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 	err = db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&count)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return errors.Wrap(err, "error reading back data in delete from book_contents")
 	}
 
@@ -210,7 +204,6 @@ func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
 	commandTag, err := db.Conn.Exec(query, id)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return errors.Wrap(err, "error on delete from book")
 	}
 
@@ -238,7 +231,6 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
 		Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Author,
 			&updatedBook.Image, &updatedBook.CreatedAt)
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on update book")
 	}
 
@@ -247,7 +239,6 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
 	rows, err := db.Conn.QueryEx(ctx, query, nil, id)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on selecting languages on update book")
 	}
 
@@ -261,7 +252,6 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
 
 	// runs if rows.Next() fails
 	if rows.Err() != nil {
-		fmt.Printf("Error: %s\n", err)
 		return updatedBook, errors.Wrap(err, "error on row iteration in update book")
 	}
 
@@ -294,7 +284,6 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 		Scan(&updatedLanguage)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return updatedBookDetails, errors.Wrap(err, "error on updating book_contents")
 	}
 
@@ -312,7 +301,6 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 			&updatedBookDetails.Learn.Video, &updatedBookDetails.Learn.Body)
 
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
 		return updatedBookDetails, errors.Wrap(err, "error on reading back from book_contents on update book_details")
 
 	}
