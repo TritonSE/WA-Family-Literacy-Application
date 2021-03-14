@@ -101,7 +101,9 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
  */
 func (db *BookDatabase) InsertBook(ctx context.Context,
 	book models.APICreateBook) (models.Book, error) {
-	var newBook models.Book
+	var newBook = models.Book{
+		Languages: []string{},
+	}
 	var query string = "INSERT INTO books (title, author, image) " +
 		"VALUES ($1, $2, $3) " +
 		"RETURNING id, title, author, image, created_at"
@@ -112,8 +114,6 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 	if err != nil {
 		return newBook, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
-
-	newBook.Languages = []string{}
 
 	return newBook, nil
 
@@ -131,7 +131,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 		"learn_video, learn_body) " +
 		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
 
-	commandTag, err := db.Conn.Exec(query, id, book.Language,
+	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id, book.Language,
 		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
 		book.Learn.Video, book.Learn.Body)
 
@@ -166,7 +166,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
 	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2"
 
-	commandTag, err := db.Conn.Exec(query, id, lang)
+	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id, lang)
 
 	if err != nil {
 		return errors.Wrap(err, "error on delete from book_contents")
@@ -201,7 +201,7 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
 	var query string = "DELETE from books WHERE id = $1"
 
-	commandTag, err := db.Conn.Exec(query, id)
+	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id)
 
 	if err != nil {
 		return errors.Wrap(err, "error on delete from book")
