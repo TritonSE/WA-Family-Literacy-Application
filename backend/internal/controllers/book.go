@@ -55,7 +55,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	var resBook models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
+		writeResponse(rw, http.StatusBadRequest, "error")
 		return
 	}
 
@@ -79,7 +79,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetail)
 
 	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
+		writeResponse(rw, http.StatusBadRequest, "error")
 		return
 	}
 
@@ -130,7 +130,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 
 	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
+		writeResponse(rw, http.StatusBadRequest, "error")
 		return
 	}
 
@@ -149,7 +149,7 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
 
 	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
+		writeResponse(rw, http.StatusBadRequest, "error")
 		return
 	}
 
