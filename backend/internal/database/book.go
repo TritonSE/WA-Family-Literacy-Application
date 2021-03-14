@@ -14,37 +14,6 @@ type BookDatabase struct {
 	Conn *pgx.Conn
 }
 
-type APICreateBook struct {
-	Title  string  `json:"title"`
-	Author string  `json:"author"`
-	Image  *string `json:"image"`
-}
-
-type APICreateBookContents struct {
-	Language string            `json:"lang"`
-	Read     models.TabContent `json:"read"`
-	Explore  models.TabContent `json:"explore"`
-	Learn    models.TabContent `json:"learn"`
-}
-
-type APIUpdateTabContents struct {
-	Video *string `json:"video"`
-	Body  *string `json:"body"`
-}
-
-type APIUpdateBook struct {
-	Title  *string `json:"title"`
-	Author *string `json:"author"`
-	Image  *string `json:"image"`
-}
-
-type APIUpdateBookDetails struct {
-	Language *string              `json:"language"`
-	Read     APIUpdateTabContents `json:"read"`
-	Explore  APIUpdateTabContents `json:"explore"`
-	Learn    APIUpdateTabContents `json:"learn"`
-}
-
 /*
  * Get book list for the main page
  * Only need to show previews (no read/explore/learn)
@@ -131,7 +100,7 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
  * and has no associated language
  */
 func (db *BookDatabase) InsertBook(ctx context.Context,
-	book APICreateBook) (models.Book, error) {
+	book models.APICreateBook) (models.Book, error) {
 	var newBook models.Book
 	var query string = "INSERT INTO books (title, author, image) " +
 		"VALUES ($1, $2, $3) " +
@@ -156,7 +125,7 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
  * complete books details
  */
 func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
-	book APICreateBookContents) (models.BookDetails, error) {
+	book models.APICreateBookContents) (models.BookDetails, error) {
 	var newBookDetail models.BookDetails
 	var query string = "INSERT INTO book_contents " +
 		"(id, lang, read_video, read_body, explore_video, explore_body, " +
@@ -256,7 +225,7 @@ func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
  * Updates a book in the books table
  */
 func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
-	updates APIUpdateBook) (models.Book, error) {
+	updates models.APIUpdateBook) (models.Book, error) {
 	var updatedBook models.Book
 	var query string = "UPDATE books " +
 		"SET title = COALESCE($1, title), " +
@@ -304,7 +273,7 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
  * Updates a row in the book_contents table
  */
 func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
-	lang string, book APIUpdateBookDetails) (models.BookDetails, error) {
+	lang string, book models.APIUpdateBookDetails) (models.BookDetails, error) {
 	var updatedBookDetails models.BookDetails
 	var updatedLanguage string
 	var query string = "UPDATE book_contents " +

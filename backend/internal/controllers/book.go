@@ -51,7 +51,7 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
-	var reqBook database.APICreateBook
+	var reqBook models.APICreateBook
 	var resBook models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
@@ -71,7 +71,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
-	var reqBookDetail database.APICreateBookContents
+	var reqBookDetail models.APICreateBookContents
 	var resBookDetail models.BookDetails
 
 	var bookID string = chi.URLParam(req, "id")
@@ -125,7 +125,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 // updates the book from the books table (/books{id})
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
-	var reqBook database.APIUpdateBook
+	var reqBook models.APIUpdateBook
 	var resBook models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 
@@ -144,7 +144,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
-	var reqBookDetails database.APIUpdateBookDetails
+	var reqBookDetails models.APIUpdateBookDetails
 	var resBookDetails models.BookDetails
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
 

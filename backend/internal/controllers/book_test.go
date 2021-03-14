@@ -125,13 +125,13 @@ func TestGetNullBook(t *testing.T) {
 
 // Test if creating a book and its corresponding contents works
 func TestCreateBookandBookDetails(t *testing.T) {
-	var book = database.APICreateBook{
+	var book = models.APICreateBook{
 		Title:  "Harry Potter",
 		Author: "JK Rowling",
 		Image:  nil,
 	}
 
-	var bookDetails = database.APICreateBookContents{
+	var bookDetails = models.APICreateBookContents{
 		Language: "en",
 		Read: models.TabContent{
 			Video: nil,
@@ -166,7 +166,7 @@ func TestCreateBookandBookDetails(t *testing.T) {
 
 // Test if inserting into book_contents with an id not in books throws an error
 func TestBookDetailsErrorWithInvalidID(t *testing.T) {
-	var badBookDetails = database.APICreateBookContents{
+	var badBookDetails = models.APICreateBookContents{
 
 		Language: "en",
 		Read: models.TabContent{
@@ -233,7 +233,7 @@ func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
 // Test if updating entry in books work
 func TestUpdateBook(t *testing.T) {
 	var str = "updated_title"
-	var updatedBook = database.APIUpdateBook{
+	var updatedBook = models.APIUpdateBook{
 		Title:  &str,
 		Author: nil,
 		Image:  nil,
@@ -249,17 +249,17 @@ func TestUpdateBook(t *testing.T) {
 // Test if updating entry in book_contents works
 func TestUpdateBookDetails(t *testing.T) {
 	var read_vid string = "new_read_video"
-	var updatedBook = database.APIUpdateBookDetails{
+	var updatedBook = models.APIUpdateBookDetails{
 		Language: nil,
-		Read: database.APIUpdateTabContents{
+		Read: models.APIUpdateTabContents{
 			Video: &read_vid,
 			Body:  nil,
 		},
-		Explore: database.APIUpdateTabContents{
+		Explore: models.APIUpdateTabContents{
 			Video: nil,
 			Body:  nil,
 		},
-		Learn: database.APIUpdateTabContents{
+		Learn: models.APIUpdateTabContents{
 			Video: nil,
 			Body:  nil,
 		},
