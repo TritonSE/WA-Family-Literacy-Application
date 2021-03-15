@@ -23,7 +23,8 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
 	books := make([]models.Book, 0)
 
 	var query string = "SELECT books.id, title, author, image, created_at, " +
-		"array_agg(lang) FROM books LEFT JOIN book_contents ON books.id = " +
+		"array_remove(array_agg(lang), NULL) as languages " +
+		"FROM books LEFT JOIN book_contents ON books.id = " +
 		"book_contents.id GROUP BY books.id ORDER BY title"
 
 	rows, err := db.Conn.QueryEx(ctx, query, nil)
