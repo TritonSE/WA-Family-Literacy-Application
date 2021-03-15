@@ -136,6 +136,11 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
 	resBook, err = c.Books.UpdateBook(req.Context(), bookID, reqBook)
 
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
 	writeResponse(rw, http.StatusOK, resBook)
 
 }
