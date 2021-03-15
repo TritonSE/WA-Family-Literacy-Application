@@ -95,6 +95,22 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 	return &book, false, nil
 }
 
+func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book, error) {
+	var book models.Book
+	var query = "SELECT books.id, title, author, image, array_remove(array_agg(lang), NULL) as languages," +
+		"created_at FROM books LEFT JOIN book_contents ON " +
+		"books.id = book_contents.id WHERE books.id = $1 GROUP BY books.id"
+
+	err := db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+		&book.Languages, &book.CreatedAt)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "error on FetchBook")
+	}
+
+	return &book, nil
+}
+
 /*
  * Inserts a book into the books table
  * MUST be called on the first instance a book is inserted into the database
@@ -150,9 +166,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 }
 
 /*
- * Deletes a language entry of a book in the book_contents table. If book has
- * no other remaining languages in book_contents table, deletes the book from the
- * books table
+ * Deletes a language entry of a book in the book_contents table.
  */
 func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
 	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2"
@@ -165,22 +179,6 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 
 	if commandTag.RowsAffected() != 1 {
 		return errors.New("No row found to delete")
-	}
-
-	query = "SELECT COUNT(*) FROM book_contents WHERE id = $1"
-	var count int
-	err = db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&count)
-
-	if err != nil {
-		return errors.Wrap(err, "error reading back data in delete from book_contents")
-	}
-
-	// if no more books remain in book_contents table with selected id, delete book in books table
-	if count == 0 {
-		err = db.DeleteBook(ctx, id)
-		if err != nil {
-			return errors.Wrap(err, "error on deleting book with no language")
-		}
 	}
 
 	return nil
@@ -209,44 +207,19 @@ func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
  * Updates a book in the books table
  */
 func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
-	updates models.APIUpdateBook) (models.Book, error) {
-	var updatedBook models.Book
+	updates models.APIUpdateBook) (*models.Book, error) {
 	var query string = "UPDATE books " +
 		"SET title = COALESCE($1, title), " +
 		"author = COALESCE($2, author), " +
 		"image = COALESCE($3, image) " +
-		"WHERE id = $4 " +
-		"RETURNING id, title, author, image, created_at"
-	err := db.Conn.QueryRowEx(ctx, query, nil, updates.Title, updates.Author,
-		updates.Image, id).
-		Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Author,
-			&updatedBook.Image, &updatedBook.CreatedAt)
+		"WHERE id = $4"
+	_, err := db.Conn.ExecEx(ctx, query, nil, updates.Title, updates.Author,
+		updates.Image, id)
 	if err != nil {
-		return updatedBook, errors.Wrap(err, "error on update book")
+		return nil, errors.Wrap(err, "error on update book")
 	}
 
-	// to get languages Array
-	query = "SELECT lang FROM book_contents WHERE id = $1"
-	rows, err := db.Conn.QueryEx(ctx, query, nil, id)
-
-	if err != nil {
-		return updatedBook, errors.Wrap(err, "error on selecting languages on update book")
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var lang string
-		rows.Scan(&lang)
-		updatedBook.Languages = append(updatedBook.Languages, lang)
-	}
-
-	// runs if rows.Next() fails
-	if rows.Err() != nil {
-		return updatedBook, errors.Wrap(err, "error on row iteration in update book")
-	}
-
-	return updatedBook, nil
+	return db.FetchBook(ctx, id)
 
 }
 

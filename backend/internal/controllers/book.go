@@ -126,7 +126,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var reqBook models.APIUpdateBook
-	var resBook models.Book
+	var resBook *models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 
 	if err != nil {
