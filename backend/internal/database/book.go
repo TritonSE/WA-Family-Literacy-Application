@@ -95,6 +95,9 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 	return &book, false, nil
 }
 
+/*
+ * Fetches a book entry from the database given the id
+ */
 func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book, error) {
 	var book models.Book
 	var query = "SELECT books.id, title, author, image, array_remove(array_agg(lang), NULL) as languages," +
