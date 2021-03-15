@@ -53,53 +53,40 @@ func TestGetNullBook(t *testing.T) {
 	require.Equal(t, "book not found", response)
 }
 
-func TestCreateBookandBookDetails(t *testing.T) {
-	body := `{"title": "Harry Potter", "author":"JK Rowling", "image":null}`
-	var response models.Book
-	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated, &response, t)
+func TestJustCreateBook(t *testing.T) {
+	body := `{"title": "Lonely Book", "author":"Lonely Man", "image":null}`
+	var createdBook models.Book
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated,
+		&createdBook, t)
 
+	var response []models.Book
+	testutils.MakeHttpRequest("GET", ts.URL+"/books", "", 200, &response, t)
+
+	// Check for correct number of elements, and sort alphabetically
+	require.Len(t, response, 5)
 }
 
-// // Test if creating a book and its corresponding contents works
-// func TestCreateBookandBookDetails(t *testing.T) {
-// 	var book = models.APICreateBook{
-// 		Title:  "Harry Potter",
-// 		Author: "JK Rowling",
-// 		Image:  nil,
-// 	}
+func TestCreateBookandBookDetails(t *testing.T) {
+	body := `{"title": "Harry Potter", "author":"JK Rowling", "image":null}`
+	var createdBook models.Book
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated,
+		&createdBook, t)
 
-// 	var bookDetails = models.APICreateBookContents{
-// 		Language: "en",
-// 		Read: models.TabContent{
-// 			Video: nil,
-// 			Body:  "read_body",
-// 		},
-// 		Explore: models.TabContent{
-// 			Video: nil,
-// 			Body:  "explore_body",
-// 		},
-// 		Learn: models.TabContent{
-// 			Video: nil,
-// 			Body:  "learn_body",
-// 		},
-// 	}
+	require.Equal(t, "Harry Potter", createdBook.Title)
+	require.Equal(t, "JK Rowling", createdBook.Author)
+	require.Equal(t, []string{}, createdBook.Languages)
 
-// 	var createdBook models.Book
-// 	var createdBookDetails models.BookDetails
-// 	var jsonString = testutils.MakeJSONBody(book, t)
+	body = `{"language": "en", 
+	"Read": {"video": null, "body":"hp_rb"}, 
+	"Explore": {"video": null, "body":"hp_eb"},  
+	"Learn": {"video": null, "body":"hp_lb"}}`
+	var createdBookDetails models.BookDetails
+	testutils.MakeHttpRequest("POST", ts.URL+"/books/"+createdBook.ID, body, http.StatusCreated,
+		&createdBookDetails, t)
 
-// 	testutils.MakeHttpRequest("POST", ts.URL+"/books", jsonString, &createdBook, t)
-
-// 	require.Equal(t, "Harry Potter", createdBook.Title)
-// 	require.Equal(t, "JK Rowling", createdBook.Author)
-// 	require.Equal(t, []string{}, createdBook.Languages)
-
-// 	jsonString = testutils.MakeJSONBody(bookDetails, t)
-
-// 	testutils.MakeHttpRequest("POST",
-// 		ts.URL+"/books/"+createdBook.ID, jsonString, &createdBookDetails, t)
-
-// }
+	require.Equal(t, "hp_rb", createdBookDetails.Read.Body)
+	require.Equal(t, "hp_eb", createdBookDetails.Explore.Body)
+}
 
 // // Test if inserting into book_contents with an id not in books throws an error
 // func TestBookDetailsErrorWithInvalidID(t *testing.T) {
