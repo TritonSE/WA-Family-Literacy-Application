@@ -163,28 +163,3 @@ func TestUpdateBookDetails(t *testing.T) {
 	require.Equal(t, "updated_l", updatedBook.Learn.Body)
 
 }
-
-// // Test if updating entry in book_contents works
-// func TestUpdateBookDetails(t *testing.T) {
-// 	var read_vid string = "new_read_video"
-// 	var updatedBook = models.APIUpdateBookDetails{
-// 		Read: models.APIUpdateTabContents{
-// 			Video: &read_vid,
-// 			Body:  nil,
-// 		},
-// 		Explore: models.APIUpdateTabContents{
-// 			Video: nil,
-// 			Body:  nil,
-// 		},
-// 		Learn: models.APIUpdateTabContents{
-// 			Video: nil,
-// 			Body:  nil,
-// 		},
-// 	}
-
-// 	jsonStr := testutils.MakeJSONBody(updatedBook, t)
-// 	var response models.BookDetails
-// 	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update_me/en",
-// 		jsonStr, &response, t)
-// 	require.Equal(t, "new_read_video", *response.Read.Video)
-// }
