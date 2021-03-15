@@ -72,7 +72,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var reqBookDetail models.APICreateBookContents
-	var resBookDetail models.BookDetails
+	var resBookDetail *models.BookDetails
 
 	var bookID string = chi.URLParam(req, "id")
 

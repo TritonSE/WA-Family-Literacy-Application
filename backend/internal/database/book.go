@@ -124,35 +124,25 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
  * complete books details
  */
 func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
-	book models.APICreateBookContents) (models.BookDetails, error) {
-	var newBookDetail models.BookDetails
+	book models.APICreateBookContents) (*models.BookDetails, error) {
+	var newBookDetail *models.BookDetails
 	var query string = "INSERT INTO book_contents " +
 		"(id, lang, read_video, read_body, explore_video, explore_body, " +
 		"learn_video, learn_body) " +
 		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
 
-	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id, book.Language,
+	_, err := db.Conn.ExecEx(ctx, query, nil, id, book.Language,
 		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
 		book.Learn.Video, book.Learn.Body)
 
-	if err != nil || commandTag.RowsAffected() != 1 {
-		return newBookDetail, errors.Wrap(err, "error on INSERT INTO book_contents in InsertBookDetails")
+	if err != nil {
+		return nil, errors.Wrap(err, "error on INSERT INTO book_contents in InsertBookDetails")
 	}
 
-	query = "SELECT books.id, title, author, image, " +
-		"created_at, read_video, read_body, explore_video, explore_body, " +
-		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
-		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
-
-	err = db.Conn.QueryRowEx(ctx, query, nil, id, book.Language).
-		Scan(&newBookDetail.ID, &newBookDetail.Title, &newBookDetail.Author,
-			&newBookDetail.Image, &newBookDetail.CreatedAt,
-			&newBookDetail.Read.Video, &newBookDetail.Read.Body,
-			&newBookDetail.Explore.Video, &newBookDetail.Explore.Body,
-			&newBookDetail.Learn.Video, &newBookDetail.Learn.Body)
+	newBookDetail, _, err = db.FetchBookDetails(ctx, id, book.Language)
 
 	if err != nil {
-		return newBookDetail, errors.Wrap(err, "error on query for book details")
+		return nil, errors.Wrap(err, "error on GET book_details in InsertBookDetails")
 	}
 
 	return newBookDetail, nil
