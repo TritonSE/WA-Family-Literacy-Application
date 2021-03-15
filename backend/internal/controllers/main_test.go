@@ -1,12 +1,13 @@
 package controllers_test
 
 import (
-	"github.com/TritonSE/words-alive/internal/auth"
-	"github.com/TritonSE/words-alive/internal/controllers"
-	"github.com/TritonSE/words-alive/internal/database"
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/TritonSE/words-alive/internal/auth"
+	"github.com/TritonSE/words-alive/internal/controllers"
+	"github.com/TritonSE/words-alive/internal/database"
 )
 
 var conn = database.GetConnection()
@@ -18,7 +19,7 @@ var ts = httptest.NewServer(r)
 func TestMain(m *testing.M) {
 	database.Migrate("../../migrations")
 
-	_, _ = conn.Exec("TRUNCATE books")
+	_, _ = conn.Exec("TRUNCATE books CASCADE")
 	_, _ = conn.Exec("TRUNCATE book_contents")
 	_, _ = conn.Exec("TRUNCATE users")
 

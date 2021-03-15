@@ -1,6 +1,7 @@
 package controllers_test
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -50,6 +51,13 @@ func TestGetNullBook(t *testing.T) {
 	testutils.MakeHttpRequest("GET", ts.URL+"/books/nonexistent/en", "", 404, &response, t)
 
 	require.Equal(t, "book not found", response)
+}
+
+func TestCreateBookandBookDetails(t *testing.T) {
+	body := `{"title": "Harry Potter", "author":"JK Rowling", "image":null}`
+	var response models.Book
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated, &response, t)
+
 }
 
 // // Test if creating a book and its corresponding contents works
