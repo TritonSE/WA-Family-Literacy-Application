@@ -29,6 +29,8 @@ func TestMain(m *testing.M) {
 	conn.Exec("INSERT INTO books (id, title, author) values ('b_id', 'b','b1');")
 	conn.Exec("INSERT INTO books (id, title, author) VALUES ('catcher'," +
 		"'catcher in the rye', 'a');")
+	conn.Exec("INSERT INTO books (id, title, author) VALUES ('update'," +
+		"'update_me', 'update_me_author');")
 
 	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
@@ -59,6 +61,11 @@ func TestMain(m *testing.M) {
 		"explore_video, explore_body, learn_video, learn_body) VALUES " +
 		"('catcher', 'es', 'catcher_es_rv', 'catcher_es_rb', 'catcher_es_ev', " +
 		" 'catcher_es_eb', 'catcher_es_lv', 'catcher_es_lb')")
+
+	conn.Exec("INSERT INTO book_contents (id, lang, read_video, read_body, " +
+		"explore_video, explore_body, learn_video, learn_body) VALUES " +
+		"('update', 'en', 'update_en_rv', 'update_en_rb', 'update_en_ev', " +
+		" 'update_en_eb', 'update_en_lv', 'update_en_lb')")
 
 	// Close the server
 	defer ts.Close()

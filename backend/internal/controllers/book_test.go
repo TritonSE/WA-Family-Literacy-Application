@@ -17,7 +17,7 @@ func TestGetBooks(t *testing.T) {
 	testutils.MakeHttpRequest("GET", ts.URL+"/books", "", 200, &response, t)
 
 	// Check for correct number of elements, and sort alphabetically
-	require.Len(t, response, 4)
+	require.Len(t, response, 5)
 	require.Equal(t, "a", response[0].Title)
 	require.Equal(t, "b", response[1].Title)
 	require.Equal(t, "c", response[2].Title)
@@ -62,7 +62,7 @@ func TestJustCreateBook(t *testing.T) {
 	testutils.MakeHttpRequest("GET", ts.URL+"/books", "", 200, &response, t)
 
 	// Check for correct number of elements, and sort alphabetically
-	require.Len(t, response, 5)
+	require.Len(t, response, 6)
 }
 
 func TestCreateBookandBookDetails(t *testing.T) {
@@ -133,21 +133,36 @@ func TestDeleteBookDetOnInvalidLang(t *testing.T) {
 		nil, t)
 }
 
-// // Test if updating entry in books work
-// func TestUpdateBook(t *testing.T) {
-// 	var str = "updated_title"
-// 	var updatedBook = models.APIUpdateBook{
-// 		Title:  &str,
-// 		Author: nil,
-// 		Image:  nil,
-// 	}
-// 	jsonStr := testutils.MakeJSONBody(updatedBook, t)
-// 	var response models.Book
-// 	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update_me", jsonStr, &response, t)
-// 	require.Equal(t, "updated_title", response.Title)
-// 	require.Equal(t, "update_author", response.Author)
+func TestUpdateBook(t *testing.T) {
+	var updatedBook models.Book
+	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
+	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update", body, http.StatusOK, &updatedBook, t)
 
-// }
+	require.Equal(t, "updated_title", updatedBook.Title)
+	require.Equal(t, "updated_author", updatedBook.Author)
+
+}
+
+func TestUpdateBookDetails(t *testing.T) {
+	var updatedBook models.BookDetails
+	body := `{
+	"Read": {"video": null, "body":"updated_r"}, 
+	"Explore": {"video": null, "body":"updated_e"},  
+	"Learn": {"video": null, "body":"updated_l"}}
+	}`
+	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update/en", body, http.StatusOK, &updatedBook, t)
+
+	require.Equal(t, "updated_r", updatedBook.Read.Body)
+	require.Equal(t, "updated_e", updatedBook.Explore.Body)
+	require.Equal(t, "updated_l", updatedBook.Learn.Body)
+
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/update/en", body, http.StatusOK, &updatedBook, t)
+
+	require.Equal(t, "updated_r", updatedBook.Read.Body)
+	require.Equal(t, "updated_e", updatedBook.Explore.Body)
+	require.Equal(t, "updated_l", updatedBook.Learn.Body)
+
+}
 
 // // Test if updating entry in book_contents works
 // func TestUpdateBookDetails(t *testing.T) {
