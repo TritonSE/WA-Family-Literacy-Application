@@ -56,8 +56,7 @@ type APIUpdateBook struct {
 }
 
 type APIUpdateBookDetails struct {
-	Language *string              `json:"language"`
-	Read     APIUpdateTabContents `json:"read"`
-	Explore  APIUpdateTabContents `json:"explore"`
-	Learn    APIUpdateTabContents `json:"learn"`
+	Read    APIUpdateTabContents `json:"read"`
+	Explore APIUpdateTabContents `json:"explore"`
+	Learn   APIUpdateTabContents `json:"learn"`
 }

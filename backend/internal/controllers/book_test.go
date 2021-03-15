@@ -250,7 +250,6 @@ func TestUpdateBook(t *testing.T) {
 func TestUpdateBookDetails(t *testing.T) {
 	var read_vid string = "new_read_video"
 	var updatedBook = models.APIUpdateBookDetails{
-		Language: nil,
 		Read: models.APIUpdateTabContents{
 			Video: &read_vid,
 			Body:  nil,

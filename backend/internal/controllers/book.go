@@ -66,7 +66,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, resBook)
+	writeResponse(rw, http.StatusCreated, resBook)
 }
 
 // Creates an entry in the book_contents table (/books/{id})
@@ -89,7 +89,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, resBookDetail)
+	writeResponse(rw, http.StatusCreated, resBookDetail)
 }
 
 // deletes an entry from the book_contents entry (/books/{id}/{lang})
@@ -145,7 +145,7 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 	var reqBookDetails models.APIUpdateBookDetails
-	var resBookDetails models.BookDetails
+	var resBookDetails *models.BookDetails
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
 
 	if err != nil {

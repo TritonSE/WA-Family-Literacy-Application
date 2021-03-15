@@ -158,11 +158,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 
 	newBookDetail, _, err = db.FetchBookDetails(ctx, id, book.Language)
 
-	if err != nil {
-		return nil, errors.Wrap(err, "error on GET book_details in InsertBookDetails")
-	}
-
-	return newBookDetail, nil
+	return newBookDetail, err
 }
 
 /*
@@ -227,48 +223,29 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
  * Updates a row in the book_contents table
  */
 func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
-	lang string, book models.APIUpdateBookDetails) (models.BookDetails, error) {
-	var updatedBookDetails models.BookDetails
-	var updatedLanguage string
-	var query string = "UPDATE book_contents " +
-		" SET lang = COALESCE($1, lang), " +
-		"read_video = COALESCE($2, read_video), " +
-		"read_body = COALESCE($3, read_body), " +
-		"explore_video = COALESCE($4, explore_video), " +
-		"explore_body = COALESCE($5, explore_body), " +
-		"learn_video = COALESCE($6, learn_video), " +
-		"learn_body = COALESCE($7, learn_body) " +
-		"WHERE id = $8 AND lang = $9 " +
-		"RETURNING lang"
+	lang string, book models.APIUpdateBookDetails) (*models.BookDetails, error) {
+	var updatedBookDetails *models.BookDetails
+	var query string = "UPDATE book_contents SET " +
+		"read_video = COALESCE($1, read_video), " +
+		"read_body = COALESCE($2, read_body), " +
+		"explore_video = COALESCE($3, explore_video), " +
+		"explore_body = COALESCE($4, explore_body), " +
+		"learn_video = COALESCE($5, learn_video), " +
+		"learn_body = COALESCE($6, learn_body) " +
+		"WHERE id = $7 AND lang = $8"
 
-	err := db.Conn.QueryRowEx(ctx, query, nil, book.Language,
+	_, err := db.Conn.ExecEx(ctx, query, nil,
 		book.Read.Video, book.Read.Body,
 		book.Explore.Video, book.Explore.Body,
-		book.Learn.Video, book.Learn.Body, id, lang).
-		Scan(&updatedLanguage)
+		book.Learn.Video, book.Learn.Body, id, lang)
 
 	if err != nil {
-		return updatedBookDetails, errors.Wrap(err, "error on updating book_contents")
+		fmt.Print(err)
+		return nil, errors.Wrap(err, "error on updating book_contents")
 	}
 
-	query = "SELECT books.id, title, author, image, " +
-		"created_at, read_video, read_body, explore_video, explore_body, " +
-		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
-		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
+	updatedBookDetails, _, err = db.FetchBookDetails(ctx, id, lang)
 
-	err = db.Conn.QueryRowEx(ctx, query, nil, id, updatedLanguage).
-		Scan(&updatedBookDetails.ID, &updatedBookDetails.Title,
-			&updatedBookDetails.Author, &updatedBookDetails.Image,
-			&updatedBookDetails.CreatedAt,
-			&updatedBookDetails.Read.Video, &updatedBookDetails.Read.Body,
-			&updatedBookDetails.Explore.Video, &updatedBookDetails.Explore.Body,
-			&updatedBookDetails.Learn.Video, &updatedBookDetails.Learn.Body)
-
-	if err != nil {
-		return updatedBookDetails, errors.Wrap(err, "error on reading back from book_contents on update book_details")
-
-	}
-
-	return updatedBookDetails, nil
+	return updatedBookDetails, err
 
 }
