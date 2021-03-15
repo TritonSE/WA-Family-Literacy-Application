@@ -107,34 +107,31 @@ func TestDeleteBookDetails(t *testing.T) {
 
 }
 
-// // Testif deleting book works
-// func TestBookDelete(t *testing.T) {
-// 	var response interface{}
-// 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/d_id", nil, &response, t)
+func TestDeleteBook(t *testing.T) {
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/a_id", "", http.StatusNoContent,
+		nil, t)
 
-// 	require.Equal(t, nil, response)
-// }
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/a_id/en", "", http.StatusNotFound,
+		nil, t)
 
-// // Testing if delete on an invalid id returns an error
-// func TestBookDeleteOnInvalidId(t *testing.T) {
-// 	var response string
-// 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", nil, &response, t)
-// 	require.Equal(t, "error", response)
-// }
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/a_id/es", "", http.StatusNotFound,
+		nil, t)
 
-// // Test if book detail delete on an invalid id returns an error
-// func TestBookDetailDeleteOnInvalidId(t *testing.T) {
-// 	var response string
-// 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", nil, &response, t)
-// 	require.Equal(t, "error", response)
-// }
+}
+func TestDeleteBookOnInvalidId(t *testing.T) {
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", "", http.StatusInternalServerError,
+		nil, t)
+}
 
-// // Test book detail on invalid language returns an error
-// func TestBookDetailDeleteOnInvalidLanguage(t *testing.T) {
-// 	var response string
-// 	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", nil, &response, t)
-// 	require.Equal(t, "error", response)
-// }
+func TestDeleteBookDetOnInvalidId(t *testing.T) {
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", "", http.StatusInternalServerError,
+		nil, t)
+}
+
+func TestDeleteBookDetOnInvalidLang(t *testing.T) {
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", "", http.StatusInternalServerError,
+		nil, t)
+}
 
 // // Test if updating entry in books work
 // func TestUpdateBook(t *testing.T) {
