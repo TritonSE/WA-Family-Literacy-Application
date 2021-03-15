@@ -55,9 +55,8 @@ func TestGetNullBook(t *testing.T) {
 
 func TestJustCreateBook(t *testing.T) {
 	body := `{"title": "Lonely Book", "author":"Lonely Man", "image":null}`
-	var createdBook models.Book
 	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated,
-		&createdBook, t)
+		nil, t)
 
 	var response []models.Book
 	testutils.MakeHttpRequest("GET", ts.URL+"/books", "", 200, &response, t)
@@ -88,42 +87,25 @@ func TestCreateBookandBookDetails(t *testing.T) {
 	require.Equal(t, "hp_eb", createdBookDetails.Explore.Body)
 }
 
-// // Test if inserting into book_contents with an id not in books throws an error
-// func TestBookDetailsErrorWithInvalidID(t *testing.T) {
-// 	var badBookDetails = models.APICreateBookContents{
+func TestBookDetailsForeignKey(t *testing.T) {
+	body := `{"language": "en", 
+	"Read": {"video": null, "body":"bad_rb"}, 
+	"Explore": {"video": null, "body":"bad_eb"},  
+	"Learn": {"video": null, "body":"bad_lb"}}`
 
-// 		Language: "en",
-// 		Read: models.TabContent{
-// 			Video: nil,
-// 			Body:  "read_body",
-// 		},
-// 		Explore: models.TabContent{
-// 			Video: nil,
-// 			Body:  "explore_body",
-// 		},
-// 		Learn: models.TabContent{
-// 			Video: nil,
-// 			Body:  "learn_body",
-// 		},
-// 	}
-// 	var response string
-// 	var jsonString = testutils.MakeJSONBody(badBookDetails, t)
+	testutils.MakeHttpRequest("POST", ts.URL+"/books/nonexistant", body, http.StatusInternalServerError,
+		nil, t)
 
-// 	testutils.MakeHttpRequest("POST",
-// 		ts.URL+"/books/nonexistant", jsonString, &response, t)
+}
 
-// 	require.Equal(t, "error", response)
+func TestDeleteBookDetails(t *testing.T) {
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/c_id/en", "", http.StatusNoContent,
+		nil, t)
 
-// }
+	testutils.MakeHttpRequest("GET", ts.URL+"/books/c_id/en", "", http.StatusNotFound,
+		nil, t)
 
-// // Test if deleting from book_contents works
-// func TestBookDetailDelete(t *testing.T) {
-// 	var response interface{}
-// 	testutils.MakeHttpRequest("DELETE",
-// 		ts.URL+"/books/c_id/en", nil, &response, t)
-
-// 	require.Equal(t, nil, response)
-// }
+}
 
 // // Testif deleting book works
 // func TestBookDelete(t *testing.T) {
