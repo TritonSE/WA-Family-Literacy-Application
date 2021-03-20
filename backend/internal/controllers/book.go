@@ -52,14 +52,13 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	var reqBook models.APICreateBook
-	var resBook models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
-		writeResponse(rw, http.StatusBadRequest, "error")
+		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
 		return
 	}
 
-	resBook, err = c.Books.InsertBook(req.Context(), reqBook)
+	resBook, err := c.Books.InsertBook(req.Context(), reqBook)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -72,18 +71,17 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var reqBookDetail models.APICreateBookContents
-	var resBookDetail *models.BookDetails
 
 	var bookID string = chi.URLParam(req, "id")
 
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetail)
 
 	if err != nil {
-		writeResponse(rw, http.StatusBadRequest, "error")
+		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
 		return
 	}
 
-	resBookDetail, err = c.Books.InsertBookDetails(req.Context(), bookID, reqBookDetail)
+	resBookDetail, err := c.Books.InsertBookDetails(req.Context(), bookID, reqBookDetail)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
@@ -92,7 +90,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 	writeResponse(rw, http.StatusCreated, resBookDetail)
 }
 
-// deletes an entry from the book_contents entry (/books/{id}/{lang})
+// deletes an entry from the book_contents table (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
@@ -126,15 +124,14 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var reqBook models.APIUpdateBook
-	var resBook *models.Book
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 
 	if err != nil {
-		writeResponse(rw, http.StatusBadRequest, "error")
+		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
 		return
 	}
 
-	resBook, err = c.Books.UpdateBook(req.Context(), bookID, reqBook)
+	resBook, err := c.Books.UpdateBook(req.Context(), bookID, reqBook)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -150,15 +147,14 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 	var reqBookDetails models.APIUpdateBookDetails
-	var resBookDetails *models.BookDetails
 	err := json.NewDecoder(req.Body).Decode(&reqBookDetails)
 
 	if err != nil {
-		writeResponse(rw, http.StatusBadRequest, "error")
+		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
 		return
 	}
 
-	resBookDetails, err = c.Books.UpdateBookDetails(req.Context(), bookID, lang, reqBookDetails)
+	resBookDetails, err := c.Books.UpdateBookDetails(req.Context(), bookID, lang, reqBookDetails)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")

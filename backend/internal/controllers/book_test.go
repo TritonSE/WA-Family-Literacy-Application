@@ -69,7 +69,7 @@ func TestJustCreateBook(t *testing.T) {
 
 // Test creating a book and its contents together
 func TestCreateBookandBookDetails(t *testing.T) {
-	body := `{"title": "Harry Potter", "author":"JK Rowling", "image":null}`
+	body := `{"title": "Harry Potter", "author": "JK Rowling", "image":null}`
 	var createdBook models.Book
 	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated,
 		&createdBook, t)
@@ -79,9 +79,9 @@ func TestCreateBookandBookDetails(t *testing.T) {
 	require.Equal(t, []string{}, createdBook.Languages)
 
 	body = `{"language": "en", 
-	"Read": {"video": null, "body":"hp_rb"}, 
-	"Explore": {"video": null, "body":"hp_eb"},  
-	"Learn": {"video": null, "body":"hp_lb"}}`
+	"read": {"video": null, "body":"hp_rb"}, 
+	"explore": {"video": null, "body":"hp_eb"},  
+	"learn": {"video": null, "body":"hp_lb"}}`
 	var createdBookDetails models.BookDetails
 	testutils.MakeHttpRequest("POST", ts.URL+"/books/"+createdBook.ID, body, http.StatusCreated,
 		&createdBookDetails, t)
@@ -93,9 +93,9 @@ func TestCreateBookandBookDetails(t *testing.T) {
 // Make sure foreign key constraint is working
 func TestBookDetailsForeignKey(t *testing.T) {
 	body := `{"language": "en", 
-	"Read": {"video": null, "body":"bad_rb"}, 
-	"Explore": {"video": null, "body":"bad_eb"},  
-	"Learn": {"video": null, "body":"bad_lb"}}`
+	"read": {"video": null, "body":"bad_rb"}, 
+	"explore": {"video": null, "body":"bad_eb"},  
+	"learn": {"video": null, "body":"bad_lb"}}`
 
 	testutils.MakeHttpRequest("POST", ts.URL+"/books/nonexistant", body, http.StatusInternalServerError,
 		nil, t)
@@ -159,9 +159,9 @@ func TestUpdateBook(t *testing.T) {
 func TestUpdateBookDetails(t *testing.T) {
 	var updatedBook models.BookDetails
 	body := `{
-	"Read": {"video": null, "body":"updated_r"}, 
-	"Explore": {"video": null, "body":"updated_e"},  
-	"Learn": {"video": null, "body":"updated_l"}
+	"read": {"video": null, "body":"updated_r"}, 
+	"explore": {"video": null, "body":"updated_e"},  
+	"learn": {"video": null, "body":"updated_l"}
 	}`
 	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/update/en", body, http.StatusOK, &updatedBook, t)
 
@@ -186,9 +186,9 @@ func TestUpdateBookOnInvalidID(t *testing.T) {
 // Test updating entry with invalid id in book contents
 func TestUpdateBookDetailsOnInvalidID(t *testing.T) {
 	body := `{
-		"Read": {"video": null, "body":"updated_r"}, 
-		"Explore": {"video": null, "body":"updated_e"},  
-		"Learn": {"video": null, "body":"updated_l"}
+		"read": {"video": null, "body":"updated_r"}, 
+		"explore": {"video": null, "body":"updated_e"},  
+		"learn": {"video": null, "body":"updated_l"}
 		}`
 
 	testutils.MakeHttpRequest("PATCH", ts.URL+"/nonexistant/en", body, http.StatusNotFound, nil, t)
@@ -197,9 +197,9 @@ func TestUpdateBookDetailsOnInvalidID(t *testing.T) {
 // Test updating entry with invalid lang in book contents
 func TestUpdateBookDetailsOnInvalidLang(t *testing.T) {
 	body := `{
-		"Read": {"video": null, "body":"updated_r"}, 
-		"Explore": {"video": null, "body":"updated_e"},  
-		"Learn": {"video": null, "body":"updated_l"}
+		"read": {"video": null, "body":"updated_r"}, 
+		"explore": {"video": null, "body":"updated_e"},  
+		"learn": {"video": null, "body":"updated_l"}
 		}`
 
 	testutils.MakeHttpRequest("PATCH", ts.URL+"/update/es", body, http.StatusNotFound, nil, t)

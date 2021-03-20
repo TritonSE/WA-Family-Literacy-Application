@@ -116,26 +116,20 @@ func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book,
 
 /*
  * Inserts a book into the books table
- * MUST be called on the first instance a book is inserted into the database
- * and has no associated language
  */
 func (db *BookDatabase) InsertBook(ctx context.Context,
-	book models.APICreateBook) (models.Book, error) {
-	var newBook = models.Book{
-		Languages: []string{},
-	}
+	book models.APICreateBook) (*models.Book, error) {
+	var newBookId string
+
 	var query string = "INSERT INTO books (title, author, image) " +
-		"VALUES ($1, $2, $3) " +
-		"RETURNING id, title, author, image, created_at"
-	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).
-		Scan(&newBook.ID, &newBook.Title, &newBook.Author,
-			&newBook.Image, &newBook.CreatedAt)
+		"VALUES ($1, $2, $3) RETURNING id"
+	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).Scan(&newBookId)
 
 	if err != nil {
-		return newBook, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
+		return nil, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
 
-	return newBook, nil
+	return db.FetchBook(ctx, newBookId)
 
 }
 
