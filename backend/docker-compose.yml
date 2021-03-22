@@ -11,10 +11,6 @@ services:
     ports:
     - 8080:8080
     environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: ""
-      DB_DATABASE: postgres
+      DATABASE_URL: postgresql://postgres@db:5432/postgres
     depends_on:
       - db

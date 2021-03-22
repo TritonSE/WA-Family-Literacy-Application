@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 
 	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookDatabase struct {
-	Conn *pgx.Conn
+	Conn *pgxpool.Pool
 }
 
 /*
@@ -27,7 +27,7 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
 		"FROM books LEFT JOIN book_contents ON books.id = " +
 		"book_contents.id GROUP BY books.id ORDER BY title"
 
-	rows, err := db.Conn.QueryEx(ctx, query, nil)
+	rows, err := db.Conn.Query(ctx, query)
 	if err != nil {
 		return nil, errors.Wrap(err, "error on SELECT FROM books in FetchBookList")
 	}
@@ -62,7 +62,7 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 		"created_at, read_video, read_body, explore_video, explore_body, " +
 		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
 		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
-	rows, err := db.Conn.QueryEx(ctx, query, nil, id, lang)
+	rows, err := db.Conn.Query(ctx, query, id, lang)
 	if err != nil {
 		return &book, false, errors.Wrap(err, "error on query for book details")
 	}
@@ -75,7 +75,7 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 		var queryID string = "SELECT count(*) FROM book_contents WHERE " +
 			"id = $1"
 
-		err = db.Conn.QueryRowEx(ctx, queryID, nil, id).Scan(&count)
+		err = db.Conn.QueryRow(ctx, queryID, id).Scan(&count)
 
 		if err != nil {
 			return nil, false, errors.Wrap(err, "error on scan for ID")
