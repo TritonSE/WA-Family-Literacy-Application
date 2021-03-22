@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('b_id', 'b','b1');")
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) VALUES ('catcher'," +
 		"'catcher in the rye', 'a');")
-	conn.Exec("INSERT INTO books (id, title, author) VALUES ('update'," +
+	conn.Exec(ctx, "INSERT INTO books (id, title, author) VALUES ('update'," +
 		"'update_me', 'update_me_author');")
 
 	conn.Exec(ctx, "INSERT INTO book_contents (id, lang, read_video, read_body, " +
