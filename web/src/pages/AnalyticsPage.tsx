@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Analytics: React.FC = () => {
+export const AnalyticsPage: React.FC = () => {
   return (
     <h1>Analytics</h1>
   );

@@ -5,10 +5,10 @@ import {
   Route,
   NavLink,
 } from 'react-router-dom';
-import { Communication } from '../pages/Communication';
-import { Analytics } from '../pages/Analytics';
-import { UploadBooks } from '../pages/UploadBooks';
-import { Manage } from '../pages/Manage';
+import { CommunicationPage } from '../pages/CommunicationPage';
+import { AnalyticsPage } from '../pages/AnalyticsPage';
+import { UploadBooksPage } from '../pages/UploadBooksPage';
+import { ManagePage } from '../pages/ManagePage';
 import '../css/Navbar.css';
 
 export const Navbar: React.FC = () => {
@@ -33,16 +33,16 @@ export const Navbar: React.FC = () => {
 
       <Switch>
         <Route path="/communication">
-          <Communication />
+          <CommunicationPage />
         </Route>
         <Route path="/analytics">
-          <Analytics />
+          <AnalyticsPage />
         </Route>
         <Route path="/upload">
-          <UploadBooks />
+          <UploadBooksPage />
         </Route>
         <Route path="/manage">
-          <Manage />
+          <ManagePage />
         </Route>
       </Switch>
     </Router>

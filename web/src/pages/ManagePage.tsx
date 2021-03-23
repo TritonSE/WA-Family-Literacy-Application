@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Manage: React.FC = () => {
+export const ManagePage: React.FC = () => {
   return (
     <h1>Manage</h1>
   );

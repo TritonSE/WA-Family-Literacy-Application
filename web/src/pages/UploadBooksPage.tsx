@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const UploadBooks: React.FC = () => {
+export const UploadBooksPage: React.FC = () => {
   return (
     <h1>UploadBooks</h1>
   );
