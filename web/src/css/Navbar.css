@@ -6,14 +6,16 @@ ul {
 }
 
 li {
-  display: inline;
-  padding-left: 8px;
+
+  float: left;
 }
 
 li a {
-  padding-top: 8px;
-  text-decoration: none;
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
   color: gray;
+  text-decoration: none;
 }
 
 .active {
