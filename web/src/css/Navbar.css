@@ -1,0 +1,21 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+li {
+  display: inline;
+  padding-left: 8px;
+}
+
+li a {
+  padding-top: 8px;
+  text-decoration: none;
+  color: gray;
+}
+
+.active {
+  text-decoration: underline;
+}
