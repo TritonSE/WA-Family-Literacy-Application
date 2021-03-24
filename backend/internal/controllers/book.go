@@ -95,6 +95,13 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 
+	book, _, _ := c.Books.FetchBookDetails(req.Context(), bookID, lang)
+
+	if book == nil {
+		writeResponse(rw, http.StatusNotFound, "Book with requested ID or Language was not found")
+		return
+	}
+
 	err := c.Books.DeleteBookContent(req.Context(), bookID, lang)
 
 	if err != nil {
@@ -109,6 +116,13 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 // deletes a book from the books table (/books/{id})
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
+
+	book, _ := c.Books.FetchBook(req.Context(), bookID)
+
+	if book == nil {
+		writeResponse(rw, http.StatusNotFound, "Book with requested id was not found")
+		return
+	}
 
 	err := c.Books.DeleteBook(req.Context(), bookID)
 
@@ -128,6 +142,13 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
+		return
+	}
+
+	book, _ := c.Books.FetchBook(req.Context(), bookID)
+
+	if book == nil {
+		writeResponse(rw, http.StatusNotFound, "Book with ID requested not found")
 		return
 	}
 
@@ -151,6 +172,13 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 
 	if err != nil {
 		writeResponse(rw, http.StatusBadRequest, "Invalid request schema")
+		return
+	}
+
+	bookDetails, _, _ := c.Books.FetchBookDetails(req.Context(), bookID, lang)
+
+	if bookDetails == nil {
+		writeResponse(rw, http.StatusNotFound, "Book not found with requested id and language")
 		return
 	}
 

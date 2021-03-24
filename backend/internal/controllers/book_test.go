@@ -128,19 +128,19 @@ func TestDeleteBook(t *testing.T) {
 
 // Make sure cannot delete book on id that does not exist
 func TestDeleteBookOnInvalidId(t *testing.T) {
-	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", "", http.StatusInternalServerError,
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant", "", http.StatusNotFound,
 		nil, t)
 }
 
 // Make sure cannot delete book contents on id that does not exist
 func TestDeleteBookDetOnInvalidId(t *testing.T) {
-	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", "", http.StatusInternalServerError,
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/nonexistant/en", "", http.StatusNotFound,
 		nil, t)
 }
 
 // Make sure cannot delete book contents on language that does not exist
 func TestDeleteBookDetOnInvalidLang(t *testing.T) {
-	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", "", http.StatusInternalServerError,
+	testutils.MakeHttpRequest("DELETE", ts.URL+"/books/catcher/ge", "", http.StatusNotFound,
 		nil, t)
 }
 
@@ -179,7 +179,7 @@ func TestUpdateBookDetails(t *testing.T) {
 // Test updating entry with invalid id in books
 func TestUpdateBookOnInvalidID(t *testing.T) {
 	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
-	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/nonexistant", body, http.StatusInternalServerError, nil, t)
+	testutils.MakeHttpRequest("PATCH", ts.URL+"/books/nonexistant", body, http.StatusNotFound, nil, t)
 
 }
 
