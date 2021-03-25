@@ -17,7 +17,7 @@
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-gesture-handler": "~1.8.0",
-    "react-native-markdown-view": "^1.1.4",
+    "react-native-markdown-view": "git+https://github.com/Benjamin-Dobell/react-native-markdown-view.git#07e467f",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@types/i18n-js": "^3.8.0",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
@@ -41,7 +42,7 @@
     "typescript": "~4.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --strict",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",

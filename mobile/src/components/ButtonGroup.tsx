@@ -5,7 +5,7 @@ import { TextStyles } from '../styles/TextStyles';
 import { I18nContext } from '../context/I18nContext';
 
 // button labels and callback function for passing key of active button to parent
-type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange };
+type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange: (key: string) => void };
 
 /**
  * Renders an inline group of three button tabs
