@@ -1,6 +1,6 @@
 import React from 'react';
 import { Svg, Circle } from 'react-native-svg';
-import { Text, Image, View, ScrollView, StyleSheet, TextInput } from 'react-native';
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -21,13 +21,21 @@ const MoreInfoTab: React.FC = () => {
 		<View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
 			<Text style={[TextStyles.h3, {marginBottom: 20}]} >Social Media</Text>
 			<View style={styles.socialRow}>
-				<Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
+				<TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
+					<Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={async () => await Linking.openURL("https://instagram.com/wordsalivesd")}>
 				<Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/instagram.png')}/>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={async () => await Linking.openURL("https://www.facebook.com/WordsAliveSD")}>
 				<Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/facebook.png')}/>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={async () => await Linking.openURL("https://www.tiktok.com/@wordsalivesd")}>
 				<Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/tiktok.png')}/>
+				</TouchableOpacity>
 			</View>
-			<LargeButton text="Donate" onPress={() => alert("This button does nothing, for now")}/>
-			<LargeButton text="Become a Volunteer" onPress={() => alert("This button does nothing, for now")}/>
+			<LargeButton text="Donate" onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
+			<LargeButton text="Become a Volunteer" onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
 			<Text style={[TextStyles.h1, {textAlign: 'center', marginTop: 20}]}>
 				Interested in our Program?
 			</Text>
@@ -40,7 +48,7 @@ const MoreInfoTab: React.FC = () => {
 				onChangeText={text => onChangeText(text)}
 				value={value}
 			/>
-			<LargeButton text="Send" onPress={() => alert("This button does nothing, for now")} />
+			<LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:test@example.com?subject=Interested&body=${value}`)} />
 		</View>
 	);
 };
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
 		width: 32,
 	},
 	notLeftPic: {
-		marginLeft: 10,
+		marginLeft: 20,
 	},
 	textBox: {
 		height: 400,

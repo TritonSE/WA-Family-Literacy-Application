@@ -3,7 +3,7 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
-export const LargeButton: React.FC = ({ text, onPress}) => {
+export const LargeButton: React.FC = ({ text, onPress }) => {
 	const [active, setActive] = React.useState(false);
 
 	return (
