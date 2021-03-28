@@ -2,10 +2,12 @@ package database
 
 import (
 	"context"
+    "fmt"
 
-	"github.com/TritonSE/words-alive/internal/models"
 	"github.com/jackc/pgx"
 	"github.com/pkg/errors"
+
+	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type UserDatabase struct {
@@ -57,9 +59,15 @@ func (db *UserDatabase) FetchUserByEmail(ctx context.Context, email string) (*mo
 
 func (db *UserDatabase) UpdateUser(ctx context.Context, id string, user models.User) (error) {
 
-    cmd, err := db.Conn.ExecEx(ctx, "UPDATE users SET name = $1, email = $2, in_san_diego = $3 WHERE id = $4",
-                 nil, user.Name, user.Email, user.InSanDiego, id)
+    var query string = "UPDATE users SET " +
+                        "name = COALESCE($1, name), " +
+                        "in_san_diego = COALESCE($2, in_san_diego) " +
+                        "WHERE id = $3"
+
+    cmd, err := db.Conn.ExecEx(ctx, query,
+                 nil, user.Name, user.InSanDiego, id)
     if err != nil {
+        fmt.Printf("Error: %s\n", err)
         return errors.Wrap(err, "error on UPDATE users")
     }
 

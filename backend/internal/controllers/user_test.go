@@ -1,11 +1,14 @@
 package controllers_test
 
 import (
-	"github.com/TritonSE/words-alive/internal/models"
-	"github.com/TritonSE/words-alive/internal/testutils"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
+    "fmt"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/TritonSE/words-alive/internal/models"
+	"github.com/TritonSE/words-alive/internal/testutils"
 )
 
 func TestNoToken(t *testing.T) {
@@ -50,17 +53,44 @@ func TestGetUser(t *testing.T) {
 	require.Equal(t, response.InSanDiego, true)
 }
 
+func TestGetUserNotFound(t *testing.T) {
+    var response string
+	testutils.MakeAuthenticatedRequest("GET", ts.URL+"/users/user2", "", http.StatusNotFound, &response, "test-token-user1", t)
+	require.Equal(t, response, "user does not exist")
+}
+
+func TestGetUserUnAuth(t *testing.T) {
+    var response string
+	testutils.MakeAuthenticatedRequest("GET", ts.URL+"/users/user1", "", http.StatusForbidden, &response, "test-token-user2", t)
+
+    fmt.Printf("UserUnAuth resp: %s\n", response)
+}
+
 func TestUpdateUser(t *testing.T) {
 	// valid token test
-	body := `{"id": "user1", "name": "roberto", "email": "test5@test.com", "in_san_diego": false}`
+	body := `{"id": "user1", "name": "roberto", "email": "test4@test.com", "in_san_diego": false}`
 	var response1 string
     var response2 models.User
-	testutils.MakeAuthenticatedRequest("PUT", ts.URL+"/users/user1", body, http.StatusOK, &response1, "test-token-user1", t)
+	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusOK, &response1, "test-token-user1", t)
 	// assertions with response here
     require.Equal(t, response1, "updated")
 	testutils.MakeAuthenticatedRequest("GET", ts.URL+"/users/user1", "", http.StatusOK, &response2, "test-token-user1", t)
 	require.Equal(t, response2.ID, "user1")
 	require.Equal(t, response2.Name, "roberto")
-	require.Equal(t, response2.Email, "test5@test.com")
+	require.Equal(t, response2.Email, "test4@test.com")
 	require.Equal(t, response2.InSanDiego, false)
+}
+
+func TestUpdateUserNotFound(t *testing.T) {
+	body := `{"id": "user2", "name": "robert", "email": "test4@test.com", "in_san_diego": false}`
+	var response string
+	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user2", body, http.StatusNotFound, &response, "test-token-user2", t)
+    require.Equal(t, response, "user not found")
+}
+
+func TestUpdateUserEmail(t *testing.T) {
+	body := `{"id": "user1", "name": "robert", "email": "test5@test.com", "in_san_diego": false}`
+	var response string
+	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusBadRequest, &response, "test-token-user1", t)
+    require.Equal(t, response, "cannot change email")
 }

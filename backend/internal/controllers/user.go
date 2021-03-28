@@ -71,14 +71,32 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
     var userID string = chi.URLParam(req, "id")
 
-    newUser, err := c.Users.FetchUserByID(req.Context(), userID)
+	uid, ok := req.Context().Value("user").(string)
+
+	if !ok {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println("unable to get user from request context")
+		return
+	}
+
+    user, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, newUser)
+    if user == nil {
+        writeResponse(rw, http.StatusNotFound, "user does not exist")
+        return
+    }
+
+    if uid != user.ID {
+		writeResponse(rw, http.StatusForbidden, "Token does not match request")
+        return
+    }
+
+	writeResponse(rw, http.StatusOK, user)
 }
 
 func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
@@ -86,33 +104,41 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 
 	var user models.User
 
+    // Read request body
 	if err := json.NewDecoder(req.Body).Decode(&user); err != nil {
 		writeResponse(rw, http.StatusBadRequest, "bad input!")
 		return
 	}
 
+    // Pull user and validate token
 	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
+
 	if uid != user.ID || uid != userID {
 		writeResponse(rw, http.StatusForbidden, "Token does not match request body")
 		return
 	}
 
-	duplicate, err := c.Users.FetchUserByEmail(req.Context(), user.Email)
+    // Check current user info
+	currUser, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
-	if duplicate != nil {
-		// we have created a user with this email before
-		writeResponse(rw, http.StatusBadRequest, "user with email already exists")
+	if currUser == nil {
+		writeResponse(rw, http.StatusNotFound, "user not found")
 		return
 	}
+    if user.Email != "" && user.Email != currUser.Email {
+        writeResponse(rw, http.StatusBadRequest, "cannot change email")
+        return
+    }
 
+    // Carry out the update
     err = c.Users.UpdateUser(req.Context(), userID, user)
     if err != nil {
         writeResponse(rw, http.StatusInternalServerError, "error")
