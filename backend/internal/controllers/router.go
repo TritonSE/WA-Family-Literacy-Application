@@ -37,6 +37,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		})
 	})
 
+	r.Get("/ping", ping)
+
 	r.Route("/books", func(r chi.Router) {
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
@@ -60,4 +62,9 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 
 	return r
+}
+
+// GET /ping handler, for a very simple health check
+func ping(rw http.ResponseWriter, _ *http.Request) {
+	writeResponse(rw, http.StatusOK, "pong!")
 }
