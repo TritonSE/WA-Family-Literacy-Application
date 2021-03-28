@@ -68,9 +68,14 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 	writeResponse(rw, http.StatusCreated, newUser)
 }
 
+/*
+ * Handles GET requests, requires {id}
+ * Sends JSON object with all user data if request is authenticated
+ */
 func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
-    var userID string = chi.URLParam(req, "id")
+	var userID string = chi.URLParam(req, "id")
 
+	// Check for valid token
 	uid, ok := req.Context().Value("user").(string)
 
 	if !ok {
@@ -79,38 +84,44 @@ func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-    user, err := c.Users.FetchUserByID(req.Context(), userID)
+	if uid != userID {
+		writeResponse(rw, http.StatusForbidden, "Token does not match request")
+		return
+	}
+
+	// Fetch user info
+	user, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)
 		return
 	}
 
-    if user == nil {
-        writeResponse(rw, http.StatusNotFound, "user does not exist")
-        return
-    }
-
-    if uid != user.ID {
-		writeResponse(rw, http.StatusForbidden, "Token does not match request")
-        return
-    }
+	// User not found
+	if user == nil {
+		writeResponse(rw, http.StatusNotFound, "user does not exist")
+		return
+	}
 
 	writeResponse(rw, http.StatusOK, user)
 }
 
+/*
+ * Handles PATCH request, requires {id}
+ * Update fields of user info
+ */
 func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
-    var userID string = chi.URLParam(req, "id")
+	var userID string = chi.URLParam(req, "id")
 
 	var user models.User
 
-    // Read request body
+	// Read request body
 	if err := json.NewDecoder(req.Body).Decode(&user); err != nil {
 		writeResponse(rw, http.StatusBadRequest, "bad input!")
 		return
 	}
 
-    // Pull user and validate token
+	// Pull user and validate token
 	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -123,7 +134,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-    // Check current user info
+	// Check current user info
 	currUser, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -133,17 +144,18 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 		writeResponse(rw, http.StatusNotFound, "user not found")
 		return
 	}
-    if user.Email != "" && user.Email != currUser.Email {
-        writeResponse(rw, http.StatusBadRequest, "cannot change email")
-        return
-    }
+	// Illegal attempt to change email
+	if user.Email != "" && user.Email != currUser.Email {
+		writeResponse(rw, http.StatusBadRequest, "cannot change email")
+		return
+	}
 
-    // Carry out the update
-    err = c.Users.UpdateUser(req.Context(), userID, user)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        return
-    }
+	// Carry out the update
+	err = c.Users.UpdateUser(req.Context(), userID, user)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
 
-    writeResponse(rw, http.StatusOK, "updated")
+	writeResponse(rw, http.StatusOK, "updated")
 }
