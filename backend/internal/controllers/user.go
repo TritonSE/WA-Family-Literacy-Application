@@ -144,13 +144,6 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 		writeResponse(rw, http.StatusNotFound, "user not found")
 		return
 	}
-	/*
-		// Illegal attempt to change email
-		if user.Email != "" && user.Email != currUser.Email {
-			writeResponse(rw, http.StatusBadRequest, "cannot change email")
-			return
-		}
-	*/
 
 	// Carry out the update
 	err = c.Users.UpdateUser(req.Context(), userID, user)
