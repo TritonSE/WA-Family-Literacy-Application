@@ -65,7 +65,7 @@ func TestGetUserUnAuth(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	// valid token test
-	body := `{"id": "user1", "name": "roberto", "email": "test4@test.com", "in_san_diego": false}`
+	body := `{"name": "roberto", "in_san_diego": false}`
 	var response1 string
 	var response2 models.User
 	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusOK, &response1, "test-token-user1", t)
@@ -79,15 +79,38 @@ func TestUpdateUser(t *testing.T) {
 }
 
 func TestUpdateUserNotFound(t *testing.T) {
-	body := `{"id": "user2", "name": "robert", "email": "test4@test.com", "in_san_diego": false}`
+	body := `{"name": "robert", "in_san_diego": false}`
 	var response string
 	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user2", body, http.StatusNotFound, &response, "test-token-user2", t)
 	require.Equal(t, response, "user not found")
 }
 
-func TestUpdateUserEmail(t *testing.T) {
-	body := `{"id": "user1", "name": "robert", "email": "test5@test.com", "in_san_diego": false}`
-	var response string
-	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusBadRequest, &response, "test-token-user1", t)
-	require.Equal(t, response, "cannot change email")
+func TestUpdateUserPartialName(t *testing.T) {
+	// valid token test
+	body := `{"name": "new name"}`
+	var response1 string
+	var response2 models.User
+	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusOK, &response1, "test-token-user1", t)
+	// assertions with response here
+	require.Equal(t, response1, "updated")
+	testutils.MakeAuthenticatedRequest("GET", ts.URL+"/users/user1", "", http.StatusOK, &response2, "test-token-user1", t)
+	require.Equal(t, response2.ID, "user1")
+	require.Equal(t, response2.Name, "new name")
+	require.Equal(t, response2.Email, "test4@test.com")
+	require.Equal(t, response2.InSanDiego, false)
+}
+
+func TestUpdateUserPartialLocation(t *testing.T) {
+	// valid token test
+	body := `{"in_san_diego": true}`
+	var response1 string
+	var response2 models.User
+	testutils.MakeAuthenticatedRequest("PATCH", ts.URL+"/users/user1", body, http.StatusOK, &response1, "test-token-user1", t)
+	// assertions with response here
+	require.Equal(t, response1, "updated")
+	testutils.MakeAuthenticatedRequest("GET", ts.URL+"/users/user1", "", http.StatusOK, &response2, "test-token-user1", t)
+	require.Equal(t, response2.ID, "user1")
+	require.Equal(t, response2.Name, "new name")
+	require.Equal(t, response2.Email, "test4@test.com")
+	require.Equal(t, response2.InSanDiego, true)
 }

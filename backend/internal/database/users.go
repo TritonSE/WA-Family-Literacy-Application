@@ -56,7 +56,7 @@ func (db *UserDatabase) FetchUserByEmail(ctx context.Context, email string) (*mo
 	return &user, nil
 }
 
-func (db *UserDatabase) UpdateUser(ctx context.Context, id string, user models.User) error {
+func (db *UserDatabase) UpdateUser(ctx context.Context, id string, user models.UpdateUser) error {
 
 	var query string = "UPDATE users SET " +
 		"name = COALESCE($1, name), " +

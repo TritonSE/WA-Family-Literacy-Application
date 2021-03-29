@@ -113,7 +113,7 @@ func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
 func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	var userID string = chi.URLParam(req, "id")
 
-	var user models.User
+	var user models.UpdateUser
 
 	// Read request body
 	if err := json.NewDecoder(req.Body).Decode(&user); err != nil {
@@ -129,7 +129,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if uid != user.ID || uid != userID {
+	if uid != userID {
 		writeResponse(rw, http.StatusForbidden, "Token does not match request body")
 		return
 	}
@@ -144,11 +144,13 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 		writeResponse(rw, http.StatusNotFound, "user not found")
 		return
 	}
+    /*
 	// Illegal attempt to change email
 	if user.Email != "" && user.Email != currUser.Email {
 		writeResponse(rw, http.StatusBadRequest, "cannot change email")
 		return
 	}
+    */
 
 	// Carry out the update
 	err = c.Users.UpdateUser(req.Context(), userID, user)
