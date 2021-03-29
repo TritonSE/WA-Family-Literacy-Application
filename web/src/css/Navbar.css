@@ -6,7 +6,6 @@ ul {
 }
 
 li {
-
   float: left;
 }
 
@@ -18,6 +17,34 @@ li a {
   text-decoration: none;
 }
 
+li button {
+  display: block;
+  background-color: transparent;
+  border: none;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+li button:focus {
+  outline: none;
+}
+
+li button span {
+  color: gray
+}
+
+img {
+  display: block;
+  text-align: center;
+  width: 85px;
+  height: 60px;
+  padding-right: 25px;
+}
+
 .active {
   text-decoration: underline;
+}
+
+.sign_out {
+  float: right;
 }

@@ -1,50 +1,33 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-} from 'react-router-dom';
-import { CommunicationPage } from '../pages/CommunicationPage';
-import { AnalyticsPage } from '../pages/AnalyticsPage';
-import { UploadBooksPage } from '../pages/UploadBooksPage';
-import { ManagePage } from '../pages/ManagePage';
+import { NavLink } from 'react-router-dom';
 import '../css/Navbar.css';
-
+/**
+ * This is the navbar for the application. Creates links to the routes defined
+ * in App.js
+ */
 export const Navbar: React.FC = () => {
   return (
-    <Router>
-      <nav>
-        <ul>
-          <li>
-            <NavLink activeClassName="active" to="/communication">Communication</NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName="active" to="/analytics">Analytics</NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName="active" to="/upload">Upload Books</NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName="active" to="/manage">Manage</NavLink>
-          </li>
-        </ul>
-      </nav>
-
-      <Switch>
-        <Route path="/communication">
-          <CommunicationPage />
-        </Route>
-        <Route path="/analytics">
-          <AnalyticsPage />
-        </Route>
-        <Route path="/upload">
-          <UploadBooksPage />
-        </Route>
-        <Route path="/manage">
-          <ManagePage />
-        </Route>
-      </Switch>
-    </Router>
+    <nav>
+      <ul>
+        <li>
+          <img src="./img/logo.png" alt="Logo" />
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/communication">Communication</NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/analytics">Analytics</NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/upload">Upload Books</NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/manage">Manage</NavLink>
+        </li>
+        <li className="sign_out">
+          <button type="submit"><span>Sign Out</span></button>
+        </li>
+      </ul>
+    </nav>
   );
 };
