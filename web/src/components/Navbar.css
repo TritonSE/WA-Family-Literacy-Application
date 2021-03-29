@@ -1,39 +1,20 @@
-ul {
-  list-style-type: none;
+.navbar_list{
+  list-style-type: none ;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-li {
+.nav_element_left {
   float: left;
 }
 
-li a {
-  display: block;
-  text-align: center;
-  padding: 14px 16px;
-  color: gray;
-  text-decoration: none;
+.nav_element_right{
+  float: right;
 }
 
-li button {
-  display: block;
-  background-color: transparent;
-  border: none;
-  padding: 14px 16px;
-  cursor: pointer;
-}
 
-li button:focus {
-  outline: none;
-}
-
-li button span {
-  color: gray
-}
-
-img {
+.nav_logo {
   display: block;
   text-align: center;
   width: 85px;
@@ -41,10 +22,31 @@ img {
   padding-right: 25px;
 }
 
+.nav_link {
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  color: gray;
+  text-decoration: none;
+}
+
+.nav_button {
+  display: block;
+  background-color: transparent;
+  border: none;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.nav_button:focus {
+  outline: none;
+}
+
+.nav_button span {
+  color: gray
+}
+
 .active {
   text-decoration: underline;
 }
 
-.sign_out {
-  float: right;
-}

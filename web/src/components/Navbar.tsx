@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import '../css/Navbar.css';
+import './Navbar.css';
 /**
  * This is the navbar for the application. Creates links to the routes defined
  * in App.js
@@ -8,24 +8,25 @@ import '../css/Navbar.css';
 export const Navbar: React.FC = () => {
   return (
     <nav>
-      <ul>
-        <li>
-          <img src="./img/logo.png" alt="Logo" />
+      <ul className="navbar_list">
+
+        <li className="nav_element_left">
+          <img className="nav_logo" src="./img/logo.png" alt="Logo" />
         </li>
-        <li>
-          <NavLink activeClassName="active" to="/communication">Communication</NavLink>
+        <li className="nav_element_left">
+          <NavLink className="nav_link" activeClassName="active" to="/communication">Communication</NavLink>
         </li>
-        <li>
-          <NavLink activeClassName="active" to="/analytics">Analytics</NavLink>
+        <li className="nav_element_left">
+          <NavLink className="nav_link" activeClassName="active" to="/analytics">Analytics</NavLink>
         </li>
-        <li>
-          <NavLink activeClassName="active" to="/upload">Upload Books</NavLink>
+        <li className="nav_element_left">
+          <NavLink className="nav_link" activeClassName="active" to="/upload">Upload Books</NavLink>
         </li>
-        <li>
-          <NavLink activeClassName="active" to="/manage">Manage</NavLink>
+        <li className="nav_element_left">
+          <NavLink className="nav_link" activeClassName="active" to="/manage">Manage</NavLink>
         </li>
-        <li className="sign_out">
-          <button type="submit"><span>Sign Out</span></button>
+        <li className="nav_element_right">
+          <button className="nav_button" type="submit"><span>Sign Out</span></button>
         </li>
       </ul>
     </nav>
