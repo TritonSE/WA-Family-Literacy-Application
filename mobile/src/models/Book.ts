@@ -1,10 +1,22 @@
+import { Language } from './Languages';
+
 export type Book = {
     id: string
     title: string
+    author: string
     image?: string
-    read?: TabContent
-    explore?: TabContent
-    learn?: TabContent
+    languages: Language[]
+    createdAt: string
+};
+
+export type BookDetails = {
+    id: string
+    title: string
+    author: string
+    image?: string
+    read: TabContent
+    explore: TabContent
+    learn: TabContent
     createdAt: string
 };
 
