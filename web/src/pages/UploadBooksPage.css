@@ -1,0 +1,56 @@
+.upload {
+  padding: 20px;
+}
+
+.search {
+  height: 40px;
+  width: 250px;
+  margin: auto;
+  padding-left: 5px;
+  border: 1px solid #B8B8B8;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.clickable {
+  text-decoration: underline;
+  font-size: 12px;
+  border: none;
+  outline: none;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+
+.title {
+  text-align: left;
+  font-size: 30px;
+  margin-right: 40px;
+}
+
+p {
+  font-size: 12px;
+  margin: 0px;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.books {
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+  flex-wrap: wrap;
+}
+
+.books::after {
+  width: 100%;
+  content: "";
+  justify-content: space-between;
+  align-content: space-between;
+  flex: auto;
+}

@@ -1,11 +1,12 @@
 import React from 'react';
 
 import './App.css';
+import { UploadBooksPage } from './pages/UploadBooksPage';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <p>TODO</p>
+      <UploadBooksPage />
     </div>
   );
 };
