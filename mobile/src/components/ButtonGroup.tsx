@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { I18nContext } from '../context/I18nContext';
@@ -35,7 +35,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
       {buttons.map(res => {
         return (
           <View key={res.key}>
-            <TouchableOpacity
+            <Pressable
               style={[styles.button, activeButton === res.key ? styles.buttonActive : styles.buttonInactive]}
               onPress={() => {
                 setActiveButton(res.key);
@@ -45,7 +45,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBt
               <Text style={[activeButton === res.key ? styles.buttonTextActive : styles.buttonTextInactive, TextStyles.caption2]}>
                 {res.label}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         );
       })}

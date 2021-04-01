@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
@@ -16,7 +16,7 @@ export const HorizontalBookList: React.FC<HorizontalBookListProps> = ({ books })
       data={books}
       renderItem={({ item, index }) => (
         // this ensures that the first and last book have the correct spacing
-        <TouchableOpacity onPress={() => navigation.navigate('Book', {
+        <Pressable onPress={() => navigation.navigate('Book', {
           book: item,
         })}
         >
@@ -27,7 +27,7 @@ export const HorizontalBookList: React.FC<HorizontalBookListProps> = ({ books })
           >
             <BookCard book={item} />
           </View>
-        </TouchableOpacity>
+        </Pressable>
       )}
       horizontal
       ItemSeparatorComponent={

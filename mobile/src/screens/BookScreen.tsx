@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
@@ -80,7 +80,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   return (
     <ScrollView>
-      <TouchableOpacity style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></TouchableOpacity>
+      <Pressable style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></Pressable>
       <View style={styles.container}>
         <LanguageButtons
           langs={langs}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { Language, Languages } from '../models/Languages';
@@ -29,7 +29,7 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
         ];
         return (
           <View key={lang} style={{ width: '33.33%' }}>
-            <TouchableOpacity
+            <Pressable
               style={btnStyle}
               onPress={() => {
                 setActiveButton(lang);
@@ -39,7 +39,7 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
               <Text style={labelStyle}>
                 {Languages[lang]}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         );
       })}

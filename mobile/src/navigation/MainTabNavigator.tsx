@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { HomeStackNavigator } from './HomeStackNavigator';
+import { Colors } from '../styles/Colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,8 +50,8 @@ const styles = StyleSheet.create({
     padding: 4.5,
     paddingLeft: 47,
     paddingRight: 47,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000000',
+    backgroundColor: Colors.white,
+    shadowColor: Colors.shadowColor,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: {
