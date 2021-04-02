@@ -99,7 +99,24 @@ func TestBookDetailsForeignKey(t *testing.T) {
 
 	testutils.MakeHttpRequest("POST", ts.URL+"/books/nonexistant", body, http.StatusInternalServerError,
 		nil, t)
+}
 
+func TestDuplicateBookDetails(t *testing.T) {
+	body := `{"title": "Duplicate", "author": "OneOfAKind", "image":null}`
+	var createdBook models.Book
+	testutils.MakeHttpRequest("POST", ts.URL+"/books", body, http.StatusCreated,
+		&createdBook, t)
+
+	body = `{"language": "en", 
+		"read": {"video": null, "body":"rbody"}, 
+		"explore": {"video": null, "body":"ebody"},  
+		"learn": {"video": null, "body":"lbody"}}`
+	var createdBookDetails models.BookDetails
+	testutils.MakeHttpRequest("POST", ts.URL+"/books/"+createdBook.ID, body, http.StatusCreated,
+		&createdBookDetails, t)
+
+	testutils.MakeHttpRequest("POST", ts.URL+"/books/"+createdBook.ID, body, http.StatusConflict,
+		nil, t)
 }
 
 // Test deleting from book contents

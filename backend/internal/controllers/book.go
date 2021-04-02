@@ -81,6 +81,13 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 		return
 	}
 
+	bookDetail, _, _ := c.Books.FetchBookDetails(req.Context(), bookID, reqBookDetail.Language)
+
+	if bookDetail != nil {
+		writeResponse(rw, http.StatusConflict, "Book with associated language already exists")
+		return
+	}
+
 	resBookDetail, err := c.Books.InsertBookDetails(req.Context(), bookID, reqBookDetail)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -134,7 +141,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	writeResponse(rw, http.StatusNoContent, nil)
 }
 
-// updates the book from the books table (/books{id})
+// updates the book from the books table (/books/{id})
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var reqBook models.APIUpdateBook
@@ -163,7 +170,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
 }
 
-// updates a book in the book_contents table (/books{id}/{lang})
+// updates a book in the book_contents table (/books/{id}/{lang})
 func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
