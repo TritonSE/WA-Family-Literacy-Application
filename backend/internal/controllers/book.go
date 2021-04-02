@@ -81,7 +81,13 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	bookDetail, _, _ := c.Books.FetchBookDetails(req.Context(), bookID, reqBookDetail.Language)
+	bookDetail, _, err := c.Books.FetchBookDetails(req.Context(), bookID, reqBookDetail.Language)
+
+	// test for duplicate (id, lang)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
 
 	if bookDetail != nil {
 		writeResponse(rw, http.StatusConflict, "Book with associated language already exists")
