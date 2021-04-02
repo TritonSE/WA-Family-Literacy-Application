@@ -15,7 +15,6 @@ import { LanguageButtons } from '../components/LanguageButtons';
 import { Colors } from '../styles/Colors';
 import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
-import { act } from 'react-dom/test-utils';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
