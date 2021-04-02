@@ -38,19 +38,19 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	})
 
 	r.Route("/books", func(r chi.Router) {
-		// "localhost:8080/books/{id}/{lang}
-		r.Get("/{id}/{lang}", bookController.GetBookDetails)
-
 		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
+
+		// "localhost:8080/books/{id}/{lang}
+		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
 		r.Post("/", bookController.CreateBook)
 
 		r.Post("/{id}", bookController.CreateBookDetail)
 
-		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
-
 		r.Delete("/{id}", bookController.DeleteBook)
+
+		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
 
 		r.Patch("/{id}", bookController.UpdateBook)
 
