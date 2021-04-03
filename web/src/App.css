@@ -1,11 +1,22 @@
+:root {
+    --orange: #E89228;
+    --dark-grey: #B8B8B8;
+    --white: #FFFFFF;
+    --black: #0000;
+    --green: #28c464;
+    --red: #dd2a00;
+    --light-grey: #E6E6E6;
+    --blue:#2C2F4A;
+}
+
 body {
     margin-left: 88px;
-    margin-right: 30px;
+    margin-right: 100px;
     margin-top: 10px;
 }
 
 .body3 {
-    size: 20px;
+    font-size: 20px;
     font-family: 'GothamRounded - Light'
 }
 

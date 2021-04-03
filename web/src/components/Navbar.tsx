@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
           <NavLink className="body3 nav_link" activeClassName="active" to="/manage">Manage</NavLink>
         </li>
         <li className="nav_element_right">
-          <button className="nav_button" type="submit"><span>Sign Out</span></button>
+          <button className="nav_button" type="submit"><span className="body3">Sign Out</span></button>
         </li>
       </ul>
     </nav>

@@ -24,7 +24,7 @@ nav {
   width: 122px;
   height: 89px;
   padding-right: 94px;
-  padding-top: 25px;
+  margin-top: 25px;
 }
 
 .nav_link {
@@ -38,9 +38,9 @@ nav {
 
 .nav_button {
   display: block;
+  margin-top: 50px;
   background-color: transparent;
   border: none;
-  padding: 14px 16px;
   cursor: pointer;
 }
 
@@ -49,7 +49,7 @@ nav {
 }
 
 .nav_button span {
-  color: gray
+  color: black;
 }
 
 .active {
