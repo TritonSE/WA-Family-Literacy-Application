@@ -23,7 +23,7 @@
   text-align: center;
   width: 122px;
   height: 89px;
-  padding-right: 94px;
+  margin-right: 94px;
   margin-top: 25px;
 }
 
@@ -32,7 +32,7 @@
   text-align: center;
   margin-top: 50px;
   margin-right: 58px;
-  color: black;
+  color: var(--black);
   text-decoration: none;
 }
 
@@ -54,7 +54,7 @@
 
 .active {
   text-decoration: underline;
-  text-decoration-color: #E89228;
+  text-decoration-color: var(--orange);
   text-underline-offset: 10px;
 }
 
