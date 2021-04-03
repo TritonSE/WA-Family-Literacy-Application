@@ -7,7 +7,7 @@ import './Navbar.css';
  */
 export const Navbar: React.FC = () => {
   return (
-    <nav>
+    <nav className="navbar">
       <ul className="navbar_list">
 
         <li className="nav_element_left">
