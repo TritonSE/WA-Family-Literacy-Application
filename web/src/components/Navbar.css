@@ -48,8 +48,8 @@
   outline: none;
 }
 
-.nav_button span {
-  color: black;
+.button_text {
+  color: var(--black);
 }
 
 .active {
