@@ -1,5 +1,15 @@
 body {
-    margin-left: 30px;
+    margin-left: 88px;
     margin-right: 30px;
     margin-top: 10px;
+}
+
+.body3 {
+    size: 20px;
+    font-family: 'GothamRounded - Light'
+}
+
+@font-face {
+    font-family: 'GothamRounded - Light';
+    src: url(./assets/fonts/gotham-rounded/GothamRounded-Light.otf) format('opentype');
 }

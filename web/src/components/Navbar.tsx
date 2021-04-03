@@ -14,16 +14,16 @@ export const Navbar: React.FC = () => {
           <img className="nav_logo" src="./img/logo.png" alt="Logo" />
         </li>
         <li className="nav_element_left">
-          <NavLink className="nav_link" activeClassName="active" to="/communication">Communication</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/communication">Communication</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="nav_link" activeClassName="active" to="/analytics">Analytics</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/analytics">Analytics</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="nav_link" activeClassName="active" to="/upload">Upload Books</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/upload">Upload Books</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="nav_link" activeClassName="active" to="/manage">Manage</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/manage">Manage</NavLink>
         </li>
         <li className="nav_element_right">
           <button className="nav_button" type="submit"><span>Sign Out</span></button>

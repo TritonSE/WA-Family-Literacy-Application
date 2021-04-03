@@ -1,3 +1,7 @@
+nav {
+  height: 115px;
+}
+
 .navbar_list{
   list-style-type: none ;
   margin: 0;
@@ -17,16 +21,18 @@
 .nav_logo {
   display: block;
   text-align: center;
-  width: 85px;
-  height: 60px;
-  padding-right: 25px;
+  width: 122px;
+  height: 89px;
+  padding-right: 94px;
+  padding-top: 25px;
 }
 
 .nav_link {
   display: block;
   text-align: center;
-  padding: 14px 16px;
-  color: gray;
+  margin-top: 50px;
+  margin-right: 58px;
+  color: black;
   text-decoration: none;
 }
 
@@ -48,5 +54,7 @@
 
 .active {
   text-decoration: underline;
+  text-decoration-color: #E89228;
+  text-underline-offset: 10px;
 }
 
