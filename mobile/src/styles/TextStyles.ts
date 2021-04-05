@@ -17,5 +17,13 @@ export const TextStyles = StyleSheet.create({
     fontFamily: 'Gotham-Medium',
     fontWeight: 'normal',
   },
+  h4: {
+    fontSize: 18,
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'bold',
+    marginLeft: '5%',
+    padding: '2%',
+    width: '88%',
+  },
 
 });

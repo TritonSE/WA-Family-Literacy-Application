@@ -1,19 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
+import { Colors } from '../styles/Colors';
 
 /**
  * Left tab on navbar for chatting with volunteers
  */
 export const ChatScreen: React.FC = () => {
+  const i18nCtx = useContext(I18nContext);
   return (
     <View style={styles.container}>
-      <Text style={TextStyles.h3}>  {`\tLet's Talk\n`}</Text>
-      <Text> <Text style={TextStyles.h3}> {`\t`}Tel: </Text><Text>858.274.9673{`\n`}</Text> </Text>
-      <Text> <Text style={TextStyles.h3}> {`\t`}Fax: </Text><Text>858.274.9673{`\n`}</Text> </Text>
-      <Text> <Text style={TextStyles.h3}> {`\t`}Mon-Fri: </Text><Text>8am-4pm{`\n`}</Text> </Text>
-      <Text> <Text style={TextStyles.h3}> {`\t`}Email Us: </Text><Text>info@wordsalive.gov{`\n`}</Text> </Text>
-      <Text> <Text style={TextStyles.h3}> {`\t`}Address: </Text><Text>{`5111 Santa Fe Street Suite\n\t219 San Diego, California, 92081, \n\tUnited States`}{`\n`}</Text> </Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('letsTalk')}</Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('tel')} </Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('fax')}</Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('days')}</Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('email')}</Text>
+      <Text style={TextStyles.h4}> {i18nCtx.t('address')}</Text>
     </View>
     
   );
@@ -24,8 +27,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    backgroundColor: 'orange',
-    width: '400pt',
-    height: '400pt',
+    marginRight: '20%',
+    backgroundColor: Colors.orange,
+    width: '100%',
+    height: '100%',
   },
 });
