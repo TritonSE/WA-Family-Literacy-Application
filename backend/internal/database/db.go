@@ -3,11 +3,13 @@ package database
 import (
 	"context"
 	"database/sql"
-	"github.com/TritonSE/words-alive/internal/utils"
+	"log"
+
 	"github.com/jackc/pgx/stdlib"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pressly/goose"
-	"log"
+
+	"github.com/TritonSE/words-alive/internal/utils"
 )
 
 // Connects to the database and returns a pool of connections
