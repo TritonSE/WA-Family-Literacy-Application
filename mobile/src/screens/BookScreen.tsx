@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MarkdownStyles, MarkdownView } from 'react-native-markdown-view';
+import { MarkdownView } from 'react-native-markdown-view';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import * as WebBrowser from 'expo-web-browser';
 import { HomeStackParams } from '../navigation/HomeStackNavigator';
@@ -47,7 +47,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   const tabContentWidth = 0.83 * width;
 
-  const markdownStyles: MarkdownStyles = {
+  const markdownStyles = {
     heading: TextStyles.mdRegular,
     paragraph: TextStyles.mdRegular,
     strong: TextStyles.mdStrong,
@@ -91,7 +91,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const tabContentView = bookDetails !== null && (
     <View style={styles.tabContentContainer}>
       {videoPlayer}
-      <MarkdownView styles={markdownStyles} onLinkPress={url => WebBrowser.openBrowserAsync(url)}>
+      <MarkdownView styles={markdownStyles} onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}>
         {bookDetails[activeButton].body}
       </MarkdownView>
     </View>
