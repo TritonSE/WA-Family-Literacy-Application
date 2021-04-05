@@ -48,7 +48,7 @@ const MoreInfoTab: React.FC = () => {
 				onChangeText={text => onChangeText(text)}
 				value={value}
 			/>
-			<LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:test@example.com?subject=Interested&body=${value}`)} />
+			<LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
 		</View>
 	);
 };
