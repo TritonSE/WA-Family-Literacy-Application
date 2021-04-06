@@ -17,13 +17,16 @@ export const MainTabNavigator: React.FC = () => {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
-          const TabIcons = {
-            Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />,
-            Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />,
-            Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />,
-          };
-
-          return TabIcons[route.name];
+          switch (route.name) {
+            case 'Home':
+              return <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />;
+            case 'Chat':
+              return <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />;
+            case 'Settings':
+              return <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />;
+            default:
+              return null;
+          }
         },
       })}
       tabBarOptions={{

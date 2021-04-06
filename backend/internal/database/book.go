@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 
 	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookDatabase struct {
-	Conn *pgx.Conn
+	Conn *pgxpool.Pool
 }
 
 /*
@@ -27,7 +27,7 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
 		"FROM books LEFT JOIN book_contents ON books.id = " +
 		"book_contents.id GROUP BY books.id ORDER BY title"
 
-	rows, err := db.Conn.QueryEx(ctx, query, nil)
+	rows, err := db.Conn.Query(ctx, query)
 	if err != nil {
 		return nil, errors.Wrap(err, "error on SELECT FROM books in FetchBookList")
 	}
@@ -62,7 +62,7 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 		"created_at, read_video, read_body, explore_video, explore_body, " +
 		"learn_video, learn_body FROM books LEFT JOIN book_contents ON " +
 		"books.id = book_contents.id WHERE books.id = $1 AND lang = $2"
-	rows, err := db.Conn.QueryEx(ctx, query, nil, id, lang)
+	rows, err := db.Conn.Query(ctx, query, id, lang)
 	if err != nil {
 		return &book, false, errors.Wrap(err, "error on query for book details")
 	}
@@ -75,7 +75,7 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context,
 		var queryID string = "SELECT count(*) FROM book_contents WHERE " +
 			"id = $1"
 
-		err = db.Conn.QueryRowEx(ctx, queryID, nil, id).Scan(&count)
+		err = db.Conn.QueryRow(ctx, queryID, id).Scan(&count)
 
 		if err != nil {
 			return nil, false, errors.Wrap(err, "error on scan for ID")
@@ -104,7 +104,7 @@ func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book,
 		"created_at FROM books LEFT JOIN book_contents ON " +
 		"books.id = book_contents.id WHERE books.id = $1 GROUP BY books.id"
 
-	err := db.Conn.QueryRowEx(ctx, query, nil, id).Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+	err := db.Conn.QueryRow(ctx, query, id).Scan(&book.ID, &book.Title, &book.Author, &book.Image,
 		&book.Languages, &book.CreatedAt)
 
 	if err != nil {
@@ -123,7 +123,7 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 
 	var query string = "INSERT INTO books (title, author, image) " +
 		"VALUES ($1, $2, $3) RETURNING id"
-	err := db.Conn.QueryRowEx(ctx, query, nil, book.Title, book.Author, book.Image).Scan(&newBookId)
+	err := db.Conn.QueryRow(ctx, query, book.Title, book.Author, book.Image).Scan(&newBookId)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
@@ -145,7 +145,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 		"learn_video, learn_body) " +
 		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)"
 
-	_, err := db.Conn.ExecEx(ctx, query, nil, id, book.Language,
+	_, err := db.Conn.Exec(ctx, query, id, book.Language,
 		book.Read.Video, book.Read.Body, book.Explore.Video, book.Explore.Body,
 		book.Learn.Video, book.Learn.Body)
 
@@ -164,7 +164,7 @@ func (db *BookDatabase) InsertBookDetails(ctx context.Context, id string,
 func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang string) error {
 	var query string = "DELETE from book_contents WHERE id = $1 AND lang = $2"
 
-	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id, lang)
+	commandTag, err := db.Conn.Exec(ctx, query, id, lang)
 
 	if err != nil {
 		return errors.Wrap(err, "error on delete from book_contents")
@@ -183,7 +183,7 @@ func (db *BookDatabase) DeleteBookContent(ctx context.Context, id string, lang s
 func (db *BookDatabase) DeleteBook(ctx context.Context, id string) error {
 	var query string = "DELETE from books WHERE id = $1"
 
-	commandTag, err := db.Conn.ExecEx(ctx, query, nil, id)
+	commandTag, err := db.Conn.Exec(ctx, query, id)
 
 	if err != nil {
 		return errors.Wrap(err, "error on delete from book")
@@ -206,7 +206,7 @@ func (db *BookDatabase) UpdateBook(ctx context.Context, id string,
 		"author = COALESCE($2, author), " +
 		"image = COALESCE($3, image) " +
 		"WHERE id = $4"
-	_, err := db.Conn.ExecEx(ctx, query, nil, updates.Title, updates.Author,
+	_, err := db.Conn.Exec(ctx, query, updates.Title, updates.Author,
 		updates.Image, id)
 	if err != nil {
 		return nil, errors.Wrap(err, "error on update book")
@@ -231,7 +231,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 		"learn_body = COALESCE($6, learn_body) " +
 		"WHERE id = $7 AND lang = $8"
 
-	_, err := db.Conn.ExecEx(ctx, query, nil,
+	_, err := db.Conn.Exec(ctx, query,
 		book.Read.Video, book.Read.Body,
 		book.Explore.Video, book.Explore.Body,
 		book.Learn.Video, book.Learn.Body, id, lang)

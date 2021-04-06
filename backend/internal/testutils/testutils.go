@@ -10,9 +10,8 @@ import (
 )
 
 // Sends http request, converts data from json, and stores to response
-func MakeHttpRequest(method string, url string, bodyString string, expectedStatusCode int, response interface{}, t *testing.T) {
-
-	bodyReader := strings.NewReader(bodyString)
+func MakeHttpRequest(t *testing.T, method string, url string, body string, expectedStatusCode int, response interface{}) {
+	bodyReader := strings.NewReader(body)
 
 	req, err := http.NewRequest(method, url, bodyReader)
 	require.NoError(t, err)
@@ -35,8 +34,8 @@ func MakeHttpRequest(method string, url string, bodyString string, expectedStatu
 	}
 }
 
-func MakeAuthenticatedRequest(method string, url string, bodyString string, expectedStatusCode int, response interface{}, token string, t *testing.T) {
-	bodyReader := strings.NewReader(bodyString)
+func MakeAuthenticatedRequest(t *testing.T, method string, url string, body string, expectedStatusCode int, response interface{}, token string) {
+	bodyReader := strings.NewReader(body)
 
 	req, err := http.NewRequest(method, url, bodyReader)
 	require.NoError(t, err)

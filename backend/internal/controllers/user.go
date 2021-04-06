@@ -13,12 +13,9 @@ type UserController struct {
 	Users database.UserDatabase
 }
 
-/*
- * Handler parses body of request and ensures it is a valid request
- * Makes sure user id's match, user with this email doesn't already exist
- * creates the user in the backend
- */
-
+// POST /users
+// Creates a user in the database after validating that it is unique.
+// Expects that the user has already been created in Firebase Auth (since the auth token is valid)
 func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 	var user models.User
 
@@ -38,25 +35,34 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	duplicate, err := c.Users.FetchUserByEmail(req.Context(), user.Email)
+	duplicateID, err := c.Users.FetchUserByID(req.Context(), user.ID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
-	if duplicate != nil {
+	if duplicateID != nil {
+		writeResponse(rw, http.StatusBadRequest, "user with ID already exists")
+	}
+
+	duplicateEmail, err := c.Users.FetchUserByEmail(req.Context(), user.Email)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+	if duplicateEmail != nil {
 		// we have created a user with this email before
 		writeResponse(rw, http.StatusBadRequest, "user with email already exists")
 		return
 	}
 
-	id, err := c.Users.CreateUser(req.Context(), user)
+	err = c.Users.CreateUser(req.Context(), user)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)
 		return
 	}
 
-	newUser, err := c.Users.FetchUserByID(req.Context(), id)
+	newUser, err := c.Users.FetchUserByID(req.Context(), user.ID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)

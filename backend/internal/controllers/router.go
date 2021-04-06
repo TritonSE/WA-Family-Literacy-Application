@@ -57,7 +57,6 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		r.Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
-	//authenticator := auth.MockAuthenticator{}
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 
 	return r

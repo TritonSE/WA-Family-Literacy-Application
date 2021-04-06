@@ -38,7 +38,7 @@ jobs:
         working-directory: backend
         run: make test
         env:
-          DB_PASS: postgres
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
   mobile:
     runs-on: ubuntu-latest
     steps:

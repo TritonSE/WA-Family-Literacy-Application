@@ -11,20 +11,20 @@ import (
 func TestNoToken(t *testing.T) {
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
 	// not passing token
-	testutils.MakeAuthenticatedRequest("POST", ts.URL+"/users", body, http.StatusUnauthorized, nil, "", t)
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusUnauthorized, nil, "")
 }
 
 func TestInvalidToken(t *testing.T) {
 	// passing invalid token
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
-	testutils.MakeAuthenticatedRequest("POST", ts.URL+"/users", body, http.StatusForbidden, nil, "invalid-test-token", t)
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusForbidden, nil, "invalid-test-token")
 }
 
 func TestCreateUser(t *testing.T) {
 	// valid token test
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
 	var response models.User
-	testutils.MakeAuthenticatedRequest("POST", ts.URL+"/users", body, http.StatusCreated, &response, "test-token-user1", t)
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusCreated, &response, "test-token-user1")
 	// assertions with response here
 	require.Equal(t, response.ID, "user1")
 	require.Equal(t, response.Name, "robert")
@@ -33,9 +33,17 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestCreateDuplicateUser(t *testing.T) {
-	// same information as above, should fail
+	// same information as TestCreateUser, should fail
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
 	var response string
-	testutils.MakeAuthenticatedRequest("POST", ts.URL+"/users", body, http.StatusBadRequest, &response, "test-token-user1", t)
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusBadRequest, &response, "test-token-user1")
+	require.Equal(t, response, "user with ID already exists")
+}
+
+func TestCreateDuplicateEmailUser(t *testing.T) {
+	// same email as TestCreateUser, should fail
+	body := `{"id": "user2", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
+	var response string
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusBadRequest, &response, "test-token-user2")
 	require.Equal(t, response, "user with email already exists")
 }
