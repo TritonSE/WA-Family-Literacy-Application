@@ -4,9 +4,9 @@
     "browser": true
   },
   "extends": [
+    "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "airbnb"
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -25,8 +25,6 @@
     "import/resolver": {
       "node": {
         "extensions": [
-          ".js",
-          ".jsx",
           ".ts",
           ".tsx"
         ]
@@ -34,6 +32,8 @@
     }
   },
   "rules": {
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 2],
     "object-shorthand": "off",
     "func-style": [
       "error",
@@ -59,14 +59,12 @@
     "operator-linebreak": "off",
     "no-mixed-operators": "off",
     "max-len": "off",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": "off",
     "import/extensions": [
       "error",
       "never"
     ],
     "react/jsx-filename-extension": [
-      1,
+      "error",
       {
         "extensions": [
           ".tsx"
@@ -101,9 +99,10 @@
     "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
     "global-require": "off",
-    "no-nested-ternary": "off", 
+    "no-nested-ternary": "off",
     "no-console": "off",
     "@typescript-eslint/no-unused-vars": "error",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "react/display-name": "off"
   }
 }

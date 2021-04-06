@@ -3,9 +3,9 @@ import { APIContext } from './APIContext';
 import { Book } from '../models/Book';
 
 type BookState = {
-    books: Book[], // holds all the books we have stored
-    fetchBooks: () => void, // api call to get books
-    loading: boolean, // lets us know if the books are being loaded or not
+  books: Book[], // holds all the books we have stored
+  fetchBooks: () => void, // api call to get books
+  loading: boolean, // lets us know if the books are being loaded or not
 };
 
 const initialState: BookState = {

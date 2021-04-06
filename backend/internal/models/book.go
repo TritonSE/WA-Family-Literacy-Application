@@ -21,7 +21,7 @@ type BookDetails struct {
 	CreatedAt time.Time  `json:"created_at"` // Following ISO 8601
 }
 
-// For main page listings
+// Contains contents of a book without read/explore/learn tabs
 type Book struct {
 	ID        string    `json:"id"`
 	Title     string    `json:"title"`
