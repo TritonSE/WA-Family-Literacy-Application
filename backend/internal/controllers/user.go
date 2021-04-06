@@ -143,7 +143,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	// Check current user info
 	currUser, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
-        fmt.Printf("Err: %s\n", err)
+		fmt.Printf("Err: %s\n", err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -155,7 +155,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	// Carry out the update
 	err = c.Users.UpdateUser(req.Context(), userID, user)
 	if err != nil {
-        fmt.Printf("Err: %s\n", err)
+		fmt.Printf("Err: %s\n", err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
