@@ -17,6 +17,10 @@ func MakeHttpRequest(method string, url string, bodyString string, expectedStatu
 	req, err := http.NewRequest(method, url, bodyReader)
 	require.NoError(t, err)
 
+	if method == "POST" || method == "PUT" || method == "PATCH" {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
 	res, err := http.DefaultClient.Do(req)
 	require.NoError(t, err)
 
