@@ -1,9 +1,10 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, Text, ScrollView } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
 
 import { Book } from '../models/Book';
 import { TextStyles } from '../styles/TextStyles';
 import { BookCard } from './BookCard';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -22,6 +23,8 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
     booksChunked.push(books.slice(i, i + booksPerPage).concat(empty.slice(0, emptyCount)));
   }
 
+  const navigation = useNavigation();
+
   return (
 
     <ScrollView
@@ -38,9 +41,16 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
             { bookArray.map((bookItem: Book, emptyIndex: number) => (
               bookItem != null ?
                 (
-                  <View key={`bookID${bookItem.id}`} style={styles.bookCard}>
-                    <BookCard book={bookItem} size={0.28 * width} />
-                  </View>
+                  <Pressable 
+                    key={`bookItem${bookItem.id}`}
+                    onPress={() => navigation.navigate('Book', {
+                      book: bookItem,
+                    })}
+                  >
+                    <View key={`bookID${bookItem.id}`} style={styles.bookCard}>
+                      <BookCard book={bookItem} size={0.28 * width} />
+                    </View>
+                  </Pressable>
                 )
                 :
                 (

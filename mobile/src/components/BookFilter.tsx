@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Pressable, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Pressable, Text, TouchableOpacity } from 'react-native';
 
 import { Language, Languages } from '../models/Languages';
 import { TextStyles } from '../styles/TextStyles';
@@ -71,14 +71,14 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
 
     <View style={styles.filters}>
 
-      <Pressable
+      <TouchableOpacity
         onPress={() => setDropDownVisible(!dropdownVisible)}
         style={styles.button}
       >
         <View style={styles.iconContainer}>
           <Image style={styles.hamburgerIcon} source={require('../../assets/images/bars-solid.png')}/>
         </View>
-      </Pressable>
+      </TouchableOpacity>
 
       {dropdownVisible && dropdown}
 
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
   searchBar: {
     height: 36,
     width: width - 134,
+    paddingLeft: 10,
     ...TextStyles.caption3,
   },
   imageContainer: {
