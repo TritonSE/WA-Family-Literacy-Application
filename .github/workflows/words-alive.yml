@@ -88,7 +88,7 @@ jobs:
         id: docker_meta_gh
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ghcr.io/tritonse/words-alive
+          images: ghcr.io/tritonse/wa-family-literacy-application
       - name: Build and push to GitHub container registry
         uses: docker/build-push-action@v2
         with:
@@ -132,7 +132,7 @@ jobs:
         id: docker_meta_gh
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ghcr.io/tritonse/words-alive
+          images: ghcr.io/tritonse/wa-family-literacy-application
       - name: Build and push to GitHub container registry
         uses: docker/build-push-action@v2
         with:
