@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi"
 	chiMW "github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 
 	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/controllers/middleware"
@@ -30,12 +31,11 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.Use(chiMW.Logger)
 	r.Use(chiMW.Recoverer)
 	r.Use(chiMW.Timeout(15 * time.Second))
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			next.ServeHTTP(w, req)
-		})
-	})
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Authorization"},
+	}))
 
 	r.Get("/ping", ping)
 
