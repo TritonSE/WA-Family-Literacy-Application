@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi"
 	chiMW "github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 
 	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/controllers/middleware"
@@ -30,12 +31,13 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.Use(chiMW.Logger)
 	r.Use(chiMW.Recoverer)
 	r.Use(chiMW.Timeout(15 * time.Second))
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			next.ServeHTTP(w, req)
-		})
-	})
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Authorization"},
+	}))
+
+	r.Get("/ping", ping)
 
 	r.Route("/books", func(r chi.Router) {
 		// "localhost:8080/books/
@@ -62,4 +64,9 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
 
 	return r
+}
+
+// GET /ping handler, for a very simple health check
+func ping(rw http.ResponseWriter, _ *http.Request) {
+	writeResponse(rw, http.StatusOK, "pong!")
 }
