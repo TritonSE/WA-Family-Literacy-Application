@@ -65,6 +65,25 @@ func (db *UserDatabase) FetchUserByEmail(ctx context.Context, email string) (*mo
 	return &user, nil
 }
 
+func (db *UserDatabase) UpdateUser(ctx context.Context, id string, user models.UpdateUser) error {
+
+	var query string = "UPDATE users SET " +
+		"name = COALESCE($1, name), " +
+		"in_san_diego = COALESCE($2, in_san_diego) " +
+		"WHERE id = $3"
+
+	cmd, err := db.Conn.Exec(ctx, query, user.Name, user.InSanDiego, id)
+	if err != nil {
+		return errors.Wrap(err, "error on UPDATE users")
+	}
+
+	if cmd.RowsAffected() != 1 {
+		return errors.New("No users to update")
+	}
+
+	return nil
+}
+
 // Deletes the user with the given ID
 func (db *UserDatabase) RemoveUser(ctx context.Context, user models.User) error {
 	err := db.Conn.QueryRow(ctx, "DELETE FROM users WHERE id = $1", user.ID)
