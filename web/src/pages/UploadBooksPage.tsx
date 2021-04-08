@@ -136,7 +136,7 @@ export const UploadBooksPage: React.FC = () => {
       </div>
       <div className="books">
         {books.filter(search).slice(0, viewAll ? books.length : 12).map((book) => (
-          <BookCard book={book} onDelete={displayModal} deleteMode={deleteMode} />
+          <BookCard key={book.id} book={book} onDelete={displayModal} deleteMode={deleteMode} />
         ))}
       </div>
       {showModal &&
@@ -157,7 +157,7 @@ export const UploadBooksPage: React.FC = () => {
                     <div>
                       <h4>Which version(s) of this book would you like to delete?</h4>
                       {modalLanguages.map(lang => (
-                        <label className="checkLabel" htmlFor={lang}>
+                        <label key={lang} className="checkLabel" htmlFor={lang}>
                           {LanguageLabels[lang]}
                           <input className="checkbox" checked={checked[lang]} onChange={() => toggleCheck(lang)} id={lang} type="checkbox" />
                           <br />

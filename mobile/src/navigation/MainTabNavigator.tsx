@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { HomeStackNavigator } from './HomeStackNavigator';
+import { Colors } from '../styles/Colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,13 +17,16 @@ export const MainTabNavigator: React.FC = () => {
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
-          const TabIcons = {
-            Home: <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />,
-            Chat: <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />,
-            Settings: <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />,
-          };
-
-          return TabIcons[route.name];
+          switch (route.name) {
+            case 'Home':
+              return <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />;
+            case 'Chat':
+              return <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />;
+            case 'Settings':
+              return <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />;
+            default:
+              return null;
+          }
         },
       })}
       tabBarOptions={{
@@ -49,8 +53,8 @@ const styles = StyleSheet.create({
     padding: 4.5,
     paddingLeft: 47,
     paddingRight: 47,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000000',
+    backgroundColor: Colors.white,
+    shadowColor: Colors.shadowColor,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: {

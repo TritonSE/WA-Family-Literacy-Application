@@ -38,15 +38,28 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	})
 
 	r.Route("/books", func(r chi.Router) {
+		// "localhost:8080/books/
+		r.Get("/", bookController.GetBookList)
+
 		// "localhost:8080/books/{id}/{lang}
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
-		// "localhost:8080/books/
-		r.Get("/", bookController.GetBookList)
+		r.Post("/", bookController.CreateBook)
+
+		r.Post("/{id}", bookController.CreateBookDetail)
+
+		r.Delete("/{id}", bookController.DeleteBook)
+
+		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
+
+		r.Patch("/{id}", bookController.UpdateBook)
+
+		r.Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
-	//authenticator := auth.MockAuthenticator{}
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
+	r.With(middleware.RequireAuth(authenticator)).Get("/users/{id}", userController.GetUser)
+	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
 
 	return r
 }

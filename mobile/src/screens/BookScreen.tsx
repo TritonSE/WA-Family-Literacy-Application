@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
@@ -34,10 +34,10 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const i18nCtx = useContext(I18nContext);
   const insets = useSafeAreaInsets();
 
-  const locale = i18nCtx.locale.substring(0, 2);
+  const locale = i18nCtx.locale.substring(0, 2) as Language;
   const defaultLang = langs.includes(locale) ? locale : langs.includes('en') ? 'en' : langs[0];
 
-  const videoIdRegEx = '^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?.com|youtu.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)';
+  const videoIdRegEx = new RegExp('^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?.com|youtu.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)');
 
   // book screen states
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,6 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     listItemBullet: TextStyles.listItem,
     listItemOrderedContent: TextStyles.mdRegular,
     listItemUnorderedContent: TextStyles.mdRegular,
-    tableHeaderCellContent: TextStyles.mdRegular,
     em: TextStyles.mdEm,
     imageWrapper: { width: tabContentWidth },
   };
@@ -73,14 +72,34 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     [language],
   );
 
-  const handleMarkdownLink = async (url: string): Promise<any> => {
-    const response = await WebBrowser.openBrowserAsync(url);
-    return response;
-  };
+  // Get the tab content (video and body) for the selected tab
+  const tabContent = bookDetails !== null && bookDetails[activeButton];
+
+  // Try to parse the video URL and only show the player if it exists and is a valid YouTube URL
+  const videoMatch = tabContent && tabContent.video && tabContent.video.match(videoIdRegEx);
+  const videoID = videoMatch && videoMatch[1];
+  const videoPlayer = videoID && (
+    <View style={styles.video}>
+      <YoutubePlayer
+        height={9 / 16 * tabContentWidth}
+        width={tabContentWidth}
+        videoId={videoID}
+      />
+    </View>
+  );
+
+  const tabContentView = bookDetails !== null && (
+    <View style={styles.tabContentContainer}>
+      {videoPlayer}
+      <MarkdownView styles={markdownStyles} onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}>
+        {bookDetails[activeButton].body}
+      </MarkdownView>
+    </View>
+  );
 
   return (
     <ScrollView>
-      <TouchableOpacity style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></TouchableOpacity>
+      <Pressable style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></Pressable>
       <View style={styles.container}>
         <LanguageButtons
           langs={langs}
@@ -99,25 +118,10 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           btn2="explore"
           btn3="learn"
           onBtnChange={(btn) => {
-            setActiveButton(btn);
+            setActiveButton(btn as Tab);
           }}
         />
-        {loading ? <View style={styles.loadingCircle}><LoadingCircle /></View> : (
-          <View style={styles.tabContentContainer}>
-            {bookDetails[activeButton].video && (
-              <View style={styles.video}>
-                <YoutubePlayer
-                  height={9 / 16 * tabContentWidth}
-                  width={tabContentWidth}
-                  videoId={bookDetails[activeButton].video.match(videoIdRegEx)[1]}
-                />
-              </View>
-            )}
-            <MarkdownView styles={markdownStyles} onLinkPress={handleMarkdownLink}>
-              {bookDetails[activeButton].body}
-            </MarkdownView>
-          </View>
-        )}
+        {loading ? <View style={styles.loadingCircle}><LoadingCircle /></View> : tabContentView}
       </View>
     </ScrollView>
   );

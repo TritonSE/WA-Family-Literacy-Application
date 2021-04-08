@@ -1,5 +1,26 @@
+:root {
+    --white: #FFFFFF;
+    --black: black;
+    --orange: #E89228;
+    --dark-grey: #B8B8B8;
+    --green: #28c464;
+    --red: #dd2a00;
+    --light-grey: #E6E6E6;
+    --blue:#2C2F4A;
+}
+
 body {
-  margin-left: 30px;
-  margin-right: 30px;
-  margin-top: 10px;
+    margin-left: 88px;
+    margin-right: 100px;
+    margin-top: 10px;
+}
+
+.body3 {
+    font-size: 20px;
+    font-family: 'GothamRounded - Light'
+}
+
+@font-face {
+    font-family: 'GothamRounded - Light';
+    src: url(./assets/fonts/gotham-rounded/GothamRounded-Light.otf) format('opentype');
 }
