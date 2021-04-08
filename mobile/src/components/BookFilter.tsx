@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Pressable, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Language, Languages } from '../models/Languages';
