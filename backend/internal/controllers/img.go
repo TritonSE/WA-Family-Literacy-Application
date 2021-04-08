@@ -12,8 +12,21 @@ type ImgController struct {
 	Image database.ImgDatabase
 }
 
+var allowedTypes = map[string]bool{
+	"image/png":  true,
+	"image/jpeg": true,
+}
+
 func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	content_type := req.Header.Get("Content-Type")
+
+	allowed := allowedTypes[content_type]
+
+	if !allowed {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
