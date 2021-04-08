@@ -2,20 +2,21 @@
   /* images display inline by default and act like text. We want them to act like divs, so display block */
   flex: 1;
   object-fit: cover;
-  width: 150px;
-  height: 150px;
+  width: 235px;
+  height: 235px;
   /* our width setting for mobile, one image per line */
   flex-basis: 100%;
   /* ensure padding doesn't cause images to wrap, it should be within the width rather than in addition */
   box-sizing: border-box;
   margin-top: 10px;
   margin-bottom: 10px;
+  border-radius: 15px;
 }
 
 .deleteIcon {
   flex: 1;
-  width: 25px;
-  height: 25px;
+  width: 42px;
+  height: 42px;
   vertical-align: middle;
   cursor: pointer;
 }

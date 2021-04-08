@@ -17,7 +17,6 @@ export const UploadBooksPage: React.FC = () => {
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [modalLanguages, setModalLanguages] = useState<Language[]>([]);
   const [checkedAll, setCheckedAll] = useState(false);
-  // eslint-disable-next-line
   const [checked, setChecked] = useState<{ [key in Language]?: boolean }>({});
   const [deleteId, setDeleteId] = useState('');
 
@@ -44,7 +43,6 @@ export const UploadBooksPage: React.FC = () => {
     setDeleteId(id);
     setModalLanguages(langs);
     setCheckedAll(false);
-    // eslint-disable-next-line
     const langDict: { [key in Language]?: boolean } = {};
     for (let i = 0; i < langs.length; i++) {
       langDict[langs[i]] = false;
@@ -116,21 +114,21 @@ export const UploadBooksPage: React.FC = () => {
   };
 
   return (
-    <div className="upload">
+    <div>
       <div className="row">
-        <input className="search" onChange={event => setQuery(event.target.value)} name="q" type="search" placeholder="Search Book to Edit" />
+        <input className="search body1" onChange={event => setQuery(event.target.value)} name="q" type="search" placeholder="Search Book to Edit" />
       </div>
       <div className="row">
         <div className="row">
-          <p className="title">Recent Releases</p>
-          <button type="button" onClick={() => setViewAll(!viewAll)} className="clickable">
+          <p className="title h2">Recent Releases</p>
+          <button type="button" onClick={() => setViewAll(!viewAll)} className="clickable body3">
             {viewAll ? 'View Less' : 'View All'}
           </button>
         </div>
       </div>
       <div className="row">
-        <p>(Tap book to edit)</p>
-        <button type="button" onClick={() => setDeleteMode(!deleteMode)} className="clickable">
+        <p className="body3">(Tap book to edit)</p>
+        <button type="button" onClick={() => setDeleteMode(!deleteMode)} className="clickable body3">
           {deleteMode ? 'Done' : 'Delete Books'}
         </button>
       </div>
@@ -146,31 +144,31 @@ export const UploadBooksPage: React.FC = () => {
               <form>
                 {confirmationModal ? (
                   <div>
-                    <h4>Are you sure you want to delete these book(s)?</h4>
+                    <p className="h3">Are you sure you want to delete these book(s)?</p>
                     <div className="buttons">
-                      <button className="cancelBtn" type="button" onClick={() => { setShowModal(false); setConfirmationModal(false); }}>Cancel</button>
-                      <button className="deleteBtn" type="button" onClick={handleDelete}>Delete</button>
+                      <button className="cancelBtn body3" type="button" onClick={() => { setShowModal(false); setConfirmationModal(false); }}>Cancel</button>
+                      <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
                     </div>
                   </div>
                 )
                   : (
                     <div>
-                      <h4>Which version(s) of this book would you like to delete?</h4>
+                      <p className="h3">Which version(s) of this book would you like to delete?</p>
                       {modalLanguages.map(lang => (
-                        <label key={lang} className="checkLabel" htmlFor={lang}>
+                        <label key={lang} className="checkLabel body1" htmlFor={lang}>
                           {LanguageLabels[lang]}
                           <input className="checkbox" checked={checked[lang]} onChange={() => toggleCheck(lang)} id={lang} type="checkbox" />
                           <br />
                         </label>
                       ))}
-                      <label className="checkLabel" htmlFor="all">
+                      <label className="checkLabel body1" htmlFor="all">
                         All languages
                         <input className="checkbox" id="all" checked={checkedAll} onChange={(event) => selectAllCheck(event.target.checked)} type="checkbox" />
                         <br />
                       </label>
                       <div className="buttons">
-                        <button className="cancelBtn" type="button" onClick={() => setShowModal(false)}>Cancel</button>
-                        <button className="deleteBtn" type="button" onClick={() => setConfirmationModal(true)}>Delete</button>
+                        <button className="cancelBtn body3" type="button" onClick={() => setShowModal(false)}>Cancel</button>
+                        <button className="deleteBtn body3" type="button" onClick={() => setConfirmationModal(true)}>Delete</button>
                       </div>
                     </div>
                   )}

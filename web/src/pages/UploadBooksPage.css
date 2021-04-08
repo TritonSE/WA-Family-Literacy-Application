@@ -1,29 +1,24 @@
-.upload {
-  padding: 20px;
-}
-
 .search {
-  height: 40px;
-  width: 250px;
+  height: 70px;
+  width: 500px;
   margin: auto;
   padding-left: 5px;
   border: 1px solid #B8B8B8;
   border-radius: 5px;
-  font-size: 15px;
+  margin-top: 90px;
+  margin-bottom: 9px;
 }
 
 .clickable {
   text-decoration: underline;
-  font-size: 12px;
   border: none;
   outline: none;
-  background-color: #FFFFFF;
+  background-color: var(--white);
   cursor: pointer;
 }
 
 .title {
   text-align: left;
-  font-size: 60px;
   margin-right: 40px;
 }
 
@@ -39,7 +34,8 @@ p {
 }
 
 .books {
-  margin-top: 40px;
+  margin-top: 56px;
+  margin-bottom: 139px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -69,31 +65,31 @@ p {
 
 .modalContent {
   background-color: #fefefe;
-  padding: 10px 5%;
+  padding: 40px 109px;
   margin: 15% auto; /* 15% from the top and centered */
-  border: 1px solid #666;
+  border: 1px solid var(--black);
   border-radius: 12px;
-  width: 30%; /* Could be more or less, depending on screen size */
+  width: 40%; /* Could be more or less, depending on screen size */
 }
 
 .cancelBtn {
-  background-color: white;
-  border: 0.5px solid #e89228;
+  background-color: var(--white);
+  border: 0.5px solid var(--orange);
   border-radius: 7px;
   padding: 10px 10px;
-  width: 120px;
-  margin: 0px 5px;
+  width: 200px;
+  margin: 0px 17px;
   box-shadow: 1px 2px 5px #b8b8b8;
   cursor: pointer;
 }
 
 .deleteBtn {
-  background-color: #e89228;
-  border: 0.5px solid #666;
+  background-color: var(--orange);
+  border: 0.5px solid var(--black);
   border-radius: 7px;
   padding: 10px 10px;
-  width: 120px;
-  margin: 0px 5px;
+  width: 200px;
+  margin: 0px 17px;
   box-shadow: 1px 2px 5px #b8b8b8;
   cursor: pointer;
 }
@@ -107,8 +103,8 @@ p {
 
 .checkbox {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   position: relative;
   float: right;
 }
