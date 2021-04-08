@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Pressable, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Keyboard, Dimensions, Image, Pressable, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Language, Languages } from '../models/Languages';
 import { TextStyles } from '../styles/TextStyles';
@@ -24,7 +25,11 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
   // toggles the languages in the language dropdown and re-filters the books
   const toggleLang = (lang: Language): void => {
     const newLangs = new Set<Language>(langs);
-    langs.has(lang) ? newLangs.delete(lang) : newLangs.add(lang);
+    if (langs.has(lang)) {
+      newLangs.delete(lang);
+    } else {
+      newLangs.add(lang);
+    }
 
     setLangs(newLangs);
     onFilter(search, Array.from(newLangs));
@@ -42,7 +47,7 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
     <View style={styles.dropdown}>
 
       {languages.map((lang: Language) => (
-        <Pressable
+        <TouchableOpacity
           key={lang}
           onPress={() => toggleLang(lang)}
         >
@@ -60,7 +65,7 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
 
           </View>
 
-        </Pressable>
+        </TouchableOpacity>
       ))}
 
     </View>
