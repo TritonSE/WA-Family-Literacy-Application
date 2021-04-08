@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go v0.75.0 // indirect
 	firebase.google.com/go/v4 v4.1.0
 	github.com/go-chi/chi v1.5.0
+	github.com/go-chi/cors v1.2.0
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
 	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
 	github.com/jackc/pgx v3.6.2+incompatible

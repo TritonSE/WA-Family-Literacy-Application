@@ -3,6 +3,7 @@ name: words-alive
 on:
   push:
     branches: [ main ]
+    tags: [ v** ]
   pull_request:
     branches: [ main ]
 
@@ -67,3 +68,91 @@ jobs:
       - name: Lint
         working-directory: web
         run: npm run lint
+  deploy-staging:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - mobile
+      - web
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Log into GitHub container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: TritonSE
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate image tags
+        id: docker_meta_gh
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ghcr.io/tritonse/wa-family-literacy-application
+      - name: Build and push to GitHub container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.docker_meta_gh.outputs.tags }}
+          labels: ${{ steps.docker_meta_gh.outputs.labels }}
+      - name: Log into Heroku container registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Build and push to Heroku container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: registry.heroku.com/words-alive-staging/web
+      - name: Release to Heroku
+        run: heroku container:release web -a words-alive-staging
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  deploy-prod:
+    if: contains(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - mobile
+      - web
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Log into GitHub container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: TritonSE
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate image tags
+        id: docker_meta_gh
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ghcr.io/tritonse/wa-family-literacy-application
+      - name: Build and push to GitHub container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.docker_meta_gh.outputs.tags }}
+          labels: ${{ steps.docker_meta_gh.outputs.labels }}
+      - name: Log into Heroku container registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Build and push to Heroku container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: registry.heroku.com/words-alive/web
+      - name: Release to Heroku
+        run: heroku container:release web -a words-alive
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/controllers"
 	"github.com/TritonSE/words-alive/internal/database"
+	"github.com/TritonSE/words-alive/internal/utils"
 )
 
 func main() {
@@ -17,7 +19,9 @@ func main() {
 	// Start API server
 	authenticator := auth.MockAuthenticator{}
 	r := controllers.GetRouter(authenticator)
-	if err := http.ListenAndServe(":8080", r); err != nil {
+
+	addr := fmt.Sprintf("0.0.0.0:%s", utils.GetEnv("PORT", "8080"))
+	if err := http.ListenAndServe(addr, r); err != nil {
 		log.Fatalf("error starting http server: %v", err)
 	}
 }
