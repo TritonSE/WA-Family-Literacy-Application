@@ -57,10 +57,7 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
             <Text style={{ ...TextStyles.caption4, alignSelf: 'center' }}>{Languages[lang]}</Text>
 
             <View style={styles.box}>
-              {langs.has(lang) ?
-                <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>
-                :
-                null}
+              {langs.has(lang) && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/> }
             </View>
 
           </View>

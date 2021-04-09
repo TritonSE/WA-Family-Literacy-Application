@@ -16,12 +16,12 @@ type PaginatedBookListProps = { books: Book[], booksPerPage: number };
 */
 export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, booksPerPage }) => {
   // "chunks" the books into groups of size <booksPerPage> and fills any empty spots
-  const booksChunked: Book[][] = [];
+  const bookPages: Book[][] = [];
   const empty = Array(booksPerPage).fill(null);
 
   for (let i = 0; i < books.length; i += booksPerPage) {
     const emptyCount = i + booksPerPage > books.length ? (i + booksPerPage) - books.length : 0;
-    booksChunked.push(books.slice(i, i + booksPerPage).concat(empty.slice(0, emptyCount)));
+    bookPages.push(books.slice(i, i + booksPerPage).concat(empty.slice(0, emptyCount)));
   }
 
   const navigation = useNavigation();
@@ -34,7 +34,7 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
       pagingEnabled
     >
 
-      { booksChunked.map((bookArray: Book[], index: number) => (
+      { bookPages.map((bookArray: Book[], index: number) => (
         <View key={`page${index}`} style={styles.container}>
 
           <View style={styles.grid}>

@@ -15,13 +15,13 @@ import { Language } from '../models/Languages';
 import { Book } from '../models/Book';
 
 // how many books to display per page (in the Paginated Booklist)
-const booksPerPage = 9;
+const BOOKS_PER_PAGE = 9;
 
 const { width } = Dimensions.get('window');
 
 /**
-* Renders the homescreen for the app. Currently displays heading, new books, all books.
-*/
+ * Renders the homescreen for the app. Currently displays heading, new books, all books.
+ */
 export const HomeScreen: React.FC = () => {
   // get books from backend
   const booksCtx = useContext(BookContext);
@@ -81,7 +81,7 @@ export const HomeScreen: React.FC = () => {
 
           <View style={styles.bookDisplay}>
 
-            { loading ? <LoadingCircle/> : <PaginatedBookList books={filteredBooks} booksPerPage={booksPerPage}/> }
+            { loading ? <LoadingCircle/> : <PaginatedBookList books={filteredBooks} booksPerPage={BOOKS_PER_PAGE}/> }
 
             <View style={loading ? styles.loading : filteredBooks.length === 0 ? styles.loading : null}>
               { !loading && filteredBooks.length === 0 ? <Text style={styles.noResult}>No results</Text> : null }
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     marginTop: 19,
   },
   loading: {
-    height: (0.28 * width * booksPerPage / 3) + (12 * booksPerPage / 3) + 25,
+    height: (0.28 * width * BOOKS_PER_PAGE / 3) + (12 * BOOKS_PER_PAGE / 3) + 25,
   },
   noResult: {
     ...TextStyles.caption2,
