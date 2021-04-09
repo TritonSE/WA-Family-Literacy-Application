@@ -61,6 +61,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 	r.Route("/image", func(r chi.Router) {
 		r.Post("/", imageController.PostImage)
+
+		r.Get("/{id}", imageController.GetImage)
 	})
 
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
