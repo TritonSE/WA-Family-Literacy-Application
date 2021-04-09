@@ -1,6 +1,6 @@
 import React from 'react';
 import { Book } from '../models/Book';
-import DeleteIcon from './Minus-sign.svg';
+import DeleteIcon from '../assets/images/Minus-sign.svg';
 import { Language } from '../models/Languages';
 
 import './BookCard.css';

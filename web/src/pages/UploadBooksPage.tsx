@@ -57,10 +57,21 @@ export const UploadBooksPage: React.FC = () => {
     const langs: Language[] = Object.keys(checked) as Array<Language>;
     if (checkedAll) {
       await client.deleteBook(deleteId);
+      setBooks(books.filter(book => book.id !== deleteId));
     } else {
       langs.map(async (lang) => {
         if (checked[lang]) {
           await client.deleteBookByLang(deleteId, lang);
+          setBooks(books.map((book) => {
+            if (book.id === deleteId) {
+              const updatedBook: Book = book;
+              updatedBook.languages = updatedBook.languages.filter(language => language !== lang);
+              return updatedBook;
+            }
+            else {
+              return book;
+            }
+          }));
         }
       });
     }
@@ -121,14 +132,14 @@ export const UploadBooksPage: React.FC = () => {
       <div className="row">
         <div className="row">
           <p className="title h2">Recent Releases</p>
-          <button type="button" onClick={() => setViewAll(!viewAll)} className="clickable body3">
+          <button type="button" onClick={() => setViewAll(!viewAll)} className="clickableText body3">
             {viewAll ? 'View Less' : 'View All'}
           </button>
         </div>
       </div>
       <div className="row">
         <p className="body3">(Tap book to edit)</p>
-        <button type="button" onClick={() => setDeleteMode(!deleteMode)} className="clickable body3">
+        <button type="button" onClick={() => setDeleteMode(!deleteMode)} className="clickableText body3">
           {deleteMode ? 'Done' : 'Delete Books'}
         </button>
       </div>
@@ -144,7 +155,7 @@ export const UploadBooksPage: React.FC = () => {
               <form>
                 {confirmationModal ? (
                   <div>
-                    <p className="h3">Are you sure you want to delete these book(s)?</p>
+                    <p className="h3 modalTitle">Are you sure you want to delete these book(s)?</p>
                     <div className="buttons">
                       <button className="cancelBtn body3" type="button" onClick={() => { setShowModal(false); setConfirmationModal(false); }}>Cancel</button>
                       <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
@@ -153,17 +164,19 @@ export const UploadBooksPage: React.FC = () => {
                 )
                   : (
                     <div>
-                      <p className="h3">Which version(s) of this book would you like to delete?</p>
+                      <p className="h3 modalTitle">Which version(s) of this book would you like to delete?</p>
                       {modalLanguages.map(lang => (
-                        <label key={lang} className="checkLabel body1" htmlFor={lang}>
+                        <label key={lang} className="checkboxContainer checkLabel body1" htmlFor={lang}>
                           {LanguageLabels[lang]}
                           <input className="checkbox" checked={checked[lang]} onChange={() => toggleCheck(lang)} id={lang} type="checkbox" />
+                          <span className="checkmark"></span>
                           <br />
                         </label>
                       ))}
-                      <label className="checkLabel body1" htmlFor="all">
+                      <label className="checkboxContainer checkLabel body1" htmlFor="all">
                         All languages
                         <input className="checkbox" id="all" checked={checkedAll} onChange={(event) => selectAllCheck(event.target.checked)} type="checkbox" />
+                        <span className="checkmark"></span>
                         <br />
                       </label>
                       <div className="buttons">

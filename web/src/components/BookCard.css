@@ -1,56 +1,36 @@
 .bookImg {
-  /* images display inline by default and act like text. We want them to act like divs, so display block */
-  flex: 1;
   object-fit: cover;
-  width: 235px;
-  height: 235px;
-  /* our width setting for mobile, one image per line */
-  flex-basis: 100%;
-  /* ensure padding doesn't cause images to wrap, it should be within the width rather than in addition */
-  box-sizing: border-box;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  object-position: center;
   border-radius: 15px;
+  border: 1px solid var(--dark-grey);
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-height: 100%;
+  min-width: 100%;
+  transform: translate(-50%, -50%);
 }
 
 .deleteIcon {
-  flex: 1;
   width: 42px;
   height: 42px;
-  vertical-align: middle;
   cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 100%;;
+  transform: translate(0%, -50%);
 }
 
-/* increase images per line as browser gets larger using media queries
-   this first query makes two images per line at 640px width */
-   @media only screen and (min-width: 640px) {
-    .grid-image {
-      flex-basis: 50%;
-    }
-  }
-   
-  /* three images per line when browser width exceeds 960px */
-  @media only screen and (min-width: 960px) {
-    img {
-      flex-basis: 33.333%;
-    }
-  }
-   
-  /* four images per line when browser width exceeds 1280px */
-  @media only screen and (min-width: 1280px) {
-    img {
-      flex-basis: 25%;
-    }
-  }
-   
-  /* five images per line when browser width exceeds 1600px */
-  @media only screen and (min-width: 1600px) {
-    img {
-      flex-basis: 20%;
-    }
-  }
+.container {
+  position: relative;
+  display: inline-block;
+}
 
-  .container {
-    display: flex;
-    align-items: center;
-  }
+.container:before {
+  content: "";
+  display: block;
+  height: 0;
+  width: 0;
+  padding-bottom: 100%;
+}
