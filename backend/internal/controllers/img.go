@@ -27,10 +27,8 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 		fmt.Print("ERROR ON GET")
 		return
 	}
-
-	rw.Header().Add("Content-Type", *ctype)
-
-	writeResponse(rw, http.StatusCreated, img)
+	rw.Header().Set("Content-Type", *ctype)
+	rw.Write(*img)
 
 }
 
@@ -40,6 +38,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	allowed := allowedTypes[content_type]
 
 	if !allowed {
+		fmt.Print(content_type)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
