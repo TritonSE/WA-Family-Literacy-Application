@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/TritonSE/words-alive/internal/database"
+
 	"github.com/go-chi/chi"
 )
 
@@ -14,9 +15,7 @@ type ImgController struct {
 
 var allowedTypes = map[string]bool{
 	"image/png":  true,
-	"image/jpg":  true,
 	"image/jpeg": true,
-	"image/webp": true,
 }
 
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {

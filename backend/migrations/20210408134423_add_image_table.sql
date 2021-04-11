@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE image (
-    id text PRIMARY KEY DEFAULT gen_random_uuid(),
+    id text PRIMARY KEY,
     img bytea NOT NULL,
     mime_type text not NULL
 );
