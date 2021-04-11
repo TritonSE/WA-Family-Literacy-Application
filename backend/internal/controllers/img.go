@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -15,7 +14,9 @@ type ImgController struct {
 
 var allowedTypes = map[string]bool{
 	"image/png":  true,
+	"image/jpg":  true,
 	"image/jpeg": true,
+	"image/webp": true,
 }
 
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
@@ -24,38 +25,40 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
 	if err != nil {
-		fmt.Print("ERROR ON GET")
+		writeResponse(rw, http.StatusNotFound, "Image with requested id not found")
 		return
 	}
+
 	rw.Header().Set("Content-Type", *ctype)
 	rw.Write(*img)
 
 }
 
 func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
-	content_type := req.Header.Get("Content-Type")
+	var content_type string = req.Header.Get("Content-Type")
 
-	allowed := allowedTypes[content_type]
+	var allowed bool = allowedTypes[content_type]
 
 	if !allowed {
-		fmt.Print(content_type)
-		writeResponse(rw, http.StatusInternalServerError, "error")
+		writeResponse(rw, http.StatusBadRequest, "Invalid image file type")
 		return
 	}
 
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
-		fmt.Print("ERROR ON POST")
+		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	url, err := c.Image.InsertImage(req.Context(), body, content_type)
+	id, err := c.Image.InsertImage(req.Context(), body, content_type)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
+
+	url := "/image/" + *id
 
 	writeResponse(rw, http.StatusCreated, url)
 
