@@ -4,32 +4,36 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2",
     "axios": "^0.21.1",
     "expo": "^40.0.0",
     "expo-app-loading": "^1.0.1",
     "expo-constants": "~9.3.3",
     "expo-font": "~8.4.0",
     "expo-localization": "~9.1.0",
+    "expo-web-browser": "~8.6.0",
     "i18n-js": "^3.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-markdown-view": "^1.1.4",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
     "react-native-svg": "12.1.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-native-youtube-iframe": "^1.4.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@types/i18n-js": "^3.8.0",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
     "eslint": "^7.16.0",
-    "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
@@ -37,7 +41,7 @@
     "typescript": "~4.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --strict",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",
@@ -45,7 +49,8 @@
     "ios": "expo start --ios",
     "web": "expo web",
     "eject": "expo eject",
-    "dev": "BASE_URL=http://localhost:8080 npm start"
+    "dev": "BASE_URL=http://localhost:8080 npm start",
+    "staging": "BASE_URL=https://words-alive-staging.herokuapp.com npm start"
   },
   "private": true
 }

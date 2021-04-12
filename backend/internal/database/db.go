@@ -1,50 +1,34 @@
 package database
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
 	"log"
-	"os"
-	"strconv"
 
-	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/stdlib"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pressly/goose"
+
+	"github.com/TritonSE/words-alive/internal/utils"
 )
 
-func GetConnection() *pgx.Conn {
-	dbHost := getEnv("DB_HOST", "localhost")
-	dbPort, _ := strconv.ParseUint(getEnv("DB_PORT", "5432"), 10, 16)
-	dbUser := getEnv("DB_USER", "postgres")
-	dbPass := getEnv("DB_PASS", "")
-	dbDatabase := getEnv("DB_DATABASE", "postgres")
-
-	conn, err := pgx.Connect(pgx.ConnConfig{
-		Host:     dbHost,
-		Port:     uint16(dbPort),
-		User:     dbUser,
-		Password: dbPass,
-		Database: dbDatabase,
-	})
+// Connects to the database and returns a pool of connections
+func GetConnection() *pgxpool.Pool {
+	dbUrl := utils.GetEnv("DATABASE_URL", "postgresql://postgres@localhost:5432/postgres")
+	pool, err := pgxpool.Connect(context.Background(), dbUrl)
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v", err)
 	}
 
-	return conn
+	return pool
 }
 
 // Brings the database to the most up-to-date version
 func Migrate(migrationsDir string) {
-	dbHost := getEnv("DB_HOST", "localhost")
-	dbPort, _ := strconv.ParseUint(getEnv("DB_PORT", "5432"), 10, 16)
-	dbUser := getEnv("DB_USER", "postgres")
-	dbPass := getEnv("DB_PASS", "")
-	dbDatabase := getEnv("DB_DATABASE", "postgres")
-
 	stdlib.RegisterDriverConfig(&stdlib.DriverConfig{})
 
-	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s", dbHost, dbPort, dbUser, dbPass, dbDatabase)
-	db, err := sql.Open("pgx", connString)
+	dbUrl := utils.GetEnv("DATABASE_URL", "postgresql://postgres@localhost:5432/postgres")
+	db, err := sql.Open("pgx", dbUrl)
 	if err != nil {
 		log.Fatalf("failed to migrate: failed to connect to database: %v", err)
 	}
@@ -53,12 +37,4 @@ func Migrate(migrationsDir string) {
 	if err != nil {
 		log.Fatalf("failed to migrate: %v", err)
 	}
-}
-
-func getEnv(key string, def string) string {
-	val := os.Getenv(key)
-	if val == "" {
-		return def
-	}
-	return val
 }

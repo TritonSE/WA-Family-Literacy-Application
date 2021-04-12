@@ -10,5 +10,8 @@
     "emailUs": "Email Us: ",
     "emailAddress": "info@wordsalive.gov",
     "addressTitle": "Address: ",
-    "actualAddress": "Santa Fe Street Suite 219 San Diego, California, 92081, United States"
+    "actualAddress": "Santa Fe Street Suite 219 San Diego, California, 92081, United States",
+    "read": "Read",
+    "explore": "Explore",
+    "learn": "Learn"
 }
