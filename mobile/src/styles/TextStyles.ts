@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { block } from 'react-native-reanimated';
 
 export const TextStyles = StyleSheet.create({
 
@@ -16,14 +17,6 @@ export const TextStyles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Gotham-Medium',
     fontWeight: 'normal',
-  },
-  h4: {
-    fontSize: 18,
-    fontFamily: 'Gotham-Bold',
-    fontWeight: 'bold',
-    marginLeft: '5%',
-    padding: '2%',
-    width: '88%',
   },
 
 });

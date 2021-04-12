@@ -11,14 +11,25 @@ export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
     <View style={styles.container}>
-      <Text style={TextStyles.h4}> {i18nCtx.t('letsTalk')}</Text>
-      <Text style={TextStyles.h4}> {i18nCtx.t('tel')} </Text>
-      <Text style={TextStyles.h4}> {i18nCtx.t('fax')}</Text>
-      <Text style={TextStyles.h4}> {i18nCtx.t('days')}</Text>
-      <Text style={TextStyles.h4}> {i18nCtx.t('email')}</Text>
-      <Text style={TextStyles.h4}> {i18nCtx.t('address')}</Text>
+
+      <Text style={[TextStyles.h2, styles.title]}> {i18nCtx.t('letsTalk')}</Text> 
+ 
+      <Text style={[TextStyles.h2, styles.title]}> 
+      {i18nCtx.t('tel')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
+      </Text>
+      <Text style={[TextStyles.h2, styles.title]}> 
+      {i18nCtx.t('fax')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
+      </Text>  
+      <Text style={[TextStyles.h2, styles.title]}> 
+      {i18nCtx.t('days')} <Text style={TextStyles.h3}>{i18nCtx.t('hours')}</Text>
+      </Text>
+      <Text style={[TextStyles.h2, styles.title]}> 
+      {i18nCtx.t('emailUs')} <Text style={TextStyles.h3}>{i18nCtx.t('emailAddress')}</Text>
+      </Text>
+      <Text style={[TextStyles.h2, styles.title]}> 
+      {i18nCtx.t('addressTitle')} <Text style={TextStyles.h3}>{i18nCtx.t('actualAddress')}</Text>
+      </Text>
     </View>
-    
   );
 };
 
@@ -31,5 +42,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.orange,
     width: '100%',
     height: '100%',
+  },
+  title: {
+    marginLeft: '6%',
+    padding: '2%',
+    width: '88%',
   },
 });

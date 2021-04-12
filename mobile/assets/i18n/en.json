@@ -2,9 +2,13 @@
     "newBooks": "New Books for You",
     "allBooks": "All Books",
     "letsTalk": "Let's Talk",
-    "tel": "Tel: 858.274.9673",
-    "fax": "Fax: 858.274.9673",
-    "days": "Mon-Fri: 8am-4pm",
-    "email": "Email Us: info@wordsalive.gov",
-    "address": "Address: Santa Fe Street Suite 219 San Diego, California, 92081, United States"
+    "tel": "Tel: ",
+    "num": "858.274.9673",
+    "fax": "Fax: ",
+    "days": "Mon-Fri: ",
+    "hours": "8am-4pm",
+    "emailUs": "Email Us: ",
+    "emailAddress": "info@wordsalive.gov",
+    "addressTitle": "Address: ",
+    "actualAddress": "Santa Fe Street Suite 219 San Diego, California, 92081, United States"
 }
