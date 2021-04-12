@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { block } from 'react-native-reanimated';
 
 export const TextStyles = StyleSheet.create({
   h1: {

@@ -15,19 +15,19 @@ export const ChatScreen: React.FC = () => {
       <Text style={[TextStyles.h2, styles.title]}> {i18nCtx.t('letsTalk')}</Text> 
  
       <Text style={[TextStyles.h2, styles.title]}> 
-      {i18nCtx.t('tel')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
+        {i18nCtx.t('tel')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
       </Text>
       <Text style={[TextStyles.h2, styles.title]}> 
-      {i18nCtx.t('fax')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
+        {i18nCtx.t('fax')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
       </Text>  
       <Text style={[TextStyles.h2, styles.title]}> 
-      {i18nCtx.t('days')} <Text style={TextStyles.h3}>{i18nCtx.t('hours')}</Text>
+        {i18nCtx.t('days')} <Text style={TextStyles.h3}>{i18nCtx.t('hours')}</Text>
       </Text>
       <Text style={[TextStyles.h2, styles.title]}> 
-      {i18nCtx.t('emailUs')} <Text style={TextStyles.h3}>{i18nCtx.t('emailAddress')}</Text>
+        {i18nCtx.t('emailUs')} <Text style={TextStyles.h3}>{i18nCtx.t('emailAddress')}</Text>
       </Text>
       <Text style={[TextStyles.h2, styles.title]}> 
-      {i18nCtx.t('addressTitle')} <Text style={TextStyles.h3}>{i18nCtx.t('actualAddress')}</Text>
+        {i18nCtx.t('addressTitle')} <Text style={TextStyles.h3}>{i18nCtx.t('actualAddress')}</Text>
       </Text>
     </View>
   );
