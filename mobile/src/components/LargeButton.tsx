@@ -3,7 +3,9 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
-export const LargeButton: React.FC = ({ text, onPress }) => {
+type LargeButtonProps = { text: string, onPress: () => void };
+
+export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress }) => {
 	const [active, setActive] = React.useState(false);
 
 	return (

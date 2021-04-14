@@ -53,7 +53,7 @@ const MoreInfoTab: React.FC = () => {
 	);
 };
 
-const TabScreens = {
+const TabScreens: { [index:string] : any } = {
 	'saved': <SavedTab/>,
 	'settings': <SettingsTab/>,
 	'moreInfo': <MoreInfoTab/>,
