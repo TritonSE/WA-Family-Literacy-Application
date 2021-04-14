@@ -3,5 +3,8 @@
     "allBooks": "All Books",
     "read": "Read",
     "explore": "Explore",
-    "learn": "Learn"
+    "learn": "Learn",
+	"saved": "Saved",
+	"settings": "Settings",
+	"moreInfo": "More Info"
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { Colors } from '../styles/Colors';
@@ -22,8 +22,8 @@ export const MainTabNavigator: React.FC = () => {
               return <Image style={[styles.homeIcon, { tintColor: color }]} source={require('../../assets/images/Home.png')} />;
             case 'Chat':
               return <Image style={[styles.chatIcon, { tintColor: color }]} source={require('../../assets/images/Chat_bubble.png')} />;
-            case 'Settings':
-              return <Image style={[styles.settingsIcon, { tintColor: color }]} source={require('../../assets/images/Cog.png')} />;
+            case 'Profile':
+              return <Image style={[styles.profileIcon, { tintColor: color }]} source={require('../../assets/images/user-solid.png')} />;
             default:
               return null;
           }
@@ -40,7 +40,7 @@ export const MainTabNavigator: React.FC = () => {
     >
       <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Home" component={HomeStackNavigator} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
 
   );
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     height: 22,
   },
 
-  settingsIcon: {
-    width: 26,
+  profileIcon: {
+    width: 22.5,
     height: 26,
   },
 

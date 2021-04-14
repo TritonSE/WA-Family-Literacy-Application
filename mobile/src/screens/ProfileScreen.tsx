@@ -54,16 +54,16 @@ const MoreInfoTab: React.FC = () => {
 };
 
 const TabScreens = {
-	'btn-1': <SavedTab/>,
-	'btn-2': <SettingsTab/>,
-	'btn-3': <MoreInfoTab/>,
+	'saved': <SavedTab/>,
+	'settings': <SettingsTab/>,
+	'moreInfo': <MoreInfoTab/>,
 };
 
 /**
  * Right tab on navbar for profile menu
  */
 export const ProfileScreen: React.FC = () => {
-	const [selectedTab, selectTab] = React.useState('btn-1');
+	const [selectedTab, selectTab] = React.useState('saved');
 	
  	return (
 		<ScrollView>
@@ -72,7 +72,9 @@ export const ProfileScreen: React.FC = () => {
         	<Circle cx="0.5" cy="-0.5" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
         </Svg>
     	</View>
-			<ButtonGroup btn1="Saved" btn2="Settings" btn3="More Info" onBtnChange={(btn) => {selectTab(btn)}} />
+			<View style={styles.buttonGroup}>
+				<ButtonGroup btn1="saved" btn2="settings" btn3="moreInfo" onBtnChange={(btn) => {selectTab(btn)}} />
+			</View>
 			{ TabScreens[selectedTab] }
 		</ScrollView>
  	);
@@ -96,11 +98,14 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 	},
 	textBox: {
-		height: 400,
+		height: 300,
 		width: 280,
 		borderWidth: 1,
 		borderColor: Colors.orange,
 		padding: 10,
 		marginTop: 10,
+	},
+	buttonGroup: {
+		alignItems: 'center',
 	},
 });
