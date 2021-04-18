@@ -3,6 +3,7 @@ package controllers
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/TritonSE/words-alive/internal/database"
 
@@ -20,6 +21,13 @@ var allowedTypes = map[string]bool{
 
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	var id string = chi.URLParam(req, "id")
+
+	id, err := url.PathUnescape(id)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
 
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
@@ -57,7 +65,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	url := "/image/" + *id
+	url := "/image/" + url.PathEscape(*id)
 
 	writeResponse(rw, http.StatusCreated, url)
 
