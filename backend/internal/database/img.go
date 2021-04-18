@@ -52,7 +52,7 @@ func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_typ
 	}
 
 	// encode using blurhash
-	hash, err := blurhash.Encode(4, 3, img)
+	hash, err := blurhash.Encode(4, 4, img)
 
 	if err != nil {
 		return nil, false, errors.Wrap(err, "error on encoding with blurhash")
