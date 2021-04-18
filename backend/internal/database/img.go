@@ -3,7 +3,6 @@ package database
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"image"
 
 	_ "image/jpeg"
@@ -18,6 +17,9 @@ type ImgDatabase struct {
 	Conn *pgxpool.Pool
 }
 
+/*
+ * Gets an image from the image table given the id. If image exists, returns the binary data of the image
+ */
 func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *string, error) {
 	var img []byte
 	var ctype string
@@ -26,7 +28,6 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *strin
 	err := db.Conn.QueryRow(ctx, query, id).Scan(&img, &ctype)
 
 	if err != nil {
-		fmt.Print(err)
 		return nil, nil, errors.Wrap(err, "error in SELECT")
 	}
 
@@ -34,24 +35,30 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *strin
 
 }
 
+/*
+ * Puts an image into the image table and returns id (generated using blurhash) and
+ * a boolean specifying if an image was entered into the db. If the image
+ * already exists, returns hash of pre-existing image
+ */
 func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_type string) (*string, bool, error) {
 
 	var query string = "INSERT INTO image (id, img, mime_type) VALUES ($1, $2, $3)"
 
+	// get the image into jpg/png form
 	img, _, err := image.Decode(bytes.NewReader(body))
 
 	if err != nil {
-		fmt.Print(err)
 		return nil, false, errors.Wrap(err, "error on decoding image")
 	}
 
+	// encode using blurhash
 	hash, err := blurhash.Encode(4, 3, img)
 
 	if err != nil {
-		fmt.Print(err)
 		return nil, false, errors.Wrap(err, "error on encoding with blurhash")
 	}
 
+	// check if image already exists
 	storedImage, _, _ := db.GetImage(ctx, hash)
 
 	if storedImage != nil {
@@ -59,6 +66,7 @@ func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_typ
 	}
 
 	_, err = db.Conn.Exec(ctx, query, hash, body, content_type)
+
 	if err != nil {
 		return nil, false, errors.Wrap(err, "error in INSERT")
 	}

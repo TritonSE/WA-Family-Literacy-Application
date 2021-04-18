@@ -3,9 +3,9 @@ package controllers
 import (
 	"io/ioutil"
 	"net/http"
-	"net/url"
 
 	"github.com/TritonSE/words-alive/internal/database"
+	"github.com/TritonSE/words-alive/internal/utils"
 
 	"github.com/go-chi/chi"
 )
@@ -19,15 +19,9 @@ var allowedTypes = map[string]bool{
 	"image/jpeg": true,
 }
 
+// gets an image from the database (/image/{id})
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	var id string = chi.URLParam(req, "id")
-
-	id, err := url.PathUnescape(id)
-
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		return
-	}
 
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
@@ -41,6 +35,7 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 
 }
 
+// posts an image to the database and returns the url at which it can be found (/image)
 func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	var content_type string = req.Header.Get("Content-Type")
 
@@ -65,7 +60,9 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	url := "/image/" + url.PathEscape(*id)
+	baseURL := utils.GetEnv("BASE_URL", "http://localhost:8080")
+
+	url := baseURL + "/image/" + *id
 
 	if !inserted {
 		writeResponse(rw, http.StatusFound, url)
