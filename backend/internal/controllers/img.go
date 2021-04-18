@@ -58,7 +58,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	id, err := c.Image.InsertImage(req.Context(), body, content_type)
+	id, inserted, err := c.Image.InsertImage(req.Context(), body, content_type)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -66,6 +66,11 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	url := "/image/" + url.PathEscape(*id)
+
+	if !inserted {
+		writeResponse(rw, http.StatusFound, url)
+		return
+	}
 
 	writeResponse(rw, http.StatusCreated, url)
 

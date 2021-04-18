@@ -34,27 +34,34 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *strin
 
 }
 
-func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_type string) (*string, error) {
+func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_type string) (*string, bool, error) {
+
 	var query string = "INSERT INTO image (id, img, mime_type) VALUES ($1, $2, $3)"
 
 	img, _, err := image.Decode(bytes.NewReader(body))
 
 	if err != nil {
 		fmt.Print(err)
-		return nil, errors.Wrap(err, "error on decoding image")
+		return nil, false, errors.Wrap(err, "error on decoding image")
 	}
 
 	hash, err := blurhash.Encode(4, 3, img)
 
 	if err != nil {
 		fmt.Print(err)
-		return nil, errors.Wrap(err, "error on encoding with blurhash")
+		return nil, false, errors.Wrap(err, "error on encoding with blurhash")
+	}
+
+	storedImage, _, _ := db.GetImage(ctx, hash)
+
+	if storedImage != nil {
+		return &hash, false, nil
 	}
 
 	_, err = db.Conn.Exec(ctx, query, hash, body, content_type)
 	if err != nil {
-		return nil, errors.Wrap(err, "error in INSERT")
+		return nil, false, errors.Wrap(err, "error in INSERT")
 	}
 
-	return &hash, nil
+	return &hash, true, nil
 }
