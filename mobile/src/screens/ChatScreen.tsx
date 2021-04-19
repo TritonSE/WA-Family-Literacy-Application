@@ -10,42 +10,52 @@ import { Colors } from '../styles/Colors';
 export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
-    <View style={styles.container}>
-
-      <Text style={[TextStyles.h2, styles.title]}> {i18nCtx.t('letsTalk')}</Text> 
- 
-      <Text style={[TextStyles.h2, styles.title]}> 
-        {i18nCtx.t('tel')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
-      </Text>
-      <Text style={[TextStyles.h2, styles.title]}> 
-        {i18nCtx.t('fax')} <Text style={TextStyles.h3}>{i18nCtx.t('num')}</Text>
-      </Text>  
-      <Text style={[TextStyles.h2, styles.title]}> 
-        {i18nCtx.t('days')} <Text style={TextStyles.h3}>{i18nCtx.t('hours')}</Text>
-      </Text>
-      <Text style={[TextStyles.h2, styles.title]}> 
-        {i18nCtx.t('emailUs')} <Text style={TextStyles.h3}>{i18nCtx.t('emailAddress')}</Text>
-      </Text>
-      <Text style={[TextStyles.h2, styles.title]}> 
-        {i18nCtx.t('addressTitle')} <Text style={TextStyles.h3}>{i18nCtx.t('actualAddress')}</Text>
-      </Text>
-    </View>
+    <>
+      <View style={styles.title}>
+        <Text style={TextStyles.h2}>Chat is coming soon, until then:</Text>
+      </View>
+      <View style={styles.container}>
+        <Text style={TextStyles.h1}> {i18nCtx.t('letsTalk')}</Text> 
+    
+        <Text></Text>
+        <Text style={TextStyles.h2}> 
+          {i18nCtx.t('tel')}: <Text style={TextStyles.body1}>858.274.9673</Text>
+        </Text>
+        <Text style={TextStyles.h2}> 
+          {i18nCtx.t('fax')}: <Text style={TextStyles.body1}>858.274.9673</Text>
+        </Text>  
+        <Text style={TextStyles.h2}> 
+          {i18nCtx.t('days')}: <Text style={TextStyles.body1}>{i18nCtx.t('hours')}</Text>
+        </Text>
+        <Text></Text>
+        <Text style={TextStyles.h2}> 
+          {i18nCtx.t('emailUs')}: <Text style={TextStyles.body1}>info@wordsalive.org</Text>
+        </Text>
+        <Text></Text>
+        <Text style={TextStyles.h2}> 
+          {i18nCtx.t('address')}: <Text style={TextStyles.body1}>5111 Santa Fe Street Suite 219 San Diego, California, 92081, United States</Text>
+        </Text>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  title: {
+    flex: 0,
+    justifyContent: 'center',
+    backgroundColor: Colors.orange,
+    paddingLeft: 24,
+    paddingTop: '30%',
+  },
   container: {
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    marginRight: '20%',
     backgroundColor: Colors.orange,
     width: '100%',
     height: '100%',
-  },
-  title: {
-    marginLeft: '6%',
-    padding: '2%',
-    width: '88%',
+    paddingLeft: 24,
+    paddingRight: 24,
   },
 });

@@ -17,7 +17,7 @@ export const TextStyles = StyleSheet.create({
     fontWeight: 'normal',
   },
   body1: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Gotham-Light',
     fontWeight: 'normal',
   },
