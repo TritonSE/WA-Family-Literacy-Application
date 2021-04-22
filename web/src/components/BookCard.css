@@ -2,7 +2,7 @@
   object-fit: cover;
   object-position: center;
   border-radius: 15px;
-  border: 1px solid var(--dark-grey);
+  border: 1px solid var(--black);
   display: block;
   position: absolute;
   top: 50%;

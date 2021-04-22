@@ -3,12 +3,15 @@ import { BookCard } from '../components/BookCard';
 import { Book } from '../models/Book';
 import { Language, LanguageLabels } from '../models/Languages';
 import { WordsAliveAPI } from '../api/WordsAliveAPI';
+import AddIcon from '../assets/images/plus-circle-solid.svg';
+import SearchIcon from '../assets/images/search-solid.svg';
 
 import './UploadBooksPage.css';
 
 export const UploadBooksPage: React.FC = () => {
-  // all books view states
+  // book grid view states
   const [books, setBooks] = useState<Book[]>([]);
+  const [newBooks, setNewBooks] = useState<Book[]>([]);
   const [viewAll, setViewAll] = useState(false);
 
   // delete states
@@ -35,6 +38,17 @@ export const UploadBooksPage: React.FC = () => {
       })();
     },
     [],
+  );
+
+  useEffect(
+    () => {
+      const tmpBooks: Book[] = books;
+      setNewBooks(tmpBooks.sort((a, b) => {
+        console.log(new Date(b.created_at));
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }));
+    },
+    [books],
   );
 
   // show delete menu with book's languages and checkboxes
@@ -126,12 +140,21 @@ export const UploadBooksPage: React.FC = () => {
 
   return (
     <div>
-      <div className="row">
-        <input className="search body1" onChange={event => setQuery(event.target.value)} name="q" type="search" placeholder="Search Book to Edit" />
+      <div className="flexEnd">
+        <div className="searchContainer">
+          <input className="search" onChange={event => setQuery(event.target.value)} name="q" type="search" placeholder="Search Book to Edit" />
+          <button type="button" className="searchButton">
+            <img className="searchIcon" src={SearchIcon} alt='' />
+          </button>
+        </div>
+        <button type="button" className="newButton body1">
+          <p>New Book</p>
+          <img className="addIcon" src={AddIcon} alt='' />
+        </button>
       </div>
       <div className="row">
         <div className="row">
-          <p className="title h2">Recent Releases</p>
+          <p className="title h2">{viewAll ? 'All Books' : 'Recent Releases'}</p>
           <button type="button" onClick={() => setViewAll(!viewAll)} className="clickableText body3">
             {viewAll ? 'View Less' : 'View All'}
           </button>
@@ -144,9 +167,19 @@ export const UploadBooksPage: React.FC = () => {
         </button>
       </div>
       <div className="books">
-        {books.filter(search).slice(0, viewAll ? books.length : 12).map((book) => (
-          <BookCard key={book.id} book={book} onDelete={displayModal} deleteMode={deleteMode} />
-        ))}
+        {viewAll ? books.filter(search).sort((a, b) => {
+          if (a.title < b.title) { return -1; }
+          if (a.title > b.title) { return 1; }
+          return 0;
+        })
+          .map((book) => (
+            <BookCard key={book.id} book={book} onDelete={displayModal} deleteMode={deleteMode} />
+          )) :
+          newBooks.slice(0, 4).filter(search).map((book) => (
+            <BookCard key={book.id} book={book} onDelete={displayModal} deleteMode={deleteMode} />
+          ))
+
+        }
       </div>
       {showModal &&
         (
@@ -156,7 +189,7 @@ export const UploadBooksPage: React.FC = () => {
                 {confirmationModal ? (
                   <div>
                     <p className="h3 modalTitle">Are you sure you want to delete these book(s)?</p>
-                    <div className="buttons">
+                    <div className="buttonsContainer">
                       <button className="cancelBtn body3" type="button" onClick={() => { setShowModal(false); setConfirmationModal(false); }}>Cancel</button>
                       <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
                     </div>
@@ -179,7 +212,7 @@ export const UploadBooksPage: React.FC = () => {
                         <span className="checkmark"></span>
                         <br />
                       </label>
-                      <div className="buttons">
+                      <div className="buttonsContainer">
                         <button className="cancelBtn body3" type="button" onClick={() => setShowModal(false)}>Cancel</button>
                         <button className="deleteBtn body3" type="button" onClick={() => setConfirmationModal(true)}>Delete</button>
                       </div>
