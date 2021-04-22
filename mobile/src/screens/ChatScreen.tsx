@@ -11,13 +11,13 @@ export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
         <View style={styles.container}>
-      <Text style={TextStyles.h1}>Live chat is coming soon</Text>
-      <Text style={TextStyles.h2}>Until then...</Text>
+      <Text style={TextStyles.heading1}>Live chat is coming soon</Text>
+      <Text style={TextStyles.heading2}>Until then...</Text>
 
       {/*Use empty <Text/>s to add double vertical space where necessary*/}
       <Text/>
 
-      <Text style={TextStyles.h1}>{i18nCtx.t('letsTalk')}</Text>
+      <Text style={TextStyles.heading1}>{i18nCtx.t('letsTalk')}</Text>
 
       <Text/>
       <Text/>
@@ -25,25 +25,25 @@ export const ChatScreen: React.FC = () => {
       <Text/>
 
 
-      <Text style={TextStyles.h2}>
+      <Text style={TextStyles.heading2}>
         {i18nCtx.t('tel')}: <Text style={[TextStyles.body1, styles.link]} onPress={() => Linking.openURL('tel:+18582749673')}>+1 858.274.9673</Text>
       </Text>
-      <Text style={TextStyles.h2}>
+      <Text style={TextStyles.heading2}>
           {i18nCtx.t('fax')}: <Text style={TextStyles.body1}>+1 858.274.9673</Text>
       </Text>
-      <Text style={TextStyles.h2}>
+      <Text style={TextStyles.heading2}>
         {i18nCtx.t('days')}: <Text style={TextStyles.body1}>{i18nCtx.t('hours')}</Text>
       </Text>
 
       <Text/>
 
-      <Text style={TextStyles.h2}>
+      <Text style={TextStyles.heading2}>
         {i18nCtx.t('emailUs')}: <Text style={[TextStyles.body1, styles.link]} onPress={() => Linking.openURL('mailto:info@wordsalive.org')}>info@wordsalive.org</Text>
       </Text>
 
       <Text/>
 
-      <Text style={TextStyles.h2}>
+      <Text style={TextStyles.heading2}>
         {i18nCtx.t('address')}:
       </Text>
 
