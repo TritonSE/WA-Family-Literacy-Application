@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Language } from './Languages';
 
 export type Book = {
@@ -6,7 +7,7 @@ export type Book = {
   author: string;
   image?: string;
   languages: Language[];
-  createdAt: string;
+  created_at: string;
 };
 
 export type BookDetails = {
