@@ -10,7 +10,7 @@ import { Colors } from '../styles/Colors';
 export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
-        <View style={styles.container}>
+      <View style={styles.container}>
       <Text style={TextStyles.heading1}>Live chat is coming soon</Text>
       <Text style={TextStyles.heading2}>Until then...</Text>
 
@@ -29,7 +29,7 @@ export const ChatScreen: React.FC = () => {
         {i18nCtx.t('tel')}: <Text style={[TextStyles.body1, styles.link]} onPress={() => Linking.openURL('tel:+18582749673')}>+1 858.274.9673</Text>
       </Text>
       <Text style={TextStyles.heading2}>
-          {i18nCtx.t('fax')}: <Text style={TextStyles.body1}>+1 858.274.9673</Text>
+        {i18nCtx.t('fax')}: <Text style={TextStyles.body1}>+1 858.274.9673</Text>
       </Text>
       <Text style={TextStyles.heading2}>
         {i18nCtx.t('days')}: <Text style={TextStyles.body1}>{i18nCtx.t('hours')}</Text>
