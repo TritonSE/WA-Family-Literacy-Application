@@ -10,7 +10,7 @@ import { Colors } from '../styles/Colors';
 export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
       <Text style={TextStyles.heading1}>Live chat is coming soon</Text>
       <Text style={TextStyles.heading2}>Until then...</Text>
 
