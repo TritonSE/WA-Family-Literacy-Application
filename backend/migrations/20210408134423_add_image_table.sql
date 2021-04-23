@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE image (
+CREATE TABLE images (
     id text PRIMARY KEY,
     img bytea NOT NULL,
     mime_type text not NULL
@@ -9,5 +9,5 @@ CREATE TABLE image (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE image
+DROP TABLE images;
 -- +goose StatementEnd

@@ -23,7 +23,7 @@ type ImgDatabase struct {
 func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *string, error) {
 	var img []byte
 	var ctype string
-	var query string = "SELECT img, mime_type FROM image WHERE id=$1"
+	var query string = "SELECT img, mime_type FROM images WHERE id=$1"
 
 	err := db.Conn.QueryRow(ctx, query, id).Scan(&img, &ctype)
 
@@ -42,7 +42,7 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *strin
  */
 func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_type string) (*string, bool, error) {
 
-	var query string = "INSERT INTO image (id, img, mime_type) VALUES ($1, $2, $3)"
+	var query string = "INSERT INTO images (id, img, mime_type) VALUES ($1, $2, $3)"
 
 	// get the image into jpg/png form
 	img, _, err := image.Decode(bytes.NewReader(body))
