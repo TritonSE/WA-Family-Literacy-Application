@@ -3,6 +3,7 @@ package database
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"image"
 
 	_ "image/jpeg"
@@ -20,18 +21,22 @@ type ImgDatabase struct {
 /*
  * Gets an image from the image table given the id. If image exists, returns the binary data of the image
  */
-func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, *string, error) {
+func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, string, error) {
 	var img []byte
 	var ctype string
 	var query string = "SELECT img, mime_type FROM images WHERE id=$1"
 
 	err := db.Conn.QueryRow(ctx, query, id).Scan(&img, &ctype)
 
-	if err != nil {
-		return nil, nil, errors.Wrap(err, "error in SELECT")
+	if err == sql.ErrNoRows {
+		return nil, "", nil
 	}
 
-	return &img, &ctype, nil
+	if err != nil {
+		return nil, "", errors.Wrap(err, "error in SELECT")
+	}
+
+	return &img, "", nil
 
 }
 

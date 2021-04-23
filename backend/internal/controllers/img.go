@@ -29,11 +29,16 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
 	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if img == nil {
 		writeResponse(rw, http.StatusNotFound, "Image with requested id not found")
 		return
 	}
 
-	rw.Header().Set("Content-Type", *ctype)
+	rw.Header().Set("Content-Type", ctype)
 	rw.Write(*img)
 
 }
