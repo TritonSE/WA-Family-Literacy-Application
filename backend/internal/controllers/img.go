@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"io/ioutil"
 	"net/http"
@@ -22,9 +21,9 @@ type ImgController struct {
 	Image database.ImgDatabase
 }
 
-var allowedTypes = map[string]bool{
-	"image/png":  true,
-	"image/jpeg": true,
+var allowedTypes = map[string]struct{}{
+	"image/png":  {},
+	"image/jpeg": {},
 }
 
 // gets an image from the database (/image/{id})
@@ -56,9 +55,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 
 	var baseURL string = utils.GetEnv("BASE_URL", "http://localhost:8080")
 
-	var allowed bool = allowedTypes[content_type]
-
-	if !allowed {
+	if _, found := allowedTypes[content_type]; !found {
 		writeResponse(rw, http.StatusBadRequest, "Invalid image file type")
 		return
 	}
@@ -72,12 +69,8 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 
 	var size float64 = float64(len(body))
 
-	fmt.Print(size)
-
+	// convert size to mb and check if less than 5 mb
 	size = size / (1024 * 1024)
-	fmt.Println()
-	fmt.Print(size)
-
 	if size > 5 {
 		writeResponse(rw, http.StatusBadRequest, "Image is too large.")
 	}
