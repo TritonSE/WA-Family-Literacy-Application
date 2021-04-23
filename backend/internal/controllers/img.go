@@ -1,12 +1,18 @@
 package controllers
 
 import (
+	"bytes"
+	"image"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 
+	_ "image/jpeg"
+	_ "image/png"
+
 	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/TritonSE/words-alive/internal/utils"
+	"github.com/buckket/go-blurhash"
 
 	"github.com/go-chi/chi"
 )
@@ -47,6 +53,8 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	var content_type string = req.Header.Get("Content-Type")
 
+	var baseURL string = utils.GetEnv("BASE_URL", "http://localhost:8080")
+
 	var allowed bool = allowedTypes[content_type]
 
 	if !allowed {
@@ -61,24 +69,49 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	id, inserted, err := c.Image.InsertImage(req.Context(), body, content_type)
+	// get the image into jpg/png form
+	img, _, err := image.Decode(bytes.NewReader(body))
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	baseURL := utils.GetEnv("BASE_URL", "http://localhost:8080")
+	// encode using blurhash
+	hash, err := blurhash.Encode(4, 4, img)
 
-	*id = url.QueryEscape(*id)
-
-	url := baseURL + "/image/" + *id
-
-	if !inserted {
-		writeResponse(rw, http.StatusFound, url)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	writeResponse(rw, http.StatusCreated, url)
+	// check if image already exists
+	storedImage, _, err := c.Image.GetImage(req.Context(), hash)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if storedImage != nil {
+		// ensure hash is clean for urls
+		hash = url.QueryEscape(hash)
+		returnUrl := baseURL + "/image/" + hash
+		writeResponse(rw, http.StatusFound, returnUrl)
+		return
+	}
+
+	err = c.Image.InsertImage(req.Context(), body, hash, content_type)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	// code to make return url written twice as to not pass queryescaped hash to InsertImage
+	hash = url.QueryEscape(hash)
+	returnUrl := baseURL + "/image/" + hash
+
+	writeResponse(rw, http.StatusCreated, returnUrl)
 
 }

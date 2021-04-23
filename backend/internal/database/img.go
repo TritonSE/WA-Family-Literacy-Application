@@ -1,14 +1,11 @@
 package database
 
 import (
-	"bytes"
 	"context"
-	"image"
 
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/buckket/go-blurhash"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 )
@@ -48,36 +45,15 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, string
  * a boolean specifying if an image was entered into the db. If the image
  * already exists, returns hash of pre-existing image
  */
-func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, content_type string) (*string, bool, error) {
+func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, hash string, content_type string) error {
 
 	var query string = "INSERT INTO images (id, img, mime_type) VALUES ($1, $2, $3)"
 
-	// get the image into jpg/png form
-	img, _, err := image.Decode(bytes.NewReader(body))
+	_, err := db.Conn.Exec(ctx, query, hash, body, content_type)
 
 	if err != nil {
-		return nil, false, errors.Wrap(err, "error on decoding image")
+		return errors.Wrap(err, "error in INSERT")
 	}
 
-	// encode using blurhash
-	hash, err := blurhash.Encode(4, 4, img)
-
-	if err != nil {
-		return nil, false, errors.Wrap(err, "error on encoding with blurhash")
-	}
-
-	// check if image already exists
-	storedImage, _, _ := db.GetImage(ctx, hash)
-
-	if storedImage != nil {
-		return &hash, false, nil
-	}
-
-	_, err = db.Conn.Exec(ctx, query, hash, body, content_type)
-
-	if err != nil {
-		return nil, false, errors.Wrap(err, "error in INSERT")
-	}
-
-	return &hash, true, nil
+	return nil
 }
