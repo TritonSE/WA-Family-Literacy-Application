@@ -3,7 +3,6 @@ package database
 import (
 	"bytes"
 	"context"
-	"database/sql"
 	"image"
 
 	_ "image/jpeg"
@@ -26,13 +25,17 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, string
 	var ctype string
 	var query string = "SELECT img, mime_type FROM images WHERE id=$1"
 
-	err := db.Conn.QueryRow(ctx, query, id).Scan(&img, &ctype)
+	row := db.Conn.QueryRow(ctx, query, id)
 
-	if err == sql.ErrNoRows {
-		return nil, "", nil
-	}
+	err := row.Scan(&img, &ctype)
 
 	if err != nil {
+		// check for error message b/c sql.ErrNoRows is not the same as the error returned
+		// when image cannot be found in the database
+		if err.Error() == "no rows in result set" {
+			return nil, "", nil
+		}
+
 		return nil, "", errors.Wrap(err, "error in SELECT")
 	}
 
