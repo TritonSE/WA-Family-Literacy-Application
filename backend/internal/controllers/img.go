@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"io/ioutil"
 	"net/http"
@@ -67,6 +68,18 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
+	}
+
+	var size float64 = float64(len(body))
+
+	fmt.Print(size)
+
+	size = size / (1024 * 1024)
+	fmt.Println()
+	fmt.Print(size)
+
+	if size > 5 {
+		writeResponse(rw, http.StatusBadRequest, "Image is too large.")
 	}
 
 	// get the image into jpg/png form
