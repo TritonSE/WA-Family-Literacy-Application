@@ -26,11 +26,6 @@ export const TextStyles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Gotham-Light',
   },
-  body3: {
-    fontSize: 18,
-    fontFamily: 'Gotham-Light',
-    fontWeight: 'normal',
-  },
 
   caption1: {
     fontSize: 20,
