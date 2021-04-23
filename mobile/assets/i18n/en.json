@@ -10,5 +10,7 @@
     "address": "Address",
     "read": "Read",
     "explore": "Explore",
-    "learn": "Learn"
+    "learn": "Learn",
+    "liveChat" : "Live chat is coming soon",
+    "untilThen": "Until then..."
 }

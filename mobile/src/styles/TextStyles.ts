@@ -18,13 +18,18 @@ export const TextStyles = StyleSheet.create({
   },
 
   body1: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Gotham-Light',
     fontWeight: 'normal',
   },
   body2: {
     fontSize: 12,
     fontFamily: 'Gotham-Light',
+  },
+  body3: {
+    fontSize: 18,
+    fontFamily: 'Gotham-Light',
+    fontWeight: 'normal',
   },
 
   caption1: {
