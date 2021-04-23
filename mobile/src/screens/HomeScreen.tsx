@@ -23,6 +23,10 @@ export const HomeScreen: React.FC = () => {
   const allBooks = booksCtx.books;
 
   const i18nCtx = useContext(I18nContext);
+	const i18n = i18nCtx.i18n;
+	const t = i18n.t;
+  i18nCtx.getData();
+  console.log(i18n.locale);
 
   // fix to make the flatlist for AllBooks not be inside a scrollview but maintain scrolling
   const VirtualizedView: React.FC = (props) => {
@@ -49,7 +53,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.textPadding}>
-        <Text style={TextStyles.h3}>{i18nCtx.t('newBooks')}</Text>
+        <Text style={TextStyles.h3}>{t('newBooks')}</Text>
       </View>
 
       <View>
@@ -57,7 +61,7 @@ export const HomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.textPadding}>
-        <Text style={TextStyles.h3}>{i18nCtx.t('allBooks')}</Text>
+        <Text style={TextStyles.h3}>{t("newBooks")}</Text>
       </View>
 
       <View style={styles.allBooks}>

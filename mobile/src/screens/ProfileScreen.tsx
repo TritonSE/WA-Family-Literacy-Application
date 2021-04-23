@@ -1,17 +1,110 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
 import { Svg, Circle } from 'react-native-svg';
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking } from 'react-native';
+
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
 import { LargeButton } from '../components/LargeButton';
+import { I18nContext } from '../context/I18nContext';
+import { Language, Languages } from '../models/Languages';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SavedTab: React.FC = () => {
   return <Text> Saved </Text>;
 };
 
+// const STORAGE_KEY = '@locale';
 const SettingsTab: React.FC = () => {
-  return <Text> Settings </Text>;
+
+	const i18nCtx = useContext(I18nContext);
+
+	const i18n = i18nCtx.i18n;
+	const t = i18n.t;
+	const languages = Object.keys(i18n.translations);
+	
+	const [locale, setLocale] = useState(i18n.locale);
+
+	i18nCtx.getData();
+
+	// const getData = async () => {
+	// 	try {
+	// 	  const value = await AsyncStorage.getItem(STORAGE_KEY);
+	// 	  if(value !== null) {
+	// 		setLocale(value);
+	// 		i18nCtx.setLocale(value);
+	// 		//console.log("LOCALE CHANGE to", i18n.locale, value);
+	// 	  }
+	// 	} catch(e) {
+	// 	  console.log(e);
+	// 	}
+	// }
+
+	// getData();
+	//console.log("locale", locale)
+	//console.log("i18n locale", i18n.locale);
+	  
+	// const storeData = async (value: Language) => {
+	// 	try {
+	// 	  await AsyncStorage.setItem(STORAGE_KEY, value);
+	// 	} catch (e) {
+	// 	  console.log(e);
+	// 	}
+	// }
+
+	const changeLocale = (locale: Language) => {
+		setLocale(locale);
+		i18nCtx.setLocale(locale)
+		i18nCtx.storeData(locale);
+		// storeData(locale);
+	}
+
+	//console.log(i18n.locale)
+
+	// useEffect(() => {
+	// 	// getData();
+	// }, [])
+	
+
+	return (
+		<View>
+		
+			<View style={{alignSelf: 'center', alignItems: 'center', width: 298}}>
+				<LargeButton text="Sign In" onPress={() => null} underline={true}/>
+				<LargeButton text="Sign Up" onPress={() => null} underline={true}/>
+			</View>
+
+			<View style={{marginTop: 30, alignSelf: 'center', width: 298}}>
+				<Text style={[TextStyles.h3, {marginBottom: 10}]}>Language</Text>
+				
+				{languages.map((lang: Language) => (
+					<View key={`lang${lang}`} style={{marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+						<Text style={TextStyles.body1}>{Languages[lang]}</Text>
+						
+						<Pressable style={ lang === locale ? {backgroundColor: Colors.orange, height: 20, width: 20} : {backgroundColor: 'grey', height: 20, width: 20}}
+							onPress={() => changeLocale(lang)}
+						/>
+
+					</View>
+				))}
+
+			</View>
+
+			<View style={{marginTop: 30}}>
+				<Text style={[TextStyles.h3, {textAlign: 'center'}]}>Locale: {i18nCtx.i18n.locale}</Text>
+				<Text style={{textAlign: 'center'}}>{t('newBooks')}</Text>
+				<Text style={{textAlign: 'center'}}>{t('allBooks')}</Text>
+			</View>
+
+			<View style={{height: 400}}></View>
+
+		</View>
+	
+	
+	);
+
 };
 
 const MoreInfoTab: React.FC = () => {
