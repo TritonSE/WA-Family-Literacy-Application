@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { BookCard } from '../components/BookCard';
 import { Book } from '../models/Book';
 import { Language, LanguageLabels } from '../models/Languages';
-import { WordsAliveAPI } from '../api/WordsAliveAPI';
+import { APIContext } from '../context/APIContext';
 import AddIcon from '../assets/images/plus-circle-solid.svg';
 import SearchIcon from '../assets/images/search-solid.svg';
 
@@ -26,10 +26,8 @@ export const UploadBooksPage: React.FC = () => {
   // search state
   const [query, setQuery] = useState('');
 
-  // set up api client
-  const baseURL = 'http://localhost:8080';
-  // const baseURL = 'https://words-alive-staging.herokuapp.com';
-  const client: WordsAliveAPI = new WordsAliveAPI(baseURL);
+  const client = useContext(APIContext);
+
   useEffect(
     () => {
       (async () => {
@@ -140,7 +138,8 @@ export const UploadBooksPage: React.FC = () => {
 
   return (
     <div>
-      <div className="flexEnd">
+      <div className="row">
+        <div></div>
         <div className="searchContainer">
           <input className="search" onChange={event => setQuery(event.target.value)} name="q" type="search" placeholder="Search Book to Edit" />
           <button type="button" className="searchButton">

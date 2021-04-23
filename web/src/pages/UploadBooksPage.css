@@ -15,12 +15,6 @@ p {
   cursor: pointer;
 }
 
-.flexEnd {
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-end;
-}
-
 .row {
   display: flex;
   align-items: baseline;
@@ -32,14 +26,13 @@ p {
   margin-top: 56px;
   margin-bottom: 139px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-template-rows: 1fr;
   grid-gap: 62px;
 }
 
 .searchContainer {
   display: flex;
-  align-items: flex-start;
   margin-top: 90px;
   margin-bottom: 9px;
 }
