@@ -41,9 +41,7 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, string
 }
 
 /*
- * Puts an image into the image table and returns id (generated using blurhash) and
- * a boolean specifying if an image was entered into the db. If the image
- * already exists, returns hash of pre-existing image
+ * Given image as bytes, content type, and blurhash string, inserts image into database
  */
 func (db *ImgDatabase) InsertImage(ctx context.Context, body []byte, hash string, content_type string) error {
 
