@@ -24,14 +24,12 @@ class WordsAliveAPI {
 
   // deletes all versions of a book by id
   async deleteBook(id: string): Promise<BookDetails> {
-    // const res = await this.client.delete(`/books/${id}/${lang}`);
     const res = await this.client.delete(`/books/${id}`);
     return res.data;
   }
 
   // deletes a book by id and language
   async deleteBookByLang(id: string, lang: Language): Promise<BookDetails> {
-    // const res = await this.client.delete(`/books/${id}/${lang}`);
     const res = await this.client.delete(`/books/${id}/${lang}`);
     return res.data;
   }

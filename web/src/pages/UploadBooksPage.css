@@ -44,6 +44,9 @@ p {
   border: 1px solid var(--orange);
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  font-size: 28px;
+  font-family: 'GothamRounded - Light';
+  -webkit-appearance: none;
 }
 
 .searchButton {
@@ -54,12 +57,6 @@ p {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   cursor: pointer;
-}
-
-input[type=search] {
-  font-size: 28px;
-  font-family: 'GothamRounded - Light';
-  -webkit-appearance: none;
 }
 
 .modal {
