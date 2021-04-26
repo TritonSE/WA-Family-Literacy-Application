@@ -19,7 +19,7 @@ const MoreInfoTab: React.FC = () => {
 
   return (
     <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.h3, {marginBottom: 20}]} >Social Media</Text>
+      <Text style={[TextStyles.heading3, {marginBottom: 20}]} >Social Media</Text>
       <View style={styles.socialRow}>
         <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
           <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
@@ -36,7 +36,7 @@ const MoreInfoTab: React.FC = () => {
       </View>
       <LargeButton text="Donate" onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
       <LargeButton text="Become a Volunteer" onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
-      <Text style={[TextStyles.h1, {textAlign: 'center', marginTop: 20}]}>
+      <Text style={[TextStyles.heading1, {textAlign: 'center', marginTop: 20}]}>
         Interested in our Program?
       </Text>
       <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 10}]}>
