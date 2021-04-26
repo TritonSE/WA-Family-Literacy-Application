@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 	"testing"
+    "fmt"
 
 	"github.com/stretchr/testify/require"
 
@@ -12,6 +13,9 @@ import (
 
 // Test for the book list function
 func TestGetBooks(t *testing.T) {
+    fmt.Print("\n================ START BOOK TESTS ================\n")
+
+    fmt.Print("\n---------------- GET BOOK TESTS ----------------\n")
 	var response []models.Book
 	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books", "", 200, &response)
 
@@ -51,6 +55,7 @@ func TestGetNullBook(t *testing.T) {
 
 // Test to just create the book
 func TestJustCreateBook(t *testing.T) {
+    fmt.Print("\n---------------- CREATE BOOK TESTS ----------------\n")
 	body := `{"title": "Lonely Book", "author":"Lonely Man", "image":null}`
 	testutils.MakeHttpRequest(t, "POST", ts.URL+"/books", body, http.StatusCreated,
 		nil)
@@ -117,6 +122,7 @@ func TestDuplicateBookDetails(t *testing.T) {
 
 // Test deleting from book contents
 func TestDeleteBookDetails(t *testing.T) {
+    fmt.Print("\n---------------- DELETE BOOK TESTS ----------------\n")
 	testutils.MakeHttpRequest(t, "DELETE", ts.URL+"/books/c_id/en", "", http.StatusNoContent,
 		nil)
 
@@ -159,6 +165,7 @@ func TestDeleteBookDetOnInvalidLang(t *testing.T) {
 
 // Test updating entry in books
 func TestUpdateBook(t *testing.T) {
+    fmt.Print("\n---------------- UPDATE BOOK TESTS ----------------\n")
 	var updatedBook models.Book
 	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
 	testutils.MakeHttpRequest(t, "PATCH", ts.URL+"/books/update", body, http.StatusOK, &updatedBook)
@@ -216,4 +223,5 @@ func TestUpdateBookDetailsOnInvalidLang(t *testing.T) {
 		}`
 
 	testutils.MakeHttpRequest(t, "PATCH", ts.URL+"/update/es", body, http.StatusNotFound, nil)
+    fmt.Print("\n================ END BOOK TESTS ================\n\n")
 }

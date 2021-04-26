@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 	"testing"
+    "fmt"
 
 	"github.com/stretchr/testify/require"
 
@@ -11,6 +12,8 @@ import (
 )
 
 func TestNoToken(t *testing.T) {
+    fmt.Print("\n================ START USER TESTS ================\n")
+    fmt.Print("\n---------------- AUTH USER TESTS ----------------\n")
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
 	// not passing token
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/users", body, http.StatusUnauthorized, nil, "")
@@ -23,6 +26,7 @@ func TestInvalidToken(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
+    fmt.Print("\n---------------- CREATE USER TESTS ----------------\n")
 	// valid token test
 	body := `{"id": "user1", "name": "robert", "email": "test4@test.com", "in_san_diego": true}`
 	var response models.User
@@ -51,6 +55,7 @@ func TestCreateDuplicateEmailUser(t *testing.T) {
 }
 
 func TestGetUser(t *testing.T) {
+    fmt.Print("\n---------------- GET USER TESTS ----------------\n")
 	var response models.User
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/users/user1", "", http.StatusOK, &response, "test-token-user1")
 	// assertions with response here
@@ -72,6 +77,7 @@ func TestGetUserUnAuth(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
+    fmt.Print("\n---------------- UPDATE USER TESTS ----------------\n")
 	// valid token test
 	body := `{"name": "roberto", "in_san_diego": false}`
 	var response1 string
@@ -121,4 +127,6 @@ func TestUpdateUserPartialLocation(t *testing.T) {
 	require.Equal(t, response2.Name, "new name")
 	require.Equal(t, response2.Email, "test4@test.com")
 	require.Equal(t, response2.InSanDiego, true)
+
+    fmt.Print("\n================ END USER TESTS ================\n\n")
 }

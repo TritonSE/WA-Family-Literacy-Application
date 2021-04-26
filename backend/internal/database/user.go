@@ -15,7 +15,7 @@ type UserDatabase struct {
 
 // Adds a user to the database
 func (db *UserDatabase) CreateUser(ctx context.Context, user models.User) error {
-	_, err := db.Conn.Exec(ctx, "INSERT INTO users (id, name, email, in_san_diego) VALUES ($1, $2, $3, $4) RETURNING id", user.ID, user.Name, user.Email, user.InSanDiego)
+	_, err := db.Conn.Exec(ctx, "INSERT INTO users (id, name, email, in_san_diego) VALUES ($1, $2, $3, $4)", user.ID, user.Name, user.Email, user.InSanDiego)
 	if err != nil {
 		return errors.Wrap(err, "error in CreateUser")
 	}
