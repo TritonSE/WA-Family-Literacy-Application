@@ -111,7 +111,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
         <View style={styles.imgContainer}>
           <Image source={{ uri: book.image }} style={styles.image} />
         </View>
-        <Text style={[TextStyles.h1, styles.title]}>{book.title}</Text>
+        <Text style={[TextStyles.heading1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>
         <ButtonGroup
           btn1="read"
