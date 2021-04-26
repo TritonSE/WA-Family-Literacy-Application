@@ -48,7 +48,9 @@ const MoreInfoTab: React.FC = () => {
         onChangeText={text => onChangeText(text)}
         value={value}
       />
-      <LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+      <View style={{ paddingBottom: 15 }}>
+        <LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+      </View>
     </View>
   );
 };
@@ -69,7 +71,7 @@ export const ProfileScreen: React.FC = () => {
     <ScrollView>
       <View style={styles.heading}>
         <Svg height="100%" width="100%" viewBox="0 0 1 1">
-          <Circle cx="0.5" cy="-0.5" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
+          <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
         </Svg>
       </View>
       <View style={styles.buttonGroup}>
@@ -83,7 +85,7 @@ export const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   heading: {
     color: Colors.orange,
-    height: 350,
+    height: 400,
   },
   socialRow: {
     flexDirection: 'row',
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonGroup: {
+    paddingTop: 33,
     alignItems: 'center',
   },
 });
