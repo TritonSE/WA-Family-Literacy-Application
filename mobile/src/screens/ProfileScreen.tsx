@@ -45,6 +45,8 @@ const MoreInfoTab: React.FC = () => {
       <TextInput
         style={styles.textBox}
         multiline
+        textAlignVertical={'top'}
+        textAlign={'left'}
         onChangeText={text => onChangeText(text)}
         value={value}
       />

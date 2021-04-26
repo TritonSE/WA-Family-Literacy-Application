@@ -27,6 +27,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
+    justifyContent: 'center',
     height: 43,
     width: 298,
     borderWidth: 2,
