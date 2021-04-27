@@ -5,7 +5,10 @@ import i18n from 'i18n-js';
 import { Language } from '../models/Languages';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// key for setting and retrieving locale saved locally on device
 const STORAGE_KEY = '@locale';
+
+// locale defaults to English
 const DEFAULT_LOCALE = 'en';
 
 type I18nState = {
@@ -41,12 +44,15 @@ export const I18nContext = createContext<I18nState>(val);
 
 export const I18nProvider: React.FC = ({ children }) => {
 
+  // current locale
   const [locale, setLocale] = useState<Language>('en');
 
+  // update the i18n locale globally when the locale is changed
   useEffect(() => {
     i18n.locale = locale;
   },[locale]);
 
+  // run on first render to retrieve the locally stored locale, if it exists
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then(value => {
       if(value !== null) {
@@ -55,7 +61,8 @@ export const I18nProvider: React.FC = ({ children }) => {
     });
   },[]);
   
-  const publicSetLocale = (locale: Language) => {
+  // update the i18n, state, and storage locale when the locale is changed
+  const publicSetLocale = (locale: Language): void => {
     i18n.locale = locale;
     setLocale(locale);
     AsyncStorage.setItem(STORAGE_KEY, locale);
