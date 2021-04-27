@@ -32,10 +32,7 @@ export const HomeScreen: React.FC = () => {
   const { books, loading } = booksCtx;
 
   const i18nCtx = useContext(I18nContext);
-	const i18n = i18nCtx.i18n;
-	const t = i18n.t;
-  i18nCtx.getData();
-  console.log(i18n.locale);
+  const { t } = i18nCtx;
 
   // the current search term, selected languages, and filtered books
   const [search, setSearch] = useState('');
@@ -76,9 +73,9 @@ export const HomeScreen: React.FC = () => {
           { booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/> }
         </View>
 
-        <View style={styles.allBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{i18nCtx.t('allBooks')}</Text>
-        </View>
+      <View style={styles.allBooksTextPadding}>
+        <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
+      </View>
 
         <View>
           <BookFilter onFilter={onFilter}/>

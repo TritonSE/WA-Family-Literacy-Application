@@ -13,19 +13,21 @@ type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange:
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBtnChange }) => {
 
   const i18nCtx = useContext(I18nContext);
+  const { t } = i18nCtx;
+
 
   const buttons = [
     {
       key: btn1,
-      label: i18nCtx.t(btn1),
+      label: t(btn1),
     },
     {
       key: btn2,
-      label: i18nCtx.t(btn2),
+      label: t(btn2),
     },
     {
       key: btn3,
-      label: i18nCtx.t(btn3),
+      label: t(btn3),
     },
   ];
 

@@ -18,7 +18,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underli
 				}
 			} 
 			style={[styles.button, active ? styles.activeButton : styles.inactiveButton]} >
-			<Text style={[TextStyles.h3, underline ? styles.underline : null,active ? styles.activeText : styles.inactiveText]}>
+			<Text style={[TextStyles.heading3, underline ? styles.underline : null,active ? styles.activeText : styles.inactiveText]}>
 				{text}
 			</Text>
 		</Pressable>
