@@ -74,9 +74,9 @@ export const HomeScreen: React.FC = () => {
           { booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/> }
         </View>
 
-      <View style={styles.allBooksTextPadding}>
-        <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
-      </View>
+        <View style={styles.allBooksTextPadding}>
+          <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
+        </View>
 
         <View>
           <BookFilter onFilter={onFilter}/>

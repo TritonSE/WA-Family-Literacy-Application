@@ -19,26 +19,26 @@ const SavedTab: React.FC = () => {
  */
 const SettingsTab: React.FC = () => {
 
-	const i18nCtx = useContext(I18nContext);
+  const i18nCtx = useContext(I18nContext);
   const { i18n, setLocale, t, locale } = i18nCtx;
-	const languages = Object.keys(i18n.translations);
+  const languages = Object.keys(i18n.translations);
 
-	return (
-		<View>
+  return (
+    <View>
 		
-			<View style={styles.login}>
-				<LargeButton text="Sign In" onPress={() => null} underline={true}/>
-				<LargeButton text="Sign Up" onPress={() => null} underline={true}/>
-			</View>
+      <View style={styles.login}>
+        <LargeButton text="Sign In" onPress={() => null} underline={true}/>
+        <LargeButton text="Sign Up" onPress={() => null} underline={true}/>
+      </View>
 
-			<View style={styles.langSelector}>
-       
+      <View style={styles.langSelector}>
+
         <View style={styles.languageText}>
           <Text style={TextStyles.heading3}>{t("language")}</Text>
         </View>
 				
-				{languages.map((lang: Language) => (
-					<View key={`lang${lang}`} style={styles.langElem}>
+        {languages.map((lang: Language) => (
+          <View key={`lang${lang}`} style={styles.langElem}>
 						
             <Text style={TextStyles.body1}>{Languages[lang]}</Text>
 
@@ -49,17 +49,17 @@ const SettingsTab: React.FC = () => {
               { lang === locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
             </Pressable>
 
-					</View>
-				))}
+          </View>
+        ))}
 
-			</View>
+      </View>
 
-			<View style={{height:300}}/>
+      <View style={{height:300}}/>
 
-		</View>
+    </View>
 	
 	
-	);
+  );
 
 };
 
