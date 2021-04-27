@@ -112,7 +112,7 @@ const MoreInfoTab: React.FC = () => {
 
   return (
     <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.h3, {marginBottom: 20}]} >Social Media</Text>
+      <Text style={[TextStyles.heading3, {marginBottom: 20}]} >Social Media</Text>
       <View style={styles.socialRow}>
         <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
           <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
@@ -129,7 +129,7 @@ const MoreInfoTab: React.FC = () => {
       </View>
       <LargeButton text="Donate" onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
       <LargeButton text="Become a Volunteer" onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
-      <Text style={[TextStyles.h1, {textAlign: 'center', marginTop: 20}]}>
+      <Text style={[TextStyles.heading1, {textAlign: 'center', marginTop: 20}]}>
         Interested in our Program?
       </Text>
       <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 10}]}>
@@ -138,10 +138,14 @@ const MoreInfoTab: React.FC = () => {
       <TextInput
         style={styles.textBox}
         multiline
+        textAlignVertical={'top'}
+        textAlign={'left'}
         onChangeText={text => onChangeText(text)}
         value={value}
       />
-      <LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+      <View style={{ paddingBottom: 15 }}>
+        <LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+      </View>
     </View>
   );
 };
@@ -162,7 +166,7 @@ export const ProfileScreen: React.FC = () => {
     <ScrollView>
       <View style={styles.heading}>
         <Svg height="100%" width="100%" viewBox="0 0 1 1">
-          <Circle cx="0.5" cy="-0.5" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
+          <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
         </Svg>
       </View>
       <View style={styles.buttonGroup}>
@@ -176,7 +180,7 @@ export const ProfileScreen: React.FC = () => {
 const styles = StyleSheet.create({
   heading: {
     color: Colors.orange,
-    height: 350,
+    height: 400,
   },
   socialRow: {
     flexDirection: 'row',
@@ -199,6 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonGroup: {
+    paddingTop: 33,
     alignItems: 'center',
   },
 });
