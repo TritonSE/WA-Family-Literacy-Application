@@ -14,7 +14,9 @@ const SavedTab: React.FC = () => {
   return <Text> Saved </Text>;
 };
 
-// const STORAGE_KEY = '@locale';
+/**
+ * Settings Tab to set app locale (language)
+ */
 const SettingsTab: React.FC = () => {
 
 	const i18nCtx = useContext(I18nContext);
@@ -24,34 +26,35 @@ const SettingsTab: React.FC = () => {
 	return (
 		<View>
 		
-			<View style={{alignSelf: 'center', alignItems: 'center', width: 298}}>
+			<View style={styles.login}>
 				<LargeButton text="Sign In" onPress={() => null} underline={true}/>
 				<LargeButton text="Sign Up" onPress={() => null} underline={true}/>
 			</View>
 
-			<View style={{marginTop: 30, alignSelf: 'center', width: 298}}>
-				<Text style={[TextStyles.heading3, {marginBottom: 10}]}>Language</Text>
+			<View style={styles.langSelector}>
+       
+        <View style={styles.languageText}>
+          <Text style={TextStyles.heading3}>{t("language")}</Text>
+        </View>
 				
 				{languages.map((lang: Language) => (
-					<View key={`lang${lang}`} style={{marginTop: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
-						<Text style={TextStyles.body1}>{Languages[lang]}</Text>
+					<View key={`lang${lang}`} style={styles.langElem}>
 						
-						<Pressable style={ lang === locale ? {backgroundColor: Colors.orange, height: 20, width: 20} : {backgroundColor: 'grey', height: 20, width: 20}}
-							onPress={() => setLocale(lang)}
-						/>
+            <Text style={TextStyles.body1}>{Languages[lang]}</Text>
+
+            <Pressable
+              onPress={() => setLocale(lang)}
+              style={styles.box}
+            >
+              { lang === locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
+            </Pressable>
 
 					</View>
 				))}
 
 			</View>
 
-			<View style={{marginTop: 30}}>
-				<Text style={[TextStyles.heading3, {textAlign: 'center'}]}>Locale: {i18nCtx.i18n.locale}</Text>
-				<Text style={{textAlign: 'center'}}>{t('newBooks')}</Text>
-				<Text style={{textAlign: 'center'}}>{t('allBooks')}</Text>
-			</View>
-
-			<View style={{height: 400}}></View>
+			<View style={{height:300}}/>
 
 		</View>
 	
@@ -65,7 +68,7 @@ const MoreInfoTab: React.FC = () => {
 
   return (
     <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.heading3, {marginBottom: 20}]} >Social Media</Text>
+      <Text style={[TextStyles.heading3, {marginBottom: 20}]}>Social Media</Text>
       <View style={styles.socialRow}>
         <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
           <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
@@ -159,4 +162,37 @@ const styles = StyleSheet.create({
     paddingTop: 33,
     alignItems: 'center',
   },
+  login: {
+    alignSelf: 'center', 
+    alignItems: 'center', 
+    width: 298,
+  },
+  langSelector: {
+    marginTop: 30, 
+    alignSelf: 'center', 
+    width: 298,
+  },
+  languageText: {
+    marginBottom: 10,
+  },
+  langElem: {
+    marginTop: 15, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  box: {
+    height: 24,
+    width: 24,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: Colors.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  boxChecked: {
+    height: 22,
+    width: 22,
+    tintColor: Colors.orange,
+  }
 });
