@@ -52,27 +52,3 @@ func MakeAuthenticatedRequest(t *testing.T, method string, url string, body stri
 		require.NoError(t, err)
 	}
 }
-
-func MakeImgRequest(t *testing.T, method string, url string, body string, expectedStatusCode int, response interface{}) {
-	bodyReader := strings.NewReader(body)
-
-	req, err := http.NewRequest(method, url, bodyReader)
-	require.NoError(t, err)
-
-	if method == "POST" || method == "PUT" || method == "PATCH" {
-		req.Header.Set("Content-Type", "image/png")
-	}
-
-	res, err := http.DefaultClient.Do(req)
-	require.NoError(t, err)
-
-	require.Equal(t, expectedStatusCode, res.StatusCode)
-
-	defer res.Body.Close()
-	require.Equal(t, expectedStatusCode, res.StatusCode)
-
-	if response != nil {
-		err = json.NewDecoder(res.Body).Decode(response)
-		require.NoError(t, err)
-	}
-}
