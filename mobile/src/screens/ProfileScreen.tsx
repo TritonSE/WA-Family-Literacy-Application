@@ -21,7 +21,7 @@ const SettingsTab: React.FC = () => {
 
   const i18nCtx = useContext(I18nContext);
   const { i18n, setLocale, t, locale } = i18nCtx;
-  const languages = Object.keys(i18n.translations);
+  const languages = Object.keys(i18n.translations) as Language[];
 
   return (
     <View>

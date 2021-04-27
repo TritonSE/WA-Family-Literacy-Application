@@ -13,7 +13,7 @@ const DEFAULT_LOCALE = 'en';
 
 type I18nState = {
   i18n: typeof i18n,
-  setLocale: (locale: string) => void,
+  setLocale: (locale: Language) => void,
   t: typeof i18n.t,
   locale: Language,
 };
