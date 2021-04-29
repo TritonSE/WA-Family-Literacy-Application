@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# Directories containing Node.js projects to be linted.
+node_dirs=(mobile)
+
+# Command to run in each directory specified in node_dirs.
+lint_command=(npm run lint)
+
+# Uncomment the line below to disable linting.
+#lint_command=(true)
+
+log() {
+	echo "${0}:" "${@}" >&2
+}
+
+die() {
+	log "${@}"
+	exit 1
+}
+
+num_stashes() {
+	git stash list | wc -l
+}
+
+# Make the working directory match the staging area.
+stash_push() {
+	log "Stashing unstaged changes."
+
+	local stashes_before=$(num_stashes)
+	git stash push --include-untracked --keep-index &> /dev/null
+	local stashes_after=$(num_stashes)
+
+	case "$(( stashes_after - stashes_before ))" in
+		1)
+			log "Stashing successful."
+			return 0
+			;;
+		0)
+			log "Nothing to stash."
+			return 1
+			;;
+		*)
+			die "Something unexpected occurred." \
+				"There used to be ${stashes_before} stash entries;" \
+				"now there are ${stashes_after}." \
+				"You'll need to manually recover your changes from the stash."
+			;;
+	esac
+}
+
+# Restore unstaged changes to the working directory.
+stash_pop() {
+	log "Restoring unstaged changes."
+
+	if git stash pop &> /dev/null; then
+		log "Unstaged changes restored."
+		return 0
+	else
+		die "An unexpected error occurred." \
+			"Resolve the conflicts by hand, then run 'git stash drop'."
+	fi
+}
+
+lint_check() {
+	for dir in "${node_dirs[@]}"; do
+		if ! [ -d "${dir}" ]; then
+			log "Directory '${dir}' does not exist." \
+				"Edit this script and change 'node_dirs'."
+			return 1
+		fi
+
+		if ! (cd "${dir}" && "${lint_command[@]}"); then
+			log "Lint check failed." \
+				"Run 'npm run lint-fix', then manually fix any remaining errors," \
+				"and stage those changes." \
+				"To skip this lint check, use 'git commit --no-verify'."
+			return 1
+		fi
+	done
+
+	log "Lint check passed."
+	return 0
+}
+
+main() {
+	if [ -f '.git/MERGE_HEAD' ]; then
+		log "WARNING: unable to stash unstaged changes during merge." \
+			"If there are unstaged changes, they may result in an" \
+			"incorrect lint check result."
+	else
+		stash_push && trap stash_pop EXIT
+	fi
+
+	lint_check
+}
+
+main "${@}"
