@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directories containing Node.js projects to be linted.
-node_dirs=(mobile)
+node_dirs=(mobile web)
 
 # Command to run in each directory specified in node_dirs.
 lint_command=(npm run lint)
