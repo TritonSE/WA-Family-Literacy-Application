@@ -7,6 +7,7 @@ import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
 import { ManagePage } from './pages/ManagePage';
+import { BookWizardPage } from './pages/BookWizardPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/manage">
           <ManagePage/>
+        </Route>
+        <Route path="/wiz">
+          <BookWizardPage/>
         </Route>
       </Switch>
     </Router>
