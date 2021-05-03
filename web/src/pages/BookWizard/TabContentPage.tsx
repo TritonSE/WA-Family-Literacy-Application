@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 
 type TabConentPageProps = {
-  onContentChange: ( data: TabContent ) => boolean
+  onContentChange: ( data: TabContent ) => void
 };
 
 export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange}) => {
