@@ -36,7 +36,7 @@ func (db *ImgDatabase) GetImage(ctx context.Context, id string) (*[]byte, string
 		return nil, "", errors.Wrap(err, "error in SELECT")
 	}
 
-	return &img, "", nil
+	return &img, ctype, nil
 
 }
 
