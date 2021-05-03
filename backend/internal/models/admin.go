@@ -9,3 +9,10 @@ type Admin struct {
     CanDeleteBooks bool   `json:"can_delete_books"`
 	IsPrimaryAdmin bool   `json:"is_primary_admin"`
 }
+
+type UpdateAdmin struct {
+	Name           *string `json:"name"`
+    CanManageUsers *bool   `json:"can_manage_users"`
+    CanUploadBooks *bool   `json:"can_upload_books"`
+    CanDeleteBooks *bool   `json:"can_delete_books"`
+}

@@ -22,10 +22,12 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 	bookDB := database.BookDatabase{Conn: dbConn}
 	userDB := database.UserDatabase{Conn: dbConn}
+	adminDB := database.AdminDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
 	bookController := BookController{Books: bookDB}
 	userController := UserController{Users: userDB}
+	adminController := AdminController{Admins: adminDB}
 
 	r := chi.NewRouter()
 	r.Use(chiMW.Logger)
@@ -40,10 +42,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.Get("/ping", ping)
 
 	r.Route("/books", func(r chi.Router) {
-		// "localhost:8080/books/
 		r.Get("/", bookController.GetBookList)
 
-		// "localhost:8080/books/{id}/{lang}
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
 		r.Post("/", bookController.CreateBook)
@@ -59,10 +59,17 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		r.Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
+    r.Get("/admins", adminController.GetAdminList)
+
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 	r.With(middleware.RequireAuth(authenticator)).Get("/users/{id}", userController.GetUser)
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
 
+	r.With(middleware.RequireAuth(authenticator)).Post("/admins", adminController.CreateAdmin)
+	r.With(middleware.RequireAuth(authenticator)).Get("/admins", adminController.GetAdminList)
+	r.With(middleware.RequireAuth(authenticator)).Get("/admins/{id}", adminController.GetAdminByID)
+	r.With(middleware.RequireAuth(authenticator)).Patch("/admins/{id}", adminController.UpdateAdmin)
+	r.With(middleware.RequireAuth(authenticator)).Delete("/admins/{id}", adminController.DeleteAdmin)
 	return r
 }
 
