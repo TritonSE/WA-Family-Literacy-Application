@@ -5,7 +5,7 @@ import { TextStyles } from '../styles/TextStyles';
 
 type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean };
 
-export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false }) => {
   const [active, setActive] = React.useState(false);
 
   return (
@@ -18,7 +18,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underli
         }
       } 
       style={[styles.button, active ? styles.activeButton : styles.inactiveButton]} >
-      <Text style={[TextStyles.heading3, underline ? styles.underline : null, active ? styles.activeText : styles.inactiveText]}>
+      <Text style={[TextStyles.heading3, underline && styles.underline, active ? styles.activeText : styles.inactiveText]}>
         {text}
       </Text>
     </Pressable>
