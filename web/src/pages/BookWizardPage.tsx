@@ -36,8 +36,6 @@ export const BookWizardPage: React.FC = () => {
   };
 
 
-
-
   return (
     <div>
       <TabContentPage onContentChange= {setReadTabContent}>

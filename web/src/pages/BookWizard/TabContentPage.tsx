@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -23,11 +25,13 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
         placeholder="Enter me"
         onChange={ e => setVideo(e.target.value)}
       />
-      <input
-        type="text"
-        placeholder='Enter me p3'
-        onChange={ e => setBody(e.target.value)}
-      />
+      <CKEditor
+        editor= { ClassicEditor }
+        data="<p>Hello from CKEditor 5!</p>"
+        onChange= { (event: any, editor: any) => {
+          const data = editor.getData();
+          setBody(data);
+        }}/>
     </div>
   );
 };
