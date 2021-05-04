@@ -51,7 +51,7 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
     });
 
   return (
-    <>
+    <View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator
@@ -94,10 +94,11 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
 
       </ScrollView>
 
-      <View style={styles.text}>
+      {/* Current page indicator, hidden when list of pages is empty */}
+      {bookPages.length > 0 && (<View style={styles.text}>
         <Text style={TextStyles.heading3}>{i18n.t('pageMofN', { m: currentPage, n: bookPages.length })}</Text>
-      </View>
-    </>
+      </View>)}
+    </View>
   );
 };
 
