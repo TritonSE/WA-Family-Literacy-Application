@@ -1,0 +1,19 @@
+name = 'volunteers-dev'
+type = 'webpack'
+account_id = '457556e693275da88b8ad0aa6af04170'
+route = 'volunteers-dev.wordsalive.org/*'
+zone_id = '27f2804ddf864eafa1fa63b64be3951b'
+workers_dev = false
+target_type = "webpack"
+
+[site]
+bucket = "./build"
+entry-point = "workers-site"
+
+[env.staging]
+name = 'volunteers-staging'
+route = 'volunteers-staging.wordsalive.org/*'
+
+[env.prod]
+name = 'volunteers'
+route = 'volunteers.wordsalive.org/*'

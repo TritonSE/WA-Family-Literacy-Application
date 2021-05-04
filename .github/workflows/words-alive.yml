@@ -40,6 +40,7 @@ jobs:
         run: make test
         env:
           DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
+
   mobile:
     runs-on: ubuntu-latest
     steps:
@@ -54,6 +55,7 @@ jobs:
       - name: Lint
         working-directory: mobile
         run: npm run lint
+
   web:
     runs-on: ubuntu-latest
     steps:
@@ -68,7 +70,8 @@ jobs:
       - name: Lint
         working-directory: web
         run: npm run lint
-  deploy-staging:
+
+  deploy-backend-staging:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs:
@@ -112,7 +115,8 @@ jobs:
         run: heroku container:release web -a words-alive-staging
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  deploy-prod:
+
+  deploy-backend-prod:
     if: contains(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     needs:
@@ -156,3 +160,53 @@ jobs:
         run: heroku container:release web -a words-alive
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+  deploy-web-staging:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - mobile
+      - web
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+      - name: Build admin site
+        working-directory: web
+        run: npm run build:prod
+        env:
+          REACT_APP_BASE_URL: https://api-staging.wordsalive.org
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.2.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: web
+          environment: staging
+
+  deploy-web-prod:
+    if: contains(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs:
+      - backend
+      - mobile
+      - web
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+      - name: Build admin site
+        working-directory: web
+        run: npm run build:prod
+        env:
+          REACT_APP_BASE_URL: https://api.wordsalive.org
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.2.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: web
+          environment: prod
