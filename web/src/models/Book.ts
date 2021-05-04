@@ -1,4 +1,4 @@
-import { Language } from "./Languages";
+import { Language } from './Languages';
 
 export type Book = {
   id: string

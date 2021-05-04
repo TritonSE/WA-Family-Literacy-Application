@@ -8,30 +8,33 @@ import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
 import { ManagePage } from './pages/ManagePage';
 import { BookWizardPage } from './pages/BookWizardPage';
+import { APIProvider } from './context/APIContext';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Navbar/>
+    <APIProvider>
+      <Router>
+        <Navbar />
 
-      <Switch>
-        <Route path="/communication">
-          <CommunicationPage/>
-        </Route>
-        <Route path="/analytics">
-          <AnalyticsPage/>
-        </Route>
-        <Route path="/upload">
-          <UploadBooksPage/>
-        </Route>
-        <Route path="/manage">
-          <ManagePage/>
-        </Route>
-        <Route path="/wiz">
-          <BookWizardPage/>
-        </Route>
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/communication">
+            <CommunicationPage />
+          </Route>
+          <Route path="/analytics">
+            <AnalyticsPage />
+          </Route>
+          <Route path="/upload">
+            <UploadBooksPage />
+          </Route>
+          <Route path="/manage">
+            <ManagePage />
+          </Route>
+          <Route path="/wiz">
+            <BookWizardPage />
+          </Route>
+        </Switch>
+      </Router>
+    </APIProvider>
   );
 };
 

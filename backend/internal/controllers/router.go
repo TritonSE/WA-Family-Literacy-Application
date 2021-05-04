@@ -21,10 +21,12 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	dbConn := database.GetConnection()
 
 	bookDB := database.BookDatabase{Conn: dbConn}
+	imageDB := database.ImgDatabase{Conn: dbConn}
 	userDB := database.UserDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
 	bookController := BookController{Books: bookDB}
+	imageController := ImgController{Image: imageDB}
 	userController := UserController{Users: userDB}
 
 	r := chi.NewRouter()
@@ -57,6 +59,12 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		r.Patch("/{id}", bookController.UpdateBook)
 
 		r.Patch("/{id}/{lang}", bookController.UpdateBookDetails)
+	})
+
+	r.Route("/image", func(r chi.Router) {
+		r.Post("/", imageController.PostImage)
+
+		r.Get("/{id}", imageController.GetImage)
 	})
 
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
