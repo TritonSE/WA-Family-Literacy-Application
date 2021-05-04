@@ -12,5 +12,6 @@
     "explore": "Explore",
     "learn": "Learn",
     "liveChat" : "Live chat is coming soon",
-    "untilThen": "Until then..."
+    "untilThen": "Until then...",
+    "pageMofN": "Page %{m} of %{n}"
 }
