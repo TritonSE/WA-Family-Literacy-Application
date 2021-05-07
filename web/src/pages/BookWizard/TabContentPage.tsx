@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Editor from 'ckeditor5/build/ckeditor';
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -18,6 +18,10 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     });
   }, [body, video]);
 
+  const editorConfiguration = {
+    toolbar: [ 'heading','|','bold','italic','underline','link','bulletedList','numberedList', '|','imageUpload','insertTable','mediaEmbed','undo','redo']
+  };
+
   return (
     <div>
       <input 
@@ -26,7 +30,8 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
         onChange={ e => setVideo(e.target.value)}
       />
       <CKEditor
-        editor= { ClassicEditor }
+        editor= { Editor }
+        config = { editorConfiguration }
         data="<p>Hello from CKEditor 5!</p>"
         onChange= { (event: any, editor: any) => {
           const data = editor.getData();
