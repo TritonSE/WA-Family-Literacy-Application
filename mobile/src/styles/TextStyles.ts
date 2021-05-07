@@ -4,17 +4,14 @@ export const TextStyles = StyleSheet.create({
   heading1: {
     fontSize: 24,
     fontFamily: 'Gotham-Bold',
-    fontWeight: 'bold',
   },
   heading2: {
     fontSize: 18,
     fontFamily: 'Gotham-Bold',
-    fontWeight: 'bold',
   },
   heading3: {
     fontSize: 18,
     fontFamily: 'Gotham-Medium',
-    fontWeight: 'normal',
   },
 
   body1: {
