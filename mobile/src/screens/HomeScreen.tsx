@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Svg, Circle } from 'react-native-svg';
 
 import { BookFilter } from '../components/BookFilter';
@@ -13,11 +13,24 @@ import { Colors } from '../styles/Colors';
 import { I18nContext } from '../context/I18nContext';
 import { Language } from '../models/Languages';
 import { Book } from '../models/Book';
+import { YoutubeVideo } from '../components/YoutubeVideo';
 
 // how many books to display per page (in the Paginated Booklist)
 const BOOKS_PER_PAGE = 9;
 
 const { width } = Dimensions.get('window');
+
+// YouTube videos shown in the orange header, with their titles
+const TOP_VIDEOS = [
+  {
+    title: 'Welcome!',
+    url: 'https://youtu.be/A4Dv8Z_M5VQ',
+  },
+  {
+    title: 'The Big 5: Talk, Read, Sing, Write, and Play',
+    url: 'https://youtu.be/-dYFwK5eDS0',
+  },
+];
 
 /**
  * Renders the homescreen for the app. Currently displays heading, new books, all books.
@@ -56,11 +69,22 @@ export const HomeScreen: React.FC = () => {
       style={{ flex: 1 }}
     >
       <ScrollView>
-
+        {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
+        <View style={styles.top}/>
+        {/* Starts at the top of the screen, containing the welcome videos and orange rounded background */}
         <View style={styles.heading}>
-          <View style={styles.top}/>
-          <Svg height="100%" width="100%" viewBox="0 0 1 1">
-            <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
+          <SafeAreaView edges={['top']}>
+            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.videos}>
+              {TOP_VIDEOS.map(video => (
+                <View key={video.url} style={styles.videoContainer}>
+                  <YoutubeVideo url={video.url} width={0.8 * width} height={9/16 * 0.8 * width} />
+                  <Text style={[TextStyles.heading2, styles.videoTitle]}>{video.title}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </SafeAreaView>
+          <Svg height="100%" width="100%" viewBox="0 0 1 1" style={styles.circle}>
+            <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange}/>
           </Svg>
         </View>
 
@@ -69,7 +93,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View>
-          { booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/> }
+          {booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/>}
         </View>
 
         <View style={styles.allBooksTextPadding}>
@@ -81,10 +105,10 @@ export const HomeScreen: React.FC = () => {
 
           <View style={styles.bookDisplay}>
 
-            { loading ? <LoadingCircle/> : <PaginatedBookList books={filteredBooks} booksPerPage={BOOKS_PER_PAGE}/> }
+            {loading ? <LoadingCircle/> : <PaginatedBookList books={filteredBooks} booksPerPage={BOOKS_PER_PAGE}/>}
 
             <View style={loading ? styles.loading : filteredBooks.length === 0 ? styles.loading : null}>
-              { !loading && filteredBooks.length === 0 ? <Text style={styles.noResult}>No results</Text> : null }
+              {!loading && filteredBooks.length === 0 ? <Text style={styles.noResult}>No results</Text> : null}
             </View>
 
           </View>
@@ -123,6 +147,25 @@ const styles = StyleSheet.create({
     marginTop: -500,
     height: 500,
     backgroundColor: Colors.orange,
+  },
+  circle: {
+    marginTop: -400,
+    zIndex: -1, // needed to render behind the welcome videos
+  },
+  videos: {
+    width: '100%',
+    height: '100%',
+  },
+  videoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    width: width,
+    height: 300,
+  },
+  videoTitle: {
+    color: Colors.white,
+    marginTop: 16,
   },
   newBooksTextPadding: {
     paddingTop: 33,
