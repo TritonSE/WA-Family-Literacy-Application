@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -19,7 +20,15 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
   }, [body, video]);
 
   const editorConfiguration = {
-    toolbar: [ 'heading','|','bold','italic','underline','link','bulletedList','numberedList', '|','imageUpload','insertTable','mediaEmbed','undo','redo']
+    toolbar: [ 'heading','|','bold','italic','underline','link','bulletedList','numberedList', '|','blockQuote','imageUpload','insertTable','undo','redo'],
+    simpleUpload: {
+      uploadUrl: "https://api.imgur.com/3/image",
+    },
+    image: {
+      upload: {
+        types: ['jpeg, png']
+      }
+    }
   };
 
   return (
