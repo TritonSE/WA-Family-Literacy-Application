@@ -64,11 +64,15 @@ const SettingsTab: React.FC = () => {
 };
 
 const MoreInfoTab: React.FC = () => {
+  const i18nCtx = useContext(I18nContext);
+  const { i18n, setLocale, t, locale } = i18nCtx;
+  const languages = Object.keys(i18n.translations) as Language[];
+
   const [value, onChangeText] = React.useState('');
 
   return (
     <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.heading3, {marginBottom: 20}]}>Social Media</Text>
+      <Text style={[TextStyles.heading3, {marginBottom: 20}]}>{t("socialMedia")}</Text>
       <View style={styles.socialRow}>
         <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
           <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
@@ -83,13 +87,13 @@ const MoreInfoTab: React.FC = () => {
           <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/tiktok.png')}/>
         </TouchableOpacity>
       </View>
-      <LargeButton text="Donate" onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
-      <LargeButton text="Become a Volunteer" onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
+      <LargeButton text={t("donate")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
+      <LargeButton text={t("volunteer")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
       <Text style={[TextStyles.heading1, {textAlign: 'center', marginTop: 20}]}>
-        Interested in our Program?
+        {t("tagline")}
       </Text>
-      <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 10}]}>
-        Please send us a message!
+      <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 20, marginBottom: 10}]}>
+        {t("contactUs")}
       </Text>
       <TextInput
         style={styles.textBox}
@@ -100,7 +104,7 @@ const MoreInfoTab: React.FC = () => {
         value={value}
       />
       <View style={{ paddingBottom: 15 }}>
-        <LargeButton text="Send" onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+        <LargeButton text={t("send")} onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
       </View>
     </View>
   );
