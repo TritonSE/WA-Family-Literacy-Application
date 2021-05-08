@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   textBox: {
-    height: 300,
-    width: 280,
+    height: 170,
+    width: 298,
     borderWidth: 1,
     borderColor: Colors.orange,
     padding: 10,
