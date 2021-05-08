@@ -1,3 +1,5 @@
+// import FileReader from '@ckeditor/ckeditor5-upload/src/filereader';
+import { ImageAPI } from '../api/ImageAPI';
 /* eslint-disable */ 
 export class MyUploadAdapter {
 
@@ -5,12 +7,15 @@ export class MyUploadAdapter {
         // CKEditor 5's FileLoader instance.
         this.loader = loader;
 
+        this.imageAPI = new ImageAPI('http://localhost:8080')
+
         // URL where to send files.
         this.url = 'http://localhost:8080/image';
     }
 
     // Starts the upload process.
     upload() {
+
         return new Promise( ( resolve, reject ) => {
             this._initRequest();
             this._initListeners( resolve, reject );
@@ -30,7 +35,6 @@ export class MyUploadAdapter {
         const xhr = this.xhr = new XMLHttpRequest();
 
         xhr.open( 'POST', this.url, true );
-        xhr.responseType = 'json';
     }
 
     // Initializes XMLHttpRequest listeners.
@@ -43,15 +47,16 @@ export class MyUploadAdapter {
         xhr.addEventListener( 'abort', () => reject() );
         xhr.addEventListener( 'load', () => {
             const response = xhr.response;
+            console.log(response)
 
-            if ( !response || response.error ) {
+            if ( response == "error" ) {
                 return reject( response && response.error ? response.error.message : genericErrorText );
             }
-
             // If the upload is successful, resolve the upload promise with an object containing
             // at least the "default" URL, pointing to the image on the server.
-            resolve( {
-                default: response.url
+            resolve( 
+            {
+                default: response
             } );
         } );
 
@@ -67,9 +72,13 @@ export class MyUploadAdapter {
 
     // Prepares the data and sends the request.
     _sendRequest() {
-        const mimeType = this.loader.file.blob;
-        this.xhr.setRequestHeader("Content-Type", mimeType)
-
-        this.xhr.send( this.loader.file );
+        this.xhr.setRequestHeader("Content-Type", "image/png");
+        this.loader.file.then((file, reject) => {
+            file.arrayBuffer().then(array => {
+                const uintArray = new Uint8Array(array)
+                this.xhr.send(uintArray);
+            })
+        })
+        
     }
 }

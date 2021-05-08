@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"io/ioutil"
 	"net/http"
@@ -52,6 +53,7 @@ func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 // posts an image to the database and returns the url at which it can be found (/image)
 func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	var content_type string = req.Header.Get("Content-Type")
+	fmt.Print(content_type)
 
 	var baseURL string = utils.GetEnv("BASE_URL", "http://localhost:8080")
 
@@ -63,6 +65,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 
 	if err != nil {
+		fmt.Print(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -79,6 +82,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	img, _, err := image.Decode(bytes.NewReader(body))
 
 	if err != nil {
+		fmt.Print(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -87,6 +91,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	hash, err := blurhash.Encode(4, 4, img)
 
 	if err != nil {
+		fmt.Print(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -110,6 +115,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	err = c.Image.InsertImage(req.Context(), body, hash, content_type)
 
 	if err != nil {
+		fmt.Print(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
