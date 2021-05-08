@@ -20,7 +20,17 @@ body {
     font-family: 'GothamRounded - Light'
 }
 
+.h2 {
+    font-size: 40px;
+    font-family: 'GothamRounded - Bold';
+  }
+
 @font-face {
     font-family: 'GothamRounded - Light';
     src: url(./assets/fonts/gotham-rounded/GothamRounded-Light.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'GothamRounded - Bold';
+    src: url(./assets/fonts/gotham-rounded/GothamRounded-Bold.otf) format('opentype');
 }

@@ -1,0 +1,22 @@
+p {
+    margin: 0px;
+}
+
+.title {
+    text-align: left;
+    margin-top: 94px;
+}
+
+.row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.clickableText {
+    text-decoration: underline;
+    border: none;
+    outline: none;
+    background-color: var(--white);
+    cursor: pointer;
+  }
