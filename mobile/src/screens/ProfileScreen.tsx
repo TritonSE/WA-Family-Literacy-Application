@@ -65,8 +65,7 @@ const SettingsTab: React.FC = () => {
 
 const MoreInfoTab: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
-  const { i18n, setLocale, t, locale } = i18nCtx;
-  const languages = Object.keys(i18n.translations) as Language[];
+  const { t } = i18nCtx;
 
   const [value, onChangeText] = React.useState('');
 
