@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { MyUploadAdapter } from "../../api/ImageUploadAdapter";
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 
 type TabConentPageProps = {
@@ -19,16 +20,16 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     });
   }, [body, video]);
 
+  function MyCustomUploadAdapterPlugin( editor: any ): any {
+    editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
+      // Configure the URL to the upload script in your back-end here!
+      return new MyUploadAdapter( loader );
+    };
+  }
+
   const editorConfiguration = {
     toolbar: [ 'heading','|','bold','italic','underline','link','bulletedList','numberedList', '|','blockQuote','imageUpload','insertTable','undo','redo'],
-    simpleUpload: {
-      uploadUrl: "https://api.imgur.com/3/image",
-    },
-    image: {
-      upload: {
-        types: ['jpeg, png']
-      }
-    }
+    extraPlugins: [ MyCustomUploadAdapterPlugin ]
   };
 
   return (
