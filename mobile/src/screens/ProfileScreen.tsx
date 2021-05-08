@@ -1,17 +1,66 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import { Svg, Circle } from 'react-native-svg';
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking } from 'react-native';
+
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
 import { LargeButton } from '../components/LargeButton';
+import { I18nContext } from '../context/I18nContext';
+import { Language, Languages } from '../models/Languages';
 
 const SavedTab: React.FC = () => {
   return <Text> Saved </Text>;
 };
 
+/**
+ * Settings Tab to set app locale (language)
+ */
 const SettingsTab: React.FC = () => {
-  return <Text> Settings </Text>;
+
+  const i18nCtx = useContext(I18nContext);
+  const { i18n, setLocale, t, locale } = i18nCtx;
+  const languages = Object.keys(i18n.translations) as Language[];
+
+  return (
+    <View>
+		
+      <View style={styles.login}>
+        <LargeButton text="Sign In" onPress={() => null} underline={true}/>
+        <LargeButton text="Sign Up" onPress={() => null} underline={true}/>
+      </View>
+
+      <View style={styles.langSelector}>
+
+        <View style={styles.languageText}>
+          <Text style={TextStyles.heading3}>{t("language")}</Text>
+        </View>
+				
+        {languages.map((lang: Language) => (
+          <View key={`lang${lang}`} style={styles.langElem}>
+						
+            <Text style={TextStyles.body1}>{Languages[lang]}</Text>
+
+            <Pressable
+              onPress={() => setLocale(lang)}
+              style={styles.box}
+            >
+              { lang === locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
+            </Pressable>
+
+          </View>
+        ))}
+
+      </View>
+
+      <View style={{height:300}}/>
+
+    </View>
+	
+	
+  );
+
 };
 
 const MoreInfoTab: React.FC = () => {
@@ -19,7 +68,7 @@ const MoreInfoTab: React.FC = () => {
 
   return (
     <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.heading3, {marginBottom: 20}]} >Social Media</Text>
+      <Text style={[TextStyles.heading3, {marginBottom: 20}]}>Social Media</Text>
       <View style={styles.socialRow}>
         <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
           <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
@@ -113,4 +162,37 @@ const styles = StyleSheet.create({
     paddingTop: 33,
     alignItems: 'center',
   },
+  login: {
+    alignSelf: 'center', 
+    alignItems: 'center', 
+    width: 298,
+  },
+  langSelector: {
+    marginTop: 30, 
+    alignSelf: 'center', 
+    width: 298,
+  },
+  languageText: {
+    marginBottom: 10,
+  },
+  langElem: {
+    marginTop: 15, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  box: {
+    height: 24,
+    width: 24,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: Colors.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  boxChecked: {
+    height: 22,
+    width: 22,
+    tintColor: Colors.orange,
+  }
 });

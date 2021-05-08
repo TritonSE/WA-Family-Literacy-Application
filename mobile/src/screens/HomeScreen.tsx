@@ -31,7 +31,9 @@ export const HomeScreen: React.FC = () => {
     .slice(0, 5);
   const { books, loading } = booksCtx;
 
+  //i18n Context and translate function "t"
   const i18nCtx = useContext(I18nContext);
+  const { t } = i18nCtx;
 
   // the current search term, selected languages, and filtered books
   const [search, setSearch] = useState('');
@@ -65,7 +67,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View style={styles.newBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{i18nCtx.t('newBooks')}</Text>
+          <Text style={TextStyles.heading3}>{t('newBooks')}</Text>
         </View>
 
         <View>
@@ -73,7 +75,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View style={styles.allBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{i18nCtx.t('allBooks')}</Text>
+          <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
         </View>
 
         <View>

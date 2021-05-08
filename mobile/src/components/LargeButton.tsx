@@ -3,9 +3,9 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
-type LargeButtonProps = { text: string, onPress: () => void };
+type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean };
 
-export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false }) => {
   const [active, setActive] = React.useState(false);
 
   return (
@@ -18,7 +18,7 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress }) => {
         }
       } 
       style={[styles.button, active ? styles.activeButton : styles.inactiveButton]} >
-      <Text style={[TextStyles.heading3, active ? styles.activeText : styles.inactiveText]}>
+      <Text style={[TextStyles.heading3, underline && styles.underline, active ? styles.activeText : styles.inactiveText]}>
         {text}
       </Text>
     </Pressable>
@@ -27,7 +27,6 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    justifyContent: 'center',
     height: 43,
     width: 298,
     borderWidth: 2,
@@ -57,4 +56,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
+  underline: {
+    textDecorationLine: 'underline',
+  }
 });
