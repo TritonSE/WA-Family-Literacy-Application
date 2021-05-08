@@ -1,0 +1,21 @@
+.container {
+    position: relative;
+    display: inline-block;
+  }
+
+.container:before {
+    content: "";
+    display: block;
+    height: 0;
+    width: 0;
+    padding-bottom: 100%;
+}
+
+.adminCard {
+    width: 100%;
+    height: 20;
+    border: 1px solid var(--dark-grey);
+    border-radius: 5px;
+    display: block;
+    position: absolute;
+}

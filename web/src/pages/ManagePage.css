@@ -19,4 +19,15 @@ p {
     outline: none;
     background-color: var(--white);
     cursor: pointer;
-  }
+}
+
+.admins {
+    width: 100%;
+    margin-top: 58px;
+    margin-bottom: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-rows: 1fr;
+    row-gap: 36px;
+    column-gap: 131px;
+}
