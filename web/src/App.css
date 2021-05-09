@@ -23,7 +23,12 @@ body {
 .h2 {
     font-size: 40px;
     font-family: 'GothamRounded - Bold';
-  }
+}
+
+.h3 {
+    font-size: 28px;
+    font-family: 'GothamRounded - Bold';
+}
 
 @font-face {
     font-family: 'GothamRounded - Light';

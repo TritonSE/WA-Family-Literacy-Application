@@ -11,19 +11,21 @@ export const ManagePage: React.FC = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
 
   const [deleteMode, setDeleteMode] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
 
   const client = useContext(APIContext);
 
   useEffect(()=> {
-    // (async () => {
-    //   const res = await client.getAdmins();
-    //   setAdmins(res);
-    // });
+    (async () => {
+      const res = await client.getAdmins();
+      setAdmins(res);
+    });
 
     const test: Admin[] = [
       {
         id: '1',
-        name: 'Bob',
+        name: 'BobBobBobBobBobBobBobBobBobBobBob',
         email: 'bob@gmail.com',
         can_delete_books: true,
         can_manage_users: true,
@@ -37,7 +39,7 @@ export const ManagePage: React.FC = () => {
         can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
-        is_primary_admin: false,
+        is_primary_admin: true,
       },
       {
         id: '3',
@@ -47,28 +49,75 @@ export const ManagePage: React.FC = () => {
         can_manage_users: true,
         can_upload_books: true,
         is_primary_admin: false,
+      },
+      {
+        id: '4',
+        name: 'Olivia',
+        email: 'olivia@gmail.com',
+        can_delete_books: true,
+        can_manage_users: true,
+        can_upload_books: true,
+        is_primary_admin: false,
+      },
+      {
+        id: '5',
+        name: 'John',
+        email: 'olivia@gmail.com',
+        can_delete_books: true,
+        can_manage_users: true,
+        can_upload_books: true,
+        is_primary_admin: false,
+      },
+      {
+        id: '6',
+        name: 'Jim',
+        email: 'olivia@gmail.com',
+        can_delete_books: true,
+        can_manage_users: true,
+        can_upload_books: true,
+        is_primary_admin: false,
+      },
+      {
+        id: '7',
+        name: 'Emma',
+        email: 'olivia@gmail.com',
+        can_delete_books: true,
+        can_manage_users: true,
+        can_upload_books: true,
+        is_primary_admin: false,
       }
     ];
   
-    setAdmins(test);
-
+    const primaryAdmin = test.find(a => a.is_primary_admin);
+    const temp = test.filter(a => !a.is_primary_admin);
+  
+    if (primaryAdmin) {
+      setAdmins([primaryAdmin, ...temp]);
+    } else {
+      setAdmins(test);
+    }
 
   },[]);
 
-  // useEffect(() => {
-  //   const primaryAdmin = admins.find(a => a.is_primary_admin);
-  //   const temp = admins.filter(a => !a.is_primary_admin);
 
-  //   if (primaryAdmin) {
-  //     setAdmins([primaryAdmin, ...temp]);
-  //   }
-  // }, [admins]);
+  const displayModal = (id: string): void => {
+    setConfirmationModal(true);
+    setDeleteId(id);
+  };
+
+  const handleDelete = async (): Promise<void> => {
+    setConfirmationModal(false);
+    // await client.deleteAdmin(deleteId);
+    setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId));
+  };
 
   console.log(admins);
+
   
   return (
 
     <div>
+
 
       <div className="row">
 
@@ -78,15 +127,38 @@ export const ManagePage: React.FC = () => {
           {deleteMode ? 'Done': 'Delete Account'}
         </button>
 
-
       </div>
+
 
       <div className="admins"> 
         { admins.map((admin) => (
-          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode}/>
+          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayModal}/>
         ))
         }
       </div>
+
+      {confirmationModal && 
+        (
+          <div className="modal">
+            <div className="modalContent">    
+
+              <form>
+
+                <div>
+                  <p className="h3 modalTitle">Are you sure you want to delete this account?</p>
+                  <div className="buttonsContainer">
+                    <button className="cancelBtn body3" type="button" onClick={() => { setConfirmationModal(false); }}>Cancel</button>
+                    <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+
+        )
+      }
 
 
     </div>

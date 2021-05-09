@@ -5,6 +5,7 @@ p {
 .title {
     text-align: left;
     margin-top: 94px;
+    margin-left: 12px;
 }
 
 .row {
@@ -25,9 +26,56 @@ p {
     width: 100%;
     margin-top: 58px;
     margin-bottom: 50px;
+    margin-left: 12px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-template-rows: 1fr;
-    row-gap: 36px;
     column-gap: 131px;
+    row-gap: 36px;
+}
+
+.modal {
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    overflow: auto; /* Enable scroll if needed */
+    backdrop-filter: blur(5px) brightness(68%);
+}
+
+.modalContent {
+    width: 40%; /* Could be more or less, depending on screen size */
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 40px 109px;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+}
+
+.modalTitle {
+    margin-bottom: 40px;
+}
+
+.cancelBtn {
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--orange);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+.deleteBtn {
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--black);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--orange);
+    cursor: pointer;
 }
