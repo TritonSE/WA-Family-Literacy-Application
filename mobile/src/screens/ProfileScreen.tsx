@@ -88,7 +88,7 @@ const MoreInfoTab: React.FC = () => {
       </View>
       <LargeButton text={t("donate")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
       <LargeButton text={t("volunteer")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
-      <Text style={[TextStyles.heading1, {textAlign: 'center', marginTop: 20}]}>
+      <Text style={[TextStyles.heading3, {textAlign: 'center', marginTop: 20}]}>
         {t("tagline")}
       </Text>
       <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 20, marginBottom: 10}]}>
