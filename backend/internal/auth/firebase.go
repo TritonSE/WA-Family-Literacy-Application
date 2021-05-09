@@ -20,3 +20,7 @@ func (a *FirebaseAuthenticator) VerifyToken(ctx context.Context, token string) (
 	}
 	return result.UID, true
 }
+
+func (a *FirebaseAuthenticator) CreateUser(ctx context.Context, email string, pwd string) (string) {
+
+}
