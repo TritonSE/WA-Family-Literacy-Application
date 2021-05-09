@@ -36,21 +36,52 @@
 }
 
 .deleteIcon {
-    width: 42px;
-    height: 42px;
+    width: 26px;
+    height: 26px;
+    margin-left: 32px;
+    /* margin-right: 73px; */
     cursor: pointer;
     position: absolute;
     top: 50%;
-    left: 100%;;
+    left: 100%;
     transform: translate(0%, -50%);
 }
 
 .lockIcon {
-    width: 42px;
-    height: 42px;
+    width: 31px;
+    height: 36px;
+    margin-left: 29px;
     cursor: pointer;
     position: absolute;
     top: 50%;
-    left: 100%;;
+    left: 100%;
     transform: translate(0%, -50%);
+}
+
+.modal {
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    overflow: auto; /* Enable scroll if needed */
+    backdrop-filter: blur(5px) brightness(68%);
+}
+
+.modalContentManage {
+    margin: 10% auto; /* 10% from the top and centered */
+    margin: 100px;
+    padding: 109px 480px;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+}
+
+.modalTitleManage {
+    margin-bottom: 39px;
+}
+
+.modalTextManage {
+    margin-bottom: 100px;
 }

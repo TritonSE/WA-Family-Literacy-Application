@@ -45,7 +45,7 @@ p {
     backdrop-filter: blur(5px) brightness(68%);
 }
 
-.modalContent {
+.modalContentDelete {
     width: 40%; /* Could be more or less, depending on screen size */
     margin: 15% auto; /* 15% from the top and centered */
     padding: 40px 109px;
@@ -54,7 +54,13 @@ p {
     background-color: var(--white);
 }
 
-.modalTitle {
+.buttonsContainer {
+    text-align: center;
+    margin: 10px;
+    margin-top: 40px;
+}
+
+.modalTitleDelete {
     margin-bottom: 40px;
 }
 
@@ -78,4 +84,19 @@ p {
     box-shadow: 1px 2px 5px var(--dark-grey);
     background-color: var(--orange);
     cursor: pointer;
+}
+
+.addIcon {
+    width: 26px;
+    height: 26px;
+    margin-left: 10px;
+}
+
+.addButton {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
 }

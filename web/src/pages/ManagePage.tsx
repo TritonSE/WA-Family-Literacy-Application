@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AdminCard } from '../components/AdminCard';
 import { APIContext } from '../context/APIContext';
 import { Admin } from '../models/Admin';
+import AddIcon from '../assets/images/plus-circle-solid-green.svg';
 
 import './ManagePage.css';
 
@@ -11,8 +12,9 @@ export const ManagePage: React.FC = () => {
   const [admins, setAdmins] = useState<Admin[]>([]);
 
   const [deleteMode, setDeleteMode] = useState(false);
-  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState('');
+
 
   const client = useContext(APIContext);
 
@@ -100,16 +102,17 @@ export const ManagePage: React.FC = () => {
   },[]);
 
 
-  const displayModal = (id: string): void => {
-    setConfirmationModal(true);
+  const displayModalDelete = (id: string): void => {
+    setDeleteModal(true);
     setDeleteId(id);
   };
 
   const handleDelete = async (): Promise<void> => {
-    setConfirmationModal(false);
+    setDeleteModal(false);
     // await client.deleteAdmin(deleteId);
     setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId));
   };
+
 
   console.log(admins);
 
@@ -132,33 +135,37 @@ export const ManagePage: React.FC = () => {
 
       <div className="admins"> 
         { admins.map((admin) => (
-          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayModal}/>
+          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayModalDelete}/>
         ))
         }
       </div>
 
-      {confirmationModal && 
+      {deleteModal && 
         (
           <div className="modal">
-            <div className="modalContent">    
-
+            <div className="modalContentDelete">    
               <form>
-
                 <div>
-                  <p className="h3 modalTitle">Are you sure you want to delete this account?</p>
+                  <p className="h3 modalTitleDelete">Are you sure you want to delete this account?</p>
                   <div className="buttonsContainer">
-                    <button className="cancelBtn body3" type="button" onClick={() => { setConfirmationModal(false); }}>Cancel</button>
+                    <button className="cancelBtn body3" type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
                     <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
                   </div>
                 </div>
-
               </form>
-
             </div>
           </div>
 
         )
       }
+
+
+      <div>
+        <button className="addButton" onClick={() => alert("clicked")}>
+          <p className="body3">New Account</p>
+          <img className="addIcon" src={AddIcon} alt='' />
+        </button>
+      </div>
 
 
     </div>
