@@ -25,6 +25,7 @@ func TestMain(m *testing.M) {
 	_, _ = conn.Exec(ctx, "TRUNCATE book_contents")
 	_, _ = conn.Exec(ctx, "TRUNCATE users")
 	_, _ = conn.Exec(ctx, "TRUNCATE admins")
+	_, _ = conn.Exec(ctx, "TRUNCATE image")
 
 	// Populate books database
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('c_id', 'c','c1');")
