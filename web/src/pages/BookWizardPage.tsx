@@ -21,16 +21,31 @@ export const BookWizardPage: React.FC = () => {
     },
   };
 
+  const emptyTabContent: TabContent = {
+    body: "",
+    video: undefined
+  };
+
   // const [readTabContent, setReadTabContent] =  useState<TabContent | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
+  const [image, setImage] = useState<string>("");
+  const [readTabContent, setReadTabContent] = useState<TabContent>(emptyTabContent);
+  const [exploreTabContent, setExploreTabContent] = useState<TabContent>(emptyTabContent);
+  const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
 
   const [newBook, setNewBook] = useState<CreateBook>(emptyBook);
   useEffect(() => {
-    console.log(newBook);
-  }, [newBook]);
+    console.log(readTabContent);
+  }, [readTabContent]);
+
+  const updateReadTabContent = (data: TabContent): void => {
+    setReadTabContent(data);
+  };
   
 
 
-  const setReadTabContent = ( data: TabContent): void => {
+  const setReadTabContent1 = ( data: TabContent): void => {
     setNewBook(newBook => ({
       ...newBook, read:data
     }));
@@ -39,7 +54,7 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      <TabContentPage onContentChange= {setReadTabContent}>
+      <TabContentPage onContentChange= {updateReadTabContent}>
       </TabContentPage>
     </div>
   );
