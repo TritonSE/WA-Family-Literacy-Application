@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { MyUploadAdapter } from "../../api/ImageUploadAdapter";
+import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -22,7 +22,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
       // Configure the URL to the upload script in your back-end here!
-      return new MyUploadAdapter( loader );
+      return new ImageUploadAdapter( loader );
     };
   }
 
