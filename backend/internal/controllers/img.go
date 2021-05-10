@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"image"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 
 	_ "image/jpeg"
 	_ "image/png"
@@ -30,13 +30,8 @@ var allowedTypes = map[string]struct{}{
 // gets an image from the database (/image/{id})
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	var id string = chi.URLParam(req, "id")
-	fmt.Print(id)
-	id, err := url.QueryUnescape(id)
-
-	if err != nil {
-		fmt.Print(err)
-		fmt.Println(id)
-	}
+	b64, _ := base64.URLEncoding.DecodeString(id)
+	id = string(b64)
 
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
@@ -111,7 +106,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 
 	if storedImage != nil {
 		// ensure hash is clean for urls
-		hash = url.QueryEscape(hash)
+		hash = base64.URLEncoding.EncodeToString([]byte(hash))
 		returnUrl := baseURL + "/images/" + hash
 		writeResponse(rw, http.StatusOK, returnUrl)
 		return
@@ -125,8 +120,8 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// code to make return url written twice as to not pass queryescaped hash to InsertImage
-	hash = url.QueryEscape(hash)
+	// rseturn url written twice as to not pass queryescaped hash to InsertImage
+	hash = base64.URLEncoding.EncodeToString([]byte(hash))
 	returnUrl := baseURL + "/images/" + hash
 
 	writeResponse(rw, http.StatusCreated, returnUrl)
