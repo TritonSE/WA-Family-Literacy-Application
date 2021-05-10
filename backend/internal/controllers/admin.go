@@ -89,7 +89,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	writeResponse(rw, http.StatusOK, cuid)
 }
 
-// Get list of admins - anyone can request
+// Get list of admins
 func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request) {
 	// Check auth token
 	uid, ok := req.Context().Value("user").(string)
@@ -99,7 +99,7 @@ func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request
 		return
 	}
 
-	// Check if admin
+	// Check admin permissions
 	isAdmin, _, _, _, err :=
 		c.Admins.FetchAdminPermissions(req.Context(), uid)
 	if err != nil {
@@ -107,18 +107,17 @@ func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request
 		fmt.Println(err)
 		return
 	}
-
 	if !isAdmin {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
+
 	admins, err := c.Admins.FetchAdmins(req.Context())
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	fmt.Printf("Admin: %s\n", admins[0].ID)
 	writeResponse(rw, http.StatusOK, admins)
 }
 
@@ -162,6 +161,7 @@ func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request
 	writeResponse(rw, http.StatusOK, admin)
 }
 
+// Update admin name/permissions
 func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request) {
 	var adminID string = chi.URLParam(req, "id")
 	var uadmin models.UpdateAdmin
