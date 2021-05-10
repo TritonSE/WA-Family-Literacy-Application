@@ -1,9 +1,9 @@
 package controllers_test
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
-    "fmt"
 
 	"github.com/stretchr/testify/require"
 
@@ -13,9 +13,9 @@ import (
 
 // Test for the book list function
 func TestGetBooks(t *testing.T) {
-    fmt.Print("\n================ START BOOK TESTS ================\n")
+	fmt.Print("\n================ START BOOK TESTS ================\n")
 
-    fmt.Print("\n---------------- GET BOOK TESTS ----------------\n")
+	fmt.Print("\n---------------- GET BOOK TESTS ----------------\n")
 	var response []models.Book
 	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books", "", 200, &response)
 
@@ -55,9 +55,9 @@ func TestGetNullBook(t *testing.T) {
 
 // Test auth for create
 func TestCreateBookUnAuth(t *testing.T) {
-    fmt.Print("\n---------------- CREATE BOOK TESTS ----------------\n")
+	fmt.Print("\n---------------- CREATE BOOK TESTS ----------------\n")
 	body := `{"title": "Lonely Book", "author":"Lonely Man", "image":null}`
-    var response string
+	var response string
 
 	testutils.MakeHttpRequest(t, "POST", ts.URL+"/books", body, http.StatusUnauthorized,
 		&response)
@@ -140,8 +140,8 @@ func TestDuplicateBookDetails(t *testing.T) {
 
 // Test auth for delete
 func TestDeleteBookUnAuth(t *testing.T) {
-    fmt.Print("\n---------------- DELETE BOOK TESTS ----------------\n")
-    var response string
+	fmt.Print("\n---------------- DELETE BOOK TESTS ----------------\n")
+	var response string
 
 	testutils.MakeHttpRequest(t, "DELETE", ts.URL+"/books/c_id/en", "", http.StatusUnauthorized,
 		&response)
@@ -197,16 +197,16 @@ func TestDeleteBookDetOnInvalidLang(t *testing.T) {
 
 // Test auth for delete
 func TestUpdateBookUnAuth(t *testing.T) {
-    fmt.Print("\n---------------- UPDATE BOOK TESTS ----------------\n")
+	fmt.Print("\n---------------- UPDATE BOOK TESTS ----------------\n")
 	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
-    var response string
+	var response string
 
 	testutils.MakeHttpRequest(t, "PATCH", ts.URL+"/books/update", body, http.StatusUnauthorized,
-            &response)
+		&response)
 	require.Equal(t, "User needs to be authenticated", response)
 
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/books/update", body, http.StatusForbidden,
-            &response, "test-token-user1")
+		&response, "test-token-user1")
 	require.Equal(t, "do not have permission", response)
 
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/books/update", body, http.StatusForbidden,
@@ -219,7 +219,7 @@ func TestUpdateBook(t *testing.T) {
 	var updatedBook models.Book
 	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/books/update", body, http.StatusOK,
-            &updatedBook, "test-token-primary")
+		&updatedBook, "test-token-primary")
 
 	require.Equal(t, "updated_title", updatedBook.Title)
 	require.Equal(t, "updated_author", updatedBook.Author)
@@ -235,14 +235,14 @@ func TestUpdateBookDetails(t *testing.T) {
 	"learn": {"video": null, "body":"updated_l"}
 	}`
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/books/update/en", body, http.StatusOK,
-            &updatedBook, "test-token-primary")
+		&updatedBook, "test-token-primary")
 
 	require.Equal(t, "updated_r", updatedBook.Read.Body)
 	require.Equal(t, "updated_e", updatedBook.Explore.Body)
 	require.Equal(t, "updated_l", updatedBook.Learn.Body)
 
 	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/update/en", body, http.StatusOK,
-            &updatedBook)
+		&updatedBook)
 
 	require.Equal(t, "updated_r", updatedBook.Read.Body)
 	require.Equal(t, "updated_e", updatedBook.Explore.Body)
@@ -253,7 +253,7 @@ func TestUpdateBookDetails(t *testing.T) {
 func TestUpdateBookOnInvalidID(t *testing.T) {
 	body := `{"title": "updated_title", "author":"updated_author", "image":null}`
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/books/nonexistant", body,
-            http.StatusNotFound, nil, "test-token-primary")
+		http.StatusNotFound, nil, "test-token-primary")
 
 }
 
@@ -266,7 +266,7 @@ func TestUpdateBookDetailsOnInvalidID(t *testing.T) {
 		}`
 
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/nonexistant/en", body,
-            http.StatusNotFound, nil, "test-token-primary")
+		http.StatusNotFound, nil, "test-token-primary")
 }
 
 // Test updating entry with invalid lang in book contents
@@ -278,6 +278,6 @@ func TestUpdateBookDetailsOnInvalidLang(t *testing.T) {
 		}`
 
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/update/es", body,
-            http.StatusNotFound, nil, "test-token-primary")
-    fmt.Print("\n================ END BOOK TESTS ================\n\n")
+		http.StatusNotFound, nil, "test-token-primary")
+	fmt.Print("\n================ END BOOK TESTS ================\n\n")
 }

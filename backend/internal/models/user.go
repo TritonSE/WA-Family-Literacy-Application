@@ -12,4 +12,3 @@ type UpdateUser struct {
 	Name       *string `json:"name"`
 	InSanDiego *bool   `json:"in_san_diego"`
 }
-

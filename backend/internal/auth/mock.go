@@ -18,7 +18,7 @@ func (a MockAuthenticator) VerifyToken(ctx context.Context, token string) (strin
 
 func (a MockAuthenticator) GenerateToken(ctx context.Context, email string, pwd string) (string, error) {
 
-    // Set token to the part of the email before the @
-    // EX: test1@test.com -> test1
-    return strings.Split(email, "@")[0], nil
+	// Set token to the part of the email before the @
+	// EX: test1@test.com -> test1
+	return strings.Split(email, "@")[0], nil
 }

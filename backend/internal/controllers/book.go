@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-    "fmt"
 
 	"github.com/go-chi/chi"
 
@@ -12,8 +12,8 @@ import (
 )
 
 type BookController struct {
-	Books database.BookDatabase
-    Admins database.AdminDatabase
+	Books  database.BookDatabase
+	Admins database.AdminDatabase
 }
 
 // Fetches a list of all books sorted by title for the main page (/books)
@@ -54,25 +54,25 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canUploadBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canUploadBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var reqBook models.APICreateBook
 	err = json.NewDecoder(req.Body).Decode(&reqBook)
@@ -94,25 +94,25 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canUploadBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canUploadBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var reqBookDetail models.APICreateBookContents
 
@@ -150,25 +150,25 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 // deletes an entry from the book_contents table (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, _, canDeleteBooks, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canDeleteBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, _, canDeleteBooks, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canDeleteBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
@@ -194,25 +194,25 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 // deletes a book from the books table (/books/{id})
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, _, canDeleteBooks, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canDeleteBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, _, canDeleteBooks, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canDeleteBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var bookID string = chi.URLParam(req, "id")
 
@@ -236,25 +236,25 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 // updates the book from the books table (/books/{id})
 func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canUploadBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canUploadBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var bookID string = chi.URLParam(req, "id")
 	var reqBook models.APIUpdateBook
@@ -286,25 +286,25 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 // updates a book in the book_contents table (/books/{id}/{lang})
 func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Request) {
 
-    // Check auth token
-    uid, ok := req.Context().Value("user").(string)
+	// Check auth token
+	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
 
-    // Check admin permissions
-    isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if !isAdmin || !canUploadBooks {
-        writeResponse(rw, http.StatusForbidden, "do not have permission")
-        return
-    }
+	// Check admin permissions
+	isAdmin, _, canUploadBooks, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+	if !isAdmin || !canUploadBooks {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+		return
+	}
 
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
