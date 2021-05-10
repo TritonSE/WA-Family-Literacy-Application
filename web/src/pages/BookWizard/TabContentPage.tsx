@@ -19,7 +19,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     });
   }, [body, video]);
 
-  function MyCustomUploadAdapterPlugin( editor: any ): any {
+  function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
       // Configure the URL to the upload script in your back-end here!
       return new MyUploadAdapter( loader );
@@ -28,7 +28,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
 
   const editorConfiguration = {
     toolbar: [ 'heading','|','bold','italic','underline','link','bulletedList','numberedList', '|','blockQuote','imageUpload','insertTable','undo','redo'],
-    extraPlugins: [ MyCustomUploadAdapterPlugin ]
+    extraPlugins: [ CustomUploadAdapter ]
   };
 
   return (
