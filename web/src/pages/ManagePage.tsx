@@ -102,7 +102,7 @@ export const ManagePage: React.FC = () => {
   },[]);
 
 
-  const displayModalDelete = (id: string): void => {
+  const displayDeleteModal = (id: string): void => {
     setDeleteModal(true);
     setDeleteId(id);
   };
@@ -123,22 +123,21 @@ export const ManagePage: React.FC = () => {
 
 
       <div className="row">
-
         <p className="title h2">Manage Accounts</p>
 
         <button type="button" onClick={() => setDeleteMode(prevMode => !prevMode)} className="clickableText body3">
           {deleteMode ? 'Done': 'Delete Account'}
         </button>
-
       </div>
 
 
       <div className="admins"> 
         { admins.map((admin) => (
-          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayModalDelete}/>
+          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayDeleteModal}/>
         ))
         }
       </div>
+
 
       {deleteModal && 
         (

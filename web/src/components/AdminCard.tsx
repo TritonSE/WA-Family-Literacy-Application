@@ -16,12 +16,11 @@ type AdminCardProps = {
 export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelete }) => {
 
 
-  const [manageMode, setManageMode] = useState(false);
   const [manageModal, setManageModal] = useState(false);
   const [manageId, setManageId] = useState('');
   const [manageAdmin, setManageAdmin] = useState(false);
 
-  const displayModalManage = (id: string): void => {
+  const displayManageModal = (id: string): void => {
     setManageModal(true);
     setManageId(id);
   };
@@ -32,14 +31,13 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
     // setAdmins();
   };
 
-  console.log(manageMode);
-
   return (
     <div className="container">
-      <div className="adminCard" onClick={() => !deleteMode && displayModalManage(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
+
+      <div className="adminCard" onClick={() => !deleteMode && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
         <div className="infoRow">
-          <p className="text body3">Account # { admin.id } {admin.is_primary_admin && '(Primary Admin)'}</p>
-          <p className="row body3">{ admin.name }</p>
+          <p className="body3">Account # { admin.id } {admin.is_primary_admin && '(Primary Admin)'}</p>
+          <p className="adminName body3">{ admin.name }</p>
         </div>
       </div>
       
@@ -65,6 +63,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
           </div>
         )
       }
+      
     </div>
   );
 };
