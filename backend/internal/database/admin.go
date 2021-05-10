@@ -50,13 +50,14 @@ func (db *AdminDatabase) CreateAdmin(ctx context.Context, admin models.Admin) er
 
     // Insert admin into database
     var query string = "INSERT INTO admins (id, name, email, " +
-                       "can_manage_users, can_upload_books, can_delete_books) VALUES " +
-                       "($1, $2, $3, $4, $5)"
+                       "can_manage_users, can_upload_books, can_delete_books, " +
+                       "is_primary_admin) VALUES ($1, $2, $3, $4, $5, $6, false)"
 
 	_, err := db.Conn.Exec(ctx, query, admin.ID, admin.Name, admin.Email,
                            admin.CanManageUsers, admin.CanUploadBooks,
-                           admin.CanDeleteBooks, false)
+                           admin.CanDeleteBooks)
 	if err != nil {
+        fmt.Println("FAILED TO CREATE ADMIN")
 		return errors.Wrap(err, "error in CreateAdmin")
 	}
 
@@ -160,8 +161,8 @@ func (db *AdminDatabase) UpdateAdmin(ctx context.Context, id string, admin model
 
 	var query string = "UPDATE admins SET " +
 		"name = COALESCE($1, name), " +
-		"can_manage_users = COALESCE($2, can_manage_users) " +
-		"can_upload_books = COALESCE($3, can_upload_books) " +
+		"can_manage_users = COALESCE($2, can_manage_users), " +
+		"can_upload_books = COALESCE($3, can_upload_books), " +
 		"can_delete_books = COALESCE($4, can_delete_books) " +
 		"WHERE id = $5"
 
@@ -180,7 +181,7 @@ func (db *AdminDatabase) UpdateAdmin(ctx context.Context, id string, admin model
 
 // Deletes the admin with the given ID
 func (db *AdminDatabase) RemoveAdmin(ctx context.Context, id string) error {
-	_, err := db.Conn.Query(ctx, "DELETE FROM admin WHERE id = $1", id)
+	_, err := db.Conn.Query(ctx, "DELETE FROM admins WHERE id = $1", id)
 	if err != nil {
 		return errors.Wrap(err, "error in RemoveAdmin")
 	}

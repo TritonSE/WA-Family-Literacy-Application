@@ -75,7 +75,7 @@ func TestMain(m *testing.M) {
     // Seed admin database with primary admin
     conn.Exec(ctx, "INSERT INTO admins (id, email, name, can_manage_users, " +
             "can_upload_books, can_delete_books, is_primary_admin) VALUES " +
-            "('primary', 'admin@words.alive', 'admin', true, true, true, true")
+            "('primary', 'admin@words.alive', 'admin', true, true, true, true)")
 
 	// Close the server
 	defer ts.Close()

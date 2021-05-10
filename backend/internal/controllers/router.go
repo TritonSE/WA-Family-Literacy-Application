@@ -62,6 +62,7 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	})
 
     r.Get("/admins", adminController.GetAdminList)
+
 	r.Route("/image", func(r chi.Router) {
 		r.Post("/", imageController.PostImage)
 
@@ -73,7 +74,7 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
 
 	r.With(middleware.RequireAuth(authenticator)).Post("/admins", adminController.CreateAdmin)
-	r.With(middleware.RequireAuth(authenticator)).Get("/admins", adminController.GetAdminList)
+    r.With(middleware.RequireAuth(authenticator)).Get("/admins", adminController.GetAdminList)
 	r.With(middleware.RequireAuth(authenticator)).Get("/admins/{id}", adminController.GetAdminByID)
 	r.With(middleware.RequireAuth(authenticator)).Patch("/admins/{id}", adminController.UpdateAdmin)
 	r.With(middleware.RequireAuth(authenticator)).Delete("/admins/{id}", adminController.DeleteAdmin)

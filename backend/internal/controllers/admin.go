@@ -17,11 +17,13 @@ type AdminController struct {
 
 // Create admin account, if request is from another admin account
 func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request) {
+ //   var cadmin models.CreateAdmin
     var admin models.Admin
 
-    // Pull admin fields from request body
+    // Pull CreateAdmin fields from request body
 	if err := json.NewDecoder(req.Body).Decode(&admin); err != nil {
 		writeResponse(rw, http.StatusBadRequest, "bad input!")
+        fmt.Println(err)
 		return
     }
 
@@ -45,6 +47,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         return
     }
 
+    /*
     // Check for duplicate admin id/email
     dupAdmin, err := c.Admins.FetchAdminByID(req.Context(), admin.ID);
     if err != nil {
@@ -56,9 +59,10 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         writeResponse(rw, http.StatusBadRequest, "duplicate id")
         return
     }
+    */
 
-    // Check for duplicate admin id/email
-    dupAdmin, err = c.Admins.FetchAdminByEmail(req.Context(), admin.Email);
+    // Check for duplicate admin email
+    dupAdmin, err := c.Admins.FetchAdminByEmail(req.Context(), admin.Email);
     if err != nil {
         writeResponse(rw, http.StatusInternalServerError, "error")
         fmt.Println(err)
@@ -68,6 +72,9 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         writeResponse(rw, http.StatusBadRequest, "duplicate email")
         return
     }
+
+    // Create admin in firebase
+
 
     // Create new admin in database
     err = c.Admins.CreateAdmin(req.Context(), admin)
@@ -82,12 +89,34 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 
 // Get list of admins - anyone can request
 func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request) {
+    // Check auth token
+	uid, ok := req.Context().Value("user").(string)
+	if !ok {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println("unable to get user from request context")
+		return
+	}
+
+    // Check if admin
+    isAdmin, _, _, _, err :=
+        c.Admins.FetchAdminPermissions(req.Context(), uid)
+    if err != nil {
+        writeResponse(rw, http.StatusInternalServerError, "error")
+        fmt.Println(err)
+        return
+    }
+
+    if !isAdmin {
+        writeResponse(rw, http.StatusForbidden, "do not have permission")
+        return
+    }
 	admins, err := c.Admins.FetchAdmins(req.Context())
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
+    fmt.Printf("Admin: %s\n", admins[0].ID)
 	writeResponse(rw, http.StatusOK, admins)
 }
 
