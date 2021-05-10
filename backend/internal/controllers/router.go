@@ -26,10 +26,10 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	adminDB := database.AdminDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
-	bookController := BookController{Books: bookDB}
+    bookController := BookController{Books: bookDB, Admins: adminDB}
 	imageController := ImgController{Image: imageDB}
 	userController := UserController{Users: userDB}
-	adminController := AdminController{Admins: adminDB}
+    adminController := AdminController{Admins: adminDB, Auth: authenticator}
 
 	r := chi.NewRouter()
 	r.Use(chiMW.Logger)
@@ -48,17 +48,17 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
-		r.Post("/", bookController.CreateBook)
+		r.With(middleware.RequireAuth(authenticator)).Post("/", bookController.CreateBook)
 
-		r.Post("/{id}", bookController.CreateBookDetail)
+		r.With(middleware.RequireAuth(authenticator)).Post("/{id}", bookController.CreateBookDetail)
 
-		r.Delete("/{id}", bookController.DeleteBook)
+		r.With(middleware.RequireAuth(authenticator)).Delete("/{id}", bookController.DeleteBook)
 
-		r.Delete("/{id}/{lang}", bookController.DeleteBookDetail)
+		r.With(middleware.RequireAuth(authenticator)).Delete("/{id}/{lang}", bookController.DeleteBookDetail)
 
-		r.Patch("/{id}", bookController.UpdateBook)
+		r.With(middleware.RequireAuth(authenticator)).Patch("/{id}", bookController.UpdateBook)
 
-		r.Patch("/{id}/{lang}", bookController.UpdateBookDetails)
+		r.With(middleware.RequireAuth(authenticator)).Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
     r.Get("/admins", adminController.GetAdminList)
@@ -72,7 +72,6 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 	r.With(middleware.RequireAuth(authenticator)).Get("/users/{id}", userController.GetUser)
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
-
 	r.With(middleware.RequireAuth(authenticator)).Post("/admins", adminController.CreateAdmin)
     r.With(middleware.RequireAuth(authenticator)).Get("/admins", adminController.GetAdminList)
 	r.With(middleware.RequireAuth(authenticator)).Get("/admins/{id}", adminController.GetAdminByID)

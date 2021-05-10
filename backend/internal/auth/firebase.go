@@ -24,7 +24,7 @@ func (a FirebaseAuthenticator) VerifyToken(ctx context.Context, token string) (s
 	return result.UID, true
 }
 
-func (a *FirebaseAuthenticator) CreateUser(ctx context.Context, email string, pwd string) (string, error) {
+func (a FirebaseAuthenticator) GenerateToken(ctx context.Context, email string, pwd string) (string, error) {
     // Populate struct with fields for user creation
     var u *auth.UserToCreate
     u = u.Email(email)

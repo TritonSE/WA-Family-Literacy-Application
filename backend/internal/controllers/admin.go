@@ -7,21 +7,24 @@ import (
 
 	"github.com/go-chi/chi"
 
+	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type AdminController struct {
     Admins database.AdminDatabase
+    Auth auth.Authenticator
 }
 
 // Create admin account, if request is from another admin account
+// Will write the admin id as a response
 func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request) {
- //   var cadmin models.CreateAdmin
+    var cadmin models.CreateAdmin
     var admin models.Admin
 
     // Pull CreateAdmin fields from request body
-	if err := json.NewDecoder(req.Body).Decode(&admin); err != nil {
+	if err := json.NewDecoder(req.Body).Decode(&cadmin); err != nil {
 		writeResponse(rw, http.StatusBadRequest, "bad input!")
         fmt.Println(err)
 		return
@@ -47,22 +50,8 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         return
     }
 
-    /*
-    // Check for duplicate admin id/email
-    dupAdmin, err := c.Admins.FetchAdminByID(req.Context(), admin.ID);
-    if err != nil {
-        writeResponse(rw, http.StatusInternalServerError, "error")
-        fmt.Println(err)
-        return
-    }
-    if dupAdmin != nil {
-        writeResponse(rw, http.StatusBadRequest, "duplicate id")
-        return
-    }
-    */
-
     // Check for duplicate admin email
-    dupAdmin, err := c.Admins.FetchAdminByEmail(req.Context(), admin.Email);
+    dupAdmin, err := c.Admins.FetchAdminByEmail(req.Context(), cadmin.Email);
     if err != nil {
         writeResponse(rw, http.StatusInternalServerError, "error")
         fmt.Println(err)
@@ -73,8 +62,21 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         return
     }
 
-    // Create admin in firebase
+    // Generate ID for new admin account
+    cuid, err := c.Auth.GenerateToken(req.Context(), cadmin.Email, cadmin.Password)
+    if err != nil {
+        writeResponse(rw, http.StatusInternalServerError, "could not generate token")
+        fmt.Println(err)
+        return
+    }
 
+    // Populate fields of admin account
+    admin.ID = cuid
+    admin.Name = cadmin.Name
+    admin.Email = cadmin.Email
+    admin.CanManageUsers = cadmin.CanManageUsers
+    admin.CanUploadBooks = cadmin.CanUploadBooks
+    admin.CanDeleteBooks = cadmin.CanDeleteBooks
 
     // Create new admin in database
     err = c.Admins.CreateAdmin(req.Context(), admin)
@@ -84,7 +86,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
         return
     }
 
-    writeResponse(rw, http.StatusOK, "created")
+    writeResponse(rw, http.StatusOK, cuid)
 }
 
 // Get list of admins - anyone can request
