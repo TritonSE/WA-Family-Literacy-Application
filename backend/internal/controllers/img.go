@@ -30,8 +30,13 @@ var allowedTypes = map[string]struct{}{
 // gets an image from the database (/image/{id})
 func (c *ImgController) GetImage(rw http.ResponseWriter, req *http.Request) {
 	var id string = chi.URLParam(req, "id")
+	fmt.Print(id)
+	id, err := url.QueryUnescape(id)
 
-	id, _ = url.QueryUnescape(id)
+	if err != nil {
+		fmt.Print(err)
+		fmt.Println(id)
+	}
 
 	img, ctype, err := c.Image.GetImage(req.Context(), id)
 
@@ -107,8 +112,8 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 	if storedImage != nil {
 		// ensure hash is clean for urls
 		hash = url.QueryEscape(hash)
-		returnUrl := baseURL + "/image/" + hash
-		writeResponse(rw, http.StatusFound, returnUrl)
+		returnUrl := baseURL + "/images/" + hash
+		writeResponse(rw, http.StatusOK, returnUrl)
 		return
 	}
 
@@ -122,7 +127,7 @@ func (c *ImgController) PostImage(rw http.ResponseWriter, req *http.Request) {
 
 	// code to make return url written twice as to not pass queryescaped hash to InsertImage
 	hash = url.QueryEscape(hash)
-	returnUrl := baseURL + "/image/" + hash
+	returnUrl := baseURL + "/images/" + hash
 
 	writeResponse(rw, http.StatusCreated, returnUrl)
 

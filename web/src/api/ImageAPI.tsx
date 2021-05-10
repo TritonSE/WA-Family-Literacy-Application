@@ -11,7 +11,7 @@ export class ImageAPI {
             'Content-Type': contentType
         }
         
-        const res = await this.client.post('/image', body, {
+        const res = await this.client.post('/images', body, {
             headers:headers
         });
         return res.data

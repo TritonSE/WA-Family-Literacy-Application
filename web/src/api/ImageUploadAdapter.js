@@ -10,18 +10,31 @@ export class MyUploadAdapter {
         this.imageAPI = new ImageAPI('http://localhost:8080')
 
         // URL where to send files.
-        this.url = 'http://localhost:8080/image';
+        this.url = 'http://localhost:8080/images';
     }
 
     // Starts the upload process.
-    upload() {
+    // upload() {
 
-        return new Promise( ( resolve, reject ) => {
-            this._initRequest();
-            this._initListeners( resolve, reject );
-            this._sendRequest();
-        } );
+    //     return new Promise( ( resolve, reject ) => {
+    //         this._initRequest();
+    //         this._initListeners( resolve, reject );
+    //         this._sendRequest();
+    //     } );
+    // }
+
+    async upload() {
+        const file =  await this.loader.file;
+        const array = await file.arrayBuffer();
+        const url = await this.imageAPI.uploadImage(new Uint8Array(array), "image/png");
+        return {
+            default: url
+        }
     }
+
+
+
+
 
     // Aborts the upload process.
     abort() {
@@ -47,19 +60,18 @@ export class MyUploadAdapter {
         xhr.addEventListener( 'abort', () => reject() );
         xhr.addEventListener( 'load', () => {
             let response = xhr.response;
-            response = response.replace('"', '')
-            response = response.replace('"', '')
-            console.log(response)
+            response = JSON.parse(response)
+            const status = xhr.status;
 
-            if ( response == "error" ) {
-                return reject( response && response.error ? response.error.message : genericErrorText );
+            if ( status == 500 || status == 400 ) {
+                return reject( response );
             }
             // If the upload is successful, resolve the upload promise with an object containing
             // at least the "default" URL, pointing to the image on the server.
             resolve( 
-            {
+            { 
                 default: response
-            } );
+            });
         } );
 
         if ( xhr.upload ) {

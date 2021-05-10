@@ -24,15 +24,16 @@ export const BookWizardPage: React.FC = () => {
   // const [readTabContent, setReadTabContent] =  useState<TabContent | null>(null);
 
   const [newBook, setNewBook] = useState<CreateBook>(emptyBook);
+  useEffect(() => {
+    console.log(newBook);
+  }, [newBook]);
   
 
 
   const setReadTabContent = ( data: TabContent): void => {
-    setNewBook({
-      ...newBook, 
-      read: data
-    });
-    console.log(newBook);
+    setNewBook(newBook => ({
+      ...newBook, read:data
+    }));
   };
 
 
