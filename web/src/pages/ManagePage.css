@@ -35,19 +35,19 @@ p {
 }
 
 .modal {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    overflow: auto; /* Enable scroll if needed */
+    overflow: auto;
     backdrop-filter: blur(5px) brightness(68%);
 }
 
 .modalContentDelete {
-    width: 40%; /* Could be more or less, depending on screen size */
-    margin: 15% auto; /* 15% from the top and centered */
+    width: 40%;
+    margin: 15% auto;
     padding: 40px 109px;
     border: 1px solid var(--black);
     border-radius: 12px;

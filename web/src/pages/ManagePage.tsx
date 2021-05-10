@@ -44,7 +44,7 @@ export const ManagePage: React.FC = () => {
         is_primary_admin: true,
       },
       {
-        id: '3',
+        id: '3333333333333333333',
         name: 'Alice',
         email: 'alice@gmail.com',
         can_delete_books: true,
@@ -160,7 +160,7 @@ export const ManagePage: React.FC = () => {
 
 
       <div>
-        <button className="addButton" onClick={() => alert("clicked")}>
+        <button className="addButton" onClick={() => !deleteMode && alert("clicked")} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
           <p className="body3">New Account</p>
           <img className="addIcon" src={AddIcon} alt='' />
         </button>

@@ -36,7 +36,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
 
       <div className="adminCard" onClick={() => !deleteMode && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
         <div className="infoRow">
-          <p className="body3">Account # { admin.id } {admin.is_primary_admin && '(Primary Admin)'}</p>
+          <p className="adminId body3">Account # { admin.id } {admin.is_primary_admin && '(Primary Admin)'}</p>
           <p className="adminName body3">{ admin.name }</p>
         </div>
       </div>
