@@ -36,7 +36,8 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     <div>
       <input 
         type="text"
-        placeholder="Enter me"
+        placeholder="Enter youtube url here"
+        className="inputField"
         onChange={ e => setVideo(e.target.value)}
       />
       <CKEditor
