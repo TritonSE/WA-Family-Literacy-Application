@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { Svg, Circle } from 'react-native-svg';
 
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable } from 'react-native';
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -11,7 +11,14 @@ import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
 
 const SavedTab: React.FC = () => {
-  return <Text> Saved </Text>;
+  return (
+    <View>
+      <Text>
+        Saved
+      </Text>
+      <View style={{height:300}}/>
+    </View>
+  );
 };
 
 /**
@@ -122,21 +129,26 @@ export const ProfileScreen: React.FC = () => {
   const [selectedTab, selectTab] = React.useState('saved');
   
   return (
-    <ScrollView>
-      <View style={styles.heading}>
-        <Svg height="100%" width="100%" viewBox="0 0 1 1">
-          <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
-        </Svg>
-      </View>
-      <View style={styles.buttonGroup}>
-        <ButtonGroup btn1="saved" btn2="settings" btn3="moreInfo" onBtnChange={(btn) => {selectTab(btn);}} />
-      </View>
-      { TabScreens[selectedTab] }
-    </ScrollView>
+    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <ScrollView>
+        <View style={styles.heading}>
+          <Svg height="100%" width="100%" viewBox="0 0 1 1">
+            <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
+          </Svg>
+        </View>
+        <View style={styles.buttonGroup}>
+          <ButtonGroup btn1="saved" btn2="settings" btn3="moreInfo" onBtnChange={(btn) => {selectTab(btn);}} />
+        </View>
+        { TabScreens[selectedTab] }
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    backgroundColor: Colors.white,
+  },
   heading: {
     color: Colors.orange,
     height: 400,
@@ -160,6 +172,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.orange,
     padding: 10,
     marginTop: 10,
+    alignSelf: 'center',
   },
   buttonGroup: {
     paddingTop: 33,
