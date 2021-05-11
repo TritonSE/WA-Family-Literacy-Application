@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Book, CreateBook, TabContent } from '../models/Book';
+import { GeneralPage } from './BookWizard/GeneralPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
 
 export const BookWizardPage: React.FC = () => {
@@ -20,6 +21,19 @@ export const BookWizardPage: React.FC = () => {
   const updateReadTabContent = (data: TabContent): void => {
     setReadTabContent(data);
   };
+
+  const updateTitle = (data: string): void => {
+    setTitle(data);
+  };
+
+  const updateAuthor = (data: string): void => {
+    setAuthor(data);
+  };
+
+  const updateImage = (data: Uint8Array): void => {
+    setImage(data);
+    console.log(data);
+  };
   
 
 
@@ -27,6 +41,8 @@ export const BookWizardPage: React.FC = () => {
     <div>
       <TabContentPage onContentChange= {updateReadTabContent}>
       </TabContentPage>
+      <GeneralPage onAuthorChange={updateAuthor} onTitleChange={updateTitle} onImageChange={updateImage}>
+      </GeneralPage>
     </div>
   );
 
