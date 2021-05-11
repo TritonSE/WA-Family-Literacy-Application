@@ -32,7 +32,6 @@ export const BookWizardPage: React.FC = () => {
 
   const updateImage = (data: Uint8Array): void => {
     setImage(data);
-    console.log(data);
   };
   
 

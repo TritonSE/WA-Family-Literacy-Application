@@ -32,7 +32,6 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
       });
       
     }
-
   };
 
   return(

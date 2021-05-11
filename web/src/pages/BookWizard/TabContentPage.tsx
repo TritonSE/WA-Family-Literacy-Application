@@ -3,6 +3,7 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
+import './TabContentPage.css';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
