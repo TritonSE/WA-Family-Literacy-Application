@@ -10,13 +10,15 @@ import styles from './ManageAccountsPage.module.css';
 
 export const ManageAccountsPage: React.FC = () => {
 
-
+  // list of admins 
   const [admins, setAdmins] = useState<Admin[]>([]);
 
+  // states for deleting and admin
   const [deleteMode, setDeleteMode] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState('');
 
+  const [newModal, setNewModal] = useState(false);
 
   const client = useContext(APIContext);
 
@@ -31,67 +33,75 @@ export const ManageAccountsPage: React.FC = () => {
         id: '1',
         name: 'RobertBob Jacobson HenryJerry',
         email: 'bob@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       },
       {
         id: '2',
         name: 'Joseph Robert Downey Jr.',
         email: 'joe@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: true,
       },
       {
         id: '3333333333333333333',
         name: 'Alice',
         email: 'alice@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       },
       {
         id: '4',
         name: 'Olivia',
         email: 'olivia@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       },
       {
         id: '5',
         name: 'John',
         email: 'olivia@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       },
       {
         id: '6',
         name: 'Jim',
         email: 'olivia@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       },
       {
         id: '7',
         name: 'Emma',
         email: 'olivia@gmail.com',
-        can_delete_books: true,
         can_manage_users: true,
         can_upload_books: true,
+        can_delete_books: true,
+        can_edit_books: false,
         is_primary_admin: false,
       }
     ];
   
+    // move inside async
     const primaryAdmin = test.find(a => a.is_primary_admin);
     const temp = test.filter(a => !a.is_primary_admin);
   
@@ -114,9 +124,6 @@ export const ManageAccountsPage: React.FC = () => {
     // await client.deleteAdmin(deleteId);
     setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId));
   };
-
-
-  console.log(admins);
 
   
   return (
@@ -144,7 +151,7 @@ export const ManageAccountsPage: React.FC = () => {
       {deleteModal && 
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentDelete}>    
+            <div className={styles.modalContentDeleteAndAdd}>    
               <form>
                 <div>
                   <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
@@ -162,11 +169,30 @@ export const ManageAccountsPage: React.FC = () => {
 
 
       <div>
-        <button className={styles.addButton} onClick={() => !deleteMode && alert("clicked")} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
+        <button className={styles.addButton} onClick={() => !deleteMode && setNewModal(true)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
           <p className={styles.addText}>New Account</p>
           <img className={styles.addIcon} src={AddIcon} alt='' />
         </button>
       </div>
+
+      {newModal && 
+        (
+          <div className={styles.modal}>
+            <div className={styles.modalContentDeleteAndAdd}>    
+              <form>
+                <div>
+                  <p className={styles.modalTitleAdd}>New Account</p>
+                  <div className={styles.buttonsContainer}>
+                    <button className={styles.cancelButton} type="button" onClick={() => setNewModal(false)}>Cancel</button>
+                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        )
+      }
 
 
     </div>

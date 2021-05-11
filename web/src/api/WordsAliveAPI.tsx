@@ -53,12 +53,12 @@ class WordsAliveAPI {
     return res.data;
   }
 
-  // update an admin by id
-  // async updateAdmin() {
-  // }
-
   // create an admin with all fields
   // async createAdmin() {
+  // }
+
+  // update an admin by id
+  // async updateAdmin() {
   // }
 
 }

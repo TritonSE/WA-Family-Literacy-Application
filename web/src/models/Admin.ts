@@ -5,5 +5,6 @@ export type Admin = {
   can_manage_users: boolean
   can_upload_books: boolean
   can_delete_books: boolean
+  can_edit_books: boolean
   is_primary_admin: boolean
 };
