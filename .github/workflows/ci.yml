@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.15
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Build
+        working-directory: backend
+        run: make
+      - name: Lint
+        uses: Jerome1337/gofmt-action@v1.0.4
+        with:
+          gofmt-path: './backend'
+          gofmt-flags: '-l -d -s'
+      - name: Test
+        working-directory: backend
+        run: make test
+        env:
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Build
+        working-directory: mobile
+        run: npm run build
+      - name: Lint
+        working-directory: mobile
+        run: npm run lint
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        working-directory: web
+        run: npm ci
+      - name: Build
+        working-directory: web
+        run: npm run build
+      - name: Lint
+        working-directory: web
+        run: npm run lint
