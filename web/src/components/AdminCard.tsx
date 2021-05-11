@@ -36,10 +36,8 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
     <div className={styles.container}>
 
       <div className={styles.adminCard} onClick={() => !deleteMode && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
-        <div className={styles.infoRow}>
-          <p className={styles.adminId}>Account # { admin.id } {admin.is_primary_admin && '(Primary Admin)'}</p>
-          <p className={styles.adminName}>{ admin.name }</p>
-        </div>
+        <span className={styles.adminName}>{ admin.name }</span>
+        { admin.is_primary_admin && <span className={styles.adminName}>(Primary Admin)</span> }
       </div>
       
       {admin.is_primary_admin && deleteMode && <img className={styles.lockIcon} role="presentation" src={LockIcon} width="20px" height="20px" alt=""/> }

@@ -29,7 +29,7 @@ export const ManageAccountsPage: React.FC = () => {
     const test: Admin[] = [
       {
         id: '1',
-        name: 'BobBobBobBobBobBobBobBobBobBobBob',
+        name: 'RobertBob Jacobson HenryJerry',
         email: 'bob@gmail.com',
         can_delete_books: true,
         can_manage_users: true,
@@ -38,7 +38,7 @@ export const ManageAccountsPage: React.FC = () => {
       },
       {
         id: '2',
-        name: 'Joe',
+        name: 'Joseph Robert Downey Jr.',
         email: 'joe@gmail.com',
         can_delete_books: true,
         can_manage_users: true,
