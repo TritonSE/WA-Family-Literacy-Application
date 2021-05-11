@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { Navbar } from './components/Navbar';
 import './App.css';
+import { LoginPage } from './pages/LoginPage';
 import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
@@ -31,6 +32,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/books/new">
             <BookWizardPage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
           </Route>
         </Switch>
       </Router>
