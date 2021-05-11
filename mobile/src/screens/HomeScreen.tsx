@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
   videoTitle: {
     color: Colors.white,
     marginTop: 16,
+    textAlign: 'center',
   },
   newBooksTextPadding: {
     paddingTop: 33,
