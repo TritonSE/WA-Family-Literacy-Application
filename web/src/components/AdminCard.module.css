@@ -20,19 +20,21 @@
     padding-left: 30px;
 }
 
-.adminName {
-    max-width: 120px;
-    white-space: nowrap;
-    display: block;
-    float: right;
-    overflow: scroll;
-}
-
 .adminId {
+    composes: body3 from '../App.css'; 
     max-width: 120px;
     white-space: nowrap;
     display: block;
     float: left;
+    overflow: scroll;
+}
+
+.adminName {
+    composes: body3 from '../App.css'; 
+    max-width: 120px;
+    white-space: nowrap;
+    display: block;
+    float: right;
     overflow: scroll;
 }
 
@@ -92,9 +94,35 @@
 }
 
 .modalTitleManage {
+    composes: h2 from '../App.css'; 
     margin-bottom: 39px;
 }
 
 .modalTextManage {
+    composes: body3 from '../App.css'; 
     margin-bottom: 100px;
+}
+
+.cancelButton {
+    composes: body3 from '../App.css'; 
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--orange);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+.deleteButton {
+    composes: body3 from '../App.css'; 
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--black);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--orange);
+    cursor: pointer;
 }

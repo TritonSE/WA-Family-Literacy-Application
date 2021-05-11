@@ -3,6 +3,7 @@ p {
 }
 
 .title {
+    composes: h2 from '../App.css'; 
     text-align: left;
     margin-top: 94px;
     margin-left: 12px;
@@ -15,6 +16,7 @@ p {
 }
 
 .clickableText {
+    composes: body3 from '../App.css'; 
     text-decoration: underline;
     border: none;
     outline: none;
@@ -61,10 +63,12 @@ p {
 }
 
 .modalTitleDelete {
+    composes: h3 from '../App.css'; 
     margin-bottom: 40px;
 }
 
-.cancelBtn {
+.cancelButton {
+    composes: body3 from '../App.css'; 
     width: 200px;
     margin: 0px 17px;
     padding: 10px 10px;
@@ -75,7 +79,8 @@ p {
     cursor: pointer;
 }
 
-.deleteBtn {
+.deleteButton {
+    composes: body3 from '../App.css'; 
     width: 200px;
     margin: 0px 17px;
     padding: 10px 10px;
@@ -86,12 +91,6 @@ p {
     cursor: pointer;
 }
 
-.addIcon {
-    width: 26px;
-    height: 26px;
-    margin-left: 10px;
-}
-
 .addButton {
     display: flex;
     align-items: center;
@@ -99,4 +98,14 @@ p {
     cursor: pointer;
     background-color: transparent;
     border: none;
+}
+
+.addText {
+    composes: body3 from '../App.css'; 
+}
+
+.addIcon {
+    width: 26px;
+    height: 26px;
+    margin-left: 10px;
 }

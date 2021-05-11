@@ -20,10 +20,10 @@ export const Navbar: React.FC = () => {
           <NavLink className="body3 nav_link" activeClassName="active" to="/analytics">Analytics</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="body3 nav_link" activeClassName="active" to="/upload">Upload Books</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/books">Upload Books</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="body3 nav_link" activeClassName="active" to="/manage">Manage</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/accounts">Manage</NavLink>
         </li>
         <li className="nav_element_right">
           <button className="nav_button" type="submit"><span className="body3 button_text">Sign Out</span></button>

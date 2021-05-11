@@ -4,9 +4,11 @@ import { APIContext } from '../context/APIContext';
 import { Admin } from '../models/Admin';
 import AddIcon from '../assets/images/plus-circle-solid-green.svg';
 
-import './ManagePage.css';
+import '../App.css';
+import styles from './ManageAccountsPage.module.css';
 
-export const ManagePage: React.FC = () => {
+
+export const ManageAccountsPage: React.FC = () => {
 
 
   const [admins, setAdmins] = useState<Admin[]>([]);
@@ -122,16 +124,16 @@ export const ManagePage: React.FC = () => {
     <div>
 
 
-      <div className="row">
-        <p className="title h2">Manage Accounts</p>
+      <div className={styles.row}>
+        <p className={styles.title}>Manage Accounts</p>
 
-        <button type="button" onClick={() => setDeleteMode(prevMode => !prevMode)} className="clickableText body3">
+        <button type="button" onClick={() => setDeleteMode(prevMode => !prevMode)} className={styles.clickableText}>
           {deleteMode ? 'Done': 'Delete Account'}
         </button>
       </div>
 
 
-      <div className="admins"> 
+      <div className={styles.admins}> 
         { admins.map((admin) => (
           <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayDeleteModal}/>
         ))
@@ -141,14 +143,14 @@ export const ManagePage: React.FC = () => {
 
       {deleteModal && 
         (
-          <div className="modal">
-            <div className="modalContentDelete">    
+          <div className={styles.modal}>
+            <div className={styles.modalContentDelete}>    
               <form>
                 <div>
-                  <p className="h3 modalTitleDelete">Are you sure you want to delete this account?</p>
-                  <div className="buttonsContainer">
-                    <button className="cancelBtn body3" type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
-                    <button className="deleteBtn body3" type="button" onClick={handleDelete}>Delete</button>
+                  <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
+                  <div className={styles.buttonsContainer}>
+                    <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
+                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
                   </div>
                 </div>
               </form>
@@ -160,9 +162,9 @@ export const ManagePage: React.FC = () => {
 
 
       <div>
-        <button className="addButton" onClick={() => !deleteMode && alert("clicked")} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
-          <p className="body3">New Account</p>
-          <img className="addIcon" src={AddIcon} alt='' />
+        <button className={styles.addButton} onClick={() => !deleteMode && alert("clicked")} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
+          <p className={styles.addText}>New Account</p>
+          <img className={styles.addIcon} src={AddIcon} alt='' />
         </button>
       </div>
 
