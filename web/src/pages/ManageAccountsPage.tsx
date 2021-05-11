@@ -41,7 +41,7 @@ export const ManageAccountsPage: React.FC = () => {
       },
       {
         id: '2',
-        name: 'Joseph Robert Downey Jr.',
+        name: 'Joseph Robert Downey Jr. Jacobs Tom III BOb ',
         email: 'joe@gmail.com',
         can_manage_users: true,
         can_upload_books: true,

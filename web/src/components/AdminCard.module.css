@@ -9,7 +9,7 @@
     composes: body3 from '../App.css'; 
     overflow: hidden;
     text-overflow: ellipsis;
-    word-break: keep-all;
+    white-space: nowrap;
 }
 
 .adminCard {
@@ -21,6 +21,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 16px 0 16px;
+    overflow: scroll;
+    text-overflow: ellipsis;
 }
 
 .deleteIcon {
@@ -51,12 +53,17 @@
     top: 0;
     overflow: auto;
     backdrop-filter: blur(5px) brightness(68%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modalContentManage {
-    width: 10% auto;
-    margin: 100px;
-    padding: 109px 480px;
+    /* margin: 100px;
+    padding: 109px 480px; */
+    padding: 60px 30px 60px 30px;
+    width: 80%;
+    height: 80%;
     border: 1px solid var(--black);
     border-radius: 12px;
     background-color: var(--white);
