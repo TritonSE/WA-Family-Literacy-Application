@@ -44,6 +44,7 @@ jobs:
         run: heroku container:release web -a words-alive
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
   web:
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +64,39 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: web
           environment: prod
-  create-release:
+
+  android:
+    runs-on: ubuntu-latest
     steps:
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Build
+        working-directory: mobile
+        run: npm run android
+        env:
+          BASE_URL: https://api.wordsalive.org
+#      - name: Release
+#        uses: softprops/action-gh-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Build
+        working-directory: mobile
+        run: npm run ios
+        env:
+          BASE_URL: https://api.wordsalive.org
+#      - name: Release
+#        uses: softprops/action-gh-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

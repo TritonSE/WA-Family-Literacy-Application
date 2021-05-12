@@ -39,6 +39,7 @@ jobs:
         run: make test
         env:
           DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/postgres'
+
   mobile:
     runs-on: ubuntu-latest
     steps:
@@ -53,6 +54,7 @@ jobs:
       - name: Lint
         working-directory: mobile
         run: npm run lint
+
   web:
     runs-on: ubuntu-latest
     steps:
