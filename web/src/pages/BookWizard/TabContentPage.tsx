@@ -11,6 +11,8 @@ type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
 };
 
+console.log(process.env);
+
 export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange}) => {
 
   const [video, setVideo] = useState< string | undefined>(undefined);

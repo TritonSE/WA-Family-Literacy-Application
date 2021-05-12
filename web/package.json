@@ -38,7 +38,9 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "REACT_APP_BASE_URL=http://localhost:8080 npm start",
+    "staging": "REACT_APP_BASE_URL=https://words-alive-staging.herokuapp.com npm start"
   },
   "eslintConfig": {
     "extends": [

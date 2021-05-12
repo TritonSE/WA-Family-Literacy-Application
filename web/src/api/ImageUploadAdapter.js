@@ -7,7 +7,7 @@ export class ImageUploadAdapter {
         // CKEditor 5's FileLoader instance.
         this.loader = loader;
 
-        this.imageAPI = new ImageAPI('http://localhost:8080')
+        this.imageAPI = new ImageAPI( process.env.REACT_APP_BASE_URL || 'http://localhost:8080')
     }
 
 
