@@ -13,7 +13,6 @@ export const TextStyles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Gotham-Medium',
   },
-
   body1: {
     fontSize: 16,
     fontFamily: 'Gotham-Light',
@@ -23,7 +22,6 @@ export const TextStyles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Gotham-Light',
   },
-
   caption1: {
     fontSize: 20,
     fontFamily: 'Gotham-Medium',
@@ -44,7 +42,6 @@ export const TextStyles = StyleSheet.create({
     fontFamily: 'Gotham-Medium',
     fontWeight: 'normal',
   },
-
   mdRegular: {
     fontFamily: 'Gotham-Light',
   },
