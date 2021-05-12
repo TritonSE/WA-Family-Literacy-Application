@@ -101,7 +101,7 @@ jobs:
         run: npm run ios
         env:
           BASE_URL: https://api.wordsalive.org
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
