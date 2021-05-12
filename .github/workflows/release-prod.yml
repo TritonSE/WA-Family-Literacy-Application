@@ -84,7 +84,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: lets-read-android.apk
+          files: mobile/lets-read-android.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
