@@ -55,7 +55,8 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     listItemUnorderedContent: TextStyles.mdRegular,
     em: TextStyles.mdEm,
     imageWrapper: { width: tabContentWidth },
-    tableHeaderCellContent: { fontWeight: 'normal' }
+    tableHeaderCellContent: { fontWeight: 'normal' },
+    del: {},
   };
 
   // fetches book details on language change
