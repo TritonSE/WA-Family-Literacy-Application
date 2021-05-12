@@ -51,6 +51,7 @@
   },
   "scripts": {
     "build": "tsc --strict",
+    "build-android": "( cd android; ./gradlew assembleRelease )",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "react-native start",

@@ -75,13 +75,18 @@ jobs:
         run: npm ci
       - name: Build
         working-directory: mobile
-        run: npm run android
+        run: npm run build-android
         env:
           BASE_URL: https://api.wordsalive.org
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Copy binary
+        working-directory: mobile
+        run: mv android/app/build/outputs/apk/release/app-release.apk lets-read-android.apk
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: lets-read-android.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   ios:
     runs-on: macos-latest
