@@ -5,6 +5,7 @@ export class ImageUploadAdapter {
     imageAPI : ImageAPI;
     loader: any
 
+
     constructor( loader:any) {
         // CKEditor 5's FileLoader instance.
         this.loader = loader;
@@ -24,9 +25,7 @@ export class ImageUploadAdapter {
 
     // Aborts the upload process.
     abort() {
-        if ( this.xhr ) {
-            this.xhr.abort();
-        }
+        this.imageAPI.cancel();
     }
 
 }
