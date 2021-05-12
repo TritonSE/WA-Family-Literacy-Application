@@ -50,7 +50,7 @@
     "web": "expo web",
     "eject": "expo eject",
     "dev": "BASE_URL=http://localhost:8080 npm start",
-    "staging": "BASE_URL=https://words-alive-staging.herokuapp.com npm start"
+    "staging": "BASE_URL=https://api-staging.wordsalive.org npm start"
   },
   "private": true
 }
