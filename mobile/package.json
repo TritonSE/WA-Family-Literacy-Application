@@ -52,7 +52,8 @@
     "web": "expo web",
     "eject": "expo eject",
     "dev": "BASE_URL=http://localhost:8080 npm start",
-    "staging": "BASE_URL=https://api-staging.wordsalive.org npm start"
+    "staging": "BASE_URL=https://api-staging.wordsalive.org npm start",
+    "prod": "BASE_URL=https://api.wordsalive.org npm start"
   },
   "private": true
 }
