@@ -15,9 +15,9 @@ export class ImageUploadAdapter {
 
 
     async upload() {
-        const file =  await this.loader.file;
+        const file:File =  await this.loader.file;
         const array = await file.arrayBuffer();
-        const url = await this.imageAPI.uploadImage(new Uint8Array(array), "image/png");
+        const url = await this.imageAPI.uploadImage(new Uint8Array(array), file.type);
         return {
             default: url
         }
