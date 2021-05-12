@@ -24,8 +24,8 @@ export const LanguageButtons: React.FC<LanguageButtonsProps> = ({ langs, default
           (idx === langs.length - 1 || (idx % LANGS_PER_ROW === LANGS_PER_ROW - 1)) && styles.rightBtn,
         ];
         const labelStyle = [
-          activeButton === lang ? styles.buttonTextActive : styles.buttonTextInactive,
           TextStyles.caption2,
+          activeButton === lang ? styles.buttonTextActive : styles.buttonTextInactive,
         ];
         return (
           <View key={lang} style={{ width: '33.33%' }}>
