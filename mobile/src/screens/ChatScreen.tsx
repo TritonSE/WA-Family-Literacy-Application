@@ -67,5 +67,6 @@ const styles = StyleSheet.create({
   body: {
     fontSize: 18,
     fontFamily: 'Gotham-Light',
+    color: Colors.text,
   },
 });
