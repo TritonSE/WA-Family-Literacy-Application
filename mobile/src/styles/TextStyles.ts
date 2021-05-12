@@ -54,18 +54,27 @@ export const TextStyles = StyleSheet.create({
   },
   mdRegular: {
     fontFamily: 'Gotham-Light',
+    fontWeight: 'normal',
+    color: Colors.text,
+  },
+  mdHeading: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
     color: Colors.text,
   },
   mdStrong: {
     fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
     color: Colors.text,
   },
   mdEm: {
     fontFamily: 'Gotham-Italic',
+    fontStyle: 'normal',
     color: Colors.text,
   },
   listItem: {
     fontFamily: 'Gotham-Light',
+    fontWeight: 'normal',
     color: Colors.text,
     minWidth: 16,
   },

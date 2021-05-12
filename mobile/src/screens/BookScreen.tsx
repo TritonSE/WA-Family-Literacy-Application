@@ -46,7 +46,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const tabContentWidth = 0.83 * width;
 
   const markdownStyles = {
-    heading: TextStyles.mdRegular,
+    heading: TextStyles.mdHeading,
     paragraph: TextStyles.mdRegular,
     strong: TextStyles.mdStrong,
     listItemNumber: TextStyles.listItem,
@@ -55,6 +55,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     listItemUnorderedContent: TextStyles.mdRegular,
     em: TextStyles.mdEm,
     imageWrapper: { width: tabContentWidth },
+    tableHeaderCellContent: { fontWeight: 'normal' }
   };
 
   // fetches book details on language change
