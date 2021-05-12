@@ -10,11 +10,19 @@ type AdminCardProps = {
   admin: Admin,
   deleteMode: boolean,
   onDelete: (id: string) => void,
+  // fetchAdmins: () => void,
   // manageMode: boolean,
   // onManage: (id: string) => void,
 };
 
 export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelete }) => {
+
+
+  // move delete functionality here and have a fetchAdmins call, then can do manage/update functionality
+  // onDelete {
+  //   handleDelete
+  //   fetchAdmins
+  // }
 
   // states for managing an admin
   const [manageModal, setManageModal] = useState(false);
@@ -38,14 +46,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
     }
   };
 
-  // reset all checkboxes
-  const resetOptions = (): void => {
-    setManageAdmins(false);
-    setUploadBooks(false);
-    setDeleteBooks(false);
-    setEditBooks(false);
-  };
-
   // diplay the modal for managing and set the current permissions for the admin
   const displayManageModal = (id: string): void => {
     setManageId(id);
@@ -57,17 +57,11 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
     setEditBooks(admin.can_edit_books);
 
     console.log(admin);
-    // console.log("Manage", manageAdmins); 
-    // console.log("Upload", uploadBooks);
-    // console.log("Delete", deleteBooks);
-    // console.log("Edit", editBooks);
-    // console.log("----------------");
-
   };
 
 
   const handleManage = async (): Promise<void> => {
-    resetOptions();
+
     setManageModal(false);
 
     const updatedAdmin: UpdateAdmin = {
@@ -78,12 +72,12 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
       can_delete_books: deleteBooks,
     };
 
-    // admin.can_delete_books = deleteBooks;
-
     console.log(updatedAdmin);
 
+    // admin.can_delete_books = deleteBooks;
+
     // await client.updateAdmin(manageId, updatedAdmin);
-    // setAdmins(); ? update current local admin or does setState on a child re-render the parent? 
+    // setAdmins(); ? update current local admin and re-render parent? add a function prop? 
   };
 
 
@@ -130,7 +124,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
                   }
 
                   <div className={styles.buttonsContainer}>
-                    <button className={styles.cancelButton} type="button" onClick={() => {resetOptions(); setManageModal(false);}}>Cancel</button>
+                    <button className={styles.cancelButton} type="button" onClick={() => {setManageModal(false);}}>Cancel</button>
                     <button className={styles.deleteButton} type="button" onClick={handleManage}>Confirm</button>
                   </div>
 

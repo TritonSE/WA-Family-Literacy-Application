@@ -45,11 +45,13 @@ p {
     top: 0;
     overflow: auto;
     backdrop-filter: blur(5px) brightness(68%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.modalContentDeleteAndAdd {
+.modalContentDelete {
     width: 40%;
-    margin: 15% auto;
     padding: 40px 109px;
     border: 1px solid var(--black);
     border-radius: 12px;
@@ -64,11 +66,6 @@ p {
 }
 
 .modalTitleDelete {
-    composes: h3 from '../App.css'; 
-    margin-bottom: 40px;
-}
-
-.modalTitleAdd {
     composes: h3 from '../App.css'; 
     margin-bottom: 40px;
 }
@@ -114,4 +111,30 @@ p {
     width: 26px;
     height: 26px;
     margin-left: 10px;
+}
+
+.modalContentAdd {
+    width: 40%;
+    height: 60%;
+    padding-right: 80px;
+    padding-left: 80px;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+}
+
+.modalTitleAdd {
+    composes: h2 from '../App.css'; 
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.addContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

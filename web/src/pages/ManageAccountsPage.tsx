@@ -22,11 +22,16 @@ export const ManageAccountsPage: React.FC = () => {
 
   const client = useContext(APIContext);
 
+  // get admins from backend
+  const fetchAdmins = async (): Promise<void> => {
+    const res = await client.getAdmins();
+    setAdmins(res);
+  };
+
+
   useEffect(()=> {
-    (async () => {
-      const res = await client.getAdmins();
-      setAdmins(res);
-    });
+
+    fetchAdmins();
 
     const test: Admin[] = [
       {
@@ -101,7 +106,7 @@ export const ManageAccountsPage: React.FC = () => {
       }
     ];
   
-    // move inside async
+    // move inside fetchAdmins
     const primaryAdmin = test.find(a => a.is_primary_admin);
     const temp = test.filter(a => !a.is_primary_admin);
   
@@ -113,7 +118,6 @@ export const ManageAccountsPage: React.FC = () => {
 
   },[]);
 
-  // use effect everytime the list of admins changes?
 
 
   const displayDeleteModal = (id: string): void => {
@@ -124,7 +128,7 @@ export const ManageAccountsPage: React.FC = () => {
   const handleDelete = async (): Promise<void> => {
     setDeleteModal(false);
     // await client.deleteAdmin(deleteId);
-    setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId));
+    setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId)); 
   };
 
   
@@ -153,7 +157,7 @@ export const ManageAccountsPage: React.FC = () => {
       {deleteModal && 
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentDeleteAndAdd}>    
+            <div className={styles.modalContentDelete}>    
               <form>
                 <div>
                   <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
@@ -180,15 +184,27 @@ export const ManageAccountsPage: React.FC = () => {
       {newModal && 
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentDeleteAndAdd}>    
+            <div className={styles.modalContentAdd}>    
               <form>
+
                 <div>
                   <p className={styles.modalTitleAdd}>New Account</p>
+
+                  <div className={styles.addContent}>
+                    <div className={styles.volunteerInfo}>
+                      <p className="h3">Volunteer Name</p>
+                    </div>
+                    <div className={styles.access}>
+                      <p className="h3">Access</p>
+                    </div>
+                  </div>
+
                   <div className={styles.buttonsContainer}>
                     <button className={styles.cancelButton} type="button" onClick={() => setNewModal(false)}>Cancel</button>
-                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
+                    <button className={styles.deleteButton} type="button" onClick={() => setNewModal(false)}>Confirm</button>
                   </div>
                 </div>
+                
               </form>
             </div>
           </div>

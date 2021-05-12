@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { Book, BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
-import { Admin } from '../models/Admin';
+import { Admin, UpdateAdmin } from '../models/Admin';
 
 // Class to encapsulate the handler for the Words Alive API
 class WordsAliveAPI {
@@ -58,8 +58,10 @@ class WordsAliveAPI {
   // }
 
   // update an admin by id
-  // async updateAdmin() {
-  // }
+  async updateAdmin(id: string, admin: UpdateAdmin): Promise<Admin> {
+    const res = await this.client.patch(`/admins/${id}`, admin);
+    return res.data;
+  }
 
 }
 

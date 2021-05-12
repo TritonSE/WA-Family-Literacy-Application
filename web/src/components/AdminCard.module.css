@@ -68,15 +68,6 @@
     text-align: center;
 }
 
-.modalContentContinue {
-    width: 40%;
-    margin: 15% auto;
-    padding: 40px 109px;
-    border: 1px solid var(--black);
-    border-radius: 12px;
-    background-color: var(--white);
-}
-
 .modalTitleManage {
     composes: h2 from '../App.css'; 
     margin-bottom: 39px;
