@@ -44,3 +44,7 @@ body {
   font-family: 'GothamRounded - Bold';
   src: url(./assets/fonts/gotham-rounded/GothamRounded-Bold.otf) format('opentype');
 }
+
+.ck-editor__editable {
+  min-height: 500px;
+}

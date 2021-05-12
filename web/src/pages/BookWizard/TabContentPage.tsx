@@ -3,7 +3,9 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
-import './TabContentPage.css';
+import './TabContentPage.module.css';
+import '../../App.css';
+import styles from './TabContentPage.module.css';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -32,18 +34,25 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     extraPlugins: [ CustomUploadAdapter ]
   };
 
+
   return (
     <div>
+      <div className = {styles.videoText}>
+        Video
+      </div>
       <input 
         type="text"
         placeholder="Enter youtube url here"
-        className="inputField"
+        className={styles.inputField}
         onChange={ e => setVideo(e.target.value)}
       />
+      <div className = {styles.editorText}>
+        Write Here
+      </div>
       <CKEditor
+        className={styles.ckeditor}
         editor= { Editor }
         config = { editorConfiguration }
-        data="<p>Hello from CKEditor 5!</p>"
         onChange= { (event: any, editor: any) => {
           const data = editor.getData();
           setBody(data);

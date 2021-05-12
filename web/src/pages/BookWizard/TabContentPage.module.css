@@ -1,0 +1,26 @@
+
+.inputField {
+    composes: body3 from '../../App.css';
+    height: 50px;
+    width: 600px;
+    border-color: var(--orange);
+    outline: none;
+    border-style: solid;
+    border-radius: 15px;
+}
+
+.inputField:focus {
+    border-color: var(--orange);
+    outline: none;
+}
+.videoText {
+    composes: h3 from '../../App.css';
+    padding-top:25px;
+    padding-bottom: 10px;
+}
+.editorText {
+    composes: h3 from '../../App.css';
+    padding-top:40px;
+    padding-bottom: 10px;
+    
+}
