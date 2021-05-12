@@ -13,6 +13,9 @@ export default {
     bundleIdentifier: 'org.wordsalive.letsread',
     icon: './assets/images/icons/ios.png',
   },
+  splash: {
+    image: './assets/images/icons/splash.png',
+  },
   extra: {
     BASE_URL: process.env.BASE_URL,
   },
