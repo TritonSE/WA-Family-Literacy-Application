@@ -36,7 +36,7 @@ export const ManageAccountsPage: React.FC = () => {
         can_manage_users: true,
         can_upload_books: true,
         can_delete_books: true,
-        can_edit_books: false,
+        can_edit_books: true,
         is_primary_admin: false,
       },
       {
@@ -54,8 +54,8 @@ export const ManageAccountsPage: React.FC = () => {
         name: 'Alice',
         email: 'alice@gmail.com',
         can_manage_users: true,
-        can_upload_books: true,
-        can_delete_books: true,
+        can_upload_books: false,
+        can_delete_books: false,
         can_edit_books: false,
         is_primary_admin: false,
       },
@@ -63,9 +63,9 @@ export const ManageAccountsPage: React.FC = () => {
         id: '4',
         name: 'Olivia',
         email: 'olivia@gmail.com',
-        can_manage_users: true,
-        can_upload_books: true,
-        can_delete_books: true,
+        can_manage_users: false,
+        can_upload_books: false,
+        can_delete_books: false,
         can_edit_books: false,
         is_primary_admin: false,
       },
@@ -75,7 +75,7 @@ export const ManageAccountsPage: React.FC = () => {
         email: 'olivia@gmail.com',
         can_manage_users: true,
         can_upload_books: true,
-        can_delete_books: true,
+        can_delete_books: false,
         can_edit_books: false,
         is_primary_admin: false,
       },
@@ -83,9 +83,9 @@ export const ManageAccountsPage: React.FC = () => {
         id: '6',
         name: 'Jim',
         email: 'olivia@gmail.com',
-        can_manage_users: true,
-        can_upload_books: true,
-        can_delete_books: true,
+        can_manage_users: false,
+        can_upload_books: false,
+        can_delete_books: false,
         can_edit_books: false,
         is_primary_admin: false,
       },
@@ -112,6 +112,8 @@ export const ManageAccountsPage: React.FC = () => {
     }
 
   },[]);
+
+  // use effect everytime the list of admins changes?
 
 
   const displayDeleteModal = (id: string): void => {
