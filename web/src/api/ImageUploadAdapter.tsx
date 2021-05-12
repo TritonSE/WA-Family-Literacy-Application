@@ -2,12 +2,14 @@
 import { ImageAPI } from '../api/ImageAPI';
 /* eslint-disable */ 
 export class ImageUploadAdapter {
+    imageAPI : ImageAPI;
+    loader: any
 
-    constructor( loader) {
+    constructor( loader:any) {
         // CKEditor 5's FileLoader instance.
         this.loader = loader;
 
-        this.imageAPI = new ImageAPI( process.env.REACT_APP_BASE_URL || 'http://localhost:8080')
+        this.imageAPI= new ImageAPI( process.env.REACT_APP_BASE_URL || 'http://localhost:8080')
     }
 
 
