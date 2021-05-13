@@ -29,16 +29,6 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     onImageChange(image);
   }, [image]);
 
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   const list = e.target.files;
-  //   if (list != null) {
-  //     const newImage = list[0];
-  //     newImage.arrayBuffer().then( (array) => {
-  //       setImage(new Uint8Array(array));
-  //     });
-      
-  //   }
-  // };
 
   const handleOnDragOver = (e: React.DragEvent): void => {
     e.preventDefault();
@@ -72,9 +62,9 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
                 fileInput.current.click();
               }}}>
 
-            <div>
+            <div className = {styles.dropZoneContent}>
               {image != null ? 
-                <img src={previewUrl} alt='image' /> : <p>Click to upload or grad image here</p>}
+                <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
               <input type="file"
                 ref = {fileInput} hidden
                 onChange = { (e) => {
