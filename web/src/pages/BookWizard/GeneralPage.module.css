@@ -1,0 +1,27 @@
+.wrapper {
+    padding:20px;
+}
+.dropZone {
+    display: flex;
+    height: 200px;
+    width: 100%;
+    background: white;
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position: center;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    background-position: center 28px;
+}
+.dropZone {
+    margin: auto;
+}
+.image{
+   width: 200px;
+   height: 200px;
+   border-radius: 4px;
+   display: inline-block;
+}

@@ -25,7 +25,6 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
-      // Configure the URL to the upload script in your back-end here!
       return new ImageUploadAdapter( loader );
     };
   }

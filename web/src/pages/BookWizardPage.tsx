@@ -13,7 +13,7 @@ export const BookWizardPage: React.FC = () => {
   // const [readTabContent, setReadTabContent] =  useState<TabContent | null>(null);
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
-  const [image, setImage] = useState<Uint8Array>(new Uint8Array());
+  const [image, setImage] = useState<File| null>(null);
   const [readTabContent, setReadTabContent] = useState<TabContent>(emptyTabContent);
   const [exploreTabContent, setExploreTabContent] = useState<TabContent>(emptyTabContent);
   const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
@@ -30,7 +30,7 @@ export const BookWizardPage: React.FC = () => {
     setAuthor(data);
   };
 
-  const updateImage = (data: Uint8Array): void => {
+  const updateImage = (data: File | null): void => {
     setImage(data);
   };
   
@@ -38,8 +38,8 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
-      </TabContentPage>
+      {/* <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
+      </TabContentPage> */}
       <GeneralPage onAuthorChange={updateAuthor} onTitleChange={updateTitle} onImageChange={updateImage}>
       </GeneralPage>
     </div>
