@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 import '../../App.css';
 import styles from './GeneralPage.module.css';
+import wizardStyles from '../BookWizardPage.module.css';
 
 type GeneralPageProps = {
   onTitleChange: ( data: string ) => void
@@ -60,29 +61,29 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     <div>
       <UploadBooksNavigation pageName={"General"} pageNumber={1}>
       </UploadBooksNavigation>
-      <div className = {styles.wrapper}>
-        <div 
-          className = {styles.dropZone}
-          onDragOver = {handleOnDragOver}
-          onDrop = {handleOnDrop}
-          onClick = { () => {
-            if (fileInput.current != null) {
-              fileInput.current.click();
-            }}}>
-          <p>Rip
-            <input type="file"
-              ref = {fileInput} hidden
-              onChange = { (e) => {
-                if(e.target != null && e.target.files != null) {
-                  handleFile(e.target.files[0]);
-                }}}/>
-          </p>
+      <div className = {wizardStyles.mainDivElement}>
+        <div className = {styles.wrapper}>
+          <div 
+            className = {styles.dropZone}
+            onDragOver = {handleOnDragOver}
+            onDrop = {handleOnDrop}
+            onClick = { () => {
+              if (fileInput.current != null) {
+                fileInput.current.click();
+              }}}>
+
+            <div>
+              {image != null ? 
+                <img src={previewUrl} alt='image' /> : <p>Click to upload or grad image here</p>}
+              <input type="file"
+                ref = {fileInput} hidden
+                onChange = { (e) => {
+                  if(e.target != null && e.target.files != null) {
+                    handleFile(e.target.files[0]);}}}/>
+            </div>
+          </div>
         </div>
       </div>
-      { image != null && <div className={styles.image}>
-        <img src={previewUrl} alt='image' /> 
-        <span> {image.name} </span>
-      </div> }
     </div>
   );
 };
