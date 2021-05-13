@@ -38,7 +38,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
   return (
     <div>
-      <UploadBooksNavigation pageName={page} pageNumber={3}>
+      <UploadBooksNavigation pageName={page} pageNumber={5}>
       </UploadBooksNavigation>
       
       <div className = {styles.videoText}>

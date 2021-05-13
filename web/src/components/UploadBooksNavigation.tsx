@@ -13,23 +13,21 @@ type UploadBooksNavigationProps = {
 
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageName}) => {
   const progressBar = [];
-
   const kebebSkewer = <span className={styles.skewer}></span>;
+  const checkCircleImg = <img src={CheckedCircle} alt = '' className={styles.progressCircles}></img>;
+  const greenCircleImg = <img src = {GreenCircle} alt = '' className={styles.progressCircles}></img>;
+  const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   
   for (let i = 1; i < pageNumber; i++) {
-    progressBar.push(
-      <img src={CheckedCircle} alt = '' className={styles.progressCircles}></img>
-    );
+    progressBar.push(checkCircleImg);
     progressBar.push(kebebSkewer);
   }
 
-  progressBar.push(<img src = {GreenCircle} alt = '' className={styles.progressCircles}></img>);
+  progressBar.push(greenCircleImg);
   progressBar.push(kebebSkewer);
 
   for (let i = pageNumber; i<5; i++) {
-    progressBar.push(
-      <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>
-    );
+    progressBar.push(greyCircleImg);
     progressBar.push(kebebSkewer);
   }
 
