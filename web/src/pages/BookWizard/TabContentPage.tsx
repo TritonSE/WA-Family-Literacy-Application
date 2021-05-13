@@ -3,9 +3,9 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
-import NavigationButtonImage from '../../assets/images/chevron-right-solid.svg';
 import '../../App.css';
 import styles from './TabContentPage.module.css';
+import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
@@ -42,7 +42,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
   return (
     <div>
-      <div className={styles.navigation}>
+      {/* <div className={styles.navigation}>
         <div>
           <button className={styles.navigationButton}>
             <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonLeft}/>
@@ -56,7 +56,9 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
             <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
           </button> 
         </div>
-      </div>
+      </div> */}
+      <UploadBooksNavigation pageName={page} pageNumber={2}>
+      </UploadBooksNavigation>
       <div className = {styles.videoText}>
         Video
       </div>

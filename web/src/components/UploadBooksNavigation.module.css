@@ -1,0 +1,33 @@
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 65px;
+}
+
+.navigationButton {
+    background-color: white;
+    outline: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.navigationButtonIcon {
+    height: 60px;
+    width: 60px;
+}
+
+.navigationButtonRight {
+    composes: navigationButtonIcon;
+}
+
+.navigationButtonLeft {
+    composes: navigationButtonIcon;
+    transform: rotate(180deg);
+}
+
+.pageName {
+    composes: h1 from '../App.css';
+    text-align: center;
+    width: 415px;
+}
