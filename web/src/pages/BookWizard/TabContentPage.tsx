@@ -3,8 +3,9 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
-import '../../App.css';
 import styles from './TabContentPage.module.css';
+import '../../App.css';
+import wizardStyles from '../BookWizardPage.module.css';
 import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 
 type TabConentPageProps = {
@@ -40,26 +41,28 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
       <UploadBooksNavigation pageName={page} pageNumber={5}>
       </UploadBooksNavigation>
       
-      <div className = {styles.videoText}>
+      <div className={wizardStyles.mainDivElement}>
+        <div className = {styles.videoText}>
         Video
-      </div>
+        </div>
       
-      <input 
-        type="text"
-        placeholder="Enter youtube url here"
-        className={styles.inputField}
-        onChange={ e => setVideo(e.target.value)}
-      />
-      <div className = {styles.editorText}>
+        <input 
+          type="text"
+          placeholder="Enter youtube url here"
+          className={styles.inputField}
+          onChange={ e => setVideo(e.target.value)}
+        />
+        <div className = {styles.editorText}>
         Write Here
+        </div>
+        <CKEditor
+          editor= { Editor }
+          config = { editorConfiguration }
+          onChange= { (event: any, editor: any) => {
+            const data = editor.getData();
+            setBody(data);
+          }}/>
       </div>
-      <CKEditor
-        editor= { Editor }
-        config = { editorConfiguration }
-        onChange= { (event: any, editor: any) => {
-          const data = editor.getData();
-          setBody(data);
-        }}/>
     </div>
   );
 };

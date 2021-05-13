@@ -38,10 +38,10 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      {/* <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
-      </TabContentPage> */}
-      <GeneralPage onAuthorChange={updateAuthor} onTitleChange={updateTitle} onImageChange={updateImage}>
-      </GeneralPage>
+      <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
+      </TabContentPage>
+      {/* <GeneralPage onAuthorChange={updateAuthor} onTitleChange={updateTitle} onImageChange={updateImage}>
+      </GeneralPage> */}
     </div>
   );
 

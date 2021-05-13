@@ -1,4 +1,18 @@
 .mainDivElement {
-    margin-left: 130px;
-    margin-right: 130px;
+    margin-left: 205px;
+    margin-right: 190px;
+}
+
+.inputBoxTitle {
+    composes: h3 from '../App.css';
+    padding-bottom: 20px;
+}
+
+.inputBox {
+    composes: body3 from '../App.css';
+    height: 50px;
+    border-color: var(--orange);
+    outline: none;
+    border-style: solid;
+    border-radius: 15px;
 }

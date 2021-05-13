@@ -52,25 +52,26 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
       <UploadBooksNavigation pageName={"General"} pageNumber={1}>
       </UploadBooksNavigation>
       <div className = {wizardStyles.mainDivElement}>
-        <div className = {styles.wrapper}>
-          <div 
-            className = {styles.dropZone}
-            onDragOver = {handleOnDragOver}
-            onDrop = {handleOnDrop}
-            onClick = { () => {
-              if (fileInput.current != null) {
-                fileInput.current.click();
-              }}}>
+        <div className={styles.imageTitle}>
+          Book Cover (IMG)
+        </div>
+        <div 
+          className = {styles.dropZone}
+          onDragOver = {handleOnDragOver}
+          onDrop = {handleOnDrop}
+          onClick = { () => {
+            if (fileInput.current != null) {
+              fileInput.current.click();
+            }}}>
 
-            <div className = {styles.dropZoneContent}>
-              {image != null ? 
-                <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
-              <input type="file"
-                ref = {fileInput} hidden
-                onChange = { (e) => {
-                  if(e.target != null && e.target.files != null) {
-                    handleFile(e.target.files[0]);}}}/>
-            </div>
+          <div className = {styles.dropZoneContent}>
+            {image != null ? 
+              <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
+            <input type="file"
+              ref = {fileInput} hidden
+              onChange = { (e) => {
+                if(e.target != null && e.target.files != null) {
+                  handleFile(e.target.files[0]);}}}/>
           </div>
         </div>
       </div>
