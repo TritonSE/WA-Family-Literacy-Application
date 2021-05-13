@@ -3,17 +3,16 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
-import './TabContentPage.module.css';
+import NavigationButtonImage from '../../assets/images/chevron-right-solid.svg';
 import '../../App.css';
 import styles from './TabContentPage.module.css';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
+  page: string 
 };
 
-console.log(process.env);
-
-export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange}) => {
+export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, page}) => {
 
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
@@ -36,12 +35,32 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
     extraPlugins: [ CustomUploadAdapter ]
   };
 
+  const temp = (): void => {
+    console.log("Hello");
+  };
+
 
   return (
     <div>
+      <div className={styles.navigation}>
+        <div>
+          <button className={styles.navigationButton}>
+            <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonLeft}/>
+          </button>
+        </div>
+        <div className= {styles.pageName}>
+          {page}
+        </div>
+        <div>
+          <button className={styles.navigationButton} onClick={temp}>
+            <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
+          </button> 
+        </div>
+      </div>
       <div className = {styles.videoText}>
         Video
       </div>
+      
       <input 
         type="text"
         placeholder="Enter youtube url here"
