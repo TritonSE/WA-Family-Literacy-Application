@@ -42,23 +42,9 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
   return (
     <div>
-      {/* <div className={styles.navigation}>
-        <div>
-          <button className={styles.navigationButton}>
-            <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonLeft}/>
-          </button>
-        </div>
-        <div className= {styles.pageName}>
-          {page}
-        </div>
-        <div>
-          <button className={styles.navigationButton} onClick={temp}>
-            <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
-          </button> 
-        </div>
-      </div> */}
       <UploadBooksNavigation pageName={page} pageNumber={2}>
       </UploadBooksNavigation>
+      
       <div className = {styles.videoText}>
         Video
       </div>
@@ -73,7 +59,6 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
         Write Here
       </div>
       <CKEditor
-        className={styles.ckeditor}
         editor= { Editor }
         config = { editorConfiguration }
         onChange= { (event: any, editor: any) => {

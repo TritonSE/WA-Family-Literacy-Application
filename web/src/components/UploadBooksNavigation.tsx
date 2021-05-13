@@ -15,22 +15,22 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
     <div>
       <div className={styles.navigation}>
         <div>
-          <button className={styles.navigationButton}>
-            <img src={NavigationButtonImage} alt='' className = {styles.navigationButtonLeft}/>
-          </button>
+          {pageNumber != 1 ? 
+            <button className={styles.navigationButton}>
+              <img src={NavigationButtonImage} alt='' className = {styles.navigationButtonLeft}/>
+            </button> : 
+            <div className={styles.blankDiv}></div>}
         </div>
         <div className= {styles.pageName}>
           {pageName}
         </div>
         <div>
-          <button className = {styles.navigationButton}>
-            <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
-          </button>
+          {pageNumber != 5 ? 
+            <button className = {styles.navigationButton}>
+              <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
+            </button> : <div className={styles.blankDiv}></div> }
         </div>
       </div>
-
-
-
     </div>
   );
 
