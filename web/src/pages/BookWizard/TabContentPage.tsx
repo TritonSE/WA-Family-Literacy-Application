@@ -35,14 +35,10 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
     extraPlugins: [ CustomUploadAdapter ]
   };
 
-  const temp = (): void => {
-    console.log("Hello");
-  };
-
 
   return (
     <div>
-      <UploadBooksNavigation pageName={page} pageNumber={2}>
+      <UploadBooksNavigation pageName={page} pageNumber={3}>
       </UploadBooksNavigation>
       
       <div className = {styles.videoText}>

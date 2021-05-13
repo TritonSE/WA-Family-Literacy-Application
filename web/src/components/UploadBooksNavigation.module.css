@@ -13,8 +13,8 @@
 }
 
 .navigationButtonIcon {
-    height: 60px;
-    width: 60px;
+    height: 37px;
+    width: 30px;
 }
 
 .navigationButtonRight {
@@ -36,3 +36,27 @@
     height: 60px;
     width: 60px;
 }
+
+.progressCircles {
+    height: 22px;
+    width: 37px;
+}
+.progressBar {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 30px;
+    width: 100%;
+    align-items: center;
+}
+
+.progressBarContainer {
+    margin: auto;
+    width: 50%;
+}
+
+.skewer {
+    flex-grow: 1;
+    border-bottom: 1px solid black;
+    margin: 5px;
+    align-content: center;
+  }
