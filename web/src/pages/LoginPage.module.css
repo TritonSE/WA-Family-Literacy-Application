@@ -1,3 +1,12 @@
+.parent {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .loginContainer {
   display: flex;
   justify-content: space-around;
@@ -20,6 +29,7 @@
 }
 
 .loginInput {
+  composes: body3 from '../App.css';
   height: 70px;
   margin: 15px 0px;
   padding-left: 20px;
@@ -27,13 +37,10 @@
   border-radius: 10px;
   box-shadow: 1px 2px 5px var(--dark-grey);
   -webkit-appearance: none;
-
-  /*border: 1px solid var(--orange);
-  -webkit-appearance: none;
-  border-radius: 10px;*/
 }
 
 .loginBtn {
+  composes: body3 from '../App.css';
   height: 70px;
   margin: 15px 0px;
   border: 1px solid var(--black);
