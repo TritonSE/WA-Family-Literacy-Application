@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Book, CreateBook, TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
+import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
 
 export const BookWizardPage: React.FC = () => {
@@ -33,15 +34,20 @@ export const BookWizardPage: React.FC = () => {
   const updateImage = (data: File | null): void => {
     setImage(data);
   };
+
+  const submitBook = (): void => {
+    console.log("hello");
+  };
   
 
 
   return (
     <div>
-      <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
-      </TabContentPage>
+      {/* <TabContentPage onContentChange= {updateReadTabContent} page={"Read"}>
+      </TabContentPage> */}
       {/* <GeneralPage onAuthorChange={updateAuthor} onTitleChange={updateTitle} onImageChange={updateImage}>
       </GeneralPage> */}
+      <OverviewPage onSubmit={submitBook}></OverviewPage>
     </div>
   );
 

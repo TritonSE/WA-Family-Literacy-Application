@@ -1,0 +1,31 @@
+.comingSoon {
+    composes: h1 from '../../App.css';
+    padding-top: 30px;
+    text-align: center;
+
+}
+
+.center {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonContainer {
+    float: right;
+}
+
+.uploadButton {
+    height: 78px;
+    width: 366px;
+    background-color: var(--orange);
+    border: none;
+    margin-bottom: 50px;
+    box-shadow: 1px 1px;
+    cursor: pointer;
+}
+
+.uploadButtonText {
+    composes: body1 from '../../App.css';
+}
