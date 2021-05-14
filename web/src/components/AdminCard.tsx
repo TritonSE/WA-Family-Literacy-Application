@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Admin, CreateAdmin, UpdateAdmin } from '../models/Admin';
+import { APIContext } from '../context/APIContext';
 import DeleteIcon from '../assets/images/Minus-sign.svg';
 import LockIcon from '../assets/images/lock-solid.svg';
 
@@ -9,20 +10,29 @@ import styles from './AdminCard.module.css';
 type AdminCardProps = {
   admin: Admin,
   deleteMode: boolean,
-  onDelete: (id: string) => void,
-  // fetchAdmins: () => void,
-  // manageMode: boolean,
-  // onManage: (id: string) => void,
+  fetchAdmins: () => void,
 };
 
-export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelete }) => {
+export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAdmins }) => {
 
+  const client = useContext(APIContext);
 
-  // move delete functionality here and have a fetchAdmins call, then can do manage/update functionality
-  // onDelete {
-  //   handleDelete
-  //   fetchAdmins
-  // }
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+
+  const handleDelete = async (): Promise<void> => {
+    setDeleteModal(false);
+    await client.deleteAdmin(deleteId);
+    fetchAdmins();
+
+    console.log(deleteId);
+  };
+
+  const displayDeleteModal = (id: string): void => {
+    setDeleteModal(true);
+    setDeleteId(id);
+  };
+
 
   // states for managing an admin
   const [manageModal, setManageModal] = useState(false);
@@ -74,10 +84,8 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
 
     console.log(updatedAdmin);
 
-    // admin.can_delete_books = deleteBooks;
-
-    // await client.updateAdmin(manageId, updatedAdmin);
-    // setAdmins(); ? update current local admin and re-render parent? add a function prop? 
+    await client.updateAdmin(manageId, updatedAdmin);
+    fetchAdmins();
   };
 
 
@@ -91,8 +99,29 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, onDelet
       
       {admin.is_primary_admin && deleteMode && <img className={styles.lockIcon} role="presentation" src={LockIcon} width="20px" height="20px" alt=""/> }
       
-      {!admin.is_primary_admin && deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => onDelete(admin.id)}/>}
+      {!admin.is_primary_admin && deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => displayDeleteModal(admin.id)}/>}
       
+
+      {deleteModal && 
+        (
+          <div className={styles.modal}>
+            <div className={styles.modalContentDelete}>    
+              <form>
+                <div>
+                  <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
+                  <div className={styles.buttonsContainer}>
+                    <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
+                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        )
+      }
+
+
 
       { manageModal &&
         (

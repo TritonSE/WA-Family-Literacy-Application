@@ -78,6 +78,19 @@
     margin-bottom: 100px;
 }
 
+.modalContentDelete {
+    width: 40%;
+    padding: 40px 109px;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+}
+
+.modalTitleDelete {
+    composes: h3 from '../App.css'; 
+    margin-bottom: 40px;
+}
+
 .buttonsContainer {
     align-items: center;
     text-align: center;

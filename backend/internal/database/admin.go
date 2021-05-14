@@ -180,7 +180,7 @@ func (db *AdminDatabase) UpdateAdmin(ctx context.Context, id string, admin model
 
 // Deletes the admin with the given ID
 func (db *AdminDatabase) RemoveAdmin(ctx context.Context, id string) error {
-	_, err := db.Conn.Query(ctx, "DELETE FROM admin WHERE id = $1", id)
+	_, err := db.Conn.Query(ctx, "DELETE FROM admins WHERE id = $1", id)
 	if err != nil {
 		return errors.Wrap(err, "error in RemoveAdmin")
 	}

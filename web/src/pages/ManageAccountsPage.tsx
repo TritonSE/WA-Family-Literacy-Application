@@ -15,8 +15,7 @@ export const ManageAccountsPage: React.FC = () => {
 
   // states for deleting and admin
   const [deleteMode, setDeleteMode] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState('');
+
 
   const [newModal, setNewModal] = useState(false);
 
@@ -107,29 +106,16 @@ export const ManageAccountsPage: React.FC = () => {
     ];
   
     // move inside fetchAdmins
-    const primaryAdmin = test.find(a => a.is_primary_admin);
-    const temp = test.filter(a => !a.is_primary_admin);
+    // const primaryAdmin = test.find(a => a.is_primary_admin);
+    // const temp = test.filter(a => !a.is_primary_admin);
   
-    if (primaryAdmin) {
-      setAdmins([primaryAdmin, ...temp]);
-    } else {
-      setAdmins(test);
-    }
+    // if (primaryAdmin) {
+    //   setAdmins([primaryAdmin, ...temp]);
+    // } else {
+    //   setAdmins(test);
+    // }
 
   },[]);
-
-
-
-  const displayDeleteModal = (id: string): void => {
-    setDeleteModal(true);
-    setDeleteId(id);
-  };
-
-  const handleDelete = async (): Promise<void> => {
-    setDeleteModal(false);
-    // await client.deleteAdmin(deleteId);
-    setAdmins(prevAdmins => prevAdmins.filter(a => a.id != deleteId)); 
-  };
 
   
   return (
@@ -148,30 +134,11 @@ export const ManageAccountsPage: React.FC = () => {
 
       <div className={styles.admins}> 
         { admins.map((admin) => (
-          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} onDelete={displayDeleteModal}/>
+          <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} fetchAdmins={fetchAdmins}/>
         ))
         }
       </div>
 
-
-      {deleteModal && 
-        (
-          <div className={styles.modal}>
-            <div className={styles.modalContentDelete}>    
-              <form>
-                <div>
-                  <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
-                  <div className={styles.buttonsContainer}>
-                    <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
-                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-
-        )
-      }
 
 
       <div>
@@ -193,6 +160,9 @@ export const ManageAccountsPage: React.FC = () => {
                   <div className={styles.addContent}>
                     <div className={styles.volunteerInfo}>
                       <p className="h3">Volunteer Name</p>
+                      <p className="h3">Username (Email)</p>
+                      <p className="h3">Password</p>
+                      <p className="h3">Re-enter Password</p>
                     </div>
                     <div className={styles.access}>
                       <p className="h3">Access</p>

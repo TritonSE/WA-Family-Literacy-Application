@@ -115,7 +115,7 @@ p {
 
 .modalContentAdd {
     width: 40%;
-    height: 60%;
+    height: 80%;
     padding-right: 80px;
     padding-left: 80px;
     border: 1px solid var(--black);
@@ -124,7 +124,6 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* text-align: center; */
 }
 
 .modalTitleAdd {
@@ -137,4 +136,12 @@ p {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.volunteerInfo {
+    margin-right: 100px;
+}
+
+.volunteerInfo > * {
+    margin-bottom: 64px;
 }
