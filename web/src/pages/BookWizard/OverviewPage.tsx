@@ -1,5 +1,4 @@
 import React from 'react';
-import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 type OverviewPageProps = {
@@ -11,8 +10,6 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
 
   return (
     <div>
-      <UploadBooksNavigation pageName={"Overview"} pageNumber={5}>
-      </UploadBooksNavigation>
       <div className = {wizardStyles.mainDivElement}>   
         <div className= {styles.center}>
           <div className = {styles.comingSoon}>
@@ -26,10 +23,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
                   Upload Book
             </span>
           </button>
-
         </div>
-
-
       </div>
     </div>
   );

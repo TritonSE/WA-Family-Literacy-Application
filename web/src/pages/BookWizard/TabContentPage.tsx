@@ -6,14 +6,12 @@ import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
 import styles from './TabContentPage.module.css';
 import '../../App.css';
 import wizardStyles from '../BookWizardPage.module.css';
-import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
-  page: string 
 };
 
-export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, page}) => {
+export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange}) => {
 
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
@@ -37,10 +35,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
 
   return (
-    <div>
-      <UploadBooksNavigation pageName={page} pageNumber={5}>
-      </UploadBooksNavigation>
-      
+    <div>      
       <div className={wizardStyles.mainDivElement}>
         <div className = {styles.videoText}>
         Video

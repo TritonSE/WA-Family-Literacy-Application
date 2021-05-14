@@ -49,8 +49,6 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
 
   return(
     <div>
-      <UploadBooksNavigation pageName={"General"} pageNumber={1}>
-      </UploadBooksNavigation>
       <div className = {wizardStyles.mainDivElement}>
         <div className={styles.imageTitle}>
           Book Cover (IMG)
