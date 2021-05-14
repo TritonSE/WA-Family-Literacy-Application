@@ -3,8 +3,8 @@ module github.com/TritonSE/words-alive
 go 1.15
 
 require (
-	cloud.google.com/go v0.75.0 // indirect
 	firebase.google.com/go/v4 v4.1.0
+	github.com/buckket/go-blurhash v1.1.0
 	github.com/go-chi/chi v1.5.0
 	github.com/go-chi/cors v1.2.0
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
@@ -17,4 +17,6 @@ require (
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
+	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
+	google.golang.org/api v0.46.0
 )

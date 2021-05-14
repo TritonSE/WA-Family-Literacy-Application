@@ -20,4 +20,8 @@ export const APIProvider: React.FC = ({ children }) => {
       {children}
     </APIContext.Provider>
   );
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> feature/k6han/939327532-admin-API

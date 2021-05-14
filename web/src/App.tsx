@@ -7,27 +7,30 @@ import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
 import { ManageAccountsPage } from './pages/ManageAccountsPage';
+import { APIProvider } from './context/APIContext';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Navbar/>
+    <APIProvider>
+      <Router>
+        <Navbar />
 
-      <Switch>
-        <Route path="/communication">
-          <CommunicationPage/>
-        </Route>
-        <Route path="/analytics">
-          <AnalyticsPage/>
-        </Route>
-        <Route path="/books">
-          <UploadBooksPage/>
-        </Route>
-        <Route path="/accounts">
-          <ManageAccountsPage/>
-        </Route>
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/communication">
+            <CommunicationPage />
+          </Route>
+          <Route path="/analytics">
+            <AnalyticsPage />
+          </Route>
+          <Route path="/books">
+            <UploadBooksPage />
+          </Route>
+          <Route path="/accounts">
+            <ManageAccountsPage />
+          </Route>
+        </Switch>
+      </Router>
+    </APIProvider>
   );
 };
 

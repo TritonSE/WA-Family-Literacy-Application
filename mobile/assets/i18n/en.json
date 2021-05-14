@@ -1,7 +1,17 @@
 {
     "newBooks": "New Books for You",
     "allBooks": "All Books",
+    "letsTalk": "Let's Talk",
+    "tel": "Tel",
+    "fax": "Fax",
+    "days": "Mon-Fri",
+    "hours": "8am-4pm",
+    "emailUs": "Email Us",
+    "address": "Address",
     "read": "Read",
     "explore": "Explore",
-    "learn": "Learn"
+    "learn": "Learn",
+    "liveChat" : "Live chat is coming soon",
+    "untilThen": "Until then...",
+    "pageMofN": "Page %{m} of %{n}"
 }

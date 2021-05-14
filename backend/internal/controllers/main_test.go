@@ -25,8 +25,9 @@ func TestMain(m *testing.M) {
 	_, _ = conn.Exec(ctx, "TRUNCATE book_contents")
 	_, _ = conn.Exec(ctx, "TRUNCATE users")
 	_, _ = conn.Exec(ctx, "TRUNCATE admins")
+	_, _ = conn.Exec(ctx, "TRUNCATE image")
 
-	// Populate database
+	// Populate books database
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('c_id', 'c','c1');")
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('a_id', 'a','a1');")
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('b_id', 'b','b1');")
@@ -35,6 +36,7 @@ func TestMain(m *testing.M) {
 	conn.Exec(ctx, "INSERT INTO books (id, title, author) VALUES ('update',"+
 		"'update_me', 'update_me_author');")
 
+	// Populate book_contents database
 	conn.Exec(ctx, "INSERT INTO book_contents (id, lang, read_video, read_body, "+
 		"explore_video, explore_body, learn_video, learn_body) VALUES "+
 		"('a_id', 'en', 'a_en_rv', 'a_en_rb', 'a_en_ev', 'a_en_eb', "+
@@ -69,6 +71,11 @@ func TestMain(m *testing.M) {
 		"explore_video, explore_body, learn_video, learn_body) VALUES "+
 		"('update', 'en', 'update_en_rv', 'update_en_rb', 'update_en_ev', "+
 		" 'update_en_eb', 'update_en_lv', 'update_en_lb')")
+
+	// Seed admin database with primary admin
+	conn.Exec(ctx, "INSERT INTO admins (id, email, name, can_manage_users, "+
+		"can_upload_books, can_delete_books, is_primary_admin) VALUES "+
+		"('primary', 'admin@words.alive', 'admin', true, true, true, true)")
 
 	// Close the server
 	defer ts.Close()
