@@ -53,7 +53,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
           onChange={ e => setVideo(e.target.value)}
         />
         <div className = {styles.editorText}>
-        Write Here
+          Write Here
         </div>
         <CKEditor
           editor= { Editor }
