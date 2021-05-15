@@ -18,6 +18,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   const [image, setImage] = useState<File|null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const fileInput = useRef<HTMLInputElement>(null);
+  const acceptableMimeType = ["image/png", "image/jpeg"];
 
   useEffect( () => {
     onTitleChange(title);
@@ -50,8 +51,13 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     e.preventDefault();
     e.stopPropagation();
     const imageFile = e.dataTransfer.files[0];
-    handleFile(imageFile);
-
+    if(acceptableMimeType.indexOf(imageFile.type) == -1) {
+      alert("Please enter a jpeg or a png file");
+      return;
+    } 
+    else {
+      handleFile(imageFile);
+    }
   };
 
   const handleFile = (file: File): void => {
@@ -81,6 +87,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
                   <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
                 <input type="file"
                   ref = {fileInput} hidden
+                  accept="image/png, image/jpeg" 
                   onChange = { (e) => {
                     if(e.target != null && e.target.files != null) {
                       handleFile(e.target.files[0]);}}}/>
