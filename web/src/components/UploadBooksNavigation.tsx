@@ -22,14 +22,12 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const pageName = pages[pageNumber];
 
   for(let i = 0; i < 5; i++) {
-    if(i < pageNumber) {
+    if(i < pageNumber) 
       progressBar.push(checkCircleImg);
-    }
-    else if (i == pageNumber) {
+    else if (i == pageNumber)
       progressBar.push(greenCircleImg);
-    } else {
+    else
       progressBar.push(greyCircleImg);
-    }
     if(i != 4)
       progressBar.push(kebebSkewer);
   }
@@ -50,8 +48,9 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         <div>
           {pageNumber != 4 ? 
             <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => pageChange(pageNumber+1)}>
-              {allowContinue ? <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
-            </button> : <div className={styles.navigationButtonIcon}></div> }
+              {allowContinue ? 
+                <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
+            </button> : <div className={styles.navigationButtonIcon}></div>}
         </div>
       </div>
       <div className = {styles.progressBarContainer}>

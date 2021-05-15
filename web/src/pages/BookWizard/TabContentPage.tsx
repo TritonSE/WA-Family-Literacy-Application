@@ -14,6 +14,7 @@ type TabConentPageProps = {
 
 export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, currentContent}) => {
 
+
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
   useEffect( () => {
@@ -27,6 +28,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
     setBody(currentContent.body);
     setVideo(currentContent.video);
   }, []);
+
 
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
