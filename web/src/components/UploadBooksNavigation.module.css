@@ -1,5 +1,10 @@
+.navigationContainer {
+    display: flex;
+}
+
 .navigation {
     display: flex;
+    flex: 1;
     justify-content: center;
     align-items: center;
     margin-top: 65px;
@@ -64,4 +69,17 @@
     border-bottom: 1px solid black;
     margin: 5px;
     align-content: center;
-  }
+}
+
+.cancelImageContainer {
+    float: right;
+    position: relative;
+    margin-right: 20px;
+    bottom: 80px;
+}
+
+.cancelImage {
+    height: 80px;
+    width: 80px;
+}
+

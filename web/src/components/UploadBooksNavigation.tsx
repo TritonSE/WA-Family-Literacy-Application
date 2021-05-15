@@ -3,6 +3,7 @@ import NavigationButtonImage from '../assets/images/chevron-right-solid.svg';
 import GreyCircle from '../assets/images/gray-circle.svg';
 import GreenCircle from '../assets/images/green-circle.svg';
 import CheckedCircle from '../assets/images/check-circle.svg';
+import CancelImage from '../assets/images/times-solid.svg';
 import styles from './UploadBooksNavigation.module.css';
 import '../App.css';
 
@@ -20,7 +21,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
-  
+
 
   for(let i = 0; i < 5; i++) {
     if(i < pageNumber) 
@@ -35,24 +36,29 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   
   return (
     <div>
-      <div className={styles.navigation}>
-        <div>
-          {pageNumber != 0 ? 
-            <button className={styles.navigationButton} onClick={ () => pageChange(pageNumber-1)}>
-              <img src={NavigationButtonImage} alt='' className = {styles.navigationButtonLeft}/>
-            </button> : 
-            <div className={styles.navigationButtonIcon}></div>}
+      <div className={styles.navigationContainer}>
+        <div className={styles.navigation}>
+          <div>
+            {pageNumber != 0 ? 
+              <button className={styles.navigationButton} onClick={ () => pageChange(pageNumber-1)}>
+                <img src={NavigationButtonImage} alt='' className = {styles.navigationButtonLeft}/>
+              </button> : 
+              <div className={styles.navigationButtonIcon}></div>}
+          </div>
+          <div className= {styles.pageName}>
+            {pageName}
+          </div>
+          <div>
+            {pageNumber != 4 ? 
+              <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => pageChange(pageNumber+1)}>
+                {allowContinue ? 
+                  <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
+              </button> : <div className={styles.navigationButtonIcon}></div>}
+          </div>
         </div>
-        <div className= {styles.pageName}>
-          {pageName}
-        </div>
-        <div>
-          {pageNumber != 4 ? 
-            <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => pageChange(pageNumber+1)}>
-              {allowContinue ? 
-                <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
-            </button> : <div className={styles.navigationButtonIcon}></div>}
-        </div>
+      </div>
+      <div className={styles.cancelImageContainer}>
+        <img src={CancelImage} alt='' className={styles.cancelImage}/>
       </div>
       <div className = {styles.progressBarContainer}>
         <div className = {styles.progressBar}>
