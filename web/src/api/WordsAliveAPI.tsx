@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { Book, BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
 
@@ -31,6 +31,24 @@ class WordsAliveAPI {
   // deletes a book by id and language
   async deleteBookByLang(id: string, lang: Language): Promise<BookDetails> {
     const res = await this.client.delete(`/books/${id}/${lang}`);
+    return res.data;
+  }
+
+  async uploadBook(title: string, author:string, image:string): Promise<Book> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+  
+
+    const requestConfig: AxiosRequestConfig  = {
+      headers: headers,
+    };
+    const res = await this.client.post('/books', {
+      title:title, 
+      author:author,
+      image:image
+    }, requestConfig);
+    
     return res.data;
   }
 }

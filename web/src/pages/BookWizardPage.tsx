@@ -13,8 +13,17 @@ export const BookWizardPage: React.FC = () => {
     video: undefined
   };
 
-  const submitPage = (): void => {
-    console.log("Hello");
+  const submitPage = async (): Promise<String> => {
+    const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
+    
+    if (image != null) {
+      const imageType = image.type;
+      const imageData = await image.arrayBuffer();
+      const imageURl = imageAPI.uploadImage(new Uint8Array(imageData), imageType);
+    }
+
+
+
   };
 
   const changePage = (newPage: number): void => {
