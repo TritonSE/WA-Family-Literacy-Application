@@ -8,9 +8,12 @@ type GeneralPageProps = {
   onTitleChange: ( data: string ) => void
   onAuthorChange: (data: string) => void 
   onImageChange: (data: File | null) => void
+  currentTitle: string
+  currentAuthor: string
+  currentImage: File | null 
 };
 
-export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange}) => {
+export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange, currentTitle, currentAuthor, currentImage}) => {
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [image, setImage] = useState<File|null>(null);
@@ -28,6 +31,16 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   useEffect( () => {
     onImageChange(image);
   }, [image]);
+
+  useEffect( () => {
+    if (currentImage != null) {
+      setImage(currentImage);
+      setPreviewUrl(URL.createObjectURL(currentImage));
+    }
+
+    setTitle(currentTitle);
+    setAuthor(currentAuthor);
+  }, []);
 
 
   const handleOnDragOver = (e: React.DragEvent): void => {
@@ -70,6 +83,22 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
               onChange = { (e) => {
                 if(e.target != null && e.target.files != null) {
                   handleFile(e.target.files[0]);}}}/>
+          </div>
+        </div>
+        <div className = {styles.inputElement}>
+          <div className = {wizardStyles.inputBoxTitle}>
+            Title
+          </div>
+          <div>
+            <input className = {wizardStyles.inputBox} defaultValue={title} type="text" onChange={ (e) => setTitle(e.target.value)}></input>
+          </div>
+        </div>
+        <div className = {styles.inputElement}>
+          <div className = {wizardStyles.inputBoxTitle}>
+            Author
+          </div>
+          <div>
+            <input className = {wizardStyles.inputBox} defaultValue={author} type="text" onChange={ (e) => setAuthor(e.target.value)}></input>
           </div>
         </div>
       </div>

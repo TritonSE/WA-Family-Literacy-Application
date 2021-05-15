@@ -32,3 +32,9 @@
     composes: inputBoxTitle from '../BookWizardPage.module.css';
     padding-top: 30px;
 }
+
+
+.inputElement {
+    float: right;
+    margin-top: 40px;
+}
