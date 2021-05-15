@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Book } from '../models/Book';
 import { Language, LanguageLabels } from '../models/Languages';
@@ -146,10 +147,12 @@ export const UploadBooksPage: React.FC = () => {
             <img className="searchIcon" src={SearchIcon} alt='' />
           </button>
         </div>
-        <button type="button" className="newButton body1">
-          <p>New Book</p>
-          <img className="addIcon" src={AddIcon} alt='' />
-        </button>
+        <Link to={"/wiz"}>
+          <button type="button" className="newButton body1">
+            <p>New Book</p>
+            <img className="addIcon" src={AddIcon} alt='' />
+          </button>
+        </Link>
       </div>
       <div className="row">
         <div className="row">

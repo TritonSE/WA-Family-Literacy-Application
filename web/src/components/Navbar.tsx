@@ -20,7 +20,13 @@ export const Navbar: React.FC = () => {
           <NavLink className="body3 nav_link" activeClassName="active" to="/analytics">Analytics</NavLink>
         </li>
         <li className="nav_element_left">
-          <NavLink className="body3 nav_link" activeClassName="active" to="/upload">Upload Books</NavLink>
+          <NavLink className="body3 nav_link" activeClassName="active" to="/upload" isActive={(
+            (match, location) => {
+              if (location.pathname == "/wiz" || location.pathname=="/upload")
+                return true;
+              return false;
+            }
+          )}>Upload Books</NavLink>
         </li>
         <li className="nav_element_left">
           <NavLink className="body3 nav_link" activeClassName="active" to="/manage">Manage</NavLink>

@@ -20,6 +20,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
+  
 
   for(let i = 0; i < 5; i++) {
     if(i < pageNumber) 
