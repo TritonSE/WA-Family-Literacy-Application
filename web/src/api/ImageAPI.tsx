@@ -8,7 +8,7 @@ export class ImageAPI {
         this.cancelToken = axios.CancelToken.source();
     }
 
-    async uploadImage(body: Uint8Array, contentType:string): Promise<String> {
+    async uploadImage(body: Uint8Array, contentType:string): Promise<string> {
         const headers = {
             'Content-Type': contentType
         }

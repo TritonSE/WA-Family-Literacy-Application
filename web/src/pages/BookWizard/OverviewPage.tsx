@@ -2,11 +2,15 @@ import React from 'react';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 type OverviewPageProps = {
-  onSubmit: () => void;
+  onSubmit: () => Promise<string>;
 };
 
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
-
+  const handleOnClick = (): void  => {
+    onSubmit().then(res => {
+      alert(res);
+    });
+  };
 
   return (
     <div>
@@ -18,7 +22,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
         </div>
 
         <div className = {styles.buttonContainer}>
-          <button className={styles.uploadButton} onClick = {onSubmit}>
+          <button className={styles.uploadButton} onClick = {handleOnClick}>
             <span className={styles.uploadButtonText}> 
                   Upload Book
             </span>

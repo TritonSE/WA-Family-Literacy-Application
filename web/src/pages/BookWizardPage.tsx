@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
+import { APIContext } from '../context/APIContext';
 import { TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
 
 export const BookWizardPage: React.FC = () => {
+
+  const client = useContext(APIContext);
 
   const emptyTabContent: TabContent = {
     body: "",
@@ -16,14 +19,18 @@ export const BookWizardPage: React.FC = () => {
   const submitPage = async (): Promise<string> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
     
+    
     if (image != null) {
       const imageType = image.type;
       const imageData = await image.arrayBuffer();
-      const imageURl = imageAPI.uploadImage(new Uint8Array(imageData), imageType);
+      const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
+      const uploadedBook = await client.uploadBook(title, author, imageURl);
+      const uploadedBookDetails = await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
+      console.log(uploadedBookDetails);
+      return "Success";
     }
 
-
-
+    throw "Fail";
   };
 
   const changePage = (newPage: number): void => {
