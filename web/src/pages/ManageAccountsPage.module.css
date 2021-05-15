@@ -122,20 +122,20 @@ p {
     border-radius: 12px;
     background-color: var(--white);
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
 .modalTitleAdd {
     composes: h2 from '../App.css'; 
+    margin-top: 10px;
     margin-bottom: 20px;
     text-align: center;
 }
 
 .addContent {
     display: flex;
-    flex-direction: row;
-    align-items: center;
 }
 
 .volunteerInfo {
@@ -143,5 +143,10 @@ p {
 }
 
 .volunteerInfo > * {
-    margin-bottom: 64px;
+    margin-bottom: 6%;
+}
+
+.access {
+    justify-content: center;
+    align-items: center;
 }

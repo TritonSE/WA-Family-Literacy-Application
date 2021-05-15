@@ -17,6 +17,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
   const client = useContext(APIContext);
 
+  // states for deleting an admin
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState('');
 
@@ -45,15 +46,12 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
   const [deleteBooks, setDeleteBooks] = useState(false);
 
 
-  // when upload books is unchecked, set edit & delete books to false
+  // upload books toggle
   const handleUploadToggle = (): void => {
-    if (uploadBooks) {
-      setUploadBooks(prevUpload => !prevUpload);
-      setEditBooks(false);
-      setDeleteBooks(false);
-    } else {
-      setUploadBooks(prevUpload => !prevUpload);
-    }
+    setUploadBooks(prevUpload => !prevUpload);
+    setEditBooks(false);
+    setDeleteBooks(false);
+    console.log(admin);
   };
 
   // diplay the modal for managing and set the current permissions for the admin
