@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
-import { Book, CreateBook, TabContent } from '../models/Book';
+import { TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
@@ -19,6 +19,20 @@ export const BookWizardPage: React.FC = () => {
 
   const changePage = (newPage: number): void => {
     setCurrentPage(newPage);
+  };
+
+  const allowChangePage = (): boolean => {
+    switch(currentPage) {
+      case 0:
+        return title != "" && author != "" && image != null;
+      case 1:
+        return readTabContent.body != "";
+      case 2:
+        return exploreTabContent.body != "";
+      case 3:
+        return learnTabContent.body != "";
+    }
+    return true;
   };
 
 
@@ -48,7 +62,7 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage}></UploadBooksNavigation>
+      <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} allowContinue={allowChangePage()}></UploadBooksNavigation>
       {pages[currentPage]}
     </div>
   );

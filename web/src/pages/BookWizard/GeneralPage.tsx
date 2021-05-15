@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { UploadBooksNavigation } from '../../components/UploadBooksNavigation';
 import '../../App.css';
 import styles from './GeneralPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
@@ -90,7 +89,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
             Title
           </div>
           <div>
-            <input className = {wizardStyles.inputBox} defaultValue={title} type="text" onChange={ (e) => setTitle(e.target.value)}></input>
+            <input className = {wizardStyles.inputBox} value={title} type="text" onChange={ (e) => setTitle(e.target.value)}></input>
           </div>
         </div>
         <div className = {styles.inputElement}>
@@ -98,7 +97,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
             Author
           </div>
           <div>
-            <input className = {wizardStyles.inputBox} defaultValue={author} type="text" onChange={ (e) => setAuthor(e.target.value)}></input>
+            <input className = {wizardStyles.inputBox} value={author} type="text" onChange={ (e) => setAuthor(e.target.value)}></input>
           </div>
         </div>
       </div>

@@ -9,10 +9,10 @@ import '../App.css';
 type UploadBooksNavigationProps = {
   pageNumber: number
   pageChange: (newPage: number) => void; 
-  // allowContinue: boolean
+  allowContinue: boolean
 };
 
-export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange}) => {
+export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue}) => {
   const progressBar = [];
   const kebebSkewer = <span className={styles.skewer}></span>;
   const checkCircleImg = <img src={CheckedCircle} alt = '' className={styles.progressCircles}></img>;
@@ -20,7 +20,6 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
-
   
   for (let i = 0; i < pageNumber; i++) {
     progressBar.push(checkCircleImg);
@@ -52,8 +51,8 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
         <div>
           {pageNumber != 4 ? 
-            <button className = {styles.navigationButton} onClick={ () => pageChange(pageNumber+1)}>
-              <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/>
+            <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => pageChange(pageNumber+1)}>
+              {allowContinue ? <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
             </button> : <div className={styles.navigationButtonIcon}></div> }
         </div>
       </div>

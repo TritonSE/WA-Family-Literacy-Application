@@ -50,7 +50,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
         <input 
           type="text"
           className={styles.inputField}
-          defaultValue={video}
+          value={video}
           onChange={ e => setVideo(e.target.value)}
         />
         <div className = {styles.editorText}>

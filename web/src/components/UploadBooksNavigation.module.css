@@ -21,6 +21,11 @@
     composes: navigationButtonIcon;
 }
 
+.navigationButtonRightDisabled {
+    composes: navigationButtonIcon;
+    filter: invert(60%) sepia(7%) saturate(73%) hue-rotate(326deg) brightness(98%) contrast(96%);
+}
+
 .navigationButtonLeft {
     composes: navigationButtonIcon;
     transform: rotate(180deg);
