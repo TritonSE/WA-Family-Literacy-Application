@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Book, BookDetails } from '../models/Book';
+import { read } from 'node:fs';
+import { Book, BookDetails, TabContent } from '../models/Book';
 import { Language } from '../models/Languages';
 
 // Class to encapsulate the handler for the Words Alive API
@@ -34,7 +35,7 @@ class WordsAliveAPI {
     return res.data;
   }
 
-  async uploadBook(title: string, author:string, image:string): Promise<Book> {
+  async uploadBook(title: string, author: string, image: string): Promise<Book> {
     const headers = {
       'Content-Type': 'application/json'
     };
@@ -48,8 +49,30 @@ class WordsAliveAPI {
       author:author,
       image:image
     }, requestConfig);
-    
+
     return res.data;
+  }
+
+  async uploadBookDetails(id: string, lang: string, readTabContent: TabContent, exploreTabContent: TabContent, learnTabContent: TabContent): Promise<BookDetails> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+  
+
+    const requestConfig: AxiosRequestConfig  = {
+      headers: headers,
+    };
+
+    const res = await this.client.post(`/books/${id}`, {
+      Language: lang, 
+      Read: readTabContent, 
+      Explore:exploreTabContent, 
+      Learn:learnTabContent
+    }, requestConfig);
+
+    return res.data;
+
+
   }
 }
 

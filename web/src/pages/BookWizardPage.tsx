@@ -13,7 +13,7 @@ export const BookWizardPage: React.FC = () => {
     video: undefined
   };
 
-  const submitPage = async (): Promise<String> => {
+  const submitPage = async (): Promise<string> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
     
     if (image != null) {
