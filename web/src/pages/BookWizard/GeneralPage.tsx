@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../../App.css';
 import styles from './GeneralPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
+import requiredFieldImage from '../../assets/images/star-of-life-solid.svg';
 
 type GeneralPageProps = {
   onTitleChange: ( data: string ) => void
@@ -72,6 +73,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
           <div>
             <div className={styles.imageTitle}>
           Book Cover (IMG)
+              <img src={requiredFieldImage} alt='' className={styles.requiredImage}/>
             </div>
             <div 
               className = {styles.dropZone}
@@ -98,6 +100,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
             <div className = {styles.inputElement}>
               <div className = {wizardStyles.inputBoxTitle}>
               Title
+                <img src={requiredFieldImage} alt='' className={styles.requiredImage}/>
               </div>
               <div>
                 <input className = {styles.inputBox} value={title} type="text" onChange={ (e) => setTitle(e.target.value)}></input>
@@ -106,6 +109,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
             <div className = {styles.inputElement}>
               <div className = {wizardStyles.inputBoxTitle}>
               Author
+                <img src={requiredFieldImage} alt='' className={styles.requiredImage}/>
               </div>
               <div>
                 <input className = {styles.inputBox} value={author} type="text" onChange={ (e) => setAuthor(e.target.value)}></input>
