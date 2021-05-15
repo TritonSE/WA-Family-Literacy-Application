@@ -26,7 +26,6 @@ export const BookWizardPage: React.FC = () => {
       const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
       const uploadedBook = await client.uploadBook(title, author, imageURl);
       const uploadedBookDetails = await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
-      console.log(uploadedBookDetails);
       return "Success";
     }
 
