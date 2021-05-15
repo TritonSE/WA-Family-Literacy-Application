@@ -34,9 +34,9 @@ export const BookWizardPage: React.FC = () => {
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} currentImage={image} currentTitle={title} currentAuthor={author}></GeneralPage>,
-    <TabContentPage onContentChange={setReadTabContent} key={1}></TabContentPage>,
-    <TabContentPage onContentChange={setExploreTabContent} key={2}></TabContentPage>,
-    <TabContentPage onContentChange={setLearnTabContent} key={3}></TabContentPage>,
+    <TabContentPage onContentChange={setReadTabContent} key={1} currentContent={readTabContent}></TabContentPage>,
+    <TabContentPage onContentChange={setExploreTabContent} currentContent={exploreTabContent} key={2}></TabContentPage>,
+    <TabContentPage onContentChange={setLearnTabContent} currentContent={learnTabContent} key={3}></TabContentPage>,
     <OverviewPage onSubmit={submitPage} key={4}></OverviewPage>
   ];
 

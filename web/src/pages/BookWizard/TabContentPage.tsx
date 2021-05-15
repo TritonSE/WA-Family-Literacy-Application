@@ -9,9 +9,10 @@ import wizardStyles from '../BookWizardPage.module.css';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
+  currentContent: TabContent
 };
 
-export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange}) => {
+export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, currentContent}) => {
 
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
@@ -21,6 +22,11 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
       body: body,
     });
   }, [body, video]);
+
+  useEffect( () => {
+    setBody(currentContent.body);
+    setVideo(currentContent.video);
+  }, []);
 
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
@@ -43,8 +49,8 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
       
         <input 
           type="text"
-          placeholder="Enter youtube url here"
           className={styles.inputField}
+          defaultValue={video}
           onChange={ e => setVideo(e.target.value)}
         />
         <div className = {styles.editorText}>
@@ -53,6 +59,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange})
         <CKEditor
           editor= { Editor }
           config = { editorConfiguration }
+          data = {body} 
           onChange= { (event: any, editor: any) => {
             const data = editor.getData();
             setBody(data);
