@@ -1,6 +1,11 @@
+.pageContainer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .dropZone {
-    height: 400px;
-    width: 400px;
+    height: 450px;
+    width: 450px;
     float: left;
     background-color: var(--orange);
     cursor: pointer;
@@ -30,11 +35,19 @@
 
 .imageTitle {
     composes: inputBoxTitle from '../BookWizardPage.module.css';
-    padding-top: 30px;
+    margin-top: 30px;
 }
 
+.inputElementContainer {
+   float: left;
+   margin-left: 80px;
+}
+
+.inputBox {
+    composes: inputBox from '../BookWizardPage.module.css';
+    width: 500px;
+}
 
 .inputElement {
-    float: right;
-    margin-top: 40px;
+    margin-top: 30px;
 }
