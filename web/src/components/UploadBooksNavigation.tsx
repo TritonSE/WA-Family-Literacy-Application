@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import NavigationButtonImage from '../assets/images/chevron-right-solid.svg';
 import GreyCircle from '../assets/images/gray-circle.svg';
 import GreenCircle from '../assets/images/green-circle.svg';
@@ -24,12 +25,16 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
 
 
   for(let i = 0; i < 5; i++) {
-    if(i < pageNumber) 
-      progressBar.push(checkCircleImg);
+    let child: JSX.Element | null = null;
+    if(i < pageNumber)
+      child = checkCircleImg;
     else if (i == pageNumber)
-      progressBar.push(greenCircleImg);
+      child = greenCircleImg;
     else
-      progressBar.push(greyCircleImg);
+      child = greyCircleImg;
+    const pageName = <p className={styles.pageLabel}>{pages[i]}</p>;
+    const div = React.createElement("div", {className: styles.circleImageContainer} ,[child, pageName]);
+    progressBar.push(div);
     if(i != 4)
       progressBar.push(kebebSkewer);
   }
@@ -58,10 +63,19 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
       </div>
       <div className={styles.cancelImageContainer}>
-        <img src={CancelImage} alt='' className={styles.cancelImage}/>
+        <Link to="/upload">
+          <button className = {styles.navigationButton}>
+            <img src={CancelImage} alt='' className={styles.cancelImage} />
+          </button>
+        </Link>
       </div>
       <div className = {styles.progressBarContainer}>
         <div className = {styles.progressBar}>
+          {/* <div className={styles.progressCircleContainer}>
+            {checkCircleImg}
+            <p>Read</p>
+          </div>
+          {kebebSkewer} */}
           {progressBar}
         </div>
       </div>
