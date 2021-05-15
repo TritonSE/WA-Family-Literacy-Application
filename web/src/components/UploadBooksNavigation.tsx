@@ -20,22 +20,20 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
+
+  for(let i = 0; i < 5; i++) {
+    if(i < pageNumber) {
+      progressBar.push(checkCircleImg);
+    }
+    else if (i == pageNumber) {
+      progressBar.push(greenCircleImg);
+    } else {
+      progressBar.push(greyCircleImg);
+    }
+    if(i != 4)
+      progressBar.push(kebebSkewer);
+  }
   
-  for (let i = 0; i < pageNumber; i++) {
-    progressBar.push(checkCircleImg);
-    progressBar.push(kebebSkewer);
-  }
-
-  progressBar.push(greenCircleImg);
-  progressBar.push(kebebSkewer);
-
-  for (let i = pageNumber; i<4; i++) {
-    progressBar.push(greyCircleImg);
-    progressBar.push(kebebSkewer);
-  }
-
-  progressBar.pop();
-
   return (
     <div>
       <div className={styles.navigation}>
