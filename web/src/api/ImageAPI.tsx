@@ -1,8 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource } from 'axios';
- 
+
+/**
+ * Class to upload an image
+ */
 export class ImageAPI {
   client: AxiosInstance;
   cancelToken: CancelTokenSource;
+
   constructor(baseURL: string) {
     this.client = axios.create({baseURL:baseURL});
     this.cancelToken = axios.CancelToken.source();
@@ -12,8 +16,6 @@ export class ImageAPI {
     const headers = {
       'Content-Type': contentType
     };
-        
-
     const requestConfig: AxiosRequestConfig  = {
       headers: headers,
       cancelToken: this.cancelToken.token
