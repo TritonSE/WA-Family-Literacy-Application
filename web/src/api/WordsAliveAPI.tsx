@@ -64,7 +64,7 @@ class WordsAliveAPI {
     };
 
     const res = await this.client.post(`/books/${id}`, {
-      Language: lang, 
+      lang: lang, 
       Read: readTabContent, 
       Explore:exploreTabContent, 
       Learn:learnTabContent

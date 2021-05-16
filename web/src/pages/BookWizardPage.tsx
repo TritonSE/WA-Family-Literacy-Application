@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
 import { APIContext } from '../context/APIContext';
-import { TabContent } from '../models/Book';
+import { BookDetails, TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
@@ -16,20 +17,17 @@ export const BookWizardPage: React.FC = () => {
     video: undefined
   };
 
-  const submitPage = async (): Promise<string> => {
+  const submitPage = async (): Promise<undefined> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
-    
-    
     if (image != null) {
       const imageType = image.type;
       const imageData = await image.arrayBuffer();
       const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
       const uploadedBook = await client.uploadBook(title, author, imageURl);
-      const uploadedBookDetails = await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
-      return "Success";
+      await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
+      setRedirect(true);
+      return;
     }
-
-    throw "Fail";
   };
 
   const changePage = (newPage: number): void => {
@@ -60,6 +58,7 @@ export const BookWizardPage: React.FC = () => {
   const [readTabContent, setReadTabContent] = useState<TabContent>(emptyTabContent);
   const [exploreTabContent, setExploreTabContent] = useState<TabContent>(emptyTabContent);
   const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
+  const [redirect, setRedirect] = useState<boolean>(false);
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} currentImage={image} currentTitle={title} currentAuthor={author}></GeneralPage>,
@@ -77,8 +76,11 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} allowContinue={allowChangePage()}></UploadBooksNavigation>
-      {pages[currentPage]}
+      { redirect ? <Redirect to="upload"/> :
+        <div>
+          <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} allowContinue={allowChangePage()}></UploadBooksNavigation>
+          { pages[currentPage]} 
+        </div> }
     </div>
   );
 

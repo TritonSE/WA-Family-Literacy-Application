@@ -2,14 +2,12 @@ import React from 'react';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 type OverviewPageProps = {
-  onSubmit: () => Promise<string>;
+  onSubmit: () => Promise<undefined>;
 };
 
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
   const handleOnClick = (): void  => {
-    onSubmit().then(res => {
-      alert(res);
-    });
+    onSubmit().catch(err => alert(err));
   };
 
   return (
