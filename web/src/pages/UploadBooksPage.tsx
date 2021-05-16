@@ -147,7 +147,7 @@ export const UploadBooksPage: React.FC = () => {
             <img className={styles.searchIcon} src={SearchIcon} alt='' />
           </button>
         </div>
-        <Link to={"/wiz"}>
+        <Link to={"/upload-books-wizard"}>
           <button type="button" className={styles.newButton}>
             <p>New Book</p>
             <img className={styles.addIcon} src={AddIcon} alt='' />

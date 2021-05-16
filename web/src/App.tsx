@@ -29,7 +29,7 @@ const App: React.FC = () => {
           <Route path="/accounts">
             <ManageAccountsPage />
           </Route>
-          <Route path="/wiz">
+          <Route path="/upload-books-wizard">
             <BookWizardPage />
           </Route>
         </Switch>
