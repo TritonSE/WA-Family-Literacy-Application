@@ -16,7 +16,6 @@ type UploadBooksNavigationProps = {
 
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue}) => {
   const progressBar = [];
-  const kebebSkewer = <span className={styles.skewer}></span>;
   const checkCircleImg = <img src={CheckedCircle} alt = '' className={styles.progressCircles}></img>;
   const greenCircleImg = <img src = {GreenCircle} alt = '' className={styles.progressCircles}></img>;
   const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
@@ -26,15 +25,21 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
 
   for(let i = 0; i < 5; i++) {
     let child: JSX.Element | null = null;
+    const imageKey = i.toString() + "img";
+    const skewerKey = i.toString() + "skew";
+    
     if(i < pageNumber)
-      child = checkCircleImg;
+      child = <img src={CheckedCircle} key={imageKey}alt = '' className={styles.progressCircles}/>;
     else if (i == pageNumber)
-      child = greenCircleImg;
+      child = <img src = {GreenCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
     else
-      child = greyCircleImg;
-    const pageName = <p className={styles.pageLabel}>{pages[i]}</p>;
-    const div = React.createElement("div", {className: styles.circleImageContainer} ,[child, pageName]);
-    progressBar.push(div);
+      child = <img src={GreyCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
+    
+    const pageName = <p className={styles.pageLabel} key={pages[i]}>{pages[i]}</p>;
+    const nameImageDiv = React.createElement("div", {className: styles.circleImageContainer, key: i.toString()} ,[child, pageName]);
+    const kebebSkewer = <span className={styles.skewer} key={skewerKey}></span>;
+    
+    progressBar.push(nameImageDiv);
     if(i != 4)
       progressBar.push(kebebSkewer);
   }
@@ -71,11 +76,6 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
       </div>
       <div className = {styles.progressBarContainer}>
         <div className = {styles.progressBar}>
-          {/* <div className={styles.progressCircleContainer}>
-            {checkCircleImg}
-            <p>Read</p>
-          </div>
-          {kebebSkewer} */}
           {progressBar}
         </div>
       </div>
