@@ -12,7 +12,7 @@ import (
 )
 
 // Test for status forbidden when not authenticated
-func TestUserToken(t *testing.T) {
+func TestPostAdminUnauthorized(t *testing.T) {
 	fmt.Print("\n================ START ADMIN TESTS ================\n")
 	fmt.Print("\n---------------- CREATE ADMIN TESTS ----------------\n")
 
@@ -23,17 +23,30 @@ func TestUserToken(t *testing.T) {
 		http.StatusForbidden, nil, "test-token-user1")
 }
 
-// Test for successful creation of admin account
-func TestPostAdmin(t *testing.T) {
+// Test for conflicting permissions
+func TestPostAdminConflictingPerm(t *testing.T) {
 	var response string
 
 	body := `{"email": "admin1@test.com", "name": "adam", 
-    "can_manage_users": false, "can_upload_books": true, "can_delete_books" : true}`
-	// not passing token
+    "can_manage_users": true, "can_upload_books": false,
+    "can_edit_books": true, "can_delete_books" : false}`
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
+		http.StatusBadRequest, &response, "test-token-primary")
+
+	require.Equal(t, "must be able to upload to edit/delete books", response)
+}
+
+// Test for successful creation of admin account
+func TestPostAdmin(t *testing.T) {
+	var response models.Admin
+
+	body := `{"email": "admin1@test.com", "name": "adam", 
+    "can_manage_users": true, "can_upload_books": true, "can_edit_books": true,
+    "can_delete_books" : false}`
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
 		http.StatusOK, &response, "test-token-primary")
 
-	require.Equal(t, "admin1", response)
+	require.Equal(t, "admin1", response.ID)
 
 	body = `{"email": "intern1@test.com", "name": "ian", 
     "can_manage_users": false, "can_upload_books": false, "can_delete_books" : false}`
@@ -41,7 +54,7 @@ func TestPostAdmin(t *testing.T) {
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
 		http.StatusOK, &response, "test-token-primary")
 
-	require.Equal(t, "intern1", response)
+	require.Equal(t, "intern1", response.ID)
 }
 
 // Test list admins without auth
@@ -79,7 +92,7 @@ func TestGetAdminByID(t *testing.T) {
 	require.Equal(t, "primary", response.ID)
 }
 
-// Test post request without auth
+// Test update request without auth
 func TestUpdateAdminUnauthorized(t *testing.T) {
 	fmt.Print("\n---------------- UPDATE ADMIN TESTS ----------------\n")
 	var response string
@@ -92,7 +105,7 @@ func TestUpdateAdminUnauthorized(t *testing.T) {
 	require.Equal(t, "do not have permission", response)
 }
 
-// Test post request on primary admin
+// Test update request on primary admin
 func TestUpdateAdminPrimary(t *testing.T) {
 	var response string
 
@@ -104,22 +117,36 @@ func TestUpdateAdminPrimary(t *testing.T) {
 	require.Equal(t, "cannot update primary admin", response)
 }
 
+// Test conflicting permissions
+func TestUpdateAdminConflictPerm(t *testing.T) {
+	var response string
+
+	body := `{"name": "eve", "can_manage_users": false, 
+    "can_upload_books": false}`
+	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/admins/admin1", body,
+		http.StatusBadRequest, &response, "test-token-admin1")
+
+	require.Equal(t, "must be able to upload to edit/delete books", response)
+}
+
 // Test post request
 func TestUpdateAdmin(t *testing.T) {
 	var response models.Admin
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/admins/admin1", "",
 		http.StatusOK, &response, "test-token-admin1")
 
-	require.Equal(t, false, response.CanManageUsers)
+	require.Equal(t, true, response.CanManageUsers)
 
-	body := `{"can_manage_users": true}`
+	require.Equal(t, true, response.CanEditBooks)
+
+	body := `{"can_edit_books": false}`
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/admins/admin1", body,
 		http.StatusOK, nil, "test-token-admin1")
 
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/admins/admin1", "",
 		http.StatusOK, &response, "test-token-admin1")
 
-	require.Equal(t, true, response.CanManageUsers)
+	require.Equal(t, false, response.CanEditBooks)
 }
 
 // Test delete request unauthorized
@@ -133,7 +160,7 @@ func TestDeleteAdminUnauthorized(t *testing.T) {
 // Test delete request
 func TestDeleteAdmin(t *testing.T) {
 	testutils.MakeAuthenticatedRequest(t, "DELETE", ts.URL+"/admins/admin1", "",
-		http.StatusOK, nil, "test-token-primary")
+		http.StatusNoContent, nil, "test-token-primary")
 
 	var response string
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/admins/admin1", "",

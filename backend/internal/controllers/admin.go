@@ -30,22 +30,14 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	// Check auth token
-	uid, ok := req.Context().Value("user").(string)
+	// Check Permission
+	manageUser, ok := req.Context().Value("permission").(bool)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
-	// Check if admin - only admins can create admin accounts
-	isAdmin, _, _, _, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
-		return
-	}
-	if !isAdmin {
+	if !manageUser {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
@@ -62,8 +54,15 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	// Check for conflicting fields
+	// Do not allow edit/delete book to be set without permission to upload books
+	if !cadmin.CanUploadBooks && (cadmin.CanEditBooks || cadmin.CanDeleteBooks) {
+		writeResponse(rw, http.StatusBadRequest, "must be able to upload to edit/delete books")
+		return
+	}
+
 	// Generate ID for new admin account
-	cuid, err := c.Auth.GenerateToken(req.Context(), cadmin.Email, cadmin.Password)
+	cuid, err := c.Auth.CreateUser(req.Context(), cadmin.Email, cadmin.Password)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "could not generate token")
 		fmt.Println(err)
@@ -76,6 +75,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	admin.Email = cadmin.Email
 	admin.CanManageUsers = cadmin.CanManageUsers
 	admin.CanUploadBooks = cadmin.CanUploadBooks
+	admin.CanEditBooks = cadmin.CanEditBooks
 	admin.CanDeleteBooks = cadmin.CanDeleteBooks
 
 	// Create new admin in database
@@ -86,32 +86,24 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	writeResponse(rw, http.StatusOK, cuid)
+	writeResponse(rw, http.StatusOK, admin)
 }
 
 // Get list of admins
 func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request) {
-	// Check auth token
-	uid, ok := req.Context().Value("user").(string)
+	// Check admin permissions
+	manageUser, ok := req.Context().Value("permission").(bool)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
-	// Check admin permissions
-	isAdmin, _, _, _, err :=
-		c.Admins.FetchAdminPermissions(req.Context(), uid)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
-		return
-	}
-	if !isAdmin {
+	if !manageUser {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
 
+	// Get list of admins from database
 	admins, err := c.Admins.FetchAdmins(req.Context())
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -125,23 +117,14 @@ func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request
 func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request) {
 	var adminID string = chi.URLParam(req, "id")
 
-	// Check auth token
-	uid, ok := req.Context().Value("user").(string)
+	// Check Permission
+	manageUser, ok := req.Context().Value("permission").(bool)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
-	// Check if admin
-	isAdmin, _, _, _, err :=
-		c.Admins.FetchAdminPermissions(req.Context(), uid)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
-		return
-	}
-	if !isAdmin {
+	if !manageUser {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
@@ -172,23 +155,14 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
-	// Check auth token
-	uid, ok := req.Context().Value("user").(string)
+	// Check Permission
+	manageUser, ok := req.Context().Value("permission").(bool)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
-	// Check if admin
-	isAdmin, _, _, _, err :=
-		c.Admins.FetchAdminPermissions(req.Context(), uid)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
-		return
-	}
-	if !isAdmin {
+	if !manageUser {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
@@ -209,6 +183,29 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	// Check for conflicting fields
+	var cub, ceb, cdb bool
+	if uadmin.CanUploadBooks != nil {
+		cub = *(uadmin.CanUploadBooks)
+	} else {
+		cub = admin.CanUploadBooks
+	}
+	if uadmin.CanEditBooks != nil {
+		ceb = *(uadmin.CanEditBooks)
+	} else {
+		ceb = admin.CanEditBooks
+	}
+	if uadmin.CanDeleteBooks != nil {
+		cdb = *(uadmin.CanDeleteBooks)
+	} else {
+		cdb = admin.CanDeleteBooks
+	}
+
+	if !cub && (ceb || cdb) {
+		writeResponse(rw, http.StatusBadRequest, "must be able to upload to edit/delete books")
+		return
+	}
+
 	// Carry out update
 	err = c.Admins.UpdateAdmin(req.Context(), adminID, uadmin)
 	if err != nil {
@@ -224,23 +221,14 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 func (c *AdminController) DeleteAdmin(rw http.ResponseWriter, req *http.Request) {
 	var adminID string = chi.URLParam(req, "id")
 
-	// Check auth token
-	uid, ok := req.Context().Value("user").(string)
+	// Check Permission
+	manageUser, ok := req.Context().Value("permission").(bool)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
-	// Check if admin
-	isAdmin, _, _, _, err :=
-		c.Admins.FetchAdminPermissions(req.Context(), uid)
-	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
-		return
-	}
-	if !isAdmin {
+	if !manageUser {
 		writeResponse(rw, http.StatusForbidden, "do not have permission")
 		return
 	}
@@ -267,5 +255,5 @@ func (c *AdminController) DeleteAdmin(rw http.ResponseWriter, req *http.Request)
 		fmt.Println(err)
 	}
 
-	writeResponse(rw, http.StatusOK, "deleted")
+	writeResponse(rw, http.StatusNoContent, "")
 }
