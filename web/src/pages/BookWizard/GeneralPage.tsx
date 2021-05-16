@@ -8,11 +8,15 @@ type GeneralPageProps = {
   onTitleChange: ( data: string ) => void
   onAuthorChange: (data: string) => void 
   onImageChange: (data: File | null) => void
-  currentTitle: string
+  // the current state of the fields. Used because fields dissapear when component re-renders
+  currentTitle: string 
   currentAuthor: string
   currentImage: File | null 
 };
 
+/**
+ * General page for the book wizard. Inputs for title, author, and image 
+ */
 export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange, currentTitle, currentAuthor, currentImage}) => {
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");

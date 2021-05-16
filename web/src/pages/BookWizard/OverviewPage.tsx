@@ -5,7 +5,11 @@ type OverviewPageProps = {
   onSubmit: () => Promise<undefined>;
 };
 
+/**
+ * Overview Page for Book Wizard
+ */
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
+  // handles when upload is clicked. No need to display success, as page redirects when upload is succesful
   const handleOnClick = (): void  => {
     onSubmit().catch(err => alert(err));
   };

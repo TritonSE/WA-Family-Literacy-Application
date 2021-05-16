@@ -24,12 +24,3 @@ export type TabContent = {
   video?: string;
   body: string;
 };
-
-export type CreateBook = {
-  title: string
-  author: string
-  image: Int8Array
-  read: TabContent
-  explore: TabContent
-  learn: TabContent
-};

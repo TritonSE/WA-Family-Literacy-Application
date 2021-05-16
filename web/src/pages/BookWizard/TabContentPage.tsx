@@ -9,11 +9,14 @@ import wizardStyles from '../BookWizardPage.module.css';
 
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
+  // the current state of the fields. Used because fields dissapear when component re-renders
   currentContent: TabContent
 };
 
+/**
+ * Read, Explore, and Learn page for the Upload Books Wizard
+ */
 export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, currentContent}) => {
-
 
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
@@ -24,12 +27,14 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
     });
   }, [body, video]);
 
+  // set current values
   useEffect( () => {
     setBody(currentContent.body);
     setVideo(currentContent.video);
   }, []);
 
 
+  // function to generate a new custom upload adapter for ckeditor
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
       return new ImageUploadAdapter( loader );

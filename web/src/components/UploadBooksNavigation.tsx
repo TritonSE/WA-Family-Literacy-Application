@@ -10,21 +10,22 @@ import '../App.css';
 
 type UploadBooksNavigationProps = {
   pageNumber: number
-  pageChange: (newPage: number) => void; 
-  allowContinue: boolean
+  pageChange: (newPage: number) => void; //function to render a new page below the navigation component
+  allowContinue: boolean //controls if user can move onto the next page
 };
 
+/**
+ * Renders the navigation wizard bar at the top of the book wizard
+ */
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue}) => {
   const progressBar = [];
-  const checkCircleImg = <img src={CheckedCircle} alt = '' className={styles.progressCircles}></img>;
-  const greenCircleImg = <img src = {GreenCircle} alt = '' className={styles.progressCircles}></img>;
-  const greyCircleImg = <img src={GreyCircle} alt = '' className={styles.progressCircles}></img>;
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
 
-
+  // creates a div with an image and a text child, and also creates the line in between them  
   for(let i = 0; i < 5; i++) {
     let child: JSX.Element | null = null;
+    // ensure all elements have unique keys
     const imageKey = i.toString() + "img";
     const skewerKey = i.toString() + "skew";
     

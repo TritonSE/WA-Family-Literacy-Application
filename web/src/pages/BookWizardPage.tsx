@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
 import { APIContext } from '../context/APIContext';
-import { BookDetails, TabContent } from '../models/Book';
+import { TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
@@ -19,6 +19,7 @@ export const BookWizardPage: React.FC = () => {
 
   const submitPage = async (): Promise<undefined> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
+    // image will never equal null here - done to please Typescript type checking
     if (image != null) {
       const imageType = image.type;
       const imageData = await image.arrayBuffer();
@@ -34,6 +35,7 @@ export const BookWizardPage: React.FC = () => {
     setCurrentPage(newPage);
   };
 
+  // logic to allow if the user can move onto the next page
   const allowChangePage = (): boolean => {
     switch(currentPage) {
       case 0:
@@ -48,9 +50,6 @@ export const BookWizardPage: React.FC = () => {
     return true;
   };
 
-
-  
-  // const [readTabContent, setReadTabContent] =  useState<TabContent | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
@@ -58,6 +57,8 @@ export const BookWizardPage: React.FC = () => {
   const [readTabContent, setReadTabContent] = useState<TabContent>(emptyTabContent);
   const [exploreTabContent, setExploreTabContent] = useState<TabContent>(emptyTabContent);
   const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
+  
+  // controls wheter to redirect the page back to start
   const [redirect, setRedirect] = useState<boolean>(false);
 
   const pages = [
@@ -67,12 +68,6 @@ export const BookWizardPage: React.FC = () => {
     <TabContentPage onContentChange={setLearnTabContent} currentContent={learnTabContent} key={3}></TabContentPage>,
     <OverviewPage onSubmit={submitPage} key={4}></OverviewPage>
   ];
-
-
-
-
-  
-
 
   return (
     <div>

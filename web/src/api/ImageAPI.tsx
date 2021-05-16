@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource } from 'axios';
-/* eslint-disable */ 
+ 
 export class ImageAPI {
     client: AxiosInstance;
     cancelToken: CancelTokenSource;
