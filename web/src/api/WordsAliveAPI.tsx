@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { read } from 'node:fs';
 import { Book, BookDetails, TabContent } from '../models/Book';
 import { Language } from '../models/Languages';
 
@@ -35,6 +34,7 @@ class WordsAliveAPI {
     return res.data;
   }
 
+  // uploads a book into the databsase, returning the book
   async uploadBook(title: string, author: string, image: string): Promise<Book> {
     const requestConfig: AxiosRequestConfig  = {
       headers: {
@@ -50,6 +50,7 @@ class WordsAliveAPI {
     return res.data;
   }
 
+  // uploads all of the details of a book and its language by the id of the book
   async uploadBookDetails(id: string, lang: string, readTabContent: TabContent, exploreTabContent: TabContent, learnTabContent: TabContent): Promise<BookDetails> {
     const requestConfig: AxiosRequestConfig  = {
       headers: {

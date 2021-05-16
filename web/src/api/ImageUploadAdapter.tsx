@@ -17,7 +17,7 @@ export class ImageUploadAdapter {
     this.imageAPI= new ImageAPI( process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
   }
 
-
+  // uploads a image inserted into ckeditor to database 
   async upload(): Promise<UploadReturn> {
     const file: File =  await this.loader.file;
     const array = await file.arrayBuffer();

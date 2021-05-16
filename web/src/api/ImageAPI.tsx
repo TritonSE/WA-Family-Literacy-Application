@@ -12,6 +12,7 @@ export class ImageAPI {
     this.cancelToken = axios.CancelToken.source();
   }
 
+  // uploads an image to the image database
   async uploadImage(body: Uint8Array, contentType: string): Promise<string> {
     const headers = {
       'Content-Type': contentType
