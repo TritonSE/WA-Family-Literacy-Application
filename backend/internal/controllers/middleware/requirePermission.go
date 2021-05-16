@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
@@ -30,22 +29,28 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 				return
 			}
 
-			var ctx context.Context
+			var permitted bool = false
 
 			switch p {
 			case models.CanManageUsers:
-				ctx = context.WithValue(req.Context(), "permission", perms.CanManageUsers)
+				permitted = perms.CanManageUsers
 			case models.CanUploadBooks:
-				ctx = context.WithValue(req.Context(), "permission", perms.CanUploadBooks)
+				permitted = perms.CanManageUsers
 			case models.CanEditBooks:
-				ctx = context.WithValue(req.Context(), "permission", perms.CanEditBooks)
+				permitted = perms.CanManageUsers
 			case models.CanDeleteBooks:
-				ctx = context.WithValue(req.Context(), "permission", perms.CanDeleteBooks)
+				permitted = perms.CanManageUsers
 			default:
-				writeResponse(rw, http.StatusInternalServerError, "invalid permission")
+				writeResponse(rw, http.StatusInternalServerError, "Bad enum value")
+				return
 			}
 
-			next.ServeHTTP(rw, req.WithContext(ctx))
+			if !permitted {
+				writeResponse(rw, http.StatusForbidden, "do not have permission")
+				return
+			}
+
+			next.ServeHTTP(rw, req)
 		})
 	}
 }
