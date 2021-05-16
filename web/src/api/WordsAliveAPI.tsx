@@ -36,13 +36,10 @@ class WordsAliveAPI {
   }
 
   async uploadBook(title: string, author: string, image: string): Promise<Book> {
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-  
-
     const requestConfig: AxiosRequestConfig  = {
-      headers: headers,
+      headers: {
+        'Content-Type': 'application/json'
+      },
     };
     const res = await this.client.post('/books', {
       title:title, 
@@ -54,13 +51,10 @@ class WordsAliveAPI {
   }
 
   async uploadBookDetails(id: string, lang: string, readTabContent: TabContent, exploreTabContent: TabContent, learnTabContent: TabContent): Promise<BookDetails> {
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-  
-
     const requestConfig: AxiosRequestConfig  = {
-      headers: headers,
+      headers: {
+        'Content-Type': 'application/json'
+      },
     };
 
     const res = await this.client.post(`/books/${id}`, {
