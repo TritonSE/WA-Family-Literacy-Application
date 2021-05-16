@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { Book, BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
-import { Admin, UpdateAdmin } from '../models/Admin';
+import { Admin, CreateAdmin, UpdateAdmin } from '../models/Admin';
 
 // Class to encapsulate the handler for the Words Alive API
 class WordsAliveAPI {
@@ -50,17 +50,19 @@ class WordsAliveAPI {
   }
 
   // delete an admin by id
-  async deleteAdmin(id: string): Promise<Admin> {
+  async deleteAdmin(id: string): Promise<string> {
     const res = await this.client.delete(`/admins/${id}`);
     return res.data;
   }
 
   // create an admin with all fields
-  // async createAdmin() {
-  // }
+  async createAdmin(admin: CreateAdmin): Promise<string> {
+    const res = await this.client.post(`/admins`, admin);
+    return res.data;
+  }
 
   // update an admin by id
-  async updateAdmin(id: string, admin: UpdateAdmin): Promise<Admin> {
+  async updateAdmin(id: string, admin: UpdateAdmin): Promise<string> {
     const res = await this.client.patch(`/admins/${id}`, admin);
     return res.data;
   }

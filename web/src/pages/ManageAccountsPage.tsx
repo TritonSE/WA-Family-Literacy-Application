@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AdminCard } from '../components/AdminCard';
 import { APIContext } from '../context/APIContext';
-import { Admin } from '../models/Admin';
+import { Admin, CreateAdmin } from '../models/Admin';
 import AddIcon from '../assets/images/plus-circle-solid-green.svg';
 
 import '../App.css';
@@ -10,25 +10,20 @@ import styles from './ManageAccountsPage.module.css';
 
 export const ManageAccountsPage: React.FC = () => {
 
+  const client = useContext(APIContext);
+
+
   // list of admins 
   const [admins, setAdmins] = useState<Admin[]>([]);
-
-  // states for deleting and admin
-  const [deleteMode, setDeleteMode] = useState(false);
-
-
-  const [newModal, setNewModal] = useState(false);
-
-  const client = useContext(APIContext);
 
   // get admins from backend
   const fetchAdmins = async (): Promise<void> => {
     const res = await client.getAdmins();
 
-    const primaryAdmin = res.find(a => a.is_primary_admin);
-    const temp = res.filter(a => !a.is_primary_admin);
+    const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
+    const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
 
-    const adminList: Admin[] = primaryAdmin ? [primaryAdmin, ...temp] : res;
+    const adminList: Admin[] =  [...primaryAdmin, ...otherAdmins];
     setAdmins(adminList);
 
   };
@@ -114,23 +109,53 @@ export const ManageAccountsPage: React.FC = () => {
   },[]);
 
 
+  // if delete mode is active
+  const [deleteMode, setDeleteMode] = useState(false);
+
   // states for new account
+  const [newModal, setNewModal] = useState(false);
+
   const [volunteerName, setVolunteerName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reenterPassword, setReenterPassword] = useState('');
+  
+  const [manageAdmins, setManageAdmins] = useState(false);
+  const [uploadBooks, setUploadBooks] = useState(false);
 
-  const handleNewAccount = (): void => {
+  const handleNewAccount = async (): Promise<void> => {
     setNewModal(false);
-    console.log(volunteerName);
-    console.log(username);
-    console.log(password);
-    console.log(reenterPassword);
+
+    // console.log(volunteerName);
+    // console.log(username);
+    // console.log(password);
+    // console.log(reenterPassword);
+    // console.log(manageAdmins);
+    // console.log(uploadBooks);
+
+    const newAdmin: CreateAdmin = {
+      name: volunteerName,
+      email: username,
+      password: password,
+      can_manage_users: manageAdmins,
+      can_upload_books: uploadBooks,
+      can_edit_books: false,
+      can_delete_books: false,
+    };
+
+    console.log(newAdmin);
+
+    await client.createAdmin(newAdmin);
+    fetchAdmins();
 
     setVolunteerName('');
     setUsername('');
     setPassword('');
     setReenterPassword('');
+
+    setManageAdmins(false);
+    setUploadBooks(false);
+
   };
 
   
@@ -195,10 +220,10 @@ export const ManageAccountsPage: React.FC = () => {
                       <p className="h3">Access</p>
 
                       <label htmlFor="manage">Manage</label>
-                      <input type="checkbox" id="manageBox"/>
-
+                      <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
+                      <br/>
                       <label htmlFor="uploadBooks">Upload Books</label>
-                      <input type="checkbox" id="uploadBooksBox"/>
+                      <input type="checkbox" id="uploadBooksBox" onChange={() => setUploadBooks(prevManage => !prevManage)} checked={uploadBooks}/>
 
                       {/* <label htmlFor="deleteBooks">Delete Books</label>
                       <input type="checkbox" id="deleteBooksBox"/>

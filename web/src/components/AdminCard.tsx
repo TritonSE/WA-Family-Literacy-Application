@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Admin, CreateAdmin, UpdateAdmin } from '../models/Admin';
+import { Admin, UpdateAdmin } from '../models/Admin';
 import { APIContext } from '../context/APIContext';
 import DeleteIcon from '../assets/images/Minus-sign.svg';
 import LockIcon from '../assets/images/lock-solid.svg';
@@ -25,8 +25,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setDeleteModal(false);
     await client.deleteAdmin(deleteId);
     fetchAdmins();
-
-    console.log(deleteId);
   };
 
   const displayDeleteModal = (id: string): void => {
