@@ -1,6 +1,7 @@
 {
   "name": "words-alive-mobile",
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/native": "^5.9.2",
@@ -23,7 +24,8 @@
     "react-native-screens": "~2.15.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
-    "react-native-youtube-iframe": "^1.4.1"
+    "react-native-youtube-iframe": "^1.4.1",
+    "react-use-localstorage": "^3.5.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -50,7 +52,7 @@
     "web": "expo web",
     "eject": "expo eject",
     "dev": "BASE_URL=http://localhost:8080 npm start",
-    "staging": "BASE_URL=https://words-alive-staging.herokuapp.com npm start"
+    "staging": "BASE_URL=https://api-staging.wordsalive.org npm start"
   },
   "private": true
 }

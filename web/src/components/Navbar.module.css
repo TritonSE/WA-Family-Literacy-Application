@@ -28,6 +28,7 @@
 }
 
 .nav_link {
+  composes: body3 from '../App.css';
   display: block;
   text-align: center;
   margin-top: 50px;
@@ -49,6 +50,7 @@
 }
 
 .button_text {
+  composes: body3 from '../App.css';
   color: var(--black);
 }
 

@@ -3,11 +3,13 @@ p {
 }
 
 .title {
+  composes: h2 from '../App.css';
   text-align: left;
   margin-right: 40px;
 }
 
 .clickableText {
+  composes: body3 from '../App.css';
   text-decoration: underline;
   border: none;
   outline: none;
@@ -80,6 +82,7 @@ p {
 }
 
 .modalTitle {
+  composes: h3 from '../App.css';
   margin-bottom: 40px;
 }
 
@@ -94,6 +97,7 @@ p {
 }
 
 .newButton {
+  composes: body1 from '../App.css';
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -109,6 +113,7 @@ p {
 }
 
 .cancelBtn {
+  composes: body3 from '../App.css';
   width: 200px;
   margin: 0px 17px;
   padding: 10px 10px;
@@ -120,6 +125,7 @@ p {
 }
 
 .deleteBtn {
+  composes: body3 from '../App.css';
   width: 200px;
   margin: 0px 17px;
   padding: 10px 10px;
@@ -138,6 +144,7 @@ p {
 
 /* checkbox container and label */
 .checkboxContainer {
+  composes: body1 from '../App.css';
   display: block;
   position: relative;
   display: block;

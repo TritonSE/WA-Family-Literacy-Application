@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
-import YoutubePlayer from 'react-native-youtube-iframe';
 import * as WebBrowser from 'expo-web-browser';
 import { HomeStackParams } from '../navigation/HomeStackNavigator';
 import { LoadingCircle } from '../components/LoadingCircle';
@@ -15,6 +14,7 @@ import { LanguageButtons } from '../components/LanguageButtons';
 import { Colors } from '../styles/Colors';
 import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
+import { YoutubeVideo } from '../components/YoutubeVideo';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
@@ -36,8 +36,6 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   const locale = i18nCtx.locale.substring(0, 2) as Language;
   const defaultLang = langs.includes(locale) ? locale : langs.includes('en') ? 'en' : langs[0];
-
-  const videoIdRegEx = new RegExp('^(?:https?:)?//[^/]*(?:youtube(?:-nocookie)?.com|youtu.be).*[=/]([-\\w]{11})(?:\\?|=|&|$)');
 
   // book screen states
   const [loading, setLoading] = useState(true);
@@ -75,31 +73,18 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   // Get the tab content (video and body) for the selected tab
   const tabContent = bookDetails !== null && bookDetails[activeButton];
 
-  // Try to parse the video URL and only show the player if it exists and is a valid YouTube URL
-  const videoMatch = tabContent && tabContent.video && tabContent.video.match(videoIdRegEx);
-  const videoID = videoMatch && videoMatch[1];
-  const videoPlayer = videoID && (
-    <View style={styles.video}>
-      <YoutubePlayer
-        height={9 / 16 * tabContentWidth}
-        width={tabContentWidth}
-        videoId={videoID}
-      />
-    </View>
-  );
-
-  const tabContentView = bookDetails !== null && (
+  const tabContentView = tabContent && (
     <View style={styles.tabContentContainer}>
-      {videoPlayer}
+      {tabContent.video && <YoutubeVideo url={tabContent.video} width={tabContentWidth} height={9 / 16 * tabContentWidth}/>}
       <MarkdownView styles={markdownStyles} onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}>
-        {bookDetails[activeButton].body}
+        {tabContent.body}
       </MarkdownView>
     </View>
   );
 
   return (
     <ScrollView>
-      <Pressable style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')} /></Pressable>
+      <Pressable style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')}/></Pressable>
       <View style={styles.container}>
         <LanguageButtons
           langs={langs}
@@ -109,7 +94,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           }}
         />
         <View style={styles.imgContainer}>
-          <Image source={{ uri: book.image }} style={styles.image} />
+          <Image source={{ uri: book.image }} style={styles.image}/>
         </View>
         <Text style={[TextStyles.heading1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>
@@ -121,7 +106,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
             setActiveButton(btn as Tab);
           }}
         />
-        {loading ? <View style={styles.loadingCircle}><LoadingCircle /></View> : tabContentView}
+        {loading ? <View style={styles.loadingCircle}><LoadingCircle/></View> : tabContentView}
       </View>
     </ScrollView>
   );
@@ -174,5 +159,4 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     marginBottom: 40,
   },
-
 });

@@ -6,8 +6,8 @@ import './App.css';
 import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
-import { ManagePage } from './pages/ManagePage';
 import { BookWizardPage } from './pages/BookWizardPage';
+import { ManageAccountsPage } from './pages/ManageAccountsPage';
 import { APIProvider } from './context/APIContext';
 
 const App: React.FC = () => {
@@ -26,8 +26,8 @@ const App: React.FC = () => {
           <Route path="/upload">
             <UploadBooksPage />
           </Route>
-          <Route path="/manage">
-            <ManagePage />
+          <Route path="/accounts">
+            <ManageAccountsPage />
           </Route>
           <Route path="/wiz">
             <BookWizardPage />

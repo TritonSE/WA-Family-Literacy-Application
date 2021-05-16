@@ -11,6 +11,17 @@
     "read": "Read",
     "explore": "Explore",
     "learn": "Learn",
+    "saved": "Saved",
+    "settings": "Settings",
+    "moreInfo": "More Info",
+    "language": "Language",
+    "socialMedia": "Social Media",
+    "donate": "Donate",
+    "volunteer": "Become a Volunteer",
+    "send": "Send",
+    "tagline": "Connecting children with the power of reading empowers families and helps whole communities thrive!",
+    "contactUs": "Contact Words Alive to explore partnership opportunities",
     "liveChat" : "Live chat is coming soon",
-    "untilThen": "Until then..."
+    "untilThen": "Until then...",
+    "pageMofN": "Page %{m} of %{n}"
 }
