@@ -11,7 +11,6 @@ import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
 import Image from '@ckeditor/ckeditor5-image/src/image.js';
 import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert.js';
-import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic.js';
 import List from '@ckeditor/ckeditor5-list/src/list.js';
@@ -21,10 +20,7 @@ import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleu
 import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters.js';
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials.js';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough.js';
-import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript.js';
-import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript.js';
 import Table from '@ckeditor/ckeditor5-table/src/table.js';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 
 class Editor extends ClassicEditor {}
 
@@ -38,7 +34,6 @@ Editor.builtinPlugins = [
 	Heading,
 	Image,
 	ImageInsert,
-	ImageResize,
 	ImageUpload,
 	Italic,
 	List,
@@ -48,10 +43,7 @@ Editor.builtinPlugins = [
 	SpecialCharacters,
 	SpecialCharactersEssentials,
 	Strikethrough,
-	Subscript,
-	Superscript,
 	Table,
-	Underline
 ];
 
 export default Editor;
