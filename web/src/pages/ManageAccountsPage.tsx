@@ -114,7 +114,7 @@ export const ManageAccountsPage: React.FC = () => {
   const [newModal, setNewModal] = useState(false);
 
   const [volunteerName, setVolunteerName] = useState('');
-  const [username, setUsername] = useState(''); // email
+  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [reenterPassword, setReenterPassword] = useState('');
   
@@ -126,7 +126,7 @@ export const ManageAccountsPage: React.FC = () => {
   const handleNewAccount = async (): Promise<void> => {
 
     // if any fields are empty or the passwords don't match, alert 
-    if (!volunteerName.length && !username.length && !password.length && !reenterPassword.length ){
+    if (volunteerName.length === 0 || email.length === 0 || password.length === 0 || reenterPassword.length === 0){
       alert('Please fill in all fields');
     } else if (password !== reenterPassword) {
       alert('Passwords must match');
@@ -136,7 +136,7 @@ export const ManageAccountsPage: React.FC = () => {
 
       const newAdmin: CreateAdmin = {
         name: volunteerName,
-        email: username,
+        email: email,
         password: password,
         can_manage_users: manageAdmins,
         can_upload_books: uploadBooks,
@@ -154,7 +154,7 @@ export const ManageAccountsPage: React.FC = () => {
   // clear the checkboxes
   const clearOptions = (): void => {
     setVolunteerName('');
-    setUsername('');
+    setEmail('');
     setPassword('');
     setReenterPassword('');
 
@@ -219,7 +219,7 @@ export const ManageAccountsPage: React.FC = () => {
                         <input type="text" id="nameBox" value={volunteerName} onChange={(e) => setVolunteerName(e.target.value)}/>
 
                         <p className="h3">Email</p>
-                        <input type="text" id="usernameBox" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        <input type="text" id="emailBox" value={email} onChange={(e) => setEmail(e.target.value)}/>
 
                         <p className="h3">Password</p>
                         <input type="text" id="passwordBox" value={password} onChange={(e) => setPassword(e.target.value)}/>
