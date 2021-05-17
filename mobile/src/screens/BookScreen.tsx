@@ -15,6 +15,7 @@ import { LanguageButtons } from '../components/LanguageButtons';
 import { Colors } from '../styles/Colors';
 import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
@@ -64,13 +65,47 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     () => {
       (async () => {
         setLoading(true);
-        const res = await client.getBook(book.id, language);
-        setBookDetails(res);
+        const tuple = book.id + " " + language;
+        await client.getBook(book.id, language).then( async (res) => {
+          setBookDetails(res);
+          console.log("caching now");
+          await AsyncStorage.setItem(tuple, JSON.stringify(res));
+        }).catch(async (err) => {
+          console.log("hello");
+          const result = await AsyncStorage.getItem(tuple);
+          if (result != null) {
+            console.log("no internet but book in cache");
+            setBookDetails(JSON.parse(result));
+          } else {
+            console.log("hi");
+            console.log(err);
+          }
+        }); 
         setLoading(false);
       })();
     },
     [language],
   );
+
+  /*
+  client.getBooks().then(async (res) => {
+      dispatch({ type: 'BOOKS_RETURNED', payload: res });
+      // cache response in async
+      await AsyncStorage.setItem('books', JSON.stringify(res));
+    }).catch(async (err) => {
+      const result = await AsyncStorage.getItem('books');
+      if (result != null) {
+        // we aren't connected but have the result cached
+        // somehow return the result
+        dispatch({ type: 'BOOKS_RETURNED', payload: JSON.parse(result) });
+        
+      } else {
+        // error case 
+        state.error = true;
+        console.log(err);
+      }
+      
+    */
 
   // Get the tab content (video and body) for the selected tab
   const tabContent = bookDetails !== null && bookDetails[activeButton];
