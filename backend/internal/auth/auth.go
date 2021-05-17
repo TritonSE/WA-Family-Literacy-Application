@@ -12,5 +12,5 @@ import (
  */
 type Authenticator interface {
 	VerifyToken(ctx context.Context, token string) (string, bool)
-	GenerateToken(ctx context.Context, email string, pwd string) (string, error)
+	CreateUser(ctx context.Context, email string, pwd string) (string, error)
 }

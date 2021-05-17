@@ -12,6 +12,7 @@ import (
 	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/controllers/middleware"
 	"github.com/TritonSE/words-alive/internal/database"
+	"github.com/TritonSE/words-alive/internal/models"
 )
 
 // Sets up the router
@@ -26,7 +27,7 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	adminDB := database.AdminDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
-	bookController := BookController{Books: bookDB, Admins: adminDB}
+	bookController := BookController{Books: bookDB}
 	imageController := ImgController{Image: imageDB}
 	userController := UserController{Users: userDB}
 	adminController := AdminController{Admins: adminDB, Auth: authenticator}
@@ -48,17 +49,23 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
-		r.With(middleware.RequireAuth(authenticator)).Post("/", bookController.CreateBook)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanUploadBooks)).
+			Post("/", bookController.CreateBook)
 
-		r.With(middleware.RequireAuth(authenticator)).Post("/{id}", bookController.CreateBookDetail)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanUploadBooks)).
+			Post("/{id}", bookController.CreateBookDetail)
 
-		r.With(middleware.RequireAuth(authenticator)).Delete("/{id}", bookController.DeleteBook)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanDeleteBooks)).
+			Delete("/{id}", bookController.DeleteBook)
 
-		r.With(middleware.RequireAuth(authenticator)).Delete("/{id}/{lang}", bookController.DeleteBookDetail)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanDeleteBooks)).
+			Delete("/{id}/{lang}", bookController.DeleteBookDetail)
 
-		r.With(middleware.RequireAuth(authenticator)).Patch("/{id}", bookController.UpdateBook)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanEditBooks)).
+			Patch("/{id}", bookController.UpdateBook)
 
-		r.With(middleware.RequireAuth(authenticator)).Patch("/{id}/{lang}", bookController.UpdateBookDetails)
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanEditBooks)).
+			Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
 	r.Get("/admins", adminController.GetAdminList)
@@ -72,11 +79,16 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 	r.With(middleware.RequireAuth(authenticator)).Get("/users/{id}", userController.GetUser)
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
-	r.With(middleware.RequireAuth(authenticator)).Post("/admins", adminController.CreateAdmin)
-	r.With(middleware.RequireAuth(authenticator)).Get("/admins", adminController.GetAdminList)
-	r.With(middleware.RequireAuth(authenticator)).Get("/admins/{id}", adminController.GetAdminByID)
-	r.With(middleware.RequireAuth(authenticator)).Patch("/admins/{id}", adminController.UpdateAdmin)
-	r.With(middleware.RequireAuth(authenticator)).Delete("/admins/{id}", adminController.DeleteAdmin)
+	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+		Post("/admins", adminController.CreateAdmin)
+	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+		Get("/admins", adminController.GetAdminList)
+	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+		Get("/admins/{id}", adminController.GetAdminByID)
+	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+		Patch("/admins/{id}", adminController.UpdateAdmin)
+	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+		Delete("/admins/{id}", adminController.DeleteAdmin)
 	return r
 }
 
