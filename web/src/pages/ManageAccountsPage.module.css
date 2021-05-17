@@ -150,3 +150,8 @@ p {
     justify-content: center;
     align-items: center;
 }
+
+.checkboxContainer {
+    display: flex;
+    flex-direction: column;
+}

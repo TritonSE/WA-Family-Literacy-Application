@@ -49,7 +49,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setUploadBooks(prevUpload => !prevUpload);
     setEditBooks(false);
     setDeleteBooks(false);
-    console.log(admin);
   };
 
   // diplay the modal for managing and set the current permissions for the admin
@@ -61,8 +60,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setUploadBooks(admin.can_upload_books);
     setDeleteBooks(admin.can_delete_books);
     setEditBooks(admin.can_edit_books);
-
-    console.log(admin);
   };
 
 
@@ -77,8 +74,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       can_edit_books: editBooks,
       can_delete_books: deleteBooks,
     };
-
-    console.log(updatedAdmin);
 
     await client.updateAdmin(manageId, updatedAdmin);
     fetchAdmins();
@@ -144,7 +139,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                         <label htmlFor="editBooks">Edit Books</label>
                         <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
                       </div>
-
                     )
                   }
 
