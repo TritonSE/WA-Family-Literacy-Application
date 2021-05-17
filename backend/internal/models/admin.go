@@ -9,7 +9,7 @@ type Admin struct {
 	CanUploadBooks bool   `json:"can_upload_books"`
 	CanEditBooks   bool   `json:"can_edit_books"`
 	CanDeleteBooks bool   `json:"can_delete_books"`
-	IsPrimaryAdmin bool
+	IsPrimaryAdmin bool   `json:"is_primary_admin"`
 }
 
 // Struct to read in fields used during admin creation
@@ -21,7 +21,6 @@ type CreateAdmin struct {
 	CanUploadBooks bool   `json:"can_upload_books"`
 	CanEditBooks   bool   `json:"can_edit_books"`
 	CanDeleteBooks bool   `json:"can_delete_books"`
-	IsPrimaryAdmin bool
 }
 
 // Struct to read in fields used when updating an admin

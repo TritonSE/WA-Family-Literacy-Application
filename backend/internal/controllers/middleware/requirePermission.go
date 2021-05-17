@@ -10,6 +10,15 @@ import (
 
 // HTTP middleware that validates the Authorization header against the provided authenticator
 func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func(http.Handler) http.Handler {
+
+	// Check if permission enum is valid
+	switch p {
+	case models.CanManageUsers, models.CanUploadBooks, models.CanEditBooks,
+		models.CanDeleteBooks:
+	default:
+		panic("Invalid permission enum")
+	}
+
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
@@ -40,11 +49,9 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 				permitted = perms.CanManageUsers
 			case models.CanDeleteBooks:
 				permitted = perms.CanManageUsers
-			default:
-				writeResponse(rw, http.StatusInternalServerError, "Bad enum value")
-				return
 			}
 
+			// Check selected permission
 			if !permitted {
 				writeResponse(rw, http.StatusForbidden, "do not have permission")
 				return

@@ -11,8 +11,7 @@ import (
 )
 
 type BookController struct {
-	Books  database.BookDatabase
-	Admins database.AdminDatabase
+	Books database.BookDatabase
 }
 
 // Fetches a list of all books sorted by title for the main page (/books)
