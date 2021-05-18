@@ -32,19 +32,19 @@
 .deleteIcon {
     width: 26px;
     height: 26px;
-    margin-left: 32px;
+    margin-left: 48px;
     cursor: pointer;
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 100%;
 }
 
 .lockIcon {
     width: 31px;
     height: 36px;
-    margin-left: 29px;
+    margin-left: 45px;
     position: absolute;
-    top: 40%;
+    top: 30%;
     left: 100%;
 }
 
@@ -63,8 +63,8 @@
 }
 
 .modalContentManage {
-    padding: 60px 30px 60px 30px;
-    width: 80%;
+    padding: 60px;
+    width: 50%;
     height: 80%;
     border: 1px solid var(--black);
     border-radius: 12px;
@@ -74,12 +74,15 @@
 
 .modalTitleManage {
     composes: h2 from '../App.css';
-    margin-bottom: 39px;
+    text-align: center;
+    flex: 1;
 }
 
 .modalTextManage {
     composes: body3 from '../App.css';
     margin-bottom: 100px;
+    margin-top: 39px;
+
 }
 
 .modalContentDelete {
@@ -124,4 +127,76 @@
     box-shadow: 1px 2px 5px var(--dark-grey);
     background-color: var(--orange);
     cursor: pointer;
+}
+
+.manageContainer {
+    display: flex;
+    flex-direction: row;
+    composes: body1 from '../App.css';
+    padding-right: 20%;
+    padding-left: 20%;
+}
+
+input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.manageUploadBox {
+    margin-bottom: 35px;
+}
+
+.manageUploadBox > label {
+    float: left;
+}
+
+.manageUploadBox > input {
+    float: right;
+}
+
+.editDeleteBox {
+    margin-bottom: 35px;
+    margin-left: 15px;
+}
+
+.editDeleteBox > label {
+    float: left;
+}
+
+.editDeleteBox > input {
+    float: right;
+}
+
+.exitButton {
+    background-color: transparent;
+    border: 0px;
+    justify-content: flex-end;
+}
+
+.cancelIcon {
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+}
+
+.titleAndCancelBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.confirmContainer {
+    align-items: center;
+    text-align: center;
+}
+
+.spacing {
+    height: 300px;
+}
+
+.checkboxContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }

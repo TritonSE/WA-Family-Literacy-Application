@@ -3,6 +3,7 @@ import { Admin, UpdateAdmin } from '../models/Admin';
 import { APIContext } from '../context/APIContext';
 import DeleteIcon from '../assets/images/Minus-sign.svg';
 import LockIcon from '../assets/images/lock-solid.svg';
+import CancelIcon from '../assets/images/times-solid.svg';
 
 import '../App.css';
 import styles from './AdminCard.module.css';
@@ -113,7 +114,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                   <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
                   <div className={styles.buttonsContainer}>
                     <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
-                    <button className={styles.deleteButton} type="button" onClick={handleDelete}>Delete</button>
+                    <button className={styles.deleteConfirmButton} type="button" onClick={handleDelete}>Delete</button>
                   </div>
                 </div>
               </form>
@@ -132,29 +133,48 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
               <form>
                 <div>
 
-                  <p className={styles.modalTitleManage}>Manage Account</p>
+                  <div className={styles.titleAndCancelBtn}>
+                    <p className={styles.modalTitleManage}>Manage Account</p>
+
+                    <button className={styles.exitButton} type="button" onClick={() => setManageModal(false)}>
+                      <img className={styles.cancelIcon} src={CancelIcon}/>
+                    </button>
+                  </div>
                   <p className={styles.modalTextManage}>(Check the boxes to grant this account specific access)</p>
 
-                  <label htmlFor="manage">Manage</label>
-                  <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
+                  <div className={styles.manageContainer}>
 
-                  <label htmlFor="uploadBooks">Upload Books</label>
-                  <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
+                    <div className={styles.spacing}/>
 
-                  {uploadBooks && 
-                    (
-                      <div>             
-                        <label htmlFor="deleteBooks">Delete Books</label>
-                        <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                      
-                        <label htmlFor="editBooks">Edit Books</label>
-                        <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
+                    <div className={styles.checkboxContainer}>                
+                      <div className={styles.manageUploadBox}>
+                        <label htmlFor="manageBox">Manage</label>
+                        <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
                       </div>
-                    )
-                  }
+                      <div className={styles.manageUploadBox}>
+                        <label htmlFor="uploadBooksBox">Upload Books</label>
+                        <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
+                      </div>
 
-                  <div className={styles.buttonsContainer}>
-                    <button className={styles.cancelButton} type="button" onClick={() => {setManageModal(false);}}>Cancel</button>
+                      {uploadBooks && 
+                        (
+                          <>
+                            <div className={styles.editDeleteBox}>
+                              <label htmlFor="editBooksBox">&mdash; Edit Books</label>
+                              <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
+                            </div>                              
+                            <div className={styles.editDeleteBox}>    
+                              <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
+                              <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
+                            </div>  
+                          </>  
+                        )
+                      }
+                    </div>
+
+                  </div>
+
+                  <div className={styles.confirmContainer}>
                     <button className={styles.deleteConfirmButton} type="button" onClick={handleManage}>Confirm</button>
                   </div>
 
