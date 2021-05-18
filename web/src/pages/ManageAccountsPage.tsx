@@ -86,28 +86,24 @@ export const ManageAccountsPage: React.FC = () => {
 
   const client = useContext(APIContext);
 
-
   // list of admins 
   const [admins, setAdmins] = useState<Admin[]>([]);
 
   // get admins from backend
   const fetchAdmins = async (): Promise<void> => {
-
     try {
       const res = await client.getAdmins();
       // const res = test;
       const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
       const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
-
       const adminList: Admin[] =  [...primaryAdmin, ...otherAdmins];
       setAdmins(adminList);
     } catch (err) {
       alert('There was an error getting admins');
     }
-
   };
 
-
+  // get admins on first load
   useEffect(()=> {
     fetchAdmins();
   },[]);
@@ -129,6 +125,7 @@ export const ManageAccountsPage: React.FC = () => {
   const [editBooks, setEditBooks] = useState(false);
   const [deleteBooks, setDeleteBooks] = useState(false);
 
+  // new admin with call to backend
   const handleNewAccount = async (): Promise<void> => {
 
     // if any fields are empty or the passwords don't match, alert 
@@ -205,13 +202,13 @@ export const ManageAccountsPage: React.FC = () => {
       </div>
 
 
-
       <div>
         <button className={styles.addButton} onClick={() => !deleteMode && setNewModal(true)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
           <p className={styles.addText}>New Account</p>
           <img className={styles.addIcon} src={AddIcon} alt='' />
         </button>
       </div>
+
 
       {newModal &&
         (
@@ -252,6 +249,7 @@ export const ManageAccountsPage: React.FC = () => {
                         <label htmlFor="manageBox">Manage</label>
                         <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
                       </div>
+
                       <div className={styles.manageUploadBox}>
                         <label htmlFor="uploadBooksBox">Upload Books</label>
                         <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
@@ -273,7 +271,6 @@ export const ManageAccountsPage: React.FC = () => {
                       }
                     
                     </div>
-
 
                   </div>
 

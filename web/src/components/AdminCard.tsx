@@ -31,7 +31,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     } catch (err){
       alert('There was an error deleting admin');
     }
-
   };
 
   // diaplay delete confirmation
@@ -93,7 +92,9 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
 
   return (
+
     <div className={styles.container}>
+
 
       <div className={styles.adminCard} onClick={() => !deleteMode && !admin.is_primary_admin && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
         <span className={styles.adminName}>{ admin.name }</span>
@@ -109,77 +110,76 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
         (
           <div className={styles.modal}>
             <div className={styles.modalContentDelete}>
+
               <form>
-                <div>
-                  <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
-                  <div className={styles.buttonsContainer}>
-                    <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
-                    <button className={styles.deleteConfirmButton} type="button" onClick={handleDelete}>Delete</button>
-                  </div>
-                </div>
+                <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
+                <div className={styles.buttonsContainer}>
+                  <button className={styles.cancelButton} type="button" onClick={() => setDeleteModal(false)}>Cancel</button>
+                  <button className={styles.deleteConfirmButton} type="button" onClick={handleDelete}>Delete</button>
+                </div>      
               </form>
+
             </div>
           </div>
-
         )
       }
-
 
 
       { manageModal &&
         (
           <div className={styles.modal}>
             <div className={styles.modalContentManage}>
+
               <form>
-                <div>
 
-                  <div className={styles.titleAndCancelBtn}>
-                    <p className={styles.modalTitleManage}>Manage Account</p>
+                <div className={styles.titleAndCancelBtn}>
+                  <p className={styles.modalTitleManage}>Manage Account</p>
 
-                    <button className={styles.exitButton} type="button" onClick={() => setManageModal(false)}>
-                      <img className={styles.cancelIcon} src={CancelIcon}/>
-                    </button>
-                  </div>
-                  <p className={styles.modalTextManage}>(Check the boxes to grant this account specific access)</p>
+                  <button className={styles.exitButton} type="button" onClick={() => setManageModal(false)}>
+                    <img className={styles.cancelIcon} src={CancelIcon}/>
+                  </button>
+                </div>
 
-                  <div className={styles.manageContainer}>
+                <p className={styles.modalTextManage}>(Check the boxes to grant this account specific access)</p>
 
-                    <div className={styles.spacing}/>
+                <div className={styles.manageContainer}>
+                  <div className={styles.spacing}/>
 
-                    <div className={styles.checkboxContainer}>                
-                      <div className={styles.manageUploadBox}>
-                        <label htmlFor="manageBox">Manage</label>
-                        <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
-                      </div>
-                      <div className={styles.manageUploadBox}>
-                        <label htmlFor="uploadBooksBox">Upload Books</label>
-                        <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
-                      </div>
+                  <div className={styles.checkboxContainer}>  
 
-                      {uploadBooks && 
-                        (
-                          <>
-                            <div className={styles.editDeleteBox}>
-                              <label htmlFor="editBooksBox">&mdash; Edit Books</label>
-                              <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
-                            </div>                              
-                            <div className={styles.editDeleteBox}>    
-                              <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
-                              <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                            </div>  
-                          </>  
-                        )
-                      }
+                    <div className={styles.manageUploadBox}>
+                      <label htmlFor="manageBox">Manage</label>
+                      <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
+                    </div>
+                    <div className={styles.manageUploadBox}>
+                      <label htmlFor="uploadBooksBox">Upload Books</label>
+                      <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
                     </div>
 
-                  </div>
+                    {uploadBooks && 
+                      (
+                        <>
+                          <div className={styles.editDeleteBox}>
+                            <label htmlFor="editBooksBox">&mdash; Edit Books</label>
+                            <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
+                          </div>                              
+                          <div className={styles.editDeleteBox}>    
+                            <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
+                            <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
+                          </div>  
+                        </>  
+                      )
+                    }
 
-                  <div className={styles.confirmContainer}>
-                    <button className={styles.deleteConfirmButton} type="button" onClick={handleManage}>Confirm</button>
                   </div>
-
                 </div>
+
+                <div className={styles.confirmContainer}>
+                  <button className={styles.deleteConfirmButton} type="button" onClick={handleManage}>Confirm</button>
+                </div>
+
               </form>
+          
             </div>
           </div>
         )
