@@ -23,7 +23,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
   const handleDelete = async (): Promise<void> => {
     setDeleteModal(false);
-    await client.deleteAdmin(deleteId);
+    await client.deleteAdmin(deleteId).catch(() => alert('There was an error deleting admin'));
     fetchAdmins();
   };
 
@@ -75,7 +75,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       can_delete_books: deleteBooks,
     };
 
-    await client.updateAdmin(manageId, updatedAdmin);
+    await client.updateAdmin(manageId, updatedAdmin).catch(() => alert('There was an error updating admin'));
     fetchAdmins();
   };
 

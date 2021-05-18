@@ -144,7 +144,7 @@ export const ManageAccountsPage: React.FC = () => {
         can_delete_books: deleteBooks,
       };
 
-      await client.createAdmin(newAdmin);
+      await client.createAdmin(newAdmin).catch(() => alert('There was an error adding admin'));
       fetchAdmins();
       clearOptions();
     }
