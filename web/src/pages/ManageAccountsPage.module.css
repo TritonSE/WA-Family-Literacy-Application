@@ -3,7 +3,7 @@ p {
 }
 
 .title {
-    composes: h2 from '../App.css'; 
+    composes: h2 from '../App.css';
     text-align: left;
     margin-top: 94px;
     margin-left: 12px;
@@ -16,7 +16,7 @@ p {
 }
 
 .clickableText {
-    composes: body3 from '../App.css'; 
+    composes: body3 from '../App.css';
     text-decoration: underline;
     border: none;
     outline: none;
@@ -28,9 +28,8 @@ p {
     width: 100%;
     margin-top: 58px;
     margin-bottom: 50px;
-    /* margin-left: 12px; */
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     grid-template-rows: 1fr;
     column-gap: 131px;
     row-gap: 36px;
@@ -66,26 +65,21 @@ p {
 }
 
 .modalTitleDelete {
-    composes: h3 from '../App.css'; 
+    composes: h3 from '../App.css';
     margin-bottom: 40px;
 }
 
 .cancelButton {
-    composes: body3 from '../App.css'; 
-    width: 200px;
-    margin: 0px 17px;
-    padding: 10px 10px;
-    border: 0.5px solid var(--orange);
-    border-radius: 7px;
-    box-shadow: 1px 2px 5px var(--dark-grey);
-    background-color: var(--white);
-    cursor: pointer;
+    background-color: transparent;
+    border: 0px;
+    justify-content: flex-end;
 }
 
-.deleteButton {
-    composes: body3 from '../App.css'; 
+.deleteConfirmButton {
+    composes: body3 from '../App.css';
     width: 200px;
-    margin: 0px 17px;
+    height: 58px;
+    margin: 0px 17px 20px 17px;
     padding: 10px 10px;
     border: 0.5px solid var(--black);
     border-radius: 7px;
@@ -104,7 +98,7 @@ p {
 }
 
 .addText {
-    composes: body3 from '../App.css'; 
+    composes: body3 from '../App.css';
 }
 
 .addIcon {
@@ -113,25 +107,28 @@ p {
     margin-left: 10px;
 }
 
+.cancelIcon {
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+}
+
 .modalContentAdd {
-    width: 40%;
-    height: 80%;
+    width: 45%;
+    margin: 15% auto;
     padding-right: 80px;
     padding-left: 80px;
     border: 1px solid var(--black);
     border-radius: 12px;
     background-color: var(--white);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .modalTitleAdd {
-    composes: h2 from '../App.css'; 
+    composes: h2 from '../App.css';
     margin-top: 10px;
     margin-bottom: 20px;
     text-align: center;
+    flex: 1;
 }
 
 .addContent {
@@ -142,16 +139,78 @@ p {
     margin-right: 100px;
 }
 
-.volunteerInfo > * {
-    margin-bottom: 6%;
+.volunteerInfo > p {
+    margin-bottom: 8px;
+}
+
+.volunteerInfo > input {
+    margin-bottom: 16px;
 }
 
 .access {
     justify-content: center;
     align-items: center;
+    /* background-color: red; */
+    flex: 1;
+}
+
+.accessTitle {
+    composes: h3 from '../App.css';
+    margin-bottom: 30px;
 }
 
 .checkboxContainer {
     display: flex;
     flex-direction: column;
+    composes: body1 from '../App.css';
+}
+
+.titleAndCancelBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 17px;
+}
+
+.inputBox {
+    height: 40px;
+    width: 250px;
+    padding-left: 10px;
+    border: 1px solid var(--orange);
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'GothamRounded - Light';
+    -webkit-appearance: none;
+}
+
+input[type=checkbox] {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.manageUploadBox {
+    /* background-color: aliceblue; */
+    margin-bottom: 35px;
+}
+
+.manageUploadBox > label {
+    float: left;
+}
+
+.manageUploadBox > input {
+    float: right;
+}
+
+.editDeleteBox {
+    margin-bottom: 35px;
+    margin-left: 15px;
+}
+
+.editDeleteBox > label {
+    float: left;
+}
+
+.editDeleteBox > input {
+    float: right;
 }

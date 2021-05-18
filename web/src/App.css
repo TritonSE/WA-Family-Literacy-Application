@@ -15,6 +15,11 @@ body {
     margin-top: 10px;
 }
 
+.h1 {
+font-size: 60px;
+font-family: 'GothamRounded - Bold';
+}
+
 .h2 {
   font-size: 40px;
   font-family: 'GothamRounded - Bold';
@@ -30,19 +35,24 @@ body {
   font-family: 'GothamRounded - Light';
 }
 
+.body2 {
+    font-size: 25px;
+  font-family: 'GothamRounded - Light';  
+}
+
 .body3 {
     font-size: 20px;
     font-family: 'GothamRounded - Light';
 }
 
-.h2 {
-    font-size: 40px;
-    font-family: 'GothamRounded - Bold';
+.caption1 {
+    font-size: 16px;
+    font-family: 'GothamRounded - Light';
 }
 
-.h3 {
-    font-size: 28px;
-    font-family: 'GothamRounded - Bold';
+.caption2 {
+    font-size: 12px;
+    font-family: 'GothamRounded - Light';
 }
 
 @font-face {

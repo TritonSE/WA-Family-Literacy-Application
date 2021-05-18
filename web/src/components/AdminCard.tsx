@@ -21,12 +21,19 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState('');
 
+  // delete admin with call to backend
   const handleDelete = async (): Promise<void> => {
     setDeleteModal(false);
-    await client.deleteAdmin(deleteId).catch(() => alert('There was an error deleting admin'));
-    fetchAdmins();
+    try {
+      await client.deleteAdmin(deleteId);
+      fetchAdmins();
+    } catch (err){
+      alert('There was an error deleting admin');
+    }
+
   };
 
+  // diaplay delete confirmation
   const displayDeleteModal = (id: string): void => {
     setDeleteModal(true);
     setDeleteId(id);
@@ -37,7 +44,6 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
   const [manageModal, setManageModal] = useState(false);
   const [manageId, setManageId] = useState('');
 
-  // states for managing an admin
   const [manageAdmins, setManageAdmins] = useState(false);
   const [uploadBooks, setUploadBooks] = useState(false);
   const [editBooks, setEditBooks] = useState(false);
@@ -62,7 +68,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setEditBooks(admin.can_edit_books);
   };
 
-
+  // update an admin with call to backend
   const handleManage = async (): Promise<void> => {
 
     setManageModal(false);
@@ -75,8 +81,13 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       can_delete_books: deleteBooks,
     };
 
-    await client.updateAdmin(manageId, updatedAdmin).catch(() => alert('There was an error updating admin'));
-    fetchAdmins();
+    try {
+      await client.updateAdmin(manageId, updatedAdmin);
+      fetchAdmins();
+    } catch (err){
+      alert('There was an error updating admin');
+    }
+
   };
 
 
@@ -85,7 +96,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
       <div className={styles.adminCard} onClick={() => !deleteMode && !admin.is_primary_admin && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
         <span className={styles.adminName}>{ admin.name }</span>
-        { admin.is_primary_admin && <span className="body3">(Primary Admin)</span> }
+        { admin.is_primary_admin && <span className={styles.primaryAdminName}>(Primary Admin)</span> }
       </div>
       
       {admin.is_primary_admin && deleteMode && <img className={styles.lockIcon} role="presentation" src={LockIcon} width="20px" height="20px" alt=""/> }
@@ -93,10 +104,10 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       {!admin.is_primary_admin && deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => displayDeleteModal(admin.id)}/>}
       
 
-      {deleteModal && 
+      {deleteModal &&
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentDelete}>    
+            <div className={styles.modalContentDelete}>
               <form>
                 <div>
                   <p className={styles.modalTitleDelete}>Are you sure you want to delete this account?</p>
@@ -117,7 +128,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       { manageModal &&
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentManage}>    
+            <div className={styles.modalContentManage}>
               <form>
                 <div>
 
@@ -132,7 +143,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
                   {uploadBooks && 
                     (
-                      <div>                   
+                      <div>             
                         <label htmlFor="deleteBooks">Delete Books</label>
                         <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
                       
@@ -144,7 +155,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
                   <div className={styles.buttonsContainer}>
                     <button className={styles.cancelButton} type="button" onClick={() => {setManageModal(false);}}>Cancel</button>
-                    <button className={styles.deleteButton} type="button" onClick={handleManage}>Confirm</button>
+                    <button className={styles.deleteConfirmButton} type="button" onClick={handleManage}>Confirm</button>
                   </div>
 
                 </div>

@@ -3,6 +3,7 @@ import { AdminCard } from '../components/AdminCard';
 import { APIContext } from '../context/APIContext';
 import { Admin, CreateAdmin } from '../models/Admin';
 import AddIcon from '../assets/images/plus-circle-solid-green.svg';
+import CancelIcon from '../assets/images/times-solid.svg';
 
 import '../App.css';
 import styles from './ManageAccountsPage.module.css';
@@ -91,19 +92,24 @@ export const ManageAccountsPage: React.FC = () => {
 
   // get admins from backend
   const fetchAdmins = async (): Promise<void> => {
-    const res = await client.getAdmins();
 
-    const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
-    const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
+    try {
+      // const res = await client.getAdmins();
+      const res = test;
+      const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
+      const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
 
-    const adminList: Admin[] =  [...primaryAdmin, ...otherAdmins];
-    setAdmins(adminList);
+      const adminList: Admin[] =  [...primaryAdmin, ...otherAdmins];
+      setAdmins(adminList);
+    } catch (err) {
+      alert('There was an error getting admins');
+    }
+
   };
 
 
   useEffect(()=> {
     fetchAdmins();
-    // setAdmins(test);
   },[]);
 
 
@@ -114,7 +120,7 @@ export const ManageAccountsPage: React.FC = () => {
   const [newModal, setNewModal] = useState(false);
 
   const [volunteerName, setVolunteerName] = useState('');
-  const [email, setEmail] = useState(''); 
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [reenterPassword, setReenterPassword] = useState('');
   
@@ -131,7 +137,7 @@ export const ManageAccountsPage: React.FC = () => {
     } else if (password !== reenterPassword) {
       alert('Passwords must match');
     } else {
-
+      
       setNewModal(false);
 
       const newAdmin: CreateAdmin = {
@@ -144,9 +150,14 @@ export const ManageAccountsPage: React.FC = () => {
         can_delete_books: deleteBooks,
       };
 
-      await client.createAdmin(newAdmin).catch(() => alert('There was an error adding admin'));
-      fetchAdmins();
+      try {
+        await client.createAdmin(newAdmin);
+        fetchAdmins();
+      } catch (err){
+        alert('There was an error adding admin');
+      }
       clearOptions();
+    
     }
 
   };
@@ -186,7 +197,7 @@ export const ManageAccountsPage: React.FC = () => {
       </div>
 
 
-      <div className={styles.admins}> 
+      <div className={styles.admins}>
         { admins.map((admin) => (
           <AdminCard key={admin.id} admin={admin} deleteMode={deleteMode} fetchAdmins={fetchAdmins}/>
         ))
@@ -202,7 +213,7 @@ export const ManageAccountsPage: React.FC = () => {
         </button>
       </div>
 
-      {newModal && 
+      {newModal &&
         (
           <div className={styles.modal}>
             <div className={styles.modalContentAdd}>    
@@ -210,45 +221,58 @@ export const ManageAccountsPage: React.FC = () => {
 
                 <div>
 
-                  <p className={styles.modalTitleAdd}>New Account</p>
+                  <div className={styles.titleAndCancelBtn}>
+                    <p className={styles.modalTitleAdd}>New Account</p>
+
+                    <button className={styles.cancelButton} type="button" onClick={() => {setNewModal(false); clearOptions();}}>
+                      <img className={styles.cancelIcon} src={CancelIcon}/>
+                    </button>
+                  </div>
+
                   <div className={styles.addContent}>
                     
                     <div>
                       <div className={styles.volunteerInfo}>
                         <p className="h3">Volunteer Name</p>
-                        <input type="text" id="nameBox" value={volunteerName} onChange={(e) => setVolunteerName(e.target.value)}/>
+                        <input type="text" id="nameBox" value={volunteerName} className={styles.inputBox} onChange={(e) => setVolunteerName(e.target.value)}/>
 
                         <p className="h3">Email</p>
-                        <input type="text" id="emailBox" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <input type="text" id="emailBox" value={email} className={styles.inputBox} onChange={(e) => setEmail(e.target.value)}/>
 
                         <p className="h3">Password</p>
-                        <input type="text" id="passwordBox" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        <input type="password" id="passwordBox" value={password} className={styles.inputBox} onChange={(e) => setPassword(e.target.value)}/>
 
                         <p className="h3">Re-enter Password</p>
-                        <input type="text" id="reenterBox" value={reenterPassword} onChange={(e) => setReenterPassword(e.target.value)}/>
+                        <input type="password" id="reenterBox" value={reenterPassword} className={styles.inputBox} onChange={(e) => setReenterPassword(e.target.value)}/>
                       </div>
                     </div>
 
                     <div className={styles.access}>
-                      <p className="h3">Access</p>
+                      <p className={styles.accessTitle}>Access</p>
 
                       <div className={styles.checkboxContainer}>
 
-                        <label htmlFor="manage">Manage</label>
-                        <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
-
-                        <label htmlFor="uploadBooks">Upload Books</label>
-                        <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
+                        <div className={styles.manageUploadBox}>
+                          <label htmlFor="manageBox">Manage</label>
+                          <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
+                        </div>
+                        <div className={styles.manageUploadBox}>
+                          <label htmlFor="uploadBooksBox">Upload Books</label>
+                          <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
+                        </div>
 
                         {uploadBooks && 
                           (
-                            <div>                   
-                              <label htmlFor="deleteBooks">Delete Books</label>
-                              <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                              <br/>
-                              <label htmlFor="editBooks">Edit Books</label>
-                              <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
-                            </div>
+                            <>
+                              <div className={styles.editDeleteBox}>
+                                <label htmlFor="editBooksBox">&mdash; Edit Books</label>
+                                <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
+                              </div>                              
+                              <div className={styles.editDeleteBox}>    
+                                <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
+                                <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
+                              </div>  
+                            </>                         
                           )
                         }
                       
@@ -260,8 +284,7 @@ export const ManageAccountsPage: React.FC = () => {
                   </div>
 
                   <div className={styles.buttonsContainer}>
-                    <button className={styles.cancelButton} type="button" onClick={() => {setNewModal(false); clearOptions();}}>Cancel</button>
-                    <button className={styles.deleteButton} type="button" onClick={handleNewAccount}>Confirm</button>
+                    <button className={styles.deleteConfirmButton} type="button" onClick={handleNewAccount}>Confirm</button>
                   </div>
                 </div>
                 

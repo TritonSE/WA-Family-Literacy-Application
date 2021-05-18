@@ -6,9 +6,14 @@
 }
 
 .adminName {
-    composes: body3 from '../App.css'; 
+    composes: body3 from '../App.css';
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.primaryAdminName {
+    composes: caption1 from '../App.css';
     white-space: nowrap;
 }
 
@@ -21,7 +26,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 16px 0 16px;
-    overflow: scroll;
     text-overflow: ellipsis;
 }
 
@@ -69,12 +73,12 @@
 }
 
 .modalTitleManage {
-    composes: h2 from '../App.css'; 
+    composes: h2 from '../App.css';
     margin-bottom: 39px;
 }
 
 .modalTextManage {
-    composes: body3 from '../App.css'; 
+    composes: body3 from '../App.css';
     margin-bottom: 100px;
 }
 
@@ -99,7 +103,7 @@
 }
 
 .cancelButton {
-    composes: body3 from '../App.css'; 
+    composes: body3 from '../App.css';
     width: 200px;
     margin: 0px 17px;
     padding: 10px 10px;
@@ -110,8 +114,8 @@
     cursor: pointer;
 }
 
-.deleteButton {
-    composes: body3 from '../App.css'; 
+.deleteConfirmButton {
+    composes: body3 from '../App.css';
     width: 200px;
     margin: 0px 17px;
     padding: 10px 10px;
