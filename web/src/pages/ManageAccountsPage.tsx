@@ -94,8 +94,8 @@ export const ManageAccountsPage: React.FC = () => {
   const fetchAdmins = async (): Promise<void> => {
 
     try {
-      // const res = await client.getAdmins();
-      const res = test;
+      const res = await client.getAdmins();
+      // const res = test;
       const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
       const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
 
