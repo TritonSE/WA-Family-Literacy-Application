@@ -51,6 +51,7 @@
   "scripts": {
     "build": "tsc --strict",
     "build-android": "( cd android; ./gradlew assembleRelease )",
+    "build-ios": "react-native run-ios --configuration Release",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",

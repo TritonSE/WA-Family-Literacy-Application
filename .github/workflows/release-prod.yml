@@ -98,7 +98,7 @@ jobs:
         run: npm ci
       - name: Build
         working-directory: mobile
-        run: npm run ios
+        run: npm run build-ios
         env:
           BASE_URL: https://api.wordsalive.org
       - name: Release
