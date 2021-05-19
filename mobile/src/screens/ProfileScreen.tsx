@@ -9,6 +9,7 @@ import { ButtonGroup } from '../components/ButtonGroup';
 import { LargeButton } from '../components/LargeButton';
 import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
+import { AuthContext } from '../context/AuthContext';
 
 const SavedTab: React.FC = () => {
   return (
@@ -25,18 +26,24 @@ const SavedTab: React.FC = () => {
  * Settings Tab to set app locale (language)
  */
 const SettingsTab: React.FC = () => {
-
   const i18nCtx = useContext(I18nContext);
   const { i18n, setLocale, t, locale } = i18nCtx;
+  const auth = useContext(AuthContext);
+
   const languages = Object.keys(i18n.translations) as Language[];
 
   return (
     <View>
 
-      <View style={styles.login}>
-        <LargeButton text="Sign In" onPress={() => null} underline={true}/>
-        <LargeButton text="Sign Up" onPress={() => null} underline={true}/>
-      </View>
+      {auth.isGuest ? (
+        <View style={styles.login}>
+          <LargeButton text="Sign Up" onPress={() => auth.logout()} underline={true}/>
+        </View>
+      ) : (
+        <View>
+          <Text>yay account</Text>
+        </View>
+      )}
 
       <View style={styles.langSelector}>
 

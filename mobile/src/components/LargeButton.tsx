@@ -3,22 +3,30 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
-type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean };
+type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean, disabled?: boolean };
 
-export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false, disabled = false }) => {
   const [active, setActive] = React.useState(false);
 
+  const buttonStyle = disabled ? styles.disabledButton
+    : active ? styles.activeButton
+    : styles.inactiveButton;
+  const textStyle = disabled ? styles.disabledText
+    : active ? styles.activeText
+    : styles.inactiveText;
+
   return (
-    <Pressable 
-      onPressIn={() => setActive(true)} 
+    <Pressable
+      onPressIn={() => setActive(true)}
       onPressOut={
         () => {
           onPress();
           setActive(false);
         }
-      } 
-      style={[styles.button, active ? styles.activeButton : styles.inactiveButton]} >
-      <Text style={[TextStyles.heading3, underline && styles.underline, active ? styles.activeText : styles.inactiveText]}>
+      }
+      disabled={disabled}
+      style={[styles.button, buttonStyle]} >
+      <Text style={[TextStyles.heading3, underline && styles.underline, textStyle]}>
         {text}
       </Text>
     </Pressable>
@@ -38,14 +46,18 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 40,
     marginTop: 15,
-    paddingVertical: 10,
+    justifyContent: 'center',
   },
   activeButton: {
-    borderColor: 'white',
-    backgroundColor: 'white',
+    borderColor: Colors.white,
+    backgroundColor: Colors.white,
   },
   inactiveButton: {
-    borderColor: Colors.orange,
+    borderColor: Colors.white,
+    backgroundColor: Colors.orange,
+  },
+  disabledButton: {
+    borderColor: Colors.gray,
     backgroundColor: Colors.orange,
   },
   activeText: {
@@ -54,7 +66,11 @@ const styles = StyleSheet.create({
   },
   inactiveText: {
     textAlign: 'center',
-    color: 'white',
+    color: Colors.white,
+  },
+  disabledText: {
+    textAlign: 'center',
+    color: Colors.gray,
   },
   underline: {
     textDecorationLine: 'underline',

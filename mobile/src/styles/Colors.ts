@@ -4,4 +4,5 @@ export const Colors = {
   shadowColor: '#000000',
   text: '#000000',
   white: '#FFFFFF',
+  gray: '#B8B8B8',
 };

@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import { WordsAliveAPI } from '../api/WordsAliveAPI';
 
 // set baseURL using environment varibales -- use export BASE_URL=<name>
-const baseURL = Constants.manifest.extra.BASE_URL || 'http://localhost:8080';
+const baseURL: string = Constants.manifest.extra.baseUrl;
 
 const initialState: WordsAliveAPI = new WordsAliveAPI(baseURL);
 
