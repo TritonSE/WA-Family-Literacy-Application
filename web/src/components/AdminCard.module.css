@@ -65,7 +65,6 @@
 .modalContentManage {
     padding: 60px;
     width: 50%;
-    height: 80%;
     border: 1px solid var(--black);
     border-radius: 12px;
     background-color: var(--white);
@@ -137,37 +136,6 @@
     padding-left: 20%;
 }
 
-input[type=checkbox] {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-}
-
-.manageUploadBox {
-    margin-bottom: 35px;
-}
-
-.manageUploadBox > label {
-    float: left;
-}
-
-.manageUploadBox > input {
-    float: right;
-}
-
-.editDeleteBox {
-    margin-bottom: 35px;
-    margin-left: 15px;
-}
-
-.editDeleteBox > label {
-    float: left;
-}
-
-.editDeleteBox > input {
-    float: right;
-}
-
 .exitButton {
     background-color: transparent;
     border: 0px;
@@ -195,8 +163,65 @@ input[type=checkbox] {
     height: 300px;
 }
 
-.checkboxContainer {
+.allCheckboxesContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+/* custom checkmark/checkbox */
+.checkboxContainer {
+    margin-bottom: 35px;
+}
+/* hide default checkbox */
+.checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+  
+/* custom checkbox with orange check */
+.checkmark {
+    top: 0;
+    left: 0;
+    background-color: var(--white);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: relative;
+    float: right;
+    border: 1px solid var(--black);
+    border-radius: 3px;
+}
+  
+/* hover effect */
+.checkboxContainer:hover input ~ .checkmark {
+    background-color: var(--light-grey);
+}
+  
+/* checkmark – hidden when unchecked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+  
+/* show checkmark when checked */
+.checkboxContainer input:checked ~ .checkmark:after {
+    display: block;
+}
+  
+/* styles for checkmark */
+.checkboxContainer .checkmark:after {
+    left: 8px;
+    top: -1px;
+    width: 12px;
+    height: 20px;
+    border: solid var(--orange);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(38deg);
+    -ms-transform: rotate(38deg);
+    transform: rotate(38deg);
 }

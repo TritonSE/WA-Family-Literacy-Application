@@ -14,6 +14,9 @@ type AdminCardProps = {
   fetchAdmins: () => void,
 };
 
+/**
+ * Individual Admin Cards with ability to edit and delete admins & permissions
+ */
 export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAdmins }) => {
 
   const client = useContext(APIContext);
@@ -145,28 +148,36 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                 <div className={styles.manageContainer}>
                   <div className={styles.spacing}/>
 
-                  <div className={styles.checkboxContainer}>  
+                  <div className={styles.allCheckboxesContainer}>  
 
-                    <div className={styles.manageUploadBox}>
-                      <label htmlFor="manageBox">Manage</label>
+                    <label className={styles.checkboxContainer} htmlFor="manageBox">
+                      Manage
                       <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
-                    </div>
-                    <div className={styles.manageUploadBox}>
-                      <label htmlFor="uploadBooksBox">Upload Books</label>
+                      <span className={styles.checkmark}></span>
+                      <br/>
+                    </label>
+                    <label className={styles.checkboxContainer} htmlFor="uploadBooksBox">
+                      Upload Books
                       <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
-                    </div>
+                      <span className={styles.checkmark}></span>
+                      <br/>
+                    </label>
 
                     {uploadBooks && 
                       (
                         <>
-                          <div className={styles.editDeleteBox}>
-                            <label htmlFor="editBooksBox">&mdash; Edit Books</label>
+                          <label className={styles.checkboxContainer} htmlFor="editBooksBox">
+                            &mdash; Edit Books
                             <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
-                          </div>                              
-                          <div className={styles.editDeleteBox}>    
-                            <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
+                            <span className={styles.checkmark}></span>
+                            <br/>
+                          </label>
+                          <label className={styles.checkboxContainer} htmlFor="deleteBooksBox">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&mdash; Delete Books
                             <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                          </div>  
+                            <span className={styles.checkmark}></span>
+                            <br/>
+                          </label>                             
                         </>  
                       )
                     }

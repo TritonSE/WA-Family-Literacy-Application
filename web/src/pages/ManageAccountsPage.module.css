@@ -1,7 +1,3 @@
-p {
-    margin: 0px;
-}
-
 .title {
     composes: h2 from '../App.css';
     text-align: left;
@@ -160,7 +156,7 @@ p {
     margin-bottom: 30px;
 }
 
-.checkboxContainer {
+.allCheckboxesContainer {
     display: flex;
     flex-direction: column;
     composes: body1 from '../App.css';
@@ -184,33 +180,60 @@ p {
     -webkit-appearance: none;
 }
 
-input[type=checkbox] {
+
+/* custom checkmark/checkbox */
+.checkboxContainer {
+    margin-bottom: 35px;
+}
+/* hide default checkbox */
+.checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+  
+/* custom checkbox with orange check */
+.checkmark {
+    top: 0;
+    left: 0;
+    background-color: var(--white);
     width: 30px;
     height: 30px;
-    border-radius: 5px;
-}
-
-.manageUploadBox {
-    margin-bottom: 35px;
-}
-
-.manageUploadBox > label {
-    float: left;
-}
-
-.manageUploadBox > input {
+    cursor: pointer;
+    position: relative;
     float: right;
+    border: 1px solid var(--black);
+    border-radius: 3px;
 }
-
-.editDeleteBox {
-    margin-bottom: 35px;
-    margin-left: 15px;
+  
+/* hover effect */
+.checkboxContainer:hover input ~ .checkmark {
+    background-color: var(--light-grey);
 }
-
-.editDeleteBox > label {
-    float: left;
+  
+/* checkmark – hidden when unchecked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
 }
-
-.editDeleteBox > input {
-    float: right;
+  
+/* show checkmark when checked */
+.checkboxContainer input:checked ~ .checkmark:after {
+    display: block;
+}
+  
+/* styles for checkmark */
+.checkboxContainer .checkmark:after {
+    left: 8px;
+    top: -1px;
+    width: 12px;
+    height: 20px;
+    border: solid var(--orange);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(38deg);
+    -ms-transform: rotate(38deg);
+    transform: rotate(38deg);
 }

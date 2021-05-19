@@ -8,80 +8,9 @@ import CancelIcon from '../assets/images/times-solid.svg';
 import '../App.css';
 import styles from './ManageAccountsPage.module.css';
 
-
-const test: Admin[] = [
-  {
-    id: '1',
-    name: 'RobertBob Jacobson HenryJerry',
-    email: 'bob@gmail.com',
-    can_manage_users: true,
-    can_upload_books: true,
-    can_delete_books: true,
-    can_edit_books: true,
-    is_primary_admin: false,
-  },
-  {
-    id: '2',
-    name: 'Joseph Robert Downey Jr. Jacobs Tom III BOb ',
-    email: 'joe@gmail.com',
-    can_manage_users: true,
-    can_upload_books: true,
-    can_delete_books: true,
-    can_edit_books: false,
-    is_primary_admin: true,
-  },
-  {
-    id: '3333333333333333333',
-    name: 'Alice',
-    email: 'alice@gmail.com',
-    can_manage_users: true,
-    can_upload_books: false,
-    can_delete_books: false,
-    can_edit_books: false,
-    is_primary_admin: false,
-  },
-  {
-    id: '4',
-    name: 'Olivia',
-    email: 'olivia@gmail.com',
-    can_manage_users: false,
-    can_upload_books: false,
-    can_delete_books: false,
-    can_edit_books: false,
-    is_primary_admin: false,
-  },
-  {
-    id: '5',
-    name: 'John',
-    email: 'olivia@gmail.com',
-    can_manage_users: true,
-    can_upload_books: true,
-    can_delete_books: false,
-    can_edit_books: false,
-    is_primary_admin: false,
-  },
-  {
-    id: '6',
-    name: 'Jim',
-    email: 'olivia@gmail.com',
-    can_manage_users: false,
-    can_upload_books: false,
-    can_delete_books: false,
-    can_edit_books: false,
-    is_primary_admin: false,
-  },
-  {
-    id: '7',
-    name: 'Emma',
-    email: 'olivia@gmail.com',
-    can_manage_users: true,
-    can_upload_books: true,
-    can_delete_books: true,
-    can_edit_books: false,
-    is_primary_admin: false,
-  }
-];
-
+/**
+ * Admin Manage Accounts page with Admin Cards and ability to add new admins
+ */
 export const ManageAccountsPage: React.FC = () => {
 
   const client = useContext(APIContext);
@@ -93,7 +22,6 @@ export const ManageAccountsPage: React.FC = () => {
   const fetchAdmins = async (): Promise<void> => {
     try {
       const res = await client.getAdmins();
-      // const res = test;
       const primaryAdmin: Admin[] = res.filter(a => a.is_primary_admin);
       const otherAdmins: Admin[] = res.filter(a => !a.is_primary_admin);
       const adminList: Admin[] =  [...primaryAdmin, ...otherAdmins];
@@ -243,29 +171,36 @@ export const ManageAccountsPage: React.FC = () => {
                   <div className={styles.access}>
                     <p className={styles.accessTitle}>Access</p>
 
-                    <div className={styles.checkboxContainer}>
+                    <div className={styles.allCheckboxesContainer}>
 
-                      <div className={styles.manageUploadBox}>
-                        <label htmlFor="manageBox">Manage</label>
+                      <label className={styles.checkboxContainer} htmlFor="manageBox">
+                        Manage
                         <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
-                      </div>
-
-                      <div className={styles.manageUploadBox}>
-                        <label htmlFor="uploadBooksBox">Upload Books</label>
+                        <span className={styles.checkmark}></span>
+                        <br/>
+                      </label>
+                      <label className={styles.checkboxContainer} htmlFor="uploadBooksBox">
+                        Upload Books
                         <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
-                      </div>
+                        <span className={styles.checkmark}></span>
+                        <br/>
+                      </label>
 
                       {uploadBooks && 
                         (
                           <>
-                            <div className={styles.editDeleteBox}>
-                              <label htmlFor="editBooksBox">&mdash; Edit Books</label>
+                            <label className={styles.checkboxContainer} htmlFor="editBooksBox">
+                              &mdash; Edit Books
                               <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
-                            </div>                              
-                            <div className={styles.editDeleteBox}>    
-                              <label htmlFor="deleteBooksBox">&mdash; Delete Books</label>
+                              <span className={styles.checkmark}></span>
+                              <br/>
+                            </label>
+                            <label className={styles.checkboxContainer} htmlFor="deleteBooksBox">
+                              &mdash; Delete Books
                               <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                            </div>  
+                              <span className={styles.checkmark}></span>
+                              <br/>
+                            </label>              
                           </>                         
                         )
                       }
