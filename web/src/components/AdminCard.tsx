@@ -173,7 +173,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                             <br/>
                           </label>
                           <label className={styles.checkboxContainer} htmlFor="deleteBooksBox">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&mdash; Delete Books
+                            &mdash; Delete Books
                             <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
                             <span className={styles.checkmark}></span>
                             <br/>
