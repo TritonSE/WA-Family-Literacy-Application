@@ -76,7 +76,7 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} 
+      <UploadBooksNavigation pageNumber={currentPage} changePage={changePage} 
         allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]}></UploadBooksNavigation>
       { pages[currentPage]}
     </div>
