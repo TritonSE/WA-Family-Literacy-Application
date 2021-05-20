@@ -7,6 +7,7 @@ import styles from './TabContentPage.module.css';
 import '../../App.css';
 import wizardStyles from '../BookWizardPage.module.css';
 
+
 type TabConentPageProps = {
   onContentChange: ( data: TabContent ) => void
   // the current state of the fields. Used because fields dissapear when component re-renders
