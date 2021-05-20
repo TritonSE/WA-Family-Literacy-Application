@@ -9,18 +9,15 @@ type GeneralPageProps = {
   onAuthorChange: (data: string) => void 
   onImageChange: (data: File | null) => void
   // the current state of the fields. Used because fields dissapear when component re-renders
-  currentTitle: string 
-  currentAuthor: string
-  currentImage: File | null 
+  title: string 
+  author: string
+  image: File | null 
 };
 
 /**
  * General page for the book wizard. Inputs for title, author, and image 
  */
-export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange, currentTitle, currentAuthor, currentImage}) => {
-  const [title, setTitle] = useState<string>("");
-  const [author, setAuthor] = useState<string>("");
-  const [image, setImage] = useState<File|null>(null);
+export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange, title, author, image}) => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const fileInput = useRef<HTMLInputElement>(null);
   const acceptableMimeType = ["image/png", "image/jpeg"];
@@ -38,13 +35,9 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   }, [image]);
 
   useEffect( () => {
-    if (currentImage != null) {
-      setImage(currentImage);
-      setPreviewUrl(URL.createObjectURL(currentImage));
+    if (image != null) {
+      setPreviewUrl(URL.createObjectURL(image));
     }
-
-    setTitle(currentTitle);
-    setAuthor(currentAuthor);
   }, []);
 
 
@@ -66,7 +59,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   };
 
   const handleFile = (file: File): void => {
-    setImage(file);
+    onImageChange(file);
     setPreviewUrl(URL.createObjectURL(file));
   };
 
@@ -107,7 +100,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
                 <img src={requiredFieldImage} alt='' className={styles.requiredImage}/>
               </div>
               <div>
-                <input className = {styles.inputBox} value={title} type="text" onChange={ (e) => setTitle(e.target.value)}></input>
+                <input className = {styles.inputBox} value={title} type="text" onChange={ (e) => onTitleChange(e.target.value)}></input>
               </div>
             </div>
             <div className = {styles.inputElement}>
@@ -116,7 +109,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
                 <img src={requiredFieldImage} alt='' className={styles.requiredImage}/>
               </div>
               <div>
-                <input className = {styles.inputBox} value={author} type="text" onChange={ (e) => setAuthor(e.target.value)}></input>
+                <input className = {styles.inputBox} value={author} type="text" onChange={ (e) => onAuthorChange(e.target.value)}></input>
               </div>
             </div>
           </div>

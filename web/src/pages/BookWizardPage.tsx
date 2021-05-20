@@ -62,7 +62,7 @@ export const BookWizardPage: React.FC = () => {
   const [redirect, setRedirect] = useState<boolean>(false);
 
   const pages = [
-    <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} currentImage={image} currentTitle={title} currentAuthor={author}></GeneralPage>,
+    <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} image={image} title={title} author={author}></GeneralPage>,
     <TabContentPage onContentChange={setReadTabContent} key={1} currentContent={readTabContent}></TabContentPage>,
     <TabContentPage onContentChange={setExploreTabContent} currentContent={exploreTabContent} key={2}></TabContentPage>,
     <TabContentPage onContentChange={setLearnTabContent} currentContent={learnTabContent} key={3}></TabContentPage>,
