@@ -21,6 +21,11 @@ class WordsAliveAPI {
     delete this.client.defaults.headers.Authorization;
   }
 
+  // Pings the backend to wake it up if asleep. Does not throw or return anything
+  ping(): void {
+    this.client.get('/ping').catch(() => {});
+  }
+
   // makes a call to the database and returns an array of all books
   async getBooks(): Promise<Book[]> {
     const res = await this.client.get('/books');
