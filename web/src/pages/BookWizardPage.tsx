@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
 import { APIContext } from '../context/APIContext';
@@ -11,6 +11,7 @@ import { TabContentPage } from './BookWizard/TabContentPage';
 export const BookWizardPage: React.FC = () => {
 
   const client = useContext(APIContext);
+  const history = useHistory();
 
   const emptyTabContent: TabContent = {
     body: "",
@@ -26,7 +27,7 @@ export const BookWizardPage: React.FC = () => {
       const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
       const uploadedBook = await client.uploadBook(title, author, imageURl);
       await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
-      setRedirect(true);
+      history.push("/books");
       return;
     }
   };
@@ -59,7 +60,6 @@ export const BookWizardPage: React.FC = () => {
   const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
   
   // controls wheter to redirect the page back to start
-  const [redirect, setRedirect] = useState<boolean>(false);
   const generalDone = title !== '' && author !== '' && image != null;
   const readDone = readTabContent.body !== '';
   const exploreDone = exploreTabContent.body !== '';
@@ -76,12 +76,9 @@ export const BookWizardPage: React.FC = () => {
 
   return (
     <div>
-      { redirect ? <Redirect to="upload"/> :
-        <div>
-          <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} 
-            allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]}></UploadBooksNavigation>
-          { pages[currentPage]} 
-        </div> }
+      <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} 
+        allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]}></UploadBooksNavigation>
+      { pages[currentPage]}
     </div>
   );
 
