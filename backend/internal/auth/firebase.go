@@ -2,7 +2,10 @@ package auth
 
 import (
 	"context"
+	"fmt"
+
 	"firebase.google.com/go/v4/auth"
+	"github.com/pkg/errors"
 )
 
 type FirebaseAuthenticator struct {
@@ -19,4 +22,22 @@ func (a FirebaseAuthenticator) VerifyToken(ctx context.Context, token string) (s
 		return "", false
 	}
 	return result.UID, true
+}
+
+func (a FirebaseAuthenticator) CreateUser(ctx context.Context, email string, pwd string) (string, error) {
+	// Populate struct with fields for user creation
+	var user auth.UserToCreate
+	u := &user
+	u = u.Email(email)
+	u = u.Password(pwd)
+
+	// Create User
+	ur, err := a.Client.CreateUser(ctx, u)
+	if err != nil {
+		fmt.Println(err)
+		return "", errors.Wrap(err, "Error in Firebase CreateUser")
+	}
+
+	// Return UID from UserRecord
+	return ur.UserInfo.UID, nil
 }

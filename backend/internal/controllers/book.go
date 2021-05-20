@@ -51,6 +51,7 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
+
 	var reqBook models.APICreateBook
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
@@ -70,6 +71,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
+
 	var reqBookDetail models.APICreateBookContents
 
 	var bookID string = chi.URLParam(req, "id")
@@ -105,6 +107,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 
 // deletes an entry from the book_contents table (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
+
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 
@@ -128,6 +131,7 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 
 // deletes a book from the books table (/books/{id})
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
+
 	var bookID string = chi.URLParam(req, "id")
 
 	book, _ := c.Books.FetchBook(req.Context(), bookID)
