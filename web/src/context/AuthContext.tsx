@@ -5,11 +5,13 @@ import {
   RouteProps,
   RouteComponentProps,
 } from "react-router-dom";
+import { Navbar } from '../components/Navbar';
 
 type AuthState = {
-  isAuthenticated: boolean,
-  signin: (cb: () => void) => void,
-  signout: (cb: () => void) => void,
+  admin: Admin | null;
+  signedIn: boolean;
+  login: (email: string, password: string, rememberMe: boolean) => void,
+  logout: () => void,
 };
 
 const val: AuthState = {
@@ -50,21 +52,29 @@ export const AuthProvider: React.FC = ({ children }) => {
   );
 };
 
-export const PrivateRoute: React.SFC<RouteProps> = ({ component, ...rest }: RouteProps) => {
-  if (!component) {
-    throw Error("component is undefined");
-  }
+export const PrivateRoute: React.FC<React.PropsWithChildren<RouteProps>> = ({ children, ...rest }: RouteProps) => {
   const auth = useContext(AuthContext);
 
-  const Component = component;
   const render = (props: RouteComponentProps): React.ReactNode => {
+    const childrenWithRouteProps = React.Children.map(children, child => {
+      if (React.isValidElement(child)) {
+        return React.cloneElement(child, props);
+      }
+
+      return child;
+    });
+
     // render protected page if signed in
     if (auth.isAuthenticated) {
-      return <Component {...props} />;
+      return (
+        <Navbar>
+          {childrenWithRouteProps}
+        </Navbar>
+      );
     }
 
     // otherwise redirect to login
-    return <Redirect to={{ pathname: '/login' }} />;
+    return (<Redirect to={{ pathname: '/login' }} />);
   };
 
   return (<Route {...rest} render={render} />);
