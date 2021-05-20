@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import { ImageAPI } from '../api/ImageAPI';
 import { UploadBooksNavigation } from '../components/UploadBooksNavigation';
 import { APIContext } from '../context/APIContext';
