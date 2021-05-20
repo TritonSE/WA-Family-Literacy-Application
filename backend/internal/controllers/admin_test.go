@@ -16,7 +16,7 @@ func TestPostAdminUnauthorized(t *testing.T) {
 	fmt.Print("\n================ START ADMIN TESTS ================\n")
 	fmt.Print("\n---------------- CREATE ADMIN TESTS ----------------\n")
 
-	body := `{"email": "admin1@test.com", "name": "adam", 
+	body := `{"email": "admin1@test.com", "password": "p@ssw0rd!", "name": "adam", 
     "can_manage_users": false, "can_upload_books": true, "can_delete_books" : true}`
 	// not passing token
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
@@ -27,7 +27,7 @@ func TestPostAdminUnauthorized(t *testing.T) {
 func TestPostAdminConflictingPerm(t *testing.T) {
 	var response string
 
-	body := `{"email": "admin1@test.com", "name": "adam", 
+	body := `{"email": "admin1@test.com", "password": "p@ssw0rd!", "name": "adam", 
     "can_manage_users": true, "can_upload_books": false,
     "can_edit_books": true, "can_delete_books" : false}`
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
@@ -40,7 +40,7 @@ func TestPostAdminConflictingPerm(t *testing.T) {
 func TestPostAdmin(t *testing.T) {
 	var response models.Admin
 
-	body := `{"email": "admin1@test.com", "name": "adam", 
+	body := `{"email": "admin1@test.com", "password": "p@ssw0rd!", "name": "adam", 
     "can_manage_users": true, "can_upload_books": true, "can_edit_books": true,
     "can_delete_books" : false}`
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
@@ -48,13 +48,25 @@ func TestPostAdmin(t *testing.T) {
 
 	require.Equal(t, "admin1", response.ID)
 
-	body = `{"email": "intern1@test.com", "name": "ian", 
+	body = `{"email": "intern1@test.com", "password": "p@ssw0rd!", "name": "ian", 
     "can_manage_users": false, "can_upload_books": false, "can_delete_books" : false}`
 
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Equal(t, "intern1", response.ID)
+}
+
+func TestPostAdminDuplicateEmail(t *testing.T) {
+	body := `{"email": "admin1@test.com", "password": "p@ssw0rd!", "name": "adam",
+    "can_manage_users": true, "can_upload_books": true, "can_edit_books": true,
+    "can_delete_books" : false}`
+
+	var res string
+	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
+		http.StatusBadRequest, &res, "test-token-primary")
+
+	require.Equal(t, "duplicate email", res)
 }
 
 // Test list admins without auth
