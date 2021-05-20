@@ -27,7 +27,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const progressBar = new Array(5).fill(null)
     .map((_, index) => (
       <div className={styles.circleImageContainer}  key={index}>
-        <button onClick={() => console.log("CLICK")} className={styles.navigationButton} disabled={!pageStatus[index]}>
+        <button onClick={() => pageChange(index)} className={styles.navigationButton} disabled={!(pageStatus[index] && (index > pageNumber ? allowContinue : true))}>
           <img src={
             index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : pageStatus[index] && allowContinue ? CheckedCircle : GreyCircle
           } className={styles.progressCircles}/>
