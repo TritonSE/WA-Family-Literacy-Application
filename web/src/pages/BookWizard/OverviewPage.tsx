@@ -1,6 +1,7 @@
 import React from 'react';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
+import '../../App.css';
 type OverviewPageProps = {
   onSubmit: () => Promise<void>;
 };
@@ -20,6 +21,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
         <div className= {styles.center}>
           <div className = {styles.comingSoon}>
                 Coming Soon!
+            <div className = "body3">
+              Mobile Preview is coming soon! Please double check all screens before submitting
+            </div>
           </div>
         </div>
 

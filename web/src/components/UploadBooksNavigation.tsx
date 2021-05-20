@@ -19,7 +19,6 @@ type UploadBooksNavigationProps = {
  * Renders the navigation wizard bar at the top of the book wizard
  */
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue, pageStatus}) => {
-  // const progressBar = [];
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
   const history = useHistory();
