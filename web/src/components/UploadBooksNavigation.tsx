@@ -18,33 +18,42 @@ type UploadBooksNavigationProps = {
  * Renders the navigation wizard bar at the top of the book wizard
  */
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue}) => {
-  const progressBar = [];
+  // const progressBar = [];
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
   const history = useHistory();
+  const skewer = <span className={styles.skewer}/>;
+  const progressBar = new Array(5).fill(null)
+    .map((_, index) => (
+      <div className={styles.circleImageContainer} key={index}>
+        <img src={index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : GreyCircle} className={styles.progressCircles}/>
+        <p className={styles.pageLabel}>{pages[index]}</p>
+      </div>
+    )).flatMap((a) => [skewer, a]).slice(1);
+
 
   // creates a div with an image and a text child, and also creates the line in between them  
-  for(let i = 0; i < 5; i++) {
-    let child: JSX.Element | null = null;
-    // ensure all elements have unique keys
-    const imageKey = i.toString() + "img";
-    const skewerKey = i.toString() + "skew";
+  // for(let i = 0; i < 5; i++) {
+  //   let child: JSX.Element | null = null;
+  //   // ensure all elements have unique keys
+  //   const imageKey = i.toString() + "img";
+  //   const skewerKey = i.toString() + "skew";
     
-    if(i < pageNumber)
-      child = <img src={CheckedCircle} key={imageKey}alt = '' className={styles.progressCircles}/>;
-    else if (i == pageNumber)
-      child = <img src = {GreenCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
-    else
-      child = <img src={GreyCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
+  //   if(i < pageNumber)
+  //     child = <img src={CheckedCircle} key={imageKey}alt = '' className={styles.progressCircles}/>;
+  //   else if (i == pageNumber)
+  //     child = <img src = {GreenCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
+  //   else
+  //     child = <img src={GreyCircle} alt = '' key={imageKey} className={styles.progressCircles}/>;
     
-    const pageName = <p className={styles.pageLabel} key={pages[i]}>{pages[i]}</p>;
-    const nameImageDiv = React.createElement("div", {className: styles.circleImageContainer, key: i.toString()} ,[child, pageName]);
-    const kebebSkewer = <span className={styles.skewer} key={skewerKey}></span>;
+  //   const pageName = <p className={styles.pageLabel} key={pages[i]}>{pages[i]}</p>;
+  //   const nameImageDiv = React.createElement("div", {className: styles.circleImageContainer, key: i.toString()} ,[child, pageName]);
+  //   const kebebSkewer = <span className={styles.skewer} key={skewerKey}></span>;
     
-    progressBar.push(nameImageDiv);
-    if(i != 4)
-      progressBar.push(kebebSkewer);
-  }
+  //   progressBar.push(nameImageDiv);
+  //   if(i != 4)
+  //     progressBar.push(kebebSkewer);
+  // }
   
   return (
     <div>
