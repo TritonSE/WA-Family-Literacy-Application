@@ -25,4 +25,4 @@ export type UpdateAdmin = {
   can_upload_books: boolean
   can_delete_books: boolean
   can_edit_books: boolean
-}
+};
