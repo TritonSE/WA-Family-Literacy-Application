@@ -60,9 +60,15 @@ export const BookWizardPage: React.FC = () => {
   
   // controls wheter to redirect the page back to start
   const [redirect, setRedirect] = useState<boolean>(false);
+  const generalDone = title !== '' && author !== '' && image != null;
+  const readDone = readTabContent.body !== '';
+  const exploreDone = exploreTabContent.body !== '';
+  const learnDone = learnTabContent.body !== '';
+  const overViewDone = generalDone && readDone && exploreDone && learnDone;
 
   const pages = [
-    <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} image={image} title={title} author={author}></GeneralPage>,
+    <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
+      image={image} title={title} author={author}></GeneralPage>,
     <TabContentPage onContentChange={setReadTabContent} key={1} currentContent={readTabContent}></TabContentPage>,
     <TabContentPage onContentChange={setExploreTabContent} currentContent={exploreTabContent} key={2}></TabContentPage>,
     <TabContentPage onContentChange={setLearnTabContent} currentContent={learnTabContent} key={3}></TabContentPage>,
@@ -73,7 +79,8 @@ export const BookWizardPage: React.FC = () => {
     <div>
       { redirect ? <Redirect to="upload"/> :
         <div>
-          <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} allowContinue={allowChangePage()}></UploadBooksNavigation>
+          <UploadBooksNavigation pageNumber={currentPage} pageChange={changePage} 
+            allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]}></UploadBooksNavigation>
           { pages[currentPage]} 
         </div> }
     </div>

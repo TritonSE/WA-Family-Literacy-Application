@@ -12,12 +12,13 @@ type UploadBooksNavigationProps = {
   pageNumber: number
   pageChange: (newPage: number) => void; //function to render a new page below the navigation component
   allowContinue: boolean //controls if user can move onto the next page
+  pageStatus: Array<boolean>
 };
 
 /**
  * Renders the navigation wizard bar at the top of the book wizard
  */
-export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue}) => {
+export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, pageChange, allowContinue, pageStatus}) => {
   // const progressBar = [];
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
@@ -26,8 +27,10 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const progressBar = new Array(5).fill(null)
     .map((_, index) => (
       <div className={styles.circleImageContainer}  key={index}>
-        <button onClick={() => console.log("CLICK")} className={styles.navigationButton}>
-          <img src={index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : GreyCircle} className={styles.progressCircles}/>
+        <button onClick={() => console.log("CLICK")} className={styles.navigationButton} disabled={!pageStatus[index]}>
+          <img src={
+            index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : pageStatus[index] && allowContinue ? CheckedCircle : GreyCircle
+          } className={styles.progressCircles}/>
         </button>
         <p className={styles.pageLabel}>{pages[index]}</p>
       </div>
