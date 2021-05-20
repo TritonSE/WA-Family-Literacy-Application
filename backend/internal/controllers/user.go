@@ -89,7 +89,6 @@ func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
 		fmt.Println("unable to get user from request context")
 		return
 	}
-
 	if uid != userID {
 		writeResponse(rw, http.StatusForbidden, "Token does not match request")
 		return
