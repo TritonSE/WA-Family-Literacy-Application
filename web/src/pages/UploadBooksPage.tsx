@@ -138,9 +138,6 @@ export const UploadBooksPage: React.FC = () => {
     return queryIdxTitle !== -1 || queryIdxAuthor !== -1;
   };
 
-  const handleUploadButtonClick = (): void => {
-    history.push("/books/new");
-  };
 
   return (
     <div>
@@ -152,7 +149,7 @@ export const UploadBooksPage: React.FC = () => {
             <img className={styles.searchIcon} src={SearchIcon} alt='' />
           </button>
         </div>
-        <button type="button" className={styles.newButton} onClick={() => handleUploadButtonClick()}>
+        <button type="button" className={styles.newButton} onClick={() => history.push("/books/new")}>
           <p>New Book</p>
           <img className={styles.addIcon} src={AddIcon} alt='' />
         </button>

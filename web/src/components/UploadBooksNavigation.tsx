@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import NavigationButtonImage from '../assets/images/chevron-right-solid.svg';
 import GreyCircle from '../assets/images/gray-circle.svg';
 import GreenCircle from '../assets/images/green-circle.svg';
@@ -21,6 +21,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const progressBar = [];
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
+  const history = useHistory();
 
   // creates a div with an image and a text child, and also creates the line in between them  
   for(let i = 0; i < 5; i++) {
@@ -69,11 +70,9 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
       </div>
       <div className={styles.cancelImageContainer}>
-        <Link to="/upload">
-          <button className = {styles.navigationButton}>
-            <img src={CancelImage} alt='' className={styles.cancelImage} />
-          </button>
-        </Link>
+        <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>
+          <img src={CancelImage} alt='' className={styles.cancelImage} />
+        </button>
       </div>
       <div className = {styles.progressBarContainer}>
         <div className = {styles.progressBar}>
