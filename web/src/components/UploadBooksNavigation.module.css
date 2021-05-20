@@ -92,3 +92,8 @@
     width: 70px;
 }
 
+.button {
+    border: none;
+    color: transparent;
+}
+

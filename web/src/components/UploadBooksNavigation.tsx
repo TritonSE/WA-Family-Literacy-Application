@@ -25,8 +25,10 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
   const skewer = <span className={styles.skewer}/>;
   const progressBar = new Array(5).fill(null)
     .map((_, index) => (
-      <div className={styles.circleImageContainer} key={index}>
-        <img src={index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : GreyCircle} className={styles.progressCircles}/>
+      <div className={styles.circleImageContainer}  key={index}>
+        <button onClick={() => console.log("CLICK")} className={styles.navigationButton}>
+          <img src={index < pageNumber ? CheckedCircle : index == pageNumber ? GreenCircle : GreyCircle} className={styles.progressCircles}/>
+        </button>
         <p className={styles.pageLabel}>{pages[index]}</p>
       </div>
     )).flatMap((a) => [skewer, a]).slice(1);
