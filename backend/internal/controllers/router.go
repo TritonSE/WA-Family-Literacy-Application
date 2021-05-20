@@ -68,8 +68,6 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 			Patch("/{id}/{lang}", bookController.UpdateBookDetails)
 	})
 
-	r.Get("/admins", adminController.GetAdminList)
-
 	r.Route("/images", func(r chi.Router) {
 		r.Post("/", imageController.PostImage)
 
