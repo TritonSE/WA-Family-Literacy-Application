@@ -20,9 +20,9 @@ export const Navbar: React.FC = () => {
           <NavLink className={styles.nav_link} activeClassName={styles.active} to="/analytics">Analytics</NavLink>
         </li>
         <li className={styles.nav_element_left}>
-          <NavLink className={styles.nav_link} activeClassName={styles.active} to="/upload" isActive={(
+          <NavLink className={styles.nav_link} activeClassName={styles.active} to="/books" isActive={(
             (match, location) => {
-              if (location.pathname == "/upload-books-wizard" || location.pathname=="/upload")
+              if (location.pathname == "/books/new" || location.pathname=="/books")
                 return true;
               return false;
             }

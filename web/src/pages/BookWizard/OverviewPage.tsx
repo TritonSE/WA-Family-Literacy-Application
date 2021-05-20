@@ -2,7 +2,7 @@ import React from 'react';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 type OverviewPageProps = {
-  onSubmit: () => Promise<undefined>;
+  onSubmit: () => Promise<void>;
 };
 
 /**

@@ -17,7 +17,7 @@ export const BookWizardPage: React.FC = () => {
     video: undefined
   };
 
-  const submitPage = async (): Promise<undefined> => {
+  const submitPage = async (): Promise<void> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
     // image will never equal null here - done to please Typescript type checking
     if (image != null) {
