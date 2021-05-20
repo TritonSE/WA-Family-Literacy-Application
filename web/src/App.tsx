@@ -26,14 +26,12 @@ const App: React.FC = () => {
           <Route path="/accounts">
             <ManageAccountsPage />
           </Route>
-          <Route path="/books"
-            render = {({ match: {url} }) => (
-              <>
-                <Route exact path={`${url}`} component={UploadBooksPage}/>
-                <Route exact path={`${url}/new`} component={BookWizardPage}/>
-              </>
-            )}
-          />
+          <Route exact path="/books">
+            <UploadBooksPage />
+          </Route>
+          <Route exact path="/books/new">
+            <BookWizardPage />
+          </Route>
         </Switch>
       </Router>
     </APIProvider>
