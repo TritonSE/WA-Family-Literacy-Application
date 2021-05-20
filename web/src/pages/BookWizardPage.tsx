@@ -64,7 +64,6 @@ export const BookWizardPage: React.FC = () => {
   const readDone = readTabContent.body !== '';
   const exploreDone = exploreTabContent.body !== '';
   const learnDone = learnTabContent.body !== '';
-  const overViewDone = generalDone && readDone && exploreDone && learnDone;
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
