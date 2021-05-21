@@ -92,7 +92,27 @@ func (c *AdminController) GetAdminList(rw http.ResponseWriter, req *http.Request
 
 // Get info for one specific admin by ID
 func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request) {
+	uid, ok := req.Context().Value("user").(string)
+	if !ok {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println("unable to get user from request context")
+		return
+	}
+
+	// Query database for permissions
+	perms, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+
 	var adminID string = chi.URLParam(req, "id")
+
+	if !perms.CanManageUsers && uid != adminID {
+		writeResponse(rw, http.StatusForbidden, "do not have permission")
+	}
+
 	// Fetch admin
 	admin, err := c.Admins.FetchAdminByID(req.Context(), adminID)
 	if err != nil {

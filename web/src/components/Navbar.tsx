@@ -35,10 +35,10 @@ export const Navbar: React.FC = () => {
         <li className={styles.nav_element_right}>
           <button
             className={styles.nav_button}
-            type="submit" onClick={() => auth.signout(() => history.push('/login'))}>
-              <span className={styles.button_text}>
-                Sign Out
-              </span>
+            type="submit" onClick={() => auth.logout()}>
+            <span className={styles.button_text}>
+              Sign Out
+            </span>
           </button>
         </li>
       </ul>

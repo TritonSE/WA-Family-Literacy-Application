@@ -81,8 +81,11 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		Post("/admins", adminController.CreateAdmin)
 	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
 		Get("/admins", adminController.GetAdminList)
-	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
+
+	// WARNING: This route does NOT require CanManageUsers - we also need to allow admins to fetch their own account
+	r.With(middleware.RequireAuth(authenticator)).
 		Get("/admins/{id}", adminController.GetAdminByID)
+
 	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).
 		Patch("/admins/{id}", adminController.UpdateAdmin)
 	r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanManageUsers)).

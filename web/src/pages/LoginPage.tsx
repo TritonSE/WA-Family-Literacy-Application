@@ -1,27 +1,36 @@
 import React, { useState, useContext } from 'react';
-import {
-  useHistory,
-} from "react-router-dom";
+import { Redirect, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 import styles from './LoginPage.module.css';
+import { useErrorAlert } from '../hooks/useErrorAlert';
 
 export const LoginPage: React.FC = () => {
+  const location = useLocation();
+  const auth = useContext(AuthContext);
+  useErrorAlert(auth.error);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const history = useHistory();
-  const auth = useContext(AuthContext);
-  const { from } = { from: { pathname: "/communication" } };
+  const login = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    auth.login(email, password, rememberMe);
+  };
+
+  if (auth.admin !== null) {
+    return <Redirect to="/communication" />;
+  }
 
   return (
     <div className={styles.parent}>
       <div className={styles.loginContainer}>
         <img className={styles.loginLogo} src="./img/logo.png" alt="Logo" />
-        <form className={styles.loginForm}>
-          <input onChange={e => setEmail(e.target.value)} className={styles.loginInput} required placeholder="Email Address" type="text" />
+        <form className={styles.loginForm} onSubmit={login}>
+          <input onChange={e => setEmail(e.target.value)} className={styles.loginInput} autoFocus required placeholder="Email Address" type="text" />
           <input onChange={e => setPassword(e.target.value)} className={styles.loginInput} required placeholder="Password" type="password" />
-          <button className={styles.loginBtn} type="button" onClick={() => auth.signin(() => history.replace(from))}>Login</button>
+          <button className={styles.loginBtn} type="submit">Login</button>
         </form>
       </div>
     </div>
