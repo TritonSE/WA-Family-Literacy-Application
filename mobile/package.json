@@ -50,7 +50,7 @@
   "scripts": {
     "build": "tsc --strict",
     "build-android": "( cd android; ./gradlew assembleRelease )",
-    "build-ios": "react-native run-ios --configuration Release",
+    "build-ios": "( cd ios; xcodebuild -workspace LetsRead.xcworkspace -scheme LetsRead -configuration Release CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\") ",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",
