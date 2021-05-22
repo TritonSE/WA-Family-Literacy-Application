@@ -2,7 +2,6 @@
     composes: h2 from '../App.css';
     text-align: left;
     margin-top: 94px;
-    margin-left: 12px;
 }
 
 .row {
