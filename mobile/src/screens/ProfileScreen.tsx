@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Svg, Circle } from 'react-native-svg';
 
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -137,8 +137,14 @@ export const ProfileScreen: React.FC = () => {
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView>
+        {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
+        <View style={styles.top} />
+        {/* Starts at the top of the screen, containing the Words Alive logo and orange rounded background */}
         <View style={styles.heading}>
-          <Svg height="100%" width="100%" viewBox="0 0 1 1">
+          <SafeAreaView edges={['top']} style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo-white.png')} style={styles.logo} />
+          </SafeAreaView>
+          <Svg height="100%" width="100%" viewBox="0 0 1 1" style={styles.circle}>
             <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange} />
           </Svg>
         </View>
@@ -155,9 +161,29 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: Colors.white,
   },
+  top: {
+    marginTop: -500,
+    height: 500,
+    backgroundColor: Colors.orange,
+  },
   heading: {
     color: Colors.orange,
     height: 400,
+  },
+  logoContainer: {
+    paddingTop: 100,
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 220,
+    height: 150,
+  },
+  circle: {
+    marginTop: -200,
+    zIndex: -1, // needed to render behind the logo
   },
   socialRow: {
     flexDirection: 'row',
