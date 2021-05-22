@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Constants from 'expo-constants';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import * as SecureStore from 'expo-secure-store';
 
 import { User } from '../models/User';
 import { APIContext } from './APIContext';
@@ -43,7 +44,23 @@ export const AuthProvider: React.FC = ({ children }) => {
     return app.auth();
   }, []);
 
-  const login = (email: string, password: string): void => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const [userJSON, token] = await Promise.all([SecureStore.getItemAsync('user'), SecureStore.getItemAsync('apiToken')]);
+        if (userJSON !== '' && token !== '') {
+          const user = JSON.parse(userJSON) as User;
+          api.setToken(token);
+          setUser(user);
+        }
+      } catch (e) {
+        // Don't set error state var, ignore, user can just re-login
+        console.log(e.message);
+      }
+    })();
+  }, [auth]);
+
+  const login = (email: string, password: string, rememberMe: boolean): void => {
     (async () => {
       try {
         const { user: fbUser } = await auth.signInWithEmailAndPassword(email, password);
@@ -53,6 +70,10 @@ export const AuthProvider: React.FC = ({ children }) => {
         const uid = fbUser.uid;
         const user = await api.getUser(uid);
         setUser(user);
+
+        if (rememberMe) {
+          await Promise.all([SecureStore.setItemAsync('user', JSON.stringify(user)), SecureStore.setItemAsync('apiToken', jwt)]);
+        }
       } catch (e) {
         setError(e);
         setUser(null);

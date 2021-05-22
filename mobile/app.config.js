@@ -18,7 +18,7 @@ export default {
   },
   extra: {
     baseUrl: process.env.BASE_URL || 'http://localhost:8080',
-    firebase: JSON.parse(process.env.FB_CONFIG) || {
+    firebase: process.env.FB_CONFIG ? JSON.parse(process.env.FB_CONFIG) : {
       apiKey: process.env.FB_API_KEY || 'AIzaSyBSJHJ-VfdN2Y3wC_vfD1k6bEU2mQmP-Vg',
       authDomain: process.env.FB_AUTH_DOMAIN || 'words-alive-staging.firebaseapp.com',
       projectId: process.env.FB_PROJECT_ID || 'words-alive-staging',
