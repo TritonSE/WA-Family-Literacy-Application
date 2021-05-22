@@ -15,7 +15,6 @@
     "expo-splash-screen": "~0.8.0",
     "expo-status-bar": "~1.0.3",
     "expo-web-browser": "~8.6.0",
-    "fsevents": "^2.3.2",
     "i18n-js": "^3.8.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -44,13 +43,14 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "fsevents": "^2.3.2",
     "typescript": "~4.0.0"
   },
   "optionalDependencies": {},
   "scripts": {
     "build": "tsc --strict",
     "build-android": "( cd android; ./gradlew assembleRelease )",
-    "build-ios": "( cd ios; pod install; xcodebuild -workspace LetsRead.xcworkspace -scheme LetsRead -configuration Release CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\") ",
+    "build-ios": "( cd ios; ./build.sh ) ",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",
