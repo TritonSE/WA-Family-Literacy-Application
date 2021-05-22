@@ -31,10 +31,10 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const langs = book.languages;
 
   const client = useContext(APIContext);
-  const i18nCtx = useContext(I18nContext);
+  const i18n = useContext(I18nContext);
   const insets = useSafeAreaInsets();
 
-  const locale = i18nCtx.locale.substring(0, 2) as Language;
+  const locale = i18n.locale;
   const defaultLang = langs.includes(locale) ? locale : langs.includes('en') ? 'en' : langs[0];
 
   // book screen states
@@ -82,6 +82,12 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     </View>
   );
 
+  const tabButtons = {
+    read: i18n.t('read'),
+    explore: i18n.t('explore'),
+    learn: i18n.t('learn'),
+  };
+
   return (
     <ScrollView>
       <Pressable style={{ marginTop: insets.top }} onPress={() => navigation.goBack()}><Image style={styles.backButton} source={require('../../assets/images/Arrow_left.png')}/></Pressable>
@@ -99,10 +105,8 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
         <Text style={[TextStyles.heading1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>
         <ButtonGroup
-          btn1="read"
-          btn2="explore"
-          btn3="learn"
-          onBtnChange={(btn) => {
+          buttons={tabButtons}
+          onButtonChange={(btn) => {
             setActiveButton(btn as Tab);
           }}
         />

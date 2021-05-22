@@ -32,7 +32,7 @@ const SettingsTab: React.FC = () => {
 
   return (
     <View>
-		
+
       <View style={styles.login}>
         <LargeButton text="Sign In" onPress={() => null} underline={true}/>
         <LargeButton text="Sign Up" onPress={() => null} underline={true}/>
@@ -43,10 +43,10 @@ const SettingsTab: React.FC = () => {
         <View style={styles.languageText}>
           <Text style={TextStyles.heading3}>{t("language")}</Text>
         </View>
-				
+
         {languages.map((lang: Language) => (
           <View key={`lang${lang}`} style={styles.langElem}>
-						
+
             <Text style={TextStyles.body1}>{Languages[lang]}</Text>
 
             <Pressable
@@ -64,8 +64,8 @@ const SettingsTab: React.FC = () => {
       <View style={{height:300}}/>
 
     </View>
-	
-	
+
+
   );
 
 };
@@ -116,18 +116,24 @@ const MoreInfoTab: React.FC = () => {
   );
 };
 
-const TabScreens: { [index: string]: any } = {
-  'saved': <SavedTab/>,
-  'settings': <SettingsTab/>,
-  'moreInfo': <MoreInfoTab/>,
+const TabScreens: { [index: string]: JSX.Element } = {
+  saved: <SavedTab/>,
+  settings: <SettingsTab/>,
+  moreInfo: <MoreInfoTab/>,
 };
 
 /**
  * Right tab on navbar for profile menu
  */
 export const ProfileScreen: React.FC = () => {
-  const [selectedTab, selectTab] = React.useState('saved');
-  
+  const i18n = useContext(I18nContext);
+
+  const [selectedTab, selectTab] = React.useState('settings');
+  const tabButtons = {
+    settings: i18n.t('settings'),
+    moreInfo: i18n.t('moreInfo'),
+  };
+
   return (
     <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <ScrollView>
@@ -137,7 +143,7 @@ export const ProfileScreen: React.FC = () => {
           </Svg>
         </View>
         <View style={styles.buttonGroup}>
-          <ButtonGroup btn1="saved" btn2="settings" btn3="moreInfo" onBtnChange={(btn) => {selectTab(btn);}} />
+          <ButtonGroup buttons={tabButtons} onButtonChange={(btn) => {selectTab(btn);}} />
         </View>
         { TabScreens[selectedTab] }
       </ScrollView>
@@ -179,21 +185,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   login: {
-    alignSelf: 'center', 
-    alignItems: 'center', 
+    alignSelf: 'center',
+    alignItems: 'center',
     width: 298,
   },
   langSelector: {
-    marginTop: 30, 
-    alignSelf: 'center', 
+    marginTop: 30,
+    alignSelf: 'center',
     width: 298,
   },
   languageText: {
     marginBottom: 10,
   },
   langElem: {
-    marginTop: 15, 
-    flexDirection: 'row', 
+    marginTop: 15,
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
