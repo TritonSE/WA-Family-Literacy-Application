@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from '../../styles/Colors';
 import { TextStyles } from '../../styles/TextStyles';
 import { Checkbox } from '../../components/Checkbox';

@@ -10,10 +10,10 @@ export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underli
 
   const buttonStyle = disabled ? styles.disabledButton
     : active ? styles.activeButton
-    : styles.inactiveButton;
+      : styles.inactiveButton;
   const textStyle = disabled ? styles.disabledText
     : active ? styles.activeText
-    : styles.inactiveText;
+      : styles.inactiveText;
 
   return (
     <Pressable

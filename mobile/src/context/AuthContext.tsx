@@ -48,7 +48,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const [userJSON, token] = await Promise.all([SecureStore.getItemAsync('user'), SecureStore.getItemAsync('apiToken')]);
-        if (userJSON !== '' && token !== '') {
+        if (userJSON && token) {
           const user = JSON.parse(userJSON) as User;
           api.setToken(token);
           setUser(user);
@@ -64,6 +64,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const { user: fbUser } = await auth.signInWithEmailAndPassword(email, password);
+        if (fbUser === null) {
+          setError(new Error('User does not exist'));
+          setUser(null);
+          return;
+        }
         const jwt = await fbUser.getIdToken();
         api.setToken(jwt);
 
@@ -85,6 +90,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const { user: fbUser } = await auth.createUserWithEmailAndPassword(email, password);
+        if (fbUser === null) {
+          setError(new Error('Unknown error creating user'));
+          setUser(null);
+          return;
+        }
         const jwt = await fbUser.getIdToken();
         api.setToken(jwt);
 
