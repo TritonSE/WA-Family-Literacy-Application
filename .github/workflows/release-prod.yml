@@ -79,7 +79,7 @@ jobs:
         env:
           BASE_URL: https://api.wordsalive.org
           FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
-      - name: Copy binary
+      - name: Copy package
         working-directory: mobile
         run: mv android/app/build/outputs/apk/release/app-release.apk lets-read-android.apk
       - name: Release
@@ -103,12 +103,12 @@ jobs:
         env:
           BASE_URL: https://api.wordsalive.org
           FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
-      - name: Copy binary
+      - name: Copy package
         working-directory: mobile
-        run: mv /Users/$USER/Library/Developer/Xcode/DerivedData/LetsRead*/Build/Products/Release-iphoneos/letsread.app lets-read-ios.app
+        run: mv ios/build/lets-read.ipa lets-read-ios.ipa
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: mobile/lets-read-ios.app
+          files: mobile/lets-read-ios.ipa
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
