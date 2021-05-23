@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { Colors } from '../../styles/Colors';
 import { LargeButton } from '../../components/LargeButton';
