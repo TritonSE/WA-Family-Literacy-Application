@@ -19,7 +19,7 @@ export const SignUpScreen: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [inSanDiego, setInSanDiego] = useState(false);
 
-  const ok = name !== '' && email !== '' && password === confirmPassword;
+  const ok = name !== '' && email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword;
 
   const signup = (): void => {
     auth.signup(name, email, password, inSanDiego);
@@ -27,22 +27,31 @@ export const SignUpScreen: React.FC = () => {
 
   return (
     <View style={styles.background}>
+
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
       </View>
+
       <View style={styles.container}>
         <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('volunteersViewThis')}*</Text>
+       
         <TextInput style={[styles.input, TextStyles.caption3]} value={name} onChangeText={setName} placeholder={i18n.t('preferredName')}/>
         <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} textContentType="emailAddress" />
         <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} secureTextEntry />
         <TextInput style={[styles.input, TextStyles.caption3]} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={i18n.t('confirmPassword')} secureTextEntry />
         {confirmPassword !== '' && password !== confirmPassword && <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('passwordsDontMatch')}</Text>}
+       
         <TouchableOpacity style={styles.inSanDiegoContainer} onPress={() => setInSanDiego(!inSanDiego)}>
           <Checkbox value={inSanDiego} onChange={setInSanDiego} inverted />
-          <Text style={TextStyles.caption2}>{i18n.t('inSanDiego')}</Text>
+          <Text style={styles.locatedText}>{i18n.t('inSanDiego')}</Text>
         </TouchableOpacity>
-        <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} />
+        
+        <View style={styles.signUpContainer}>
+          <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} />
+        </View>
+
       </View>
+
     </View>
   );
 };
@@ -58,31 +67,43 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 150,
+    marginTop: 50,
   },
   logo: {
     width: 250,
     height: 250,
+    resizeMode: 'contain',
   },
   container: {
     width: '80%',
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 25,
   },
   input: {
     width: '100%',
     backgroundColor: Colors.white,
     borderRadius: 5,
     padding: 8,
+    marginBottom: 20,
   },
   caption: {
     width: '100%',
     color: Colors.white,
+    marginBottom: 10,
   },
   inSanDiegoContainer: {
     flexDirection: 'row',
     width: '100%',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+  },
+  locatedText: {
+    ...TextStyles.caption2,
+    color: Colors.white,
+    alignSelf: 'center',
+    marginLeft: 10,
+  },
+  signUpContainer: {
+    marginTop: 20,
   }
 });
