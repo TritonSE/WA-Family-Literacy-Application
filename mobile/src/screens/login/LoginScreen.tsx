@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable} from 'react-native';
 
 import { Colors } from '../../styles/Colors';
 import { I18nContext } from '../../context/I18nContext';
@@ -8,6 +8,9 @@ import { Checkbox } from '../../components/Checkbox';
 import { LargeButton } from '../../components/LargeButton';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
+
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const LoginScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
@@ -23,8 +26,18 @@ export const LoginScreen: React.FC = () => {
     auth.login(email, password, rememberMe);
   };
 
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.background}>
+
+      <Pressable
+        style={[{marginTop: insets.top}, styles.backButtonContainer]}
+        onPress={() => navigation.goBack()}
+      >
+        <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
+      </Pressable>
 
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
@@ -55,6 +68,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: Colors.orange,
+  },
+  backButtonContainer: { 
+    position: 'absolute', 
+    left: 0,
+  },
+  backButton: {
+    width: 25,
+    height: 25,
+    marginLeft: 25,
+    marginTop: 10,
+    tintColor: Colors.white,
   },
   logoContainer: {
     width: '100%',
