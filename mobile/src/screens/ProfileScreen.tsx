@@ -37,7 +37,7 @@ const SettingsTab: React.FC = () => {
 
       {auth.isGuest ? (
         <View style={styles.login}>
-          <LargeButton text="Sign Up" onPress={() => auth.logout()} underline={true}/>
+          <LargeButton text={i18nCtx.t('signUp')} onPress={() => auth.logout()} underline={true}/>
         </View>
       ) : (
         <View>
