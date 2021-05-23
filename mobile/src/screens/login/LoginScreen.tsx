@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable} from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors } from '../../styles/Colors';
 import { I18nContext } from '../../context/I18nContext';
@@ -8,9 +11,6 @@ import { Checkbox } from '../../components/Checkbox';
 import { LargeButton } from '../../components/LargeButton';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
-
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export const LoginScreen: React.FC = () => {
@@ -31,8 +31,7 @@ export const LoginScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.background}>
-
+    <SafeAreaView style={styles.background}>
       <Pressable
         style={[{marginTop: insets.top}, styles.backButtonContainer]}
         onPress={() => navigation.goBack()}
@@ -47,18 +46,18 @@ export const LoginScreen: React.FC = () => {
       <View style={styles.container}>
         <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} textContentType="emailAddress" />
         <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} secureTextEntry />
-        
+
         <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
           <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
           <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
         </TouchableOpacity>
-       
+
         <View style={styles.signInContainer}>
           <LargeButton text={i18n.t('signIn')} onPress={login} />
         </View>
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -70,8 +69,8 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.orange,
   },
-  backButtonContainer: { 
-    position: 'absolute', 
+  backButtonContainer: {
+    position: 'absolute',
     left: 0,
   },
   backButton: {
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: '20%',
   },
   logo: {
     width: 250,

@@ -1,5 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Colors } from '../../styles/Colors';
 import { TextStyles } from '../../styles/TextStyles';
 import { Checkbox } from '../../components/Checkbox';
@@ -8,8 +12,6 @@ import { I18nContext } from '../../context/I18nContext';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
 
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export const SignUpScreen: React.FC = () => {
@@ -34,7 +36,7 @@ export const SignUpScreen: React.FC = () => {
 
 
   return (
-    <View style={styles.background}>
+    <SafeAreaView style={styles.background}>
 
       <Pressable
         style={[{marginTop: insets.top}, styles.backButtonContainer]}
@@ -49,25 +51,25 @@ export const SignUpScreen: React.FC = () => {
 
       <View style={styles.container}>
         <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('volunteersViewThis')}*</Text>
-       
+
         <TextInput style={[styles.input, TextStyles.caption3]} value={name} onChangeText={setName} placeholder={i18n.t('preferredName')}/>
         <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} textContentType="emailAddress" />
         <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} secureTextEntry />
         <TextInput style={[styles.input, TextStyles.caption3]} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={i18n.t('confirmPassword')} secureTextEntry />
         {confirmPassword !== '' && password !== confirmPassword && <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('passwordsDontMatch')}</Text>}
-       
+
         <TouchableOpacity style={styles.inSanDiegoContainer} onPress={() => setInSanDiego(!inSanDiego)}>
           <Checkbox value={inSanDiego} onChange={setInSanDiego} inverted />
           <Text style={styles.locatedText}>{i18n.t('inSanDiego')}</Text>
         </TouchableOpacity>
-        
+
         <View style={styles.signUpContainer}>
           <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} />
         </View>
 
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -79,8 +81,8 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.orange,
   },
-  backButtonContainer: { 
-    position: 'absolute', 
+  backButtonContainer: {
+    position: 'absolute',
     left: 0,
   },
   backButton: {
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: '20%',
   },
   logo: {
     width: 250,
@@ -116,7 +118,6 @@ const styles = StyleSheet.create({
   caption: {
     width: '100%',
     color: Colors.white,
-    marginBottom: 10,
   },
   inSanDiegoContainer: {
     flexDirection: 'row',

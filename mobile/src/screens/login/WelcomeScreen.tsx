@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors } from '../../styles/Colors';
 import { LargeButton } from '../../components/LargeButton';
@@ -17,7 +18,7 @@ export const WelcomeScreen: React.FC = () => {
   useErrorAlert(auth.error);
 
   return (
-    <View style={styles.background}>
+    <SafeAreaView style={styles.background}>
 
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
@@ -36,7 +37,7 @@ export const WelcomeScreen: React.FC = () => {
         <LargeButton text={i18n.t('continueAsGuest')} onPress={() => auth.continueAsGuest()} underline />
       </View>
 
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: '20%',
   },
   logo: {
     width: 250,
@@ -62,20 +63,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   textLineContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 5,
     // dimensions from LargeButton.tsx
-    height: 43, 
+    height: 43,
     width: 298,
     marginLeft: 40,
-    marginRight: 40, 
+    marginRight: 40,
   },
   line: {
-    flex: 1, 
-    height: 1, 
-    backgroundColor: Colors.white, 
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.white,
   },
   left: {
     marginRight: 10,
