@@ -59,8 +59,10 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   };
 
   const handleFile = (file: File): void => {
-    onImageChange(file);
-    setPreviewUrl(URL.createObjectURL(file));
+    if(file != null) {
+      onImageChange(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
   };
 
   return(
