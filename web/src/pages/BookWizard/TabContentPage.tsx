@@ -3,6 +3,7 @@ import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ImageUploadAdapter } from "../../api/ImageUploadAdapter";
+import requiredFieldImage from '../../assets/images/star-of-life-solid.svg';
 import styles from './TabContentPage.module.css';
 import '../../App.css';
 import wizardStyles from '../BookWizardPage.module.css';
@@ -62,6 +63,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
         />
         <div className = {styles.editorText}>
           Write Here
+          <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
         </div>
         <CKEditor
           editor= { Editor }
