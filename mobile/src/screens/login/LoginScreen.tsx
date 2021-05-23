@@ -12,6 +12,7 @@ import { useErrorAlert } from '../../hooks/useErrorAlert';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+
 export const LoginScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);

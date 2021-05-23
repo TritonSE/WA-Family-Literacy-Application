@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
-
 export const SignUpScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);

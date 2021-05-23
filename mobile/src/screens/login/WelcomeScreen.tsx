@@ -9,7 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
 
-const { width } = Dimensions.get('window');
 
 export const WelcomeScreen: React.FC = () => {
   const auth = useContext(AuthContext);
@@ -23,7 +22,7 @@ export const WelcomeScreen: React.FC = () => {
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
       </View>
-      
+
       <View style={styles.container}>
         <LargeButton text={i18n.t('signIn')} onPress={() => navigation.navigate('Login')} underline />
 
