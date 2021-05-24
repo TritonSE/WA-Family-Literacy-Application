@@ -9,18 +9,21 @@ import styles from './UploadBooksNavigation.module.css';
 import wizardStyles from '../pages/BookWizardPage.module.css';
 import '../App.css';
 import { UploadBooksDropdown } from './UploadBooksDropdown';
+import { Language } from '../models/Languages';
 
 type UploadBooksNavigationProps = {
   pageNumber: number
   changePage: (newPage: number) => void; //function to render a new page below the navigation component
   allowContinue: boolean //controls if user can move onto the next page
   pageStatus: Array<boolean>
+  changeLanguage: (newLanguage: Language) => void;
+  currentLanguage: string
 };
 
 /**
  * Renders the navigation wizard bar at the top of the book wizard
  */
-export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus}) => {
+export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage}) => {
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
   const history = useHistory();
@@ -61,7 +64,8 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
       </div>
       <div className={styles.dropdownContainer}>
-        <UploadBooksDropdown></UploadBooksDropdown>    
+        {pageNumber == 1 ? <UploadBooksDropdown onDropdownChange={changeLanguage} ></UploadBooksDropdown> :
+          pageNumber != 0 ? <div className={styles.languageLabel}> {currentLanguage} </div> : <div></div> }   
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>

@@ -7,6 +7,7 @@ import { TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
+import { Language } from '../models/Languages';
 
 export const BookWizardPage: React.FC = () => {
 
@@ -17,6 +18,8 @@ export const BookWizardPage: React.FC = () => {
     body: "",
     video: undefined
   };
+
+  const emptyMap: Map<Language, TabContent> = new Map();
 
   const submitPage = async (): Promise<void> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
@@ -51,33 +54,49 @@ export const BookWizardPage: React.FC = () => {
     return true;
   };
 
+  const handleReadTabContentChange = (content: TabContent): void => {
+    setReadTabContent((prevState) => new Map<Language, TabContent>(prevState).set(language, content));
+  };
+
+  const handleExploreTabContentChange = (content: TabContent): void => {
+    setExploreTabContent((prevState) => new Map<Language, TabContent>(prevState).set(language, content));
+  };
+
+  const handleLearnTabContentChange = (content: TabContent): void => {
+    setLearnTabContent((prevState) => new Map<Language, TabContent>(prevState).set(language, content));
+  };
+
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [image, setImage] = useState<File| null>(null);
-  const [readTabContent, setReadTabContent] = useState<TabContent>(emptyTabContent);
-  const [exploreTabContent, setExploreTabContent] = useState<TabContent>(emptyTabContent);
-  const [learnTabContent, setLearnTabContent] = useState<TabContent>(emptyTabContent);
+  const [language, setLanguage] = useState<Language>("en");
+  const [readTabContent, setReadTabContent] = useState<Map<Language, TabContent>>(emptyMap);
+  const [exploreTabContent, setExploreTabContent] = useState<Map<Language, TabContent>>(emptyMap);
+  const [learnTabContent, setLearnTabContent] = useState<Map<Language, TabContent>>(emptyMap);
   
   // controls wheter to redirect the page back to start
   const generalDone = title !== '' && author !== '' && image != null;
-  const readDone = readTabContent.body !== '';
-  const exploreDone = exploreTabContent.body !== '';
-  const learnDone = learnTabContent.body !== '';
+  const readDone = readTabContent.get(language) != undefined && readTabContent.get(language)?.body !== '';
+  const exploreDone = exploreTabContent.get(language) != undefined && exploreTabContent.get(language)?.body !== '';
+  const learnDone = exploreTabContent.get(language) != undefined && learnTabContent.get(language)?.body !== '';
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
       image={image} title={title} author={author}></GeneralPage>,
-    <TabContentPage onContentChange={setReadTabContent} key={1} currentContent={readTabContent}></TabContentPage>,
-    <TabContentPage onContentChange={setExploreTabContent} currentContent={exploreTabContent} key={2}></TabContentPage>,
-    <TabContentPage onContentChange={setLearnTabContent} currentContent={learnTabContent} key={3}></TabContentPage>,
+    <TabContentPage onContentChange={handleReadTabContentChange} key={1} 
+      currentContent={readTabContent.get(language) || emptyTabContent} ></TabContentPage>,
+    <TabContentPage onContentChange={handleExploreTabContentChange} 
+      currentContent={exploreTabContent.get(language) || emptyTabContent} key={2}></TabContentPage>,
+    <TabContentPage onContentChange={handleLearnTabContentChange} currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
     <OverviewPage onSubmit={submitPage} key={4}></OverviewPage>
   ];
 
   return (
     <div>
       <UploadBooksNavigation pageNumber={currentPage} changePage={changePage} 
-        allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]}></UploadBooksNavigation>
+        allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]} 
+        changeLanguage={setLanguage} currentLanguage={language}></UploadBooksNavigation>
       { pages[currentPage]}
     </div>
   );

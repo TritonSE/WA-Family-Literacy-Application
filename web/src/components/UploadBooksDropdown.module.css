@@ -1,4 +1,8 @@
 .dropdown {
+    composes: body3 from '../App.css';
     width: 310px;
     height: 64px;
+    background-color: white;
+    outline: none;
+    border-radius: 15px;
 }

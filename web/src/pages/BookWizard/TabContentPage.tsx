@@ -7,9 +7,10 @@ import requiredFieldImage from '../../assets/images/star-of-life-solid.svg';
 import styles from './TabContentPage.module.css';
 import '../../App.css';
 import wizardStyles from '../BookWizardPage.module.css';
+import { Language } from '../../models/Languages';
 
 type TabConentPageProps = {
-  onContentChange: ( data: TabContent ) => void
+  onContentChange: ( value: TabContent ) => void
   // the current state of the fields. Used because fields dissapear when component re-renders
   currentContent: TabContent
 };
