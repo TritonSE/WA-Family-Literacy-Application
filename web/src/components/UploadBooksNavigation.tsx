@@ -9,7 +9,7 @@ import styles from './UploadBooksNavigation.module.css';
 import wizardStyles from '../pages/BookWizardPage.module.css';
 import '../App.css';
 import { UploadBooksDropdown } from './UploadBooksDropdown';
-import { Language } from '../models/Languages';
+import { Language, LanguageLabels } from '../models/Languages';
 
 type UploadBooksNavigationProps = {
   pageNumber: number
@@ -17,7 +17,7 @@ type UploadBooksNavigationProps = {
   allowContinue: boolean //controls if user can move onto the next page
   pageStatus: Array<boolean>
   changeLanguage: (newLanguage: Language) => void;
-  currentLanguage: string
+  currentLanguage: Language
 };
 
 /**
@@ -25,6 +25,7 @@ type UploadBooksNavigationProps = {
  */
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage}) => {
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
+  const languageMap = new Map(Object.entries(LanguageLabels));
   const pageName = pages[pageNumber];
   const history = useHistory();
   const skewer = <span className={styles.skewer}/>;
@@ -65,7 +66,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
       </div>
       <div className={styles.dropdownContainer}>
         {pageNumber == 1 ? <UploadBooksDropdown onDropdownChange={changeLanguage} currentLanguage={currentLanguage}></UploadBooksDropdown> :
-          pageNumber != 0 ? <div className={styles.languageLabel}> {currentLanguage} </div> : <div></div> }   
+          pageNumber != 0 ? <div className={styles.languageLabel}> {languageMap.get(currentLanguage)} </div> : <div></div> }   
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>

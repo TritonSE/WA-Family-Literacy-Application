@@ -13,12 +13,13 @@ type TabConentPageProps = {
   onContentChange: ( value: TabContent ) => void
   // the current state of the fields. Used because fields dissapear when component re-renders
   currentContent: TabContent
+  language: Language
 };
 
 /**
  * Read, Explore, and Learn page for the Upload Books Wizard
  */
-export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, currentContent}) => {
+export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, currentContent, language}) => {
 
   const [video, setVideo] = useState< string | undefined>(undefined);
   const [body, setBody] = useState< string >("");
@@ -34,6 +35,11 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
     setBody(currentContent.body);
     setVideo(currentContent.video);
   }, []);
+
+  useEffect( () => {
+    setBody(currentContent.body);
+    setVideo(currentContent.video);
+  }, [language]);
 
 
   // function to generate a new custom upload adapter for ckeditor
@@ -59,7 +65,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
         <input 
           type="text"
           className={styles.inputField}
-          value={video}
+          value={video || ""}
           onChange={ e => setVideo(e.target.value)}
         />
         <div className = {styles.editorText}>

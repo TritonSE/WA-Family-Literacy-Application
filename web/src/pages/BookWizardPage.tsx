@@ -85,10 +85,10 @@ export const BookWizardPage: React.FC = () => {
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
       image={image} title={title} author={author}></GeneralPage>,
     <TabContentPage onContentChange={handleReadTabContentChange} key={1} 
-      currentContent={readTabContent.get(language) || emptyTabContent} ></TabContentPage>,
+      currentContent={readTabContent.get(language) || emptyTabContent} language={language}></TabContentPage>,
     <TabContentPage onContentChange={handleExploreTabContentChange} 
-      currentContent={exploreTabContent.get(language) || emptyTabContent} key={2}></TabContentPage>,
-    <TabContentPage onContentChange={handleLearnTabContentChange} currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
+      currentContent={exploreTabContent.get(language) || emptyTabContent} language={language} key={2}></TabContentPage>,
+    <TabContentPage onContentChange={handleLearnTabContentChange} language={language} currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
     <OverviewPage onSubmit={submitPage} key={4}></OverviewPage>
   ];
 

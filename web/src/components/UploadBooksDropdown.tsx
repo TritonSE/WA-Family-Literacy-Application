@@ -4,7 +4,7 @@ import styles from './UploadBooksDropdown.module.css';
 
 type UploadBookDropdownProps = {
   onDropdownChange: (data: Language) => void;
-  currentLanguage: string
+  currentLanguage: Language
 };
 
 
