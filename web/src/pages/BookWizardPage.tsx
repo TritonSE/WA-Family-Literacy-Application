@@ -45,11 +45,11 @@ export const BookWizardPage: React.FC = () => {
       case 0:
         return title != "" && author != "" && image != null;
       case 1:
-        return readTabContent.get(language)?.body != "";
+        return (readTabContent.get(language)?? emptyTabContent).body !== "";
       case 2:
-        return exploreTabContent.get(language)?.body != "";
+        return (exploreTabContent.get(language)?? emptyTabContent).body !== "";
       case 3:
-        return learnTabContent.get(language)?.body != "";
+        return (learnTabContent.get(language)?? emptyTabContent).body !== "";
     }
     return true;
   };
@@ -77,9 +77,9 @@ export const BookWizardPage: React.FC = () => {
   
   // controls wheter to redirect the page back to start
   const generalDone = title !== '' && author !== '' && image != null;
-  const readDone = readTabContent.get(language) != undefined && readTabContent.get(language)?.body !== '';
-  const exploreDone = exploreTabContent.get(language) != undefined && exploreTabContent.get(language)?.body !== '';
-  const learnDone = exploreTabContent.get(language) != undefined && learnTabContent.get(language)?.body !== '';
+  const readDone = (readTabContent.get(language)?? emptyTabContent).body !== "";
+  const exploreDone = (exploreTabContent.get(language)?? emptyTabContent).body !== "";
+  const learnDone = (learnTabContent.get(language)?? emptyTabContent).body !== "";
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
