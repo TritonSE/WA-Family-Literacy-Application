@@ -1,5 +1,7 @@
 .navigationContainer {
-    display: flex;
+    display: flexbox;
+
+    width: 100%;
 }
 
 .navigation {
@@ -7,7 +9,7 @@
     flex: 1;
     justify-content: center;
     align-items: center;
-    margin-top: 65px;
+    margin-top: 64px;
 }
 
 .navigationButton {
@@ -83,13 +85,19 @@
 .cancelImageContainer {
     float: right;
     position: relative;
-    margin-right: 20px;
-    bottom: 80px;
+    bottom: 66px;
 }
 
 .cancelImage {
     height: 70px;
     width: 70px;
+}
+
+.dropdownContainer {
+    float: left;
+    width: fit-content;
+    position: relative;
+    bottom: 70px;
 }
 
 .button {

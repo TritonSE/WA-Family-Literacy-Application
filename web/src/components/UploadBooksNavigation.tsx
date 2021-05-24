@@ -6,7 +6,9 @@ import GreenCircle from '../assets/images/green-circle.svg';
 import CheckedCircle from '../assets/images/check-circle.svg';
 import CancelImage from '../assets/images/times-solid.svg';
 import styles from './UploadBooksNavigation.module.css';
+import wizardStyles from '../pages/BookWizardPage.module.css';
 import '../App.css';
+import { UploadBooksDropdown } from './UploadBooksDropdown';
 
 type UploadBooksNavigationProps = {
   pageNumber: number
@@ -36,7 +38,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
     )).flatMap((a) => [skewer, a]).slice(1);
   
   return (
-    <div>
+    <div className={wizardStyles.mainDivElement}>
       <div className={styles.navigationContainer}>
         <div className={styles.navigation}>
           <div>
@@ -57,6 +59,9 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
               </button> : <div className={styles.navigationButtonIcon}></div>}
           </div>
         </div>
+      </div>
+      <div className={styles.dropdownContainer}>
+        <UploadBooksDropdown></UploadBooksDropdown>    
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>
