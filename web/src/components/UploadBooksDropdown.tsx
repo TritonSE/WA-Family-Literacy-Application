@@ -1,35 +1,24 @@
 import React from 'react';
-import { Language } from '../models/Languages';
+import { Language, LanguageLabels } from '../models/Languages';
 import styles from './UploadBooksDropdown.module.css';
 
 type UploadBookDropdownProps = {
   onDropdownChange: (data: Language) => void;
+  currentLanguage: string
 };
 
 
-export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onDropdownChange}) => {
-  const handleDropDownChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value;
-    onDropdownChange(newValue);
-  }
-
+export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onDropdownChange, currentLanguage}) => {
+  const languageArr = Object.entries(LanguageLabels);
+  const options = Array(languageArr.length).fill(null)
+    .map( (_, index) => (
+      <option key={index} value={languageArr[index][0]}>{languageArr[index][1]}</option>
+    ) );
   return (
     <div>
-      <select onChange={ (e) => onDropdownChange(e.target.value) }className={styles.dropdown}>
-        <option value="en">English</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="zh">Chinese</option>
-        <option value="vi">Vietnamese</option>
-        <option value="ar">Arabic</option>
-        <option value="am">Amharic</option>
+      <select defaultValue={currentLanguage} onChange={ (e) => onDropdownChange(e.target.value as Language) }className={styles.dropdown}>
+        {options}
       </select>
     </div>
-
-
-
-
   );
-
-
 }; 

@@ -64,7 +64,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
       </div>
       <div className={styles.dropdownContainer}>
-        {pageNumber == 1 ? <UploadBooksDropdown onDropdownChange={changeLanguage} ></UploadBooksDropdown> :
+        {pageNumber == 1 ? <UploadBooksDropdown onDropdownChange={changeLanguage} currentLanguage={currentLanguage}></UploadBooksDropdown> :
           pageNumber != 0 ? <div className={styles.languageLabel}> {currentLanguage} </div> : <div></div> }   
       </div>
       <div className={styles.cancelImageContainer}>

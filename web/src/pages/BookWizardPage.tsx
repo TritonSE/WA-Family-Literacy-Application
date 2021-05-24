@@ -29,7 +29,7 @@ export const BookWizardPage: React.FC = () => {
       const imageData = await image.arrayBuffer();
       const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
       const uploadedBook = await client.uploadBook(title, author, imageURl);
-      await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
+      // await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
       history.push("/books");
       return;
     }
@@ -45,11 +45,11 @@ export const BookWizardPage: React.FC = () => {
       case 0:
         return title != "" && author != "" && image != null;
       case 1:
-        return readTabContent.body != "";
+        return readTabContent.get(language)?.body != "";
       case 2:
-        return exploreTabContent.body != "";
+        return exploreTabContent.get(language)?.body != "";
       case 3:
-        return learnTabContent.body != "";
+        return learnTabContent.get(language)?.body != "";
     }
     return true;
   };
