@@ -7,6 +7,7 @@ import CancelIcon from '../assets/images/times-solid.svg';
 
 import '../App.css';
 import styles from './ManageAccountsPage.module.css';
+import { Checkbox } from '../components/Checkbox';
 
 /**
  * Admin Manage Accounts page with Admin Cards and ability to add new admins
@@ -15,7 +16,7 @@ export const ManageAccountsPage: React.FC = () => {
 
   const client = useContext(APIContext);
 
-  // list of admins 
+  // list of admins
   const [admins, setAdmins] = useState<Admin[]>([]);
 
   // get admins from backend
@@ -47,7 +48,7 @@ export const ManageAccountsPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [reenterPassword, setReenterPassword] = useState('');
-  
+
   const [manageAdmins, setManageAdmins] = useState(false);
   const [uploadBooks, setUploadBooks] = useState(false);
   const [editBooks, setEditBooks] = useState(false);
@@ -56,13 +57,13 @@ export const ManageAccountsPage: React.FC = () => {
   // new admin with call to backend
   const handleNewAccount = async (): Promise<void> => {
 
-    // if any fields are empty or the passwords don't match, alert 
+    // if any fields are empty or the passwords don't match, alert
     if (volunteerName.length === 0 || email.length === 0 || password.length === 0 || reenterPassword.length === 0){
       alert('Please fill in all fields');
     } else if (password !== reenterPassword) {
       alert('Passwords must match');
     } else {
-      
+
       setNewModal(false);
 
       const newAdmin: CreateAdmin = {
@@ -82,7 +83,7 @@ export const ManageAccountsPage: React.FC = () => {
         alert('There was an error adding admin');
       }
       clearOptions();
-    
+
     }
 
   };
@@ -107,7 +108,7 @@ export const ManageAccountsPage: React.FC = () => {
     setDeleteBooks(false);
   };
 
-  
+
   return (
 
     <div>
@@ -141,7 +142,7 @@ export const ManageAccountsPage: React.FC = () => {
       {newModal &&
         (
           <div className={styles.modal}>
-            <div className={styles.modalContentAdd}>    
+            <div className={styles.modalContentAdd}>
               <form>
 
                 <div className={styles.titleAndCancelBtn}>
@@ -153,7 +154,7 @@ export const ManageAccountsPage: React.FC = () => {
                 </div>
 
                 <div className={styles.addContent}>
-                  
+
                   <div className={styles.volunteerInfo}>
                     <p className="h3">Volunteer Name</p>
                     <input type="text" id="nameBox" value={volunteerName} className={styles.inputBox} onChange={(e) => setVolunteerName(e.target.value)}/>
@@ -173,38 +174,16 @@ export const ManageAccountsPage: React.FC = () => {
 
                     <div className={styles.allCheckboxesContainer}>
 
-                      <label className={styles.checkboxContainer} htmlFor="manageBox">
-                        Manage
-                        <input type="checkbox" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins}/>
-                        <span className={styles.checkmark}></span>
-                        <br/>
-                      </label>
-                      <label className={styles.checkboxContainer} htmlFor="uploadBooksBox">
-                        Upload Books
-                        <input type="checkbox" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks}/>
-                        <span className={styles.checkmark}></span>
-                        <br/>
-                      </label>
+                      <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
+                      <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 
-                      {uploadBooks && 
-                        (
-                          <>
-                            <label className={styles.checkboxContainer} htmlFor="editBooksBox">
-                              &mdash; Edit Books
-                              <input type="checkbox" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks}/>
-                              <span className={styles.checkmark}></span>
-                              <br/>
-                            </label>
-                            <label className={styles.checkboxContainer} htmlFor="deleteBooksBox">
-                              &mdash; Delete Books
-                              <input type="checkbox" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks}/>
-                              <span className={styles.checkmark}></span>
-                              <br/>
-                            </label>              
-                          </>                         
-                        )
-                      }
-                    
+                      {uploadBooks && (
+                        <>
+                          <Checkbox className={styles.checkbox} label="&mdash; Edit Books" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks} />
+                          <Checkbox className={styles.checkbox} label="&mdash; Delete Books" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks} />
+                        </>
+                      )}
+
                     </div>
 
                   </div>
@@ -214,7 +193,7 @@ export const ManageAccountsPage: React.FC = () => {
                 <div className={styles.buttonsContainer}>
                   <button className={styles.deleteConfirmButton} type="button" onClick={handleNewAccount}>Confirm</button>
                 </div>
-                
+
               </form>
             </div>
           </div>

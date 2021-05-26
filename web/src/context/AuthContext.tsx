@@ -64,6 +64,16 @@ export const AuthProvider: React.FC = ({ children }) => {
         const admin = await api.getAdmin(uid);
         setAdmin(admin);
         setError(null);
+      } else {
+        const uid = localStorage.getItem('userId');
+        const token = localStorage.getItem('apiToken');
+
+        if (uid && token) {
+          api.setToken(token);
+          const admin = await api.getAdmin(uid);
+          setAdmin(admin);
+          setError(null);
+        }
       }
     })();
   }, []);
@@ -80,8 +90,14 @@ export const AuthProvider: React.FC = ({ children }) => {
         const uid = fbUser.uid;
         const jwt = await fbUser.getIdToken();
         api.setToken(jwt);
-        sessionStorage.setItem('userId', uid);
-        sessionStorage.setItem('apiToken', jwt);
+
+        if (rememberMe) {
+          localStorage.setItem('userId', uid);
+          localStorage.setItem('apiToken', jwt);
+        } else {
+          sessionStorage.setItem('userId', uid);
+          sessionStorage.setItem('apiToken', jwt);
+        }
 
         const admin = await api.getAdmin(uid);
         setAdmin(admin);
@@ -96,6 +112,10 @@ export const AuthProvider: React.FC = ({ children }) => {
   const logout = (): void => {
     setAdmin(null);
     setError(null);
+    localStorage.removeItem('userId');
+    localStorage.removeItem('apiToken');
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('apiToken');
     auth.signOut();
   };
 

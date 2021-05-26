@@ -123,6 +123,8 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const logout = (): void => {
     api.clearToken();
+    SecureStore.deleteItemAsync('user');
+    SecureStore.deleteItemAsync('apiToken');
     setError(null);
     setUser(null);
     setIsGuest(false);
