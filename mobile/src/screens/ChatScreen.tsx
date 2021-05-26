@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Linking, Text, View, StyleSheet } from 'react-native';
+import { Linking, Text, View, StyleSheet, Image } from 'react-native';
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * Left tab on navbar for chatting with volunteers
@@ -11,6 +12,10 @@ export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../../assets/images/logo-white.png')} style={styles.logo} />
+      </View>
+
       <Text style={TextStyles.heading1}>{i18nCtx.t('liveChat')}</Text>
       <Text style={TextStyles.heading2}>{i18nCtx.t('untilThen')}</Text>
 
@@ -47,6 +52,17 @@ export const ChatScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  logo: {
+    width: 220,
+    height: 150,
+  },
   link: {
     color: Colors.link,
     textDecorationLine: 'underline',
