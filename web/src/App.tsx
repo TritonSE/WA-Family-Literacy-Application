@@ -23,7 +23,7 @@ const App: React.FC = () => {
             <PrivateRoute path="/analytics">
               <AnalyticsPage />
             </PrivateRoute>
-            <PrivateRoute path="/books">
+            <PrivateRoute exact path="/books">
               <UploadBooksPage />
             </PrivateRoute>
             <PrivateRoute exact path="/books/new">
