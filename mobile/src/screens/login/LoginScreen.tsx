@@ -53,7 +53,7 @@ export const LoginScreen: React.FC = () => {
         </TouchableOpacity>
 
         <View style={styles.signInContainer}>
-          <LargeButton text={i18n.t('signIn')} onPress={login} />
+          <LargeButton text={i18n.t('signIn')} onPress={login} border />
         </View>
       </View>
 

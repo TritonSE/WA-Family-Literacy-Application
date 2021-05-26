@@ -25,7 +25,7 @@ export const WelcomeScreen: React.FC = () => {
       </View>
 
       <View style={styles.container}>
-        <LargeButton text={i18n.t('signIn')} onPress={() => navigation.navigate('Login')} underline />
+        <LargeButton text={i18n.t('signIn')} onPress={() => navigation.navigate('Login')} underline border />
 
         <View style={styles.textLineContainer}>
           <View style={[styles.line, styles.left]} />
@@ -33,8 +33,8 @@ export const WelcomeScreen: React.FC = () => {
           <View style={[styles.line, styles.right]} />
         </View>
 
-        <LargeButton text={i18n.t('signUp')} onPress={() => navigation.navigate('SignUp')} underline />
-        <LargeButton text={i18n.t('continueAsGuest')} onPress={() => auth.continueAsGuest()} underline />
+        <LargeButton text={i18n.t('signUp')} onPress={() => navigation.navigate('SignUp')} underline border />
+        <LargeButton text={i18n.t('continueAsGuest')} onPress={() => auth.continueAsGuest()} underline border />
       </View>
 
     </SafeAreaView>

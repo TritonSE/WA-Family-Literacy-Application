@@ -3,14 +3,15 @@ import { Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
-type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean, disabled?: boolean };
+type LargeButtonProps = {text: string, onPress: () => void, underline?: boolean, border?: boolean, disabled?: boolean };
 
-export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false, disabled = false }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ text, onPress, underline = false, border = false, disabled = false }) => {
   const [active, setActive] = React.useState(false);
 
   const buttonStyle = disabled ? styles.disabledButton
     : active ? styles.activeButton
-      : styles.inactiveButton;
+      : border ? styles.borderButton
+        : styles.inactiveButton;
   const textStyle = disabled ? styles.disabledText
     : active ? styles.activeText
       : styles.inactiveText;
@@ -53,6 +54,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   inactiveButton: {
+    borderColor: Colors.orange,
+    backgroundColor: Colors.orange,
+  },
+  borderButton: {
     borderColor: Colors.white,
     backgroundColor: Colors.orange,
   },

@@ -64,7 +64,7 @@ export const SignUpScreen: React.FC = () => {
         </TouchableOpacity>
 
         <View style={styles.signUpContainer}>
-          <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} />
+          <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} border />
         </View>
 
       </View>
