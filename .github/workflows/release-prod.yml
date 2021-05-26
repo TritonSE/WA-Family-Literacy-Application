@@ -58,6 +58,7 @@ jobs:
         run: npm run build:prod
         env:
           REACT_APP_BASE_URL: https://api.wordsalive.org
+          REACT_APP_FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
       - name: Publish
         uses: cloudflare/wrangler-action@1.2.0
         with:
