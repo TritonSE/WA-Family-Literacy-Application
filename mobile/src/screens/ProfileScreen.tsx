@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { Svg, Circle } from 'react-native-svg';
 
-import { Text, Switch, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -13,8 +13,6 @@ import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
 import { AuthContext } from '../context/AuthContext';
 import { APIContext } from '../context/APIContext';
-import { apisAreAvailable } from 'expo';
-import { onChange } from 'react-native-reanimated';
 
 const SavedTab: React.FC = () => {
   return (
@@ -31,46 +29,46 @@ const SavedTab: React.FC = () => {
  * Settings Tab to set app locale (language)
  */
 const SettingsTab: React.FC = () => {
-  const i18nCtx = useContext(I18nContext);
-  const { i18n, setLocale, t, locale } = i18nCtx;
-  const auth = useContext(AuthContext);
+  const i18n = useContext(I18nContext);
   const api = useContext(APIContext);
+  const auth = useContext(AuthContext);
 
-  const languages = Object.keys(i18n.translations) as Language[];
-  const [isEnabled, setIsEnabled] = useState(false);
+  const languages = Object.keys(i18n.i18n.translations) as Language[];
 
-
-  const inSanDiegoChange = (inSanDiego: boolean): void => {
+  const setInSanDiego = (inSanDiego: boolean): void => {
     (async () => {
+      if (auth.user === null) {
+        return;
+      }
+
       await api.updateUser(auth.user.id, { in_san_diego: inSanDiego });
       auth.fetchUser();
     })();
   };
 
   return (
-    <View style={styles.langSelector}>
-      {auth.isGuest ? (
+    <View>
+      {auth.user === null ? (
         <View style={styles.login}>
-          <LargeButton text={i18nCtx.t('signUp')} onPress={() => auth.logout()} underline={true}/>
+          <LargeButton text={i18n.t('signUp')} onPress={() => auth.logout()} underline />
         </View>
       ) : (
-        <View>
-          <View style={styles.langElem}>
-            <Text style={[TextStyles.heading3, styles.emailText]}>{auth.user.email}</Text>
-            <View>
-              <SmallButton text={i18nCtx.t("signOut")} onPress={() => auth.logout()} underline={true}/>
-            </View>
+        <View style={styles.profileInfo}>
+          <View style={styles.emailContainer}>
+            <Text style={TextStyles.caption2}>{auth.user.email}</Text>
+            <SmallButton text={i18n.t("signOut")} onPress={() => auth.logout()} underline />
           </View>
-          <View style={styles.langElem}>
-            <Checkbox value={auth.user.in_san_diego} onChange={inSanDiegoChange} inverted={false}></Checkbox>
-            <Text style={[TextStyles.heading3, styles.locatedSanDiego]}>{"Located in the San Diego area?"}</Text>
+          <View style={styles.inSDContainer}>
+            <Checkbox value={auth.user.in_san_diego} onChange={setInSanDiego} />
+            {/* Not sure why this `auth.user &&` hack is necessary, this entire block is gated with auth.user !== null*/}
+            <Text style={[TextStyles.caption2, styles.inSDLabel]} onPress={() => auth.user && setInSanDiego(!auth.user.in_san_diego)}>{i18n.t('inSanDiego')}</Text>
           </View>
         </View>
       )}
 
       <View style={styles.langSelector}>
         <View style={styles.languageText}>
-          <Text style={TextStyles.heading3}>{t("language")}</Text>
+          <Text style={TextStyles.heading3}>{i18n.t("language")}</Text>
         </View>
 
         {languages.map((lang: Language) => (
@@ -79,10 +77,10 @@ const SettingsTab: React.FC = () => {
             <Text style={TextStyles.body1}>{Languages[lang]}</Text>
 
             <Pressable
-              onPress={() => setLocale(lang)}
+              onPress={() => i18n.setLocale(lang)}
               style={styles.box}
             >
-              { lang === locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
+              { lang === i18n.locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
             </Pressable>
 
           </View>
@@ -272,13 +270,25 @@ const styles = StyleSheet.create({
     width: 22,
     tintColor: Colors.orange,
   },
-  emailText: {
-    // marginLeft: 100,
-    textAlign: 'left',
-    fontSize: 16
+  profileInfo: {
+    width: 298,
+    alignSelf: 'center',
   },
-  locatedSanDiego: {
-    fontSize: 16,
-    // marginLeft: 15,
-  }
+  emailContainer: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  inSDContainer: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inSDLabel: {
+    marginLeft: 8,
+  },
 });

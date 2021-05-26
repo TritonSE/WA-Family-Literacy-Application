@@ -128,6 +128,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   const fetchUser = (): void => {
+    if (user === null) return;
+
     (async () => {
       try {
         const apiUser = await api.getUser(user.id);
@@ -137,7 +139,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         setUser(null);
       }
     })();
-  }
+  };
 
   return (<AuthContext.Provider
     value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser }}

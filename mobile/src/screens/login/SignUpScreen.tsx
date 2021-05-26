@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
