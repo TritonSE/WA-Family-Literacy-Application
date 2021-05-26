@@ -3,7 +3,6 @@ import { Linking, Text, View, StyleSheet, Image } from 'react-native';
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * Left tab on navbar for chatting with volunteers
