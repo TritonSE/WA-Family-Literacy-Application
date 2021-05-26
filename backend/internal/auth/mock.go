@@ -22,3 +22,7 @@ func (a MockAuthenticator) CreateUser(ctx context.Context, email string, pwd str
 	// EX: test1@test.com -> test1
 	return strings.Split(email, "@")[0], nil
 }
+
+func (a MockAuthenticator) DeleteUser(ctx context.Context, id string) error {
+	return nil
+}

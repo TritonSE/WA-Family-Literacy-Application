@@ -33,7 +33,7 @@ export const LoginPage: React.FC = () => {
           <input onChange={e => setPassword(e.target.value)} className={styles.loginInput} required placeholder="Password" type="password" />
           <button className={styles.loginBtn} type="submit">Login</button>
           <label className={styles.checkbox} htmlFor="rememberMe">
-            <span className={styles.rememberMeLabel}>Remember me?</span>
+            <span className={styles.rememberMeLabel}>Remember me</span>
             <input id="rememberMe" type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />
             <span className={styles.checkmark} />
           </label>

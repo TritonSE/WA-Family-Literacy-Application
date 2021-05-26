@@ -45,7 +45,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
   const editorConfiguration = {
-    toolbar: [ 'heading','|','bold','italic','strikethrough','bulletedList','numberedList', '|', 'blockQuote','imageUpload','insertTable','undo','redo'],
+    toolbar: [ 'heading','|','bold','italic','bulletedList','numberedList', '|', 'blockQuote','imageUpload','undo','redo'],
     extraPlugins: [ CustomUploadAdapter ]
   };
 

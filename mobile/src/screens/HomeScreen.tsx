@@ -23,7 +23,7 @@ const { width } = Dimensions.get('window');
 // YouTube videos shown in the orange header, with their titles
 const TOP_VIDEOS = [
   {
-    title: 'Welcome!',
+    title: 'Welcome to Words Alive!',
     url: 'https://youtu.be/A4Dv8Z_M5VQ',
   },
   {
