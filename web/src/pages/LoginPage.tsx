@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext, LocationState } from '../context/AuthContext';
 
 import styles from './LoginPage.module.css';
 import { useErrorAlert } from '../hooks/useErrorAlert';
 
 export const LoginPage: React.FC = () => {
-  const location = useLocation();
+  const location = useLocation<LocationState>();
   const auth = useContext(AuthContext);
-  useErrorAlert(auth.error);
+  useErrorAlert(auth.error, auth.clearError);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +20,7 @@ export const LoginPage: React.FC = () => {
   };
 
   if (auth.admin !== null) {
-    return <Redirect to="/communication" />;
+    return <Redirect to={ location.state.from } />;
   }
 
   return (

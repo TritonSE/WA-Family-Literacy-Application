@@ -44,7 +44,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "REACT_APP_BASE_URL=http://localhost:8080 npm start",
-    "staging": "REACT_APP_BASE_URL=https://words-alive-staging.herokuapp.com npm start"
+    "staging": "REACT_APP_BASE_URL=https://api-staging.wordsalive.org npm start",
+    "prod": "REACT_APP_BASE_URL=https://api.wordsalive.org npm start"
   },
   "eslintConfig": {
     "extends": [

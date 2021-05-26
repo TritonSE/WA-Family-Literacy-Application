@@ -19,6 +19,7 @@ type AuthState = {
   error: Error | null;
   login: (email: string, password: string, rememberMe: boolean) => void,
   logout: () => void,
+  clearError: () => void,
 };
 
 const init: AuthState = {
@@ -27,6 +28,7 @@ const init: AuthState = {
   error: null,
   login: () => {},
   logout: () => {},
+  clearError: () => {},
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -37,6 +39,9 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [admin, setAdmin] = useState<Admin | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const loggedIn = admin !== null;
+  const clearError = (): void => {
+    setError(null);
+  };
 
   const auth = useMemo(() => {
     const fbConfig = process.env.REACT_APP_FB_CONFIG ? JSON.parse(process.env.REACT_APP_FB_CONFIG) : {
@@ -95,10 +100,14 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ admin, loggedIn, error, login, logout }}>
+    <AuthContext.Provider value={{ admin, loggedIn, error, login, logout, clearError }}>
       {children}
     </AuthContext.Provider>
   );
+};
+
+export type LocationState = {
+  from: string;
 };
 
 export const PrivateRoute: React.FC<React.PropsWithChildren<RouteProps>> = ({ children, ...rest }: RouteProps) => {
@@ -115,7 +124,6 @@ export const PrivateRoute: React.FC<React.PropsWithChildren<RouteProps>> = ({ ch
 
     // render protected page if signed in
     if (auth.loggedIn) {
-      console.log('logged in');
       return (
         <>
           <Navbar />
@@ -124,9 +132,8 @@ export const PrivateRoute: React.FC<React.PropsWithChildren<RouteProps>> = ({ ch
       );
     }
 
-    console.log('not');
     // otherwise redirect to login
-    return (<Redirect to={{ pathname: '/' }} />);
+    return (<Redirect to={{ pathname: '/', state: { from: props.location } }} />);
   };
 
   return (<Route {...rest} render={render} />);
