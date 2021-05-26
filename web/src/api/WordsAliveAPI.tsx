@@ -11,6 +11,16 @@ class WordsAliveAPI {
     this.client = axios.create({ baseURL: baseURL });
   }
 
+  // Set the Firebase token for future API calls
+  setToken(token: string): void {
+    this.client.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // Unset the Firebase token
+  clearToken(): void {
+    delete this.client.defaults.headers.Authorization;
+  }
+
   // makes a call to the database and returns an array of all books
   async getBooks(): Promise<Book[]> {
     const res = await this.client.get('/books');

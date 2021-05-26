@@ -154,10 +154,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 2,
     borderRadius: 5,
-    shadowColor: Colors.shadowColor,
-    shadowRadius: 2,
-    shadowOpacity: 0.16,
-    shadowOffset: { width: 0, height: 3 },
   },
   searchBar: {
     height: 36,

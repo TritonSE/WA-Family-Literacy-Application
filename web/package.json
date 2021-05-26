@@ -7,6 +7,7 @@
     "@ckeditor/ckeditor5-upload": "^27.1.0",
     "axios": "^0.21.1",
     "ckeditor5": "file:./ckeditor5",
+    "firebase": "7.9.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0"
@@ -31,6 +32,9 @@
     "react-scripts": "4.0.3",
     "typescript": "^4.1.2"
   },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "tsc",
@@ -40,7 +44,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "REACT_APP_BASE_URL=http://localhost:8080 npm start",
-    "staging": "REACT_APP_BASE_URL=https://words-alive-staging.herokuapp.com npm start"
+    "staging": "REACT_APP_BASE_URL=https://api-staging.wordsalive.org npm start",
+    "prod": "REACT_APP_BASE_URL=https://api.wordsalive.org npm start"
   },
   "eslintConfig": {
     "extends": [

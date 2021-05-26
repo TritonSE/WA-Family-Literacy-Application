@@ -1,238 +1,184 @@
 .title {
-    composes: h2 from '../App.css';
-    text-align: left;
-    margin-top: 94px;
+  composes: h2 from '../App.css';
+  text-align: left;
+  margin-top: 94px;
 }
 
 .row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .clickableText {
-    composes: body3 from '../App.css';
-    text-decoration: underline;
-    border: none;
-    outline: none;
-    background-color: var(--white);
-    cursor: pointer;
+  composes: body3 from '../App.css';
+  text-decoration: underline;
+  border: none;
+  outline: none;
+  background-color: var(--white);
+  cursor: pointer;
 }
 
 .admins {
-    width: 100%;
-    margin-top: 58px;
-    margin-bottom: 50px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-template-rows: 1fr;
-    column-gap: 131px;
-    row-gap: 36px;
+  width: 100%;
+  margin-top: 58px;
+  margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-rows: 1fr;
+  column-gap: 131px;
+  row-gap: 36px;
 }
 
 .modal {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    overflow: auto;
-    backdrop-filter: blur(5px) brightness(68%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  overflow: auto;
+  backdrop-filter: blur(5px) brightness(68%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modalContentDelete {
-    width: 40%;
-    padding: 40px 109px;
-    border: 1px solid var(--black);
-    border-radius: 12px;
-    background-color: var(--white);
+  width: 40%;
+  padding: 40px 109px;
+  border: 1px solid var(--black);
+  border-radius: 12px;
+  background-color: var(--white);
 }
 
 .buttonsContainer {
-    align-items: center;
-    text-align: center;
-    margin: 10px;
-    margin-top: 40px;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  margin-top: 40px;
 }
 
 .modalTitleDelete {
-    composes: h3 from '../App.css';
-    margin-bottom: 40px;
+  composes: h3 from '../App.css';
+  margin-bottom: 40px;
 }
 
 .cancelButton {
-    background-color: transparent;
-    border: 0px;
-    justify-content: flex-end;
+  background-color: transparent;
+  border: 0px;
+  justify-content: flex-end;
 }
 
 .deleteConfirmButton {
-    composes: body3 from '../App.css';
-    width: 250px;
-    height: 58px;
-    margin: 0px 17px 20px 17px;
-    padding: 10px 10px;
-    border: 0.5px solid var(--black);
-    border-radius: 7px;
-    box-shadow: 1px 2px 5px var(--dark-grey);
-    background-color: var(--orange);
-    cursor: pointer;
+  composes: body3 from '../App.css';
+  width: 250px;
+  height: 58px;
+  margin: 0px 17px 20px 17px;
+  padding: 10px 10px;
+  border: 0.5px solid var(--black);
+  border-radius: 7px;
+  box-shadow: 1px 2px 5px var(--dark-grey);
+  background-color: var(--orange);
+  cursor: pointer;
 }
 
 .addButton {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 .addText {
-    composes: body3 from '../App.css';
+  composes: body3 from '../App.css';
 }
 
 .addIcon {
-    width: 26px;
-    height: 26px;
-    margin-left: 10px;
+  width: 26px;
+  height: 26px;
+  margin-left: 10px;
 }
 
 .cancelIcon {
-    width: 52px;
-    height: 52px;
-    cursor: pointer;
+  width: 52px;
+  height: 52px;
+  cursor: pointer;
 }
 
 .modalContentAdd {
-    width: 55%;
-    margin: 15% auto;
-    padding-right: 80px;
-    padding-left: 80px;
-    border: 1px solid var(--black);
-    border-radius: 12px;
-    background-color: var(--white);
+  width: 55%;
+  margin: 15% auto;
+  padding-right: 80px;
+  padding-left: 80px;
+  border: 1px solid var(--black);
+  border-radius: 12px;
+  background-color: var(--white);
 }
 
 .modalTitleAdd {
-    composes: h2 from '../App.css';
-    margin-top: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-    flex: 1;
+  composes: h2 from '../App.css';
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  flex: 1;
 }
 
 .addContent {
-    display: flex;
+  display: flex;
 }
 
 .volunteerInfo {
-    min-width: 45%;
+  min-width: 45%;
 }
 
 .volunteerInfo > p {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .volunteerInfo > input {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .access {
-    min-width: 40%;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    margin-left: 100px;
+  min-width: 40%;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  margin-left: 100px;
 }
 
 .accessTitle {
-    composes: h3 from '../App.css';
-    margin-bottom: 30px;
+  composes: h3 from '../App.css';
+  margin-bottom: 30px;
 }
 
 .allCheckboxesContainer {
-    display: flex;
-    flex-direction: column;
-    composes: body1 from '../App.css';
+  display: flex;
+  flex-direction: column;
+  composes: body1 from '../App.css';
 }
 
 .titleAndCancelBtn {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 17px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 17px;
 }
 
 .inputBox {
-    height: 40px;
-    width: 90%;
-    padding-left: 10px;
-    border: 1px solid var(--orange);
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: 'GothamRounded - Light';
-    -webkit-appearance: none;
+  height: 40px;
+  width: 90%;
+  padding-left: 10px;
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'GothamRounded - Light';
+  -webkit-appearance: none;
 }
 
-
-/* custom checkmark/checkbox */
-.checkboxContainer {
-    margin-bottom: 35px;
-}
-/* hide default checkbox */
-.checkboxContainer input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-  
-/* custom checkbox with orange check */
-.checkmark {
-    top: 0;
-    left: 0;
-    background-color: var(--white);
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    position: relative;
-    float: right;
-    border: 1px solid var(--black);
-    border-radius: 3px;
-}
-  
-/* hover effect */
-.checkboxContainer:hover input ~ .checkmark {
-    background-color: var(--light-grey);
-}
-  
-/* checkmark – hidden when unchecked */
-.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-  
-/* show checkmark when checked */
-.checkboxContainer input:checked ~ .checkmark:after {
-    display: block;
-}
-  
-/* styles for checkmark */
-.checkboxContainer .checkmark:after {
-    left: 8px;
-    top: -1px;
-    width: 12px;
-    height: 20px;
-    border: solid var(--orange);
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(38deg);
-    -ms-transform: rotate(38deg);
-    transform: rotate(38deg);
+.checkbox {
+  margin-bottom: 35px;
 }
