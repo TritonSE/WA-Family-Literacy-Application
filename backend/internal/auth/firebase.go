@@ -41,3 +41,7 @@ func (a FirebaseAuthenticator) CreateUser(ctx context.Context, email string, pwd
 	// Return UID from UserRecord
 	return ur.UserInfo.UID, nil
 }
+
+func (a FirebaseAuthenticator) DeleteUser(ctx context.Context, id string) error {
+	return a.Client.DeleteUser(ctx, id)
+}

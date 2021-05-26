@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	fbAuth "firebase.google.com/go/v4/auth"
 	"github.com/go-chi/chi"
 
 	"github.com/TritonSE/words-alive/internal/auth"
@@ -53,7 +54,11 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	// Generate ID for new admin account
 	cuid, err := c.Auth.CreateUser(req.Context(), cadmin.Email, cadmin.Password)
 	if err != nil {
-		writeResponse(rw, http.StatusInternalServerError, "could not generate token")
+		if fbAuth.IsEmailAlreadyExists(err) {
+			writeResponse(rw, http.StatusBadRequest, "admin already exists with that email")
+			return
+		}
+		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)
 		return
 	}
@@ -209,10 +214,17 @@ func (c *AdminController) DeleteAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	if err := c.Auth.DeleteUser(req.Context(), adminID); err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		fmt.Println(err)
+		return
+	}
+
 	// Delete the admin
 	if err = c.Admins.RemoveAdmin(req.Context(), adminID); err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		fmt.Println(err)
+		return
 	}
 
 	writeResponse(rw, http.StatusNoContent, "")
