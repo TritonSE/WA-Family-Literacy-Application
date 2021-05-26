@@ -17,6 +17,12 @@ export default {
     image: './assets/images/icons/splash.png',
   },
   extra: {
-    BASE_URL: process.env.BASE_URL,
+    baseUrl: process.env.BASE_URL || 'http://localhost:8080',
+    firebase: process.env.FB_CONFIG ? JSON.parse(process.env.FB_CONFIG) : {
+      apiKey: process.env.FB_API_KEY || 'AIzaSyBSJHJ-VfdN2Y3wC_vfD1k6bEU2mQmP-Vg',
+      authDomain: process.env.FB_AUTH_DOMAIN || 'words-alive-staging.firebaseapp.com',
+      projectId: process.env.FB_PROJECT_ID || 'words-alive-staging',
+      appId: process.env.FB_APP_ID || '1:1534285739:web:2bada99614d9126d7224ee',
+    },
   },
 };

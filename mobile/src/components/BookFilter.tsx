@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Language, Languages } from '../models/Languages';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
+import { Checkbox } from './Checkbox';
 
 const { width } = Dimensions.get('window');
 
@@ -51,17 +52,11 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
           key={lang}
           onPress={() => toggleLang(lang)}
         >
-
           <View style={styles.nameBoxContainer}>
+            <Text style={[TextStyles.caption4, styles.languageLabel]}>{Languages[lang]}</Text>
 
-            <Text style={{ ...TextStyles.caption4, alignSelf: 'center' }}>{Languages[lang]}</Text>
-
-            <View style={styles.box}>
-              {langs.has(lang) && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/> }
-            </View>
-
+            <Checkbox value={langs.has(lang)} onChange={() => toggleLang(lang)}/>
           </View>
-
         </TouchableOpacity>
       ))}
 
@@ -149,19 +144,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     justifyContent: 'space-between',
   },
-  box: {
-    height: 24,
-    width: 24,
-    borderWidth: 2,
-    borderRadius: 5,
-    borderColor: Colors.orange,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  boxChecked: {
-    height: 22,
-    width: 22,
-    tintColor: Colors.orange,
+  languageLabel: {
+    marginRight: 8,
   },
   searchBarContainer: {
     flexDirection: 'row',
