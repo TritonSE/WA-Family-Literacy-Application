@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors } from '../../styles/Colors';
 import { TextStyles } from '../../styles/TextStyles';
@@ -12,12 +11,10 @@ import { I18nContext } from '../../context/I18nContext';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
 
-
-
 export const SignUpScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);
-  useErrorAlert(auth.error);
+  useErrorAlert(auth.error, auth.clearError);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,7 +33,7 @@ export const SignUpScreen: React.FC = () => {
 
 
   return (
-    <SafeAreaView style={styles.background}>
+    <ScrollView style={styles.background} keyboardShouldPersistTaps="handled" contentContainerStyle={styles.backgroundChildren}>
 
       <Pressable
         style={[{marginTop: insets.top}, styles.backButtonContainer]}
@@ -69,17 +66,19 @@ export const SignUpScreen: React.FC = () => {
 
       </View>
 
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    alignItems: 'center',
     width: '100%',
     height: '100%',
     backgroundColor: Colors.orange,
+  },
+  backgroundChildren: {
+    alignItems: 'center',
   },
   backButtonContainer: {
     position: 'absolute',
@@ -118,6 +117,7 @@ const styles = StyleSheet.create({
   caption: {
     width: '100%',
     color: Colors.white,
+    marginBottom: 4,
   },
   inSanDiegoContainer: {
     flexDirection: 'row',
@@ -132,5 +132,6 @@ const styles = StyleSheet.create({
   },
   signUpContainer: {
     marginTop: 20,
+    marginBottom: 32,
   }
 });

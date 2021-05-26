@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors } from '../../styles/Colors';
@@ -15,10 +15,10 @@ export const WelcomeScreen: React.FC = () => {
   const auth = useContext(AuthContext);
   const i18n = useContext(I18nContext);
   const navigation = useNavigation();
-  useErrorAlert(auth.error);
+  useErrorAlert(auth.error, auth.clearError);
 
   return (
-    <SafeAreaView style={styles.background}>
+    <SafeAreaView style={styles.background} edges={['top']}>
 
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />

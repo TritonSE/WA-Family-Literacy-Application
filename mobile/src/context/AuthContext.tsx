@@ -17,6 +17,7 @@ type AuthState = {
   logout: () => void,
   continueAsGuest: () => void,
   fetchUser: () => void,
+  clearError: () => void,
 };
 
 const init: AuthState = {
@@ -29,6 +30,7 @@ const init: AuthState = {
   signup: () => {},
   continueAsGuest: () => {},
   fetchUser: () => {},
+  clearError: () => {},
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -40,6 +42,9 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [isGuest, setIsGuest] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const loggedIn = user !== null || isGuest;
+  const clearError = (): void => {
+    setError(null);
+  };
 
   const auth = useMemo(() => {
     const app = firebase.apps[0] || firebase.initializeApp(Constants.manifest.extra.firebase);
@@ -142,7 +147,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   return (<AuthContext.Provider
-    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser }}
+    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser, clearError }}
   >
     {children}
   </AuthContext.Provider>);

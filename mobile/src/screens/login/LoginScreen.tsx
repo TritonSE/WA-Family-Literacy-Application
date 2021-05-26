@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,7 +15,7 @@ import { useErrorAlert } from '../../hooks/useErrorAlert';
 export const LoginScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);
-  useErrorAlert(auth.error);
+  useErrorAlert(auth.error, auth.clearError);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +30,7 @@ export const LoginScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={styles.background}>
+    <ScrollView style={styles.background} keyboardShouldPersistTaps='handled' contentContainerStyle={styles.backgroundChildren}>
       <Pressable
         style={[{marginTop: insets.top}, styles.backButtonContainer]}
         onPress={() => navigation.goBack()}
@@ -57,17 +56,19 @@ export const LoginScreen: React.FC = () => {
         </View>
       </View>
 
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    alignItems: 'center',
     width: '100%',
     height: '100%',
     backgroundColor: Colors.orange,
+  },
+  backgroundChildren: {
+    alignItems: 'center',
   },
   backButtonContainer: {
     position: 'absolute',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: '20%',
+    marginTop: '40%',
   },
   logo: {
     width: 250,
@@ -116,5 +117,6 @@ const styles = StyleSheet.create({
   },
   signInContainer: {
     marginTop: 60,
+    marginBottom: 32,
   }
 });
