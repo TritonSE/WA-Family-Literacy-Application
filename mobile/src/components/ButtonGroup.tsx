@@ -24,7 +24,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, onButtonChang
                 onButtonChange(key);
               }}
             >
-              <Text style={[activeButton === key ? styles.buttonTextActive : styles.buttonTextInactive, TextStyles.caption2]}>
+              <Text style={[TextStyles.caption2, activeButton === key ? styles.buttonTextActive : styles.buttonTextInactive]}>
                 {label}
               </Text>
             </Pressable>

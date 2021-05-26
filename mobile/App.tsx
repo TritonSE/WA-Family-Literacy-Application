@@ -3,6 +3,7 @@ import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { APIProvider } from './src/context/APIContext';
 import { BookProvider } from './src/context/BookContext';
 import { I18nProvider } from './src/context/I18nContext';
@@ -17,7 +18,7 @@ const App: React.FC = () => {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading/>;
   }
   return (
     <APIProvider>
@@ -26,7 +27,8 @@ const App: React.FC = () => {
           <BookProvider>
             <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
               <NavigationContainer>
-                <MainTabNavigator />
+                <StatusBar translucent backgroundColor="transparent"/>
+                <MainTabNavigator/>
               </NavigationContainer>
             </SafeAreaView>
           </BookProvider>
