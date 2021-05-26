@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Circle, Svg } from 'react-native-svg';
 
-import { Svg, Circle } from 'react-native-svg';
-
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
@@ -20,7 +20,7 @@ const SavedTab: React.FC = () => {
       <Text>
         Saved
       </Text>
-      <View style={{height:300}}/>
+      <View style={{ height: 300 }} />
     </View>
   );
 };
@@ -56,7 +56,7 @@ const SettingsTab: React.FC = () => {
         <View style={styles.profileInfo}>
           <View style={styles.emailContainer}>
             <Text style={TextStyles.caption2}>{auth.user.email}</Text>
-            <SmallButton text={i18n.t("signOut")} onPress={() => auth.logout()} underline />
+            <SmallButton text={i18n.t('signOut')} onPress={() => auth.logout()} underline />
           </View>
           <View style={styles.inSDContainer}>
             <Checkbox value={auth.user.in_san_diego} onChange={setInSanDiego} />
@@ -68,7 +68,7 @@ const SettingsTab: React.FC = () => {
 
       <View style={styles.langSelector}>
         <View style={styles.languageText}>
-          <Text style={TextStyles.heading3}>{i18n.t("language")}</Text>
+          <Text style={TextStyles.heading3}>{i18n.t('language')}</Text>
         </View>
 
         {languages.map((lang: Language) => (
@@ -80,7 +80,7 @@ const SettingsTab: React.FC = () => {
               onPress={() => i18n.setLocale(lang)}
               style={styles.box}
             >
-              { lang === i18n.locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')}/>}
+              {lang === i18n.locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')} />}
             </Pressable>
 
           </View>
@@ -88,10 +88,9 @@ const SettingsTab: React.FC = () => {
 
       </View>
 
-      <View style={{height:300}}/>
+      <View style={{ height: 300 }} />
 
     </View>
-
 
   );
 
@@ -104,29 +103,29 @@ const MoreInfoTab: React.FC = () => {
   const [value, onChangeText] = React.useState('');
 
   return (
-    <View style={{ alignSelf: 'center', width: 298, alignItems: 'center'}}>
-      <Text style={[TextStyles.heading3, {marginBottom: 20}]}>{t("socialMedia")}</Text>
+    <View style={{ alignSelf: 'center', width: 298, alignItems: 'center' }}>
+      <Text style={[TextStyles.heading3, { marginBottom: 20 }]}>{t('socialMedia')}</Text>
       <View style={styles.socialRow}>
-        <TouchableOpacity onPress={async () => await Linking.openURL("https://twitter.com/WordsAliveSD")}>
-          <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')}/>
+        <TouchableOpacity onPress={async () => await Linking.openURL('https://twitter.com/WordsAliveSD')}>
+          <Image style={styles.socialPic} source={require('../../assets/images/twitter.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={async () => await Linking.openURL("https://instagram.com/wordsalivesd")}>
-          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/instagram.png')}/>
+        <TouchableOpacity onPress={async () => await Linking.openURL('https://instagram.com/wordsalivesd')}>
+          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/instagram.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={async () => await Linking.openURL("https://www.facebook.com/WordsAliveSD")}>
-          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/facebook.png')}/>
+        <TouchableOpacity onPress={async () => await Linking.openURL('https://www.facebook.com/WordsAliveSD')}>
+          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/facebook.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={async () => await Linking.openURL("https://www.tiktok.com/@wordsalivesd")}>
-          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/tiktok.png')}/>
+        <TouchableOpacity onPress={async () => await Linking.openURL('https://www.tiktok.com/@wordsalivesd')}>
+          <Image style={[styles.socialPic, styles.notLeftPic]} source={require('../../assets/images/tiktok.png')} />
         </TouchableOpacity>
       </View>
-      <LargeButton text={t("donate")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/donate")}/>
-      <LargeButton text={t("volunteer")} onPress={async () => await Linking.openURL("https://www.wordsalive.org/becomeavolunteer")}/>
-      <Text style={[TextStyles.heading3, {textAlign: 'center', marginTop: 20}]}>
-        {t("tagline")}
+      <LargeButton text={t('donate')} onPress={async () => await Linking.openURL('https://www.wordsalive.org/donate')} />
+      <LargeButton text={t('volunteer')} onPress={async () => await Linking.openURL('https://www.wordsalive.org/becomeavolunteer')} />
+      <Text style={[TextStyles.heading3, { textAlign: 'center', marginTop: 20 }]}>
+        {t('tagline')}
       </Text>
-      <Text style={[TextStyles.caption3, {textAlign: 'center', marginTop: 20, marginBottom: 10}]}>
-        {t("contactUs")}
+      <Text style={[TextStyles.caption3, { textAlign: 'center', marginTop: 20, marginBottom: 10 }]}>
+        {t('contactUs')}
       </Text>
       <TextInput
         style={styles.textBox}
@@ -137,16 +136,16 @@ const MoreInfoTab: React.FC = () => {
         value={value}
       />
       <View style={{ paddingBottom: 15 }}>
-        <LargeButton text={t("send")} onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
+        <LargeButton text={t('send')} onPress={async () => await Linking.openURL(`mailto:amanda@wordsalive.org?subject=Family Literacy App Contact Form&body=${value}`)} />
       </View>
     </View>
   );
 };
 
 const TabScreens: { [index: string]: JSX.Element } = {
-  saved: <SavedTab/>,
-  settings: <SettingsTab/>,
-  moreInfo: <MoreInfoTab/>,
+  saved: <SavedTab />,
+  settings: <SettingsTab />,
+  moreInfo: <MoreInfoTab />,
 };
 
 /**
@@ -162,7 +161,7 @@ export const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView>
         {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
         <View style={styles.top} />
@@ -176,9 +175,11 @@ export const ProfileScreen: React.FC = () => {
           </Svg>
         </View>
         <View style={styles.buttonGroup}>
-          <ButtonGroup buttons={tabButtons} onButtonChange={(btn) => {selectTab(btn);}} />
+          <ButtonGroup buttons={tabButtons} onButtonChange={(btn) => {
+            selectTab(btn);
+          }} />
         </View>
-        { TabScreens[selectedTab] }
+        {TabScreens[selectedTab]}
       </ScrollView>
     </KeyboardAvoidingView>
   );
