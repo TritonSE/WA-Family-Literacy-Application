@@ -24,6 +24,11 @@ body {
   font-family: 'GothamRounded - Bold';
 }
 
+.h1 {
+  font-size: 60px;
+  font-family: 'GothamRounded - Bold';
+}
+
 .h2 {
   font-size: 40px;
   font-family: 'GothamRounded - Bold';
@@ -67,4 +72,8 @@ body {
 @font-face {
   font-family: 'GothamRounded - Bold';
   src: url(./assets/fonts/gotham-rounded/GothamRounded-Bold.otf) format('opentype');
+}
+
+.ck-editor__editable {
+  min-height: 500px;
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { BookCard } from '../components/BookCard';
 import { Book } from '../models/Book';
 import { Language, LanguageLabels } from '../models/Languages';
@@ -28,6 +29,7 @@ export const UploadBooksPage: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const client = useContext(APIContext);
+  const history = useHistory();
 
   useEffect(
     () => {
@@ -136,6 +138,7 @@ export const UploadBooksPage: React.FC = () => {
     return queryIdxTitle !== -1 || queryIdxAuthor !== -1;
   };
 
+
   return (
     <div>
       <div className={styles.row}>
@@ -146,7 +149,7 @@ export const UploadBooksPage: React.FC = () => {
             <img className={styles.searchIcon} src={SearchIcon} alt='' />
           </button>
         </div>
-        <button type="button" className={styles.newButton}>
+        <button type="button" className={styles.newButton} onClick={() => history.push("/books/new")}>
           <p>New Book</p>
           <img className={styles.addIcon} src={AddIcon} alt='' />
         </button>

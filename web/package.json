@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@ckeditor/ckeditor5-upload": "^27.1.0",
     "axios": "^0.21.1",
+    "ckeditor5": "file:./ckeditor5",
     "react": "^17.0.2",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0"
@@ -35,7 +38,9 @@
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "REACT_APP_BASE_URL=http://localhost:8080 npm start",
+    "staging": "REACT_APP_BASE_URL=https://words-alive-staging.herokuapp.com npm start"
   },
   "eslintConfig": {
     "extends": [

@@ -6,6 +6,7 @@ import './App.css';
 import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
+import { BookWizardPage } from './pages/BookWizardPage';
 import { ManageAccountsPage } from './pages/ManageAccountsPage';
 import { APIProvider } from './context/APIContext';
 
@@ -22,11 +23,14 @@ const App: React.FC = () => {
           <Route path="/analytics">
             <AnalyticsPage />
           </Route>
-          <Route path="/books">
-            <UploadBooksPage />
-          </Route>
           <Route path="/accounts">
             <ManageAccountsPage />
+          </Route>
+          <Route exact path="/books">
+            <UploadBooksPage />
+          </Route>
+          <Route exact path="/books/new">
+            <BookWizardPage />
           </Route>
         </Switch>
       </Router>

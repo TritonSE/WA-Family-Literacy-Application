@@ -20,7 +20,7 @@ export type BookDetails = {
   created_at: string
 };
 
-type TabContent = {
+export type TabContent = {
   video?: string;
   body: string;
 };
