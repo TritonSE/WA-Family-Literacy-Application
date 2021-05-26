@@ -19,6 +19,8 @@ type FirebaseAuthenticator struct {
 func (a FirebaseAuthenticator) VerifyToken(ctx context.Context, token string) (string, bool) {
 	result, err := a.Client.VerifyIDToken(ctx, token)
 	if err != nil {
+		fmt.Println(token)
+		fmt.Printf("err: %v\n", err)
 		return "", false
 	}
 	return result.UID, true
