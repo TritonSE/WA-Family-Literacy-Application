@@ -42,6 +42,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const clearError = (): void => {
     setError(null);
   };
+  useErrorAlert(error, () => setError(null));
 
   const auth = useMemo(() => {
     const fbConfig = process.env.REACT_APP_FB_CONFIG ? JSON.parse(process.env.REACT_APP_FB_CONFIG) : {
