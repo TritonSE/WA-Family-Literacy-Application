@@ -21,8 +21,6 @@ type I18nState = {
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
   en: require('../../assets/i18n/en.json'),
-  es: require('../../assets/i18n/es.json'),
-  fr: require('../../assets/i18n/fr.json'),
 };
 
 // Set the locale once at the beginning of your app.

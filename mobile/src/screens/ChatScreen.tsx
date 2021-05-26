@@ -25,9 +25,6 @@ export const ChatScreen: React.FC = () => {
         {i18nCtx.t('tel')}: <Text style={[styles.body, styles.link]} onPress={() => Linking.openURL('tel:+18582749673')}>+1 858.274.9673</Text>
       </Text>
       <Text style={TextStyles.heading2}>
-        {i18nCtx.t('fax')}: <Text style={styles.body}>+1 858.274.9673</Text>
-      </Text>
-      <Text style={TextStyles.heading2}>
         {i18nCtx.t('days')}: <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
       </Text>
 
@@ -44,7 +41,7 @@ export const ChatScreen: React.FC = () => {
       </Text>
 
       {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
-      <Text style={styles.body} selectable={true}>5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92081{'\n'}United States</Text>
+      <Text style={styles.body} selectable={true}>5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109{'\n'}United States</Text>
     </View>
   );
 };
