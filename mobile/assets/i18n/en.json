@@ -1,5 +1,7 @@
 {
+  "notifications": "Notifications", 
   "newBooks": "New Books for You",
+  "newsUpdates": "News & Events update",
   "allBooks": "All Books",
   "letsTalk": "Let's Talk",
   "tel": "Tel",
@@ -25,6 +27,7 @@
   "untilThen": "Until then...",
   "pageMofN": "Page %{m} of %{n}",
   "signIn": "Sign In",
+  "signOut": "Sign Out",
   "signUp": "Sign Up",
   "continueAsGuest": "Continue as Guest",
   "or": "or",

@@ -16,6 +16,7 @@ type AuthState = {
   signup: (name: string, email: string, password: string, inSanDiego: boolean) => void,
   logout: () => void,
   continueAsGuest: () => void,
+  fetchUser: () => void,
 };
 
 const init: AuthState = {
@@ -27,6 +28,7 @@ const init: AuthState = {
   logout: () => {},
   signup: () => {},
   continueAsGuest: () => {},
+  fetchUser: () => {},
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -125,8 +127,20 @@ export const AuthProvider: React.FC = ({ children }) => {
     setIsGuest(true);
   };
 
+  const fetchUser = (): void => {
+    (async () => {
+      try {
+        const apiUser = await api.getUser(user.id);
+        setUser(apiUser);
+      } catch (e) {
+        setError(e);
+        setUser(null);
+      }
+    })();
+  }
+
   return (<AuthContext.Provider
-    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest }}
+    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser }}
   >
     {children}
   </AuthContext.Provider>);

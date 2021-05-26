@@ -4,3 +4,8 @@ export type User = {
   email: string;
   in_san_diego: boolean;
 };
+
+export type UpdateUser = {
+  name?: string;
+  in_san_diego?: boolean;
+};

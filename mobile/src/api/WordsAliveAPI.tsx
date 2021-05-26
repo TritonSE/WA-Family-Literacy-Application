@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
+import { TSpan } from 'react-native-svg';
 import { Book, BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
-import { User } from '../models/User';
+import { User, UpdateUser } from '../models/User';
 
 // Class to encapsulate the handler for the Words Alive API
 class WordsAliveAPI {
@@ -45,6 +46,11 @@ class WordsAliveAPI {
 
   async createUser(user: User): Promise<User> {
     const res = await this.client.post('/users', user);
+    return res.data;
+  }
+
+  async updateUser(id: string, update: UpdateUser): Promise<User> {
+    const res = await this.client.patch(`/users/${id}`, update);
     return res.data;
   }
 }

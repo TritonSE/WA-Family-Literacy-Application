@@ -1,15 +1,20 @@
-import React, { useContext } from 'react';
-import { Text, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useContext, useState } from 'react';
+
 import { Svg, Circle } from 'react-native-svg';
 
+import { Text, Switch, Image, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Linking, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 import { ButtonGroup } from '../components/ButtonGroup';
+import { SmallButton } from '../components/SmallButton';
 import { LargeButton } from '../components/LargeButton';
+import { Checkbox } from '../components/Checkbox';
 import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
 import { AuthContext } from '../context/AuthContext';
+import { APIContext } from '../context/APIContext';
+import { apisAreAvailable } from 'expo';
+import { onChange } from 'react-native-reanimated';
 
 const SavedTab: React.FC = () => {
   return (
@@ -29,24 +34,41 @@ const SettingsTab: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   const { i18n, setLocale, t, locale } = i18nCtx;
   const auth = useContext(AuthContext);
+  const api = useContext(APIContext);
 
   const languages = Object.keys(i18n.translations) as Language[];
+  const [isEnabled, setIsEnabled] = useState(false);
+
+
+  const inSanDiegoChange = (inSanDiego: boolean): void => {
+    (async () => {
+      await api.updateUser(auth.user.id, { in_san_diego: inSanDiego });
+      auth.fetchUser();
+    })();
+  };
 
   return (
-    <View>
-
+    <View style={styles.langSelector}>
       {auth.isGuest ? (
         <View style={styles.login}>
           <LargeButton text={i18nCtx.t('signUp')} onPress={() => auth.logout()} underline={true}/>
         </View>
       ) : (
         <View>
-          <Text>yay account</Text>
+          <View style={styles.langElem}>
+            <Text style={[TextStyles.heading3, styles.emailText]}>{auth.user.email}</Text>
+            <View>
+              <SmallButton text={i18nCtx.t("signOut")} onPress={() => auth.logout()} underline={true}/>
+            </View>
+          </View>
+          <View style={styles.langElem}>
+            <Checkbox value={auth.user.in_san_diego} onChange={inSanDiegoChange} inverted={false}></Checkbox>
+            <Text style={[TextStyles.heading3, styles.locatedSanDiego]}>{"Located in the San Diego area?"}</Text>
+          </View>
         </View>
       )}
 
       <View style={styles.langSelector}>
-
         <View style={styles.languageText}>
           <Text style={TextStyles.heading3}>{t("language")}</Text>
         </View>
@@ -249,5 +271,14 @@ const styles = StyleSheet.create({
     height: 22,
     width: 22,
     tintColor: Colors.orange,
+  },
+  emailText: {
+    // marginLeft: 100,
+    textAlign: 'left',
+    fontSize: 16
+  },
+  locatedSanDiego: {
+    fontSize: 16,
+    // marginLeft: 15,
   }
 });

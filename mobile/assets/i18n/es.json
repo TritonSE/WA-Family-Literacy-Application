@@ -1,4 +1,7 @@
 {
+    "notifications": "Notificaciones", 
     "newBooks": "Libros nuevos para ti",
-    "language": "Idioma"
+    "newsUpdates": "Actualizaciones de noticias y eventos",
+    "language": "Idioma",
+    "signOut": "desconectar"
 }
