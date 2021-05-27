@@ -5,7 +5,7 @@ import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 import '../../App.css';
 type OverviewPageProps = {
-  onSubmit: () => Promise<void>;
+  onSubmit: (okLanguages: Map<Language, boolean>) => Promise<void>;
   modalLanguages: Array<Language>
 };
 
@@ -14,11 +14,20 @@ type OverviewPageProps = {
  */
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages}) => {
   // handles when upload is clicked. No need to display success, as page redirects when upload is succesful
-  const handleOnClick = (): void  => {
-    onSubmit().catch(err => alert(err));
+  const handleSubmit = (): void  => {
+    onSubmit(checked).catch(err => alert(err));
   };
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  
+  const [checked, setChecked] = useState<Map<Language, boolean>>
+  (new Map(modalLanguages.map( (lang) => [lang, false])));
+
+  const toggleCheck = (lang: Language): void => {
+    setChecked( (prevState) => new Map(prevState).set(lang, !prevState.get(lang))
+    );
+  };
+
 
   return (
     <div>
@@ -45,17 +54,19 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
         <div className={tstyles.modal}>
           <div className={tstyles.modalContent}>
             <div>
-              <p className={tstyles.modalTitle}>Which version(s) of this book would you like to delete?</p>
+              <p className={tstyles.modalTitle}>Select the language of the book you would like to upload</p>
               <div className={styles.container}>
                 {modalLanguages.map( (lang, index) => (
                   <div className={index % 2 == 0 ? styles.left : styles.right} key={lang}>
-                    <label key={lang} className={tstyles.checkboxContainer} htmlFor={lang}>
+                    <label className={tstyles.checkboxContainer} htmlFor={lang}>
                       {LanguageLabels[lang]}
-                      <input id={lang} type="checkbox" />
+                      <input id={lang} onChange={()=> toggleCheck(lang)}type="checkbox" />
                       <span className={tstyles.checkmark}></span>
                     </label>
                   </div>
                 ))}
+                <button className={tstyles.cancelBtn} type="button" onClick={() => setShowModal(false) }>Cancel</button>
+                <button className={tstyles.deleteBtn} type="button">Upload</button>
               </div>
             </div> 
           </div>

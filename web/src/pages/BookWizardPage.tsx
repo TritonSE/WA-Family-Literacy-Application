@@ -21,7 +21,7 @@ export const BookWizardPage: React.FC = () => {
 
   const emptyMap: Map<Language, TabContent> = new Map();
 
-  const submitPage = async (): Promise<void> => {
+  const submitPage = async ( uploadLanguage: Map<Language, boolean> ): Promise<void> => {
     const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
     // image will never equal null here - done to please Typescript type checking
     if (image != null) {
@@ -91,10 +91,6 @@ export const BookWizardPage: React.FC = () => {
       isTabContentDone(readTabContent.get(language as Language)) && 
       isTabContentDone(exploreTabContent.get(language as Language)) && 
       isTabContentDone(learnTabContent.get(language as Language))) as Language[];
-    // .map( (language) => {
-    //   return isTabContentDone(readTabContent.get(language)) && isTabContentDone(exploreTabContent.get(language)) 
-    //     && isTabContentDone(learnTabContent.get(language)) ? language : undefined; 
-    // }).filter();
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
