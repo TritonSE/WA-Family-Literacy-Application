@@ -25,7 +25,6 @@ type UploadBooksNavigationProps = {
  */
 export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage}) => {
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
-  const languageMap = new Map(Object.entries(LanguageLabels));
   const pageName = pages[pageNumber];
   const history = useHistory();
   const skewer = <span className={styles.skewer}/>;
@@ -66,7 +65,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
       </div>
       <div className={styles.dropdownContainer}>
         {pageNumber == 1 ? <UploadBooksDropdown onDropdownChange={changeLanguage} currentLanguage={currentLanguage}></UploadBooksDropdown> :
-          pageNumber != 0 ? <div className={styles.languageLabel}> {languageMap.get(currentLanguage)} </div> : <div></div> }   
+          pageNumber != 0 ? <div className={styles.languageLabel}> {LanguageLabels[currentLanguage]} </div> : <div></div> }   
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>

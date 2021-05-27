@@ -6,18 +6,17 @@ import styles from './OverviewPage.module.css';
 import '../../App.css';
 type OverviewPageProps = {
   onSubmit: () => Promise<void>;
+  modalLanguages: Array<Language>
 };
 
 /**
  * Overview Page for Book Wizard
  */
-export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
+export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages}) => {
   // handles when upload is clicked. No need to display success, as page redirects when upload is succesful
   const handleOnClick = (): void  => {
     onSubmit().catch(err => alert(err));
   };
-
-  const modalLanguages: Array<Language> = ['en', "fr"];
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -43,21 +42,21 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
       </div>
 
       {showModal && 
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
+        <div className={tstyles.modal}>
+          <div className={tstyles.modalContent}>
             <div>
-              <p className={styles.modalTitle}>Which version(s) of this book would you like to delete?</p>
-              <ul className={styles.ulist}> 
-                {modalLanguages.map(lang => (
-                  <li className={styles.listElement}key={lang}>
-                    <label key={lang} className={styles.checkboxContainer} htmlFor={lang}>
+              <p className={tstyles.modalTitle}>Which version(s) of this book would you like to delete?</p>
+              <div className={styles.container}>
+                {modalLanguages.map( (lang, index) => (
+                  <div className={index % 2 == 0 ? styles.left : styles.right} key={lang}>
+                    <label key={lang} className={tstyles.checkboxContainer} htmlFor={lang}>
                       {LanguageLabels[lang]}
                       <input id={lang} type="checkbox" />
-                      <span className={styles.checkmark}></span>
+                      <span className={tstyles.checkmark}></span>
                     </label>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div> 
           </div>
         </div>} 

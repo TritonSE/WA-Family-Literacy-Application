@@ -7,7 +7,7 @@ import { TabContent } from '../models/Book';
 import { GeneralPage } from './BookWizard/GeneralPage';
 import { OverviewPage } from './BookWizard/OverviewPage';
 import { TabContentPage } from './BookWizard/TabContentPage';
-import { Language } from '../models/Languages';
+import { Language, LanguageLabels } from '../models/Languages';
 
 export const BookWizardPage: React.FC = () => {
 
@@ -39,17 +39,22 @@ export const BookWizardPage: React.FC = () => {
     setCurrentPage(newPage);
   };
 
+  const isTabContentDone = (tabContent: TabContent | undefined): boolean => {
+    if (tabContent == undefined) return false;
+    return tabContent.body !== "";
+  };
+
   // logic to allow if the user can move onto the next page
   const allowChangePage = (): boolean => {
     switch(currentPage) {
       case 0:
         return title != "" && author != "" && image != null;
       case 1:
-        return (readTabContent.get(language)?? emptyTabContent).body !== "";
+        return isTabContentDone(readTabContent.get(language));
       case 2:
-        return (exploreTabContent.get(language)?? emptyTabContent).body !== "";
+        return isTabContentDone(exploreTabContent.get(language));
       case 3:
-        return (learnTabContent.get(language)?? emptyTabContent).body !== "";
+        return isTabContentDone(learnTabContent.get(language));
     }
     return true;
   };
@@ -77,9 +82,19 @@ export const BookWizardPage: React.FC = () => {
   
   // controls wheter to redirect the page back to start
   const generalDone = title !== '' && author !== '' && image != null;
-  const readDone = (readTabContent.get(language)?? emptyTabContent).body !== "";
-  const exploreDone = (exploreTabContent.get(language)?? emptyTabContent).body !== "";
-  const learnDone = (learnTabContent.get(language)?? emptyTabContent).body !== "";
+  const readDone = isTabContentDone(readTabContent.get(language));
+  const exploreDone = isTabContentDone(exploreTabContent.get(language));
+  const learnDone = isTabContentDone(learnTabContent.get(language));
+
+  const doneLanguageArray: Language[] = Object.keys(LanguageLabels)
+    .filter( (language) => 
+      isTabContentDone(readTabContent.get(language as Language)) && 
+      isTabContentDone(exploreTabContent.get(language as Language)) && 
+      isTabContentDone(learnTabContent.get(language as Language))) as Language[];
+    // .map( (language) => {
+    //   return isTabContentDone(readTabContent.get(language)) && isTabContentDone(exploreTabContent.get(language)) 
+    //     && isTabContentDone(learnTabContent.get(language)) ? language : undefined; 
+    // }).filter();
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
@@ -89,7 +104,7 @@ export const BookWizardPage: React.FC = () => {
     <TabContentPage onContentChange={handleExploreTabContentChange} 
       currentContent={exploreTabContent.get(language) || emptyTabContent} language={language} key={2}></TabContentPage>,
     <TabContentPage onContentChange={handleLearnTabContentChange} language={language} currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
-    <OverviewPage onSubmit={submitPage} key={4}></OverviewPage>
+    <OverviewPage onSubmit={submitPage} modalLanguages={doneLanguageArray} key={4}></OverviewPage>
   ];
 
   return (
