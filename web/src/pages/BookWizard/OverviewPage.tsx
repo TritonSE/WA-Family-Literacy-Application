@@ -43,21 +43,22 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit}) => {
       </div>
 
       {showModal && 
-        <div className={tstyles.modal}>
-          <div className={tstyles.modalContent}>
-            <form>
-              <div>
-                <p className={tstyles.modalTitle}>Which version(s) of this book would you like to delete?</p>
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <div>
+              <p className={styles.modalTitle}>Which version(s) of this book would you like to delete?</p>
+              <ul className={styles.ulist}> 
                 {modalLanguages.map(lang => (
-                  <label key={lang} className={tstyles.checkboxContainer} htmlFor={lang}>
-                    {LanguageLabels[lang]}
-                    <input id={lang} type="checkbox" />
-                    <span className={tstyles.checkmark}></span>
-                    <br />
-                  </label>
+                  <li className={styles.listElement}key={lang}>
+                    <label key={lang} className={styles.checkboxContainer} htmlFor={lang}>
+                      {LanguageLabels[lang]}
+                      <input id={lang} type="checkbox" />
+                      <span className={styles.checkmark}></span>
+                    </label>
+                  </li>
                 ))}
-              </div> 
-            </form>
+              </ul>
+            </div> 
           </div>
         </div>} 
     </div>
