@@ -29,7 +29,13 @@ export const BookWizardPage: React.FC = () => {
       const imageData = await image.arrayBuffer();
       const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
       const uploadedBook = await client.uploadBook(title, author, imageURl);
-      // await client.uploadBookDetails(uploadedBook.id, "en", readTabContent, exploreTabContent, learnTabContent);
+      uploadLanguage.forEach(async (shouldUpload, lang) => {
+        // read/explore/learn will never be undefined
+        if (shouldUpload) await client.uploadBookDetails(uploadedBook.id, lang, 
+          readTabContent.get(lang) as TabContent, 
+          exploreTabContent.get(lang) as TabContent, 
+          learnTabContent.get(lang) as TabContent);
+      });
       history.push("/books");
       return;
     }

@@ -8,7 +8,7 @@ class WordsAliveAPI {
   client: AxiosInstance;
 
   constructor(baseURL: string) {
-    this.client = axios.create({ baseURL: baseURL });
+    this.client = axios.create({ baseURL: baseURL, headers: { Authorization: 'Bearer test-token-1'} });
   }
 
   // makes a call to the database and returns an array of all books
@@ -39,7 +39,7 @@ class WordsAliveAPI {
   async uploadBook(title: string, author: string, image: string): Promise<Book> {
     const requestConfig: AxiosRequestConfig  = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     };
     const res = await this.client.post('/books', {

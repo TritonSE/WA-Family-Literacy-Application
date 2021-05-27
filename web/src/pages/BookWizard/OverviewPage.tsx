@@ -66,7 +66,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
                   </div>
                 ))}
                 <button className={tstyles.cancelBtn} type="button" onClick={() => setShowModal(false) }>Cancel</button>
-                <button className={tstyles.deleteBtn} type="button">Upload</button>
+                <button className={tstyles.deleteBtn} type="button" onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
               </div>
             </div> 
           </div>
