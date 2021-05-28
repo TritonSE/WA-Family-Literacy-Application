@@ -21,8 +21,9 @@ export const SignUpScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [inSanDiego, setInSanDiego] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
 
-  const ok = name !== '' && email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword;
+  const ok = name !== '' && email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword && ageConfirmed;
 
   const signup = (): void => {
     auth.signup(name, email, password, inSanDiego);
@@ -55,9 +56,14 @@ export const SignUpScreen: React.FC = () => {
         <TextInput style={[styles.input, TextStyles.caption3]} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={i18n.t('confirmPassword')} secureTextEntry />
         {confirmPassword !== '' && password !== confirmPassword && <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('passwordsDontMatch')}</Text>}
 
-        <TouchableOpacity style={styles.inSanDiegoContainer} onPress={() => setInSanDiego(!inSanDiego)}>
+        <TouchableOpacity style={styles.checkboxContainer} onPress={() => setAgeConfirmed(ageConfirmed => !ageConfirmed)}>
+          <Checkbox value={ageConfirmed} onChange={setAgeConfirmed} inverted />
+          <Text style={styles.checkboxLabel}>{i18n.t('confirmAge')}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.checkboxContainer} onPress={() => setInSanDiego(inSanDiego => !inSanDiego)}>
           <Checkbox value={inSanDiego} onChange={setInSanDiego} inverted />
-          <Text style={styles.locatedText}>{i18n.t('inSanDiego')}</Text>
+          <Text style={styles.checkboxLabel}>{i18n.t('inSanDiego')}</Text>
         </TouchableOpacity>
 
         <View style={styles.signUpContainer}>
@@ -119,12 +125,13 @@ const styles = StyleSheet.create({
     color: Colors.white,
     marginBottom: 4,
   },
-  inSanDiegoContainer: {
+  checkboxContainer: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'flex-start',
+    marginBottom: 8,
   },
-  locatedText: {
+  checkboxLabel: {
     ...TextStyles.caption2,
     color: Colors.white,
     alignSelf: 'center',
