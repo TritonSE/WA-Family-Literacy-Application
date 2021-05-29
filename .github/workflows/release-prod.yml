@@ -95,6 +95,11 @@ jobs:
     steps:
       - name: Clone
         uses: actions/checkout@v2
+      - name: Import codesign certs
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.IOS_CERTIFICATES_P12 }}
+          p12-password: ${{ secrets.IOS_CERTIFICATES_P12_PASSWORD }}
       - name: Install dependencies
         working-directory: mobile
         run: npm ci
