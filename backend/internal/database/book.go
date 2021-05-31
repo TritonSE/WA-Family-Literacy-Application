@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
@@ -129,6 +130,13 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 		return nil, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
 
+	query = "INSERT INTO book_analytics (id, clicks) VALUES($1, ARRAY_FILL(0, array[366]));"
+	_, err = db.Conn.Exec(ctx, query, newBookId)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "error on INSERT INTO book_analytics in InsertBook")
+	}
+
 	return db.FetchBook(ctx, newBookId)
 
 }
@@ -244,5 +252,92 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 	updatedBookDetails, _, err = db.FetchBookDetails(ctx, id, lang)
 
 	return updatedBookDetails, err
+
+}
+
+/*
+ * Increments current day's clicks count in the book_analytics table given a book id
+ */
+ func (db *BookDatabase) UpdateBookAnalytics(ctx context.Context, id string) error {
+	var lastUpdated time.Time
+	var time = time.Now()
+	var dayInYear = time.YearDay()
+	var query string = "SELECT last_updated FROM book_analytics WHERE id = $1"
+
+	err := db.Conn.QueryRow(ctx, query, id).Scan(&lastUpdated)
+
+	if err != nil {
+		fmt.Print(err)
+		return errors.Wrap(err, "error on accessing book_analytics")
+	}
+
+	if(lastUpdated.YearDay() == time.YearDay() && lastUpdated.Year() == time.Year()) {
+		query = "UPDATE book_analytics SET " +
+		"clicks[$1] = COALESCE(clicks[$1], 0) + 1," +
+		"last_updated = $2 WHERE id = $3"
+	} else {
+		query = "UPDATE book_analytics SET " +
+		"clicks[$1] = 1," +
+		"last_updated = $2 WHERE id = $3"
+	}
+
+	_, err = db.Conn.Exec(ctx, query, dayInYear, time, id)
+
+	if err != nil {
+		fmt.Print(err)
+		return errors.Wrap(err, "error on updating book_analytics")
+	}
+
+	return nil
+
+}
+
+/*
+ * Returns an array containing a book's daily click counts given a range from the current day
+ */
+ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
+	var analytics []int
+	var currTime = time.Now()
+	var dayInYear = currTime.YearDay()
+	var query string
+
+	var arg1 int
+	var arg2  int
+	var arg3 int
+
+	if dRange > dayInYear {
+		var prevYear = currTime.Year() - 1
+		var lastDay = time.Date(prevYear, time.December, 31, 0, 0, 0, 0, time.Local).YearDay()
+		arg1 = lastDay - (dRange - dayInYear) + 1
+		arg2 = lastDay
+		arg3 = dayInYear
+	} else {
+		arg1 = dayInYear - dRange + 1
+		arg2 = dayInYear
+		arg3 = 0
+	}
+
+	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
+	"FROM book_analytics WHERE id = $4"
+	rows, err := db.Conn.Query(ctx, query, arg1, arg2, arg3, id)
+
+	if err != nil {
+		fmt.Print(err)
+		return analytics, errors.Wrap(err, "error on query for book analytics")
+	}
+
+	defer rows.Close()
+
+	if !rows.Next() {
+		return analytics, nil
+	}
+
+	err = rows.Scan(&analytics)
+
+	if err != nil {
+		return analytics, errors.Wrap(err, "error on Scan for book clicks array")
+	}
+
+	return analytics, err
 
 }

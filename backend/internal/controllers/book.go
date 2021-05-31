@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
 
@@ -203,5 +204,64 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	}
 
 	writeResponse(rw, http.StatusOK, resBookDetails)
+
+}
+
+// increments a book's click count for the current day (/analytics/{id}/inc)
+func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+
+	analytics, _ := c.Books.FetchBookAnalytics(req.Context(), bookID, 1)
+
+	if analytics == nil {
+		writeResponse(rw, http.StatusNotFound, "Book analytics not found for requested id")
+		return
+	}
+
+	err := c.Books.UpdateBookAnalytics(req.Context(), bookID)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusNoContent, nil)
+
+}
+
+// fetches daily book clicks in a given range (/analytics/{id}?range=<days>)
+func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+	var dayRange string = req.URL.Query().Get("range")
+	var dRange int
+
+	if dayRange == "" {
+		writeResponse(rw, http.StatusBadRequest, "range missing")
+		return
+	}
+
+	if numDays, err := strconv.Atoi(dayRange); err != nil {
+		writeResponse(rw, http.StatusBadRequest, "could not parse range")
+		return
+	} else if numDays < 1 || numDays > 366 {
+		writeResponse(rw, http.StatusBadRequest, "Range out of bounds")
+		return
+	} else {
+		dRange = numDays
+	}
+
+	bookAnalytics, err := c.Books.FetchBookAnalytics(req.Context(), bookID, dRange)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if bookAnalytics == nil {
+		writeResponse(rw, http.StatusNotFound, "book analytics not found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, bookAnalytics)
 
 }
