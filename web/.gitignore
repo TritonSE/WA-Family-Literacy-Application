@@ -1,9 +1,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# typescript
+/dist
+
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+/ckeditor5/node_modules
 
 # testing
 /coverage
@@ -21,3 +25,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+

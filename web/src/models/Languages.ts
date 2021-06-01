@@ -7,7 +7,7 @@ export const Languages = {
   ar: 'العربية',
   am: 'አማርኛ',
 };
-
+  
 export const LanguageLabels = {
   en: 'English',
   es: 'Spanish',

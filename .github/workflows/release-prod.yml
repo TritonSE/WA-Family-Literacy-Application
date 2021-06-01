@@ -1,0 +1,120 @@
+name: release-prod
+
+on:
+  push:
+    tags: [v**]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Log into GitHub container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: TritonSE
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate image tags
+        id: docker_meta_gh
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ghcr.io/tritonse/wa-family-literacy-application
+      - name: Build and push to GitHub container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.docker_meta_gh.outputs.tags }}
+          labels: ${{ steps.docker_meta_gh.outputs.labels }}
+      - name: Log into Heroku container registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Build and push to Heroku container registry
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: registry.heroku.com/words-alive/web
+      - name: Release to Heroku
+        run: heroku container:release web -a words-alive
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+      - name: Build admin site
+        working-directory: web
+        run: npm run build:prod
+        env:
+          REACT_APP_BASE_URL: https://api.wordsalive.org
+          REACT_APP_FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.2.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: web
+          environment: prod
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Build
+        working-directory: mobile
+        run: npm run build-android
+        env:
+          BASE_URL: https://api.wordsalive.org
+          FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
+      - name: Copy package
+        working-directory: mobile
+        run: mv android/app/build/outputs/apk/release/app-release.apk lets-read-android.apk
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: mobile/lets-read-android.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  ios:
+#    runs-on: macos-latest
+#    steps:
+#      - name: Clone
+#        uses: actions/checkout@v2
+#      - name: Import codesign certs
+#        uses: apple-actions/import-codesign-certs@v1
+#        with:
+#          p12-file-base64: ${{ secrets.IOS_CERTIFICATES_P12 }}
+#          p12-password: ${{ secrets.IOS_CERTIFICATES_P12_PASSWORD }}
+#      - name: Install dependencies
+#        working-directory: mobile
+#        run: npm ci
+#      - name: Build
+#        working-directory: mobile
+#        run: npm run build-ios
+#        env:
+#          BASE_URL: https://api.wordsalive.org
+#          FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
+#      - name: Copy package
+#        working-directory: mobile
+#        run: mv ios/build/lets-read.ipa lets-read-ios.ipa
+#      - name: Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: mobile/lets-read-ios.ipa
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,6 @@
 # Words Alive
 
-![words-alive](https://github.com/TritonSE/Words-Alive/workflows/words-alive/badge.svg)
+[![ci](https://github.com/TritonSE/WA-Family-Literacy-Application/actions/workflows/ci.yml/badge.svg)](https://github.com/TritonSE/WA-Family-Literacy-Application/actions/workflows/ci.yml)
 
 Mobile application to discover books and lesson plans, and chat with live volunteers from [Words Alive](https://www.wordsalive.org/). Monorepo for the Words Alive:
 

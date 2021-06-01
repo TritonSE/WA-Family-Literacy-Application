@@ -15,3 +15,14 @@ func (a MockAuthenticator) VerifyToken(ctx context.Context, token string) (strin
 	}
 	return "", false
 }
+
+func (a MockAuthenticator) CreateUser(ctx context.Context, email string, pwd string) (string, error) {
+
+	// Set token to the part of the email before the @
+	// EX: test1@test.com -> test1
+	return strings.Split(email, "@")[0], nil
+}
+
+func (a MockAuthenticator) DeleteUser(ctx context.Context, id string) error {
+	return nil
+}

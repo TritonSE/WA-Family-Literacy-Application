@@ -1,12 +1,15 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
-import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+
 import { APIProvider } from './src/context/APIContext';
 import { BookProvider } from './src/context/BookContext';
 import { I18nProvider } from './src/context/I18nContext';
-import { MainTabNavigator } from './src/navigation/MainTabNavigator';
+import { TopNavigator } from './src/navigation/TopNavigator';
+import { AuthProvider } from './src/context/AuthContext';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -17,22 +20,26 @@ const App: React.FC = () => {
   });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <AppLoading/>;
   }
+
   return (
-    <APIProvider>
-      <SafeAreaProvider>
-        <I18nProvider>
-          <BookProvider>
-            <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-              <NavigationContainer>
-                <MainTabNavigator />
-              </NavigationContainer>
-            </SafeAreaView>
-          </BookProvider>
-        </I18nProvider>
-      </SafeAreaProvider>
-    </APIProvider>
+    <SafeAreaProvider>
+      <I18nProvider>
+        <APIProvider>
+          <AuthProvider>
+            <BookProvider>
+              <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+                <NavigationContainer>
+                  <StatusBar translucent backgroundColor="transparent"/>
+                  <TopNavigator />
+                </NavigationContainer>
+              </SafeAreaView>
+            </BookProvider>
+          </AuthProvider>
+        </APIProvider>
+      </I18nProvider>
+    </SafeAreaProvider>
   );
 };
 

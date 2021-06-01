@@ -9,10 +9,24 @@
     --blue:#2C2F4A;
 }
 
+p {
+  margin: 0px;
+}
+
 body {
-    margin-left: 88px;
-    margin-right: 100px;
-    margin-top: 10px;
+  margin-left: 88px;
+  margin-right: 100px;
+  margin-top: 10px;
+}
+
+.h1 {
+  font-size: 60px;
+  font-family: 'GothamRounded - Bold';
+}
+
+.h1 {
+  font-size: 60px;
+  font-family: 'GothamRounded - Bold';
 }
 
 .h2 {
@@ -30,17 +44,36 @@ body {
   font-family: 'GothamRounded - Light';
 }
 
+.body2 {
+  font-size: 25px;
+  font-family: 'GothamRounded - Light';  
+}
+
 .body3 {
-    font-size: 20px;
-    font-family: 'GothamRounded - Light';
+  font-size: 20px;
+  font-family: 'GothamRounded - Light';
+}
+
+.caption1 {
+  font-size: 16px;
+  font-family: 'GothamRounded - Light';
+}
+
+.caption2 {
+  font-size: 12px;
+  font-family: 'GothamRounded - Light';
 }
 
 @font-face {
-    font-family: 'GothamRounded - Light';
-    src: url(./assets/fonts/gotham-rounded/GothamRounded-Light.otf) format('opentype');
+  font-family: 'GothamRounded - Light';
+  src: url(./assets/fonts/gotham-rounded/GothamRounded-Light.otf) format('opentype');
 }
 
 @font-face {
   font-family: 'GothamRounded - Bold';
   src: url(./assets/fonts/gotham-rounded/GothamRounded-Bold.otf) format('opentype');
+}
+
+.ck-editor__editable {
+  min-height: 500px;
 }

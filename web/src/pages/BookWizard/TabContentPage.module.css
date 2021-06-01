@@ -1,0 +1,18 @@
+
+.inputField {
+    composes: inputBox from '../BookWizardPage.module.css';
+    width: 600px;
+}
+
+.inputField:focus {
+    border-color: var(--orange);
+    outline: none;
+}
+.videoText {
+    composes: inputBoxTitle from '../BookWizardPage.module.css';
+    padding-top:25px;
+}
+.editorText {
+    composes: inputBoxTitle from '../BookWizardPage.module.css';
+    padding-top:40px;
+}

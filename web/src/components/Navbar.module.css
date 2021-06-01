@@ -1,0 +1,62 @@
+.navbar {
+  height: 115px;
+}
+
+.navbar_list{
+  list-style-type: none ;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nav_element_left {
+  float: left;
+}
+
+.nav_element_right{
+  float: right;
+}
+
+
+.nav_logo {
+  display: block;
+  text-align: center;
+  width: 122px;
+  height: 89px;
+  margin-right: 94px;
+  margin-top: 25px;
+}
+
+.nav_link {
+  composes: body3 from '../App.css';
+  display: block;
+  text-align: center;
+  margin-top: 50px;
+  margin-right: 58px;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.nav_button {
+  display: block;
+  margin-top: 50px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav_button:focus {
+  outline: none;
+}
+
+.button_text {
+  composes: body3 from '../App.css';
+  color: var(--black);
+}
+
+.active {
+  text-decoration: underline;
+  text-decoration-color: var(--orange);
+  text-underline-offset: 10px;
+}
+
