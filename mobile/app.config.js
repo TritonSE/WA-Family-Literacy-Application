@@ -16,13 +16,14 @@ export default {
   splash: {
     image: './assets/images/icons/splash.png',
   },
+
   extra: {
-    baseUrl: process.env.BASE_URL || 'https://api.wordsalive.org',
+    baseUrl: process.env.BASE_URL || 'http://localhost:8080',
     firebase: process.env.FB_CONFIG ? JSON.parse(process.env.FB_CONFIG) : {
-      "apiKey":"AIzaSyBBhNjTHRJmGmuSnfqcVBp4EJTd3d2JIsI",
-      "authDomain":"words-alive-a3392.firebaseapp.com",
-      "projectId":"words-alive-a3392",
-      "appId":"1:242541796284:web:06e49d66e778256577e9b9"
+      apiKey: process.env.FB_API_KEY || 'AIzaSyBSJHJ-VfdN2Y3wC_vfD1k6bEU2mQmP-Vg',
+      authDomain: process.env.FB_AUTH_DOMAIN || 'words-alive-staging.firebaseapp.com',
+      projectId: process.env.FB_PROJECT_ID || 'words-alive-staging',
+      appId: process.env.FB_APP_ID || '1:1534285739:web:2bada99614d9126d7224ee',
     },
   },
 };
