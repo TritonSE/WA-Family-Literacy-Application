@@ -108,6 +108,12 @@ export const BookWizardPage: React.FC = () => {
       isTabContentDone(exploreTabContent.get(language)) && 
       isTabContentDone(learnTabContent.get(language)));
 
+  const startedLanguages: Set<Language> = new Set(((Object.keys(LanguageLabels)) as Language[])
+    .filter((language) => 
+      readTabContent.get(language) != undefined || 
+      exploreTabContent.get(language) != undefined ||
+      learnTabContent.get(language) != undefined));
+
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
       image={image} title={title} author={author}></GeneralPage>,
@@ -123,7 +129,7 @@ export const BookWizardPage: React.FC = () => {
     <div>
       <UploadBooksNavigation pageNumber={currentPage} changePage={changePage} 
         allowContinue={allowChangePage()} pageStatus={[generalDone, readDone, exploreDone, learnDone, false]} 
-        changeLanguage={setLanguage} currentLanguage={language}></UploadBooksNavigation>
+        changeLanguage={setLanguage} currentLanguage={language} startedLanguages={startedLanguages}></UploadBooksNavigation>
       { pages[currentPage]}
     </div>
   );

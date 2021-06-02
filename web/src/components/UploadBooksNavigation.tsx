@@ -18,12 +18,14 @@ type UploadBooksNavigationProps = {
   pageStatus: Array<boolean>
   changeLanguage: (newLanguage: Language) => void;
   currentLanguage: Language
+  startedLanguages: Set<Language>
 };
 
 /**
  * Renders the navigation wizard bar at the top of the book wizard
  */
-export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage}) => {
+export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = 
+({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage, startedLanguages}) => {
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
   const history = useHistory();
@@ -64,7 +66,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
         </div>
       </div>
       <div className={styles.dropdownContainer}>
-        {pageNumber == 1 ? <UploadBooksDropdown onLanguageChange={changeLanguage} currentLanguage={currentLanguage}></UploadBooksDropdown> :
+        {pageNumber == 1 ? <UploadBooksDropdown onLanguageChange={changeLanguage} currentLanguage={currentLanguage} startedLanguages={startedLanguages}></UploadBooksDropdown> :
           pageNumber != 0 ? <div className={styles.languageLabel}> {LanguageLabels[currentLanguage]} </div> : <div></div> }   
       </div>
       <div className={styles.cancelImageContainer}>

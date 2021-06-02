@@ -6,30 +6,36 @@ import styles from './UploadBooksDropdown.module.css';
 
 type UploadBookDropdownProps = {
   onLanguageChange: (data: Language) => void;
+  startedLanguages: Set<Language>
   currentLanguage: Language
 };
 
 
-export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLanguageChange, currentLanguage}) => {
+export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLanguageChange, startedLanguages, currentLanguage}) => {
   const handleLanguageChange = (data: Language): void => {
     onLanguageChange(data);
     setShowDropDown(false);
   };
-  const languageArr = Object.entries(LanguageLabels);
+  const languages = Object.keys(LanguageLabels) as Language[];
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
-  const options = Array(languageArr.length).fill(null)
-    .map( (_, index) => (
-      <button key={index} 
-        className={ index == languageArr.length-1 ? styles.lastDropdownElement:styles.dropdownElement} 
-        onClick = { () => handleLanguageChange(languageArr[index][0] as Language)}>
-        {languageArr[index][1]}
+
+  const notCurrentLanguageArray = languages.filter( (lang) => lang != currentLanguage);
+
+  const options = notCurrentLanguageArray
+    .map((lang, index) => (
+      <button key={index}
+        className={index == notCurrentLanguageArray.length-1 ? styles.lastDropdownElement:styles.dropdownElement}
+        onClick = { () => handleLanguageChange(lang)}>
+        {LanguageLabels[lang]}
         <div className={styles.imageContainer}>
-          Edit
-          <img src={editImage} className={styles.buttonImage} ></img>
+          {startedLanguages.has(lang) ? "Edit" : "New"}
+          <img src={startedLanguages.has(lang) ? editImage : newImage} 
+            className={styles.buttonImage}>
+          </img>
         </div>
-        
       </button>
-    ) );
+    ));
+
   return (
     <div>
       <button className={showDropDown ? styles.firstDropdownElement : styles.roundedDropdownElement} onClick = {() => setShowDropDown(!showDropDown)}> 
