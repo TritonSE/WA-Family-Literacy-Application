@@ -79,13 +79,13 @@ func TestMain(m *testing.M) {
 		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
-	"('b_id');")
+		"('b_id');")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks, last_updated) values "+
-	"('c_id', ARRAY_FILL(10, array[366]), '2020-06-01 11:18:07.978921-07');")
+		"('c_id', ARRAY_FILL(10, array[366]), '2020-06-01 11:18:07.978921-07');")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
-	"('catcher', ARRAY_FILL(1, array[366]));")
+		"('catcher', ARRAY_FILL(1, array[366]));")
 
 	// Close the server
 	defer ts.Close()

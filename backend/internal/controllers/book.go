@@ -243,7 +243,7 @@ func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request
 		return
 	}
 
-	numDays, err := strconv.Atoi(dayRange);
+	numDays, err := strconv.Atoi(dayRange)
 
 	if err != nil {
 		writeResponse(rw, http.StatusBadRequest, "could not parse range")

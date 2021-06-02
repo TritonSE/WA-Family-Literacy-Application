@@ -258,7 +258,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 /*
  * Increments current day's clicks count in the book_analytics table given a book id
  */
- func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) error {
+func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) error {
 	var lastUpdated time.Time
 	var time = time.Now()
 	var dayInYear = time.YearDay()
@@ -271,14 +271,14 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 		return errors.Wrap(err, "error on accessing book_analytics")
 	}
 
-	if(lastUpdated.YearDay() == time.YearDay() && lastUpdated.Year() == time.Year()) {
+	if lastUpdated.YearDay() == time.YearDay() && lastUpdated.Year() == time.Year() {
 		query = "UPDATE book_analytics SET " +
-		"clicks[$1] = clicks[$1] + 1," +
-		"last_updated = $2 WHERE id = $3"
+			"clicks[$1] = clicks[$1] + 1," +
+			"last_updated = $2 WHERE id = $3"
 	} else {
 		query = "UPDATE book_analytics SET " +
-		"clicks[$1] = 1," +
-		"last_updated = $2 WHERE id = $3"
+			"clicks[$1] = 1," +
+			"last_updated = $2 WHERE id = $3"
 	}
 
 	_, err = db.Conn.Exec(ctx, query, dayInYear, time, id)
@@ -295,14 +295,14 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 /*
  * Returns an array containing a book's daily click counts given a range from the current day
  */
- func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
+func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
 	var analytics []int
 	var currTime = time.Now()
 	var dayInYear = currTime.YearDay()
 	var query string
 
 	var firstYearStart int
-	var firstYearEnd  int
+	var firstYearEnd int
 	var secondYearEnd int
 
 	// will wrap to previous year
@@ -334,7 +334,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 	}
 
 	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
-	"FROM book_analytics WHERE id = $4"
+		"FROM book_analytics WHERE id = $4"
 	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
 
 	if err != nil {
