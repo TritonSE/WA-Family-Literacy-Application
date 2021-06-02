@@ -6,3 +6,60 @@
     outline: none;
     border-radius: 15px;
 }
+
+.dropdownElement {
+    composes: body3 from '../App.css';
+    background-color: white;
+    border-color: black;
+    border-width: 1px;
+    width: 310px;
+    height: 60px;
+    text-align: left;
+}
+
+.firstDropdownElement {
+    composes: dropdownElement;
+    border-radius: 10px 10px 0 0;
+}
+
+.lastDropdownElement {
+    composes: dropdownElement;
+    border-radius: 0 0 10px 10px;
+}
+
+.roundedDropdownElement {
+    composes: dropdownElement;
+    border-radius: 10px;
+}
+
+.buttonImage {
+    width: 15px;
+    height: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.imageContainer {
+    float: right;
+}
+
+.wrapperDropdown{
+    position: relative;
+    width: 200px;
+    margin: 0 auto;
+    padding: 10px 15px;
+
+    /* Styles */
+    background: #fff;
+    border-left: 5px solid grey;
+    cursor: pointer;
+    outline: none;
+}
+
+.dropdownContent {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+}
+

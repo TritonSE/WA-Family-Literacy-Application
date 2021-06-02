@@ -22,22 +22,32 @@ export const BookWizardPage: React.FC = () => {
   const emptyMap: Map<Language, TabContent> = new Map();
 
   const submitPage = async ( uploadLanguage: Map<Language, boolean> ): Promise<void> => {
-    const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
-    // image will never equal null here - done to please Typescript type checking
-    if (image != null) {
-      const imageType = image.type;
-      const imageData = await image.arrayBuffer();
-      const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
-      const uploadedBook = await client.uploadBook(title, author, imageURl);
-      uploadLanguage.forEach(async (shouldUpload, lang) => {
-        // read/explore/learn will never be undefined
-        if (shouldUpload) await client.uploadBookDetails(uploadedBook.id, lang, 
-          readTabContent.get(lang) as TabContent, 
-          exploreTabContent.get(lang) as TabContent, 
-          learnTabContent.get(lang) as TabContent);
-      });
-      history.push("/books");
-      return;
+    try {
+      const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
+      // image will never equal null here - done to please Typescript type checking
+      if (image != null) {
+        const imageType = image.type;
+        const imageData = await image.arrayBuffer();
+        const imageURl = await imageAPI.uploadImage(new Uint8Array(imageData), imageType);
+        const uploadedBook = await client.uploadBook(title, author, imageURl);
+        const languagesToUpload =  Array.from(uploadLanguage)
+          .filter( ([, shouldUpload]) => shouldUpload)
+          .map( ([language]) => language);
+        // uploadLanguage.entries().filter()
+
+        // await Promise.all( )
+        uploadLanguage.forEach(async (shouldUpload, lang) => {
+          // read/explore/learn will never be undefined
+          if (shouldUpload) await client.uploadBookDetails(uploadedBook.id, lang, 
+            readTabContent.get(lang) as TabContent, 
+            exploreTabContent.get(lang) as TabContent, 
+            learnTabContent.get(lang) as TabContent);
+        });
+        history.push("/books");
+        return;
+      }
+    } catch (e) {
+      alert(`Unable to Upload Book: ${e.message}`);
     }
   };
 
@@ -92,11 +102,11 @@ export const BookWizardPage: React.FC = () => {
   const exploreDone = isTabContentDone(exploreTabContent.get(language));
   const learnDone = isTabContentDone(learnTabContent.get(language));
 
-  const doneLanguageArray: Language[] = Object.keys(LanguageLabels)
+  const doneLanguageArray: Language[] = ((Object.keys(LanguageLabels)) as Language[])
     .filter( (language) => 
-      isTabContentDone(readTabContent.get(language as Language)) && 
-      isTabContentDone(exploreTabContent.get(language as Language)) && 
-      isTabContentDone(learnTabContent.get(language as Language))) as Language[];
+      isTabContentDone(readTabContent.get(language)) && 
+      isTabContentDone(exploreTabContent.get(language)) && 
+      isTabContentDone(learnTabContent.get(language)));
 
   const pages = [
     <GeneralPage key={0} onTitleChange={setTitle} onAuthorChange={setAuthor} onImageChange={setImage} 
