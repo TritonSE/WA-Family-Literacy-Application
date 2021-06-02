@@ -130,7 +130,7 @@ func (db *BookDatabase) InsertBook(ctx context.Context,
 		return nil, errors.Wrap(err, "error on INSERT INTO books in InsertBook")
 	}
 
-	query = "INSERT INTO book_analytics (id, clicks) VALUES($1, ARRAY_FILL(0, array[366]));"
+	query = "INSERT INTO book_analytics (id) VALUES($1);"
 	_, err = db.Conn.Exec(ctx, query, newBookId)
 
 	if err != nil {
@@ -258,7 +258,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 /*
  * Increments current day's clicks count in the book_analytics table given a book id
  */
- func (db *BookDatabase) UpdateBookAnalytics(ctx context.Context, id string) error {
+ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) error {
 	var lastUpdated time.Time
 	var time = time.Now()
 	var dayInYear = time.YearDay()
@@ -273,7 +273,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 
 	if(lastUpdated.YearDay() == time.YearDay() && lastUpdated.Year() == time.Year()) {
 		query = "UPDATE book_analytics SET " +
-		"clicks[$1] = COALESCE(clicks[$1], 0) + 1," +
+		"clicks[$1] = clicks[$1] + 1," +
 		"last_updated = $2 WHERE id = $3"
 	} else {
 		query = "UPDATE book_analytics SET " +
@@ -301,25 +301,41 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string,
 	var dayInYear = currTime.YearDay()
 	var query string
 
-	var arg1 int
-	var arg2  int
-	var arg3 int
+	var firstYearStart int
+	var firstYearEnd  int
+	var secondYearEnd int
 
+	// will wrap to previous year
 	if dRange > dayInYear {
 		var prevYear = currTime.Year() - 1
+		// last day of the previous year – determines if leap year
 		var lastDay = time.Date(prevYear, time.December, 31, 0, 0, 0, 0, time.Local).YearDay()
-		arg1 = lastDay - (dRange - dayInYear) + 1
-		arg2 = lastDay
-		arg3 = dayInYear
+
+		// truncate range to 365 if user specifies 366 but last year was not leap year
+		if lastDay == 365 && dRange == 366 {
+			// ensures that today's data won't be counted twice
+			firstYearStart = lastDay - (dRange - dayInYear) + 2
+		} else {
+			firstYearStart = lastDay - (dRange - dayInYear) + 1
+		}
+
+		// slice up to 365/366 depending on whether prev year was leap year
+		firstYearEnd = lastDay
+
+		// take from the start of this year to current day
+		secondYearEnd = dayInYear
 	} else {
-		arg1 = dayInYear - dRange + 1
-		arg2 = dayInYear
-		arg3 = 0
+		// take dRange number of days up to and including today
+		firstYearStart = dayInYear - dRange + 1
+		firstYearEnd = dayInYear
+
+		// no year wraparound
+		secondYearEnd = 0
 	}
 
 	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
 	"FROM book_analytics WHERE id = $4"
-	rows, err := db.Conn.Query(ctx, query, arg1, arg2, arg3, id)
+	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
 
 	if err != nil {
 		fmt.Print(err)

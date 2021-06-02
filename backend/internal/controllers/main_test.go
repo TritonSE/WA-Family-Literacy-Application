@@ -78,8 +78,8 @@ func TestMain(m *testing.M) {
 		"is_primary_admin) VALUES "+
 		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
 
-	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
-	"('b_id', ARRAY_FILL(0, array[366]));")
+	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
+	"('b_id');")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks, last_updated) values "+
 	"('c_id', ARRAY_FILL(10, array[366]), '2020-06-01 11:18:07.978921-07');")

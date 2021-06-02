@@ -285,14 +285,14 @@ func TestUpdateBookDetailsOnInvalidLang(t *testing.T) {
 func TestUpdateAnalytics(t *testing.T) {
 	fmt.Print("\n---------------- UPDATE BOOK ANALYTIC TESTS ----------------\n")
 	var response []int
-	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 204, nil)
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 200, nil)
 
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/b_id?range=1", "",
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Equal(t, 1, response[0])
 
-	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 204, nil)
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 200, nil)
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/b_id?range=1", "",
 		http.StatusOK, &response, "test-token-primary")
 
@@ -309,7 +309,7 @@ func TestUpdateResetAnalytics(t *testing.T) {
 		http.StatusOK, &response, "test-token-primary")
 	require.Equal(t, 10, response[0])
 
-	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/c_id/inc", "", 204, nil)
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/c_id/inc", "", 200, nil)
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/c_id?range=1", "",
 		http.StatusOK, &response, "test-token-primary")
 

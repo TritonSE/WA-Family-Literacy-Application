@@ -222,14 +222,14 @@ func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	err := c.Books.UpdateBookAnalytics(req.Context(), bookID)
+	err := c.Books.IncrementBookCounter(req.Context(), bookID)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
 
-	writeResponse(rw, http.StatusNoContent, nil)
+	writeResponse(rw, http.StatusOK, nil)
 
 }
 
@@ -237,24 +237,23 @@ func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Requ
 func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request) {
 	var bookID string = chi.URLParam(req, "id")
 	var dayRange string = req.URL.Query().Get("range")
-	var dRange int
 
 	if dayRange == "" {
 		writeResponse(rw, http.StatusBadRequest, "range missing")
 		return
 	}
 
-	if numDays, err := strconv.Atoi(dayRange); err != nil {
+	numDays, err := strconv.Atoi(dayRange);
+
+	if err != nil {
 		writeResponse(rw, http.StatusBadRequest, "could not parse range")
 		return
 	} else if numDays < 1 || numDays > 366 {
 		writeResponse(rw, http.StatusBadRequest, "Range out of bounds")
 		return
-	} else {
-		dRange = numDays
 	}
 
-	bookAnalytics, err := c.Books.FetchBookAnalytics(req.Context(), bookID, dRange)
+	bookAnalytics, err := c.Books.FetchBookAnalytics(req.Context(), bookID, numDays)
 
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
