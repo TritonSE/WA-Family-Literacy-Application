@@ -8,7 +8,7 @@ class WordsAliveAPI {
   client: AxiosInstance;
 
   constructor(baseURL: string) {
-    this.client = axios.create({ baseURL: baseURL, headers: { Authorization: 'Bearer test-token-1'} });
+    this.client = axios.create({ baseURL: baseURL });
   }
 
   // makes a call to the database and returns an array of all books
