@@ -33,20 +33,15 @@ export const BookWizardPage: React.FC = () => {
         const languagesToUpload =  Array.from(uploadLanguage)
           .filter( ([, shouldUpload]) => shouldUpload)
           .map( ([language]) => language);
-        // uploadLanguage.entries().filter()
-
-        // await Promise.all( )
-        uploadLanguage.forEach(async (shouldUpload, lang) => {
-          // read/explore/learn will never be undefined
-          if (shouldUpload) await client.uploadBookDetails(uploadedBook.id, lang, 
-            readTabContent.get(lang) as TabContent, 
-            exploreTabContent.get(lang) as TabContent, 
-            learnTabContent.get(lang) as TabContent);
-        });
-        history.push("/books");
-        return;
+        Promise.all(languagesToUpload.map(lang => client.uploadBookDetails(uploadedBook.id, lang, 
+          readTabContent.get(lang) as TabContent, 
+          exploreTabContent.get(lang) as TabContent, 
+          learnTabContent.get(lang) as TabContent)));
       }
-    } catch (e) {
+      history.push("/books");
+      return;
+    }
+    catch (e) {
       alert(`Unable to Upload Book: ${e.message}`);
     }
   };
