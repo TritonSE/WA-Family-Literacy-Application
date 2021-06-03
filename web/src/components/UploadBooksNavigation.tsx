@@ -60,14 +60,17 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> =
             {pageNumber != 4 ? 
               <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => changePage(pageNumber+1)}>
                 {allowContinue ? 
-                  <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
+                  <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : 
+                  <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
               </button> : <div className={styles.navigationButtonIcon}></div>}
           </div>
         </div>
       </div>
       <div className={styles.dropdownContainer}>
         {pageNumber == 1 ? <UploadBooksDropdown onLanguageChange={changeLanguage} currentLanguage={currentLanguage} startedLanguages={startedLanguages}></UploadBooksDropdown> :
-          pageNumber != 0 ? <div className={styles.languageLabel}> {LanguageLabels[currentLanguage]} </div> : <div></div> }   
+          pageNumber == 4 ? <div> <div className = "h3">Add a new language </div><button className={styles.newLangButton} onClick = {() => changePage(1)}>New Language</button> </div> :
+            pageNumber != 0 ? <div className={styles.languageLabel}> {LanguageLabels[currentLanguage]} </div> : <div></div>}
+             
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>

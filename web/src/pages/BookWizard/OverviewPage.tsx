@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {  Language, LanguageLabels } from '../../models/Languages';
-import tstyles from '../UploadBooksPage.module.css';
+import uploadBooksStyles from '../UploadBooksPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
 import '../../App.css';
@@ -51,22 +51,22 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
       </div>
 
       {showModal && 
-        <div className={tstyles.modal}>
-          <div className={tstyles.modalContent}>
+        <div className={uploadBooksStyles.modal}>
+          <div className={uploadBooksStyles.modalContent}>
             <div>
-              <p className={tstyles.modalTitle}>Select the language of the book you would like to upload</p>
+              <p className={uploadBooksStyles.modalTitle}>Select the language of the book you would like to upload</p>
               <div className={styles.container}>
                 {modalLanguages.map( (lang, index) => (
                   <div className={index % 2 == 0 ? styles.left : styles.right} key={lang}>
-                    <label className={tstyles.checkboxContainer} htmlFor={lang}>
+                    <label className={uploadBooksStyles.checkboxContainer} htmlFor={lang}>
                       {LanguageLabels[lang]}
                       <input id={lang} onChange={()=> toggleCheck(lang)}type="checkbox" />
-                      <span className={tstyles.checkmark}></span>
+                      <span className={uploadBooksStyles.checkmark}></span>
                     </label>
                   </div>
                 ))}
-                <button className={tstyles.cancelBtn} type="button" onClick={() => setShowModal(false) }>Cancel</button>
-                <button className={tstyles.deleteBtn} type="button" onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
+                <button className={uploadBooksStyles.cancelBtn} type="button" onClick={() => setShowModal(false) }>Cancel</button>
+                <button className={uploadBooksStyles.deleteBtn} type="button" onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
               </div>
             </div> 
           </div>

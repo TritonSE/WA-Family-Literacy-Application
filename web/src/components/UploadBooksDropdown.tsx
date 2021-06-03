@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Language, LanguageLabels } from '../models/Languages';
 import editImage from '../assets/images/pencil.svg';
 import newImage from '../assets/images/plus-circle-solid.svg';
+import arrow from '../assets/images/orange-arrow.svg';
 import styles from './UploadBooksDropdown.module.css';
 
 type UploadBookDropdownProps = {
@@ -40,6 +41,11 @@ export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLangua
     <div>
       <button className={showDropDown ? styles.firstDropdownElement : styles.roundedDropdownElement} onClick = {() => setShowDropDown(!showDropDown)}> 
         {LanguageLabels[currentLanguage]}
+        <div className={styles.imageContainer}>
+          <img src={arrow} 
+            className={showDropDown ? styles.arrowUp : styles.buttonImage}>
+          </img>
+        </div>
       </button>
       {showDropDown && < div className={styles.dropdownContent}>
         {options}

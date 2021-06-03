@@ -68,53 +68,51 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
   };
 
   return(
-    <div>
-      <div className = {wizardStyles.mainDivElement}>
-        <div className={styles.pageContainer}>
-          <div>
-            <div className={styles.imageTitle}>
-          Book Cover (IMG)
-              <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-            </div>
-            <div 
-              className = {styles.dropZone}
-              onDragOver = {handleOnDragOver}
-              onDrop = {handleOnDrop}
-              onClick = { () => {
-                if (fileInput.current != null) {
-                  fileInput.current.click();
-                }}}>
+    <div className = {wizardStyles.mainDivElement}>
+      <div className={styles.pageContainer}>
+        <div>
+          <div className={styles.imageTitle}>
+        Book Cover (IMG)
+            <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
+          </div>
+          <div 
+            className = {styles.dropZone}
+            onDragOver = {handleOnDragOver}
+            onDrop = {handleOnDrop}
+            onClick = { () => {
+              if (fileInput.current != null) {
+                fileInput.current.click();
+              }}}>
 
-              <div className = {styles.dropZoneContent}>
-                {image != null ? 
-                  <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
-                <input type="file"
-                  ref = {fileInput} hidden
-                  accept="image/png, image/jpeg" 
-                  onChange = { (e) => {
-                    if(e.target != null && e.target.files != null) {
-                      handleFile(e.target.files[0]);}}}/>
-              </div>
+            <div className = {styles.dropZoneContent}>
+              {image != null ? 
+                <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
+              <input type="file"
+                ref = {fileInput} hidden
+                accept="image/png, image/jpeg" 
+                onChange = { (e) => {
+                  if(e.target != null && e.target.files != null) {
+                    handleFile(e.target.files[0]);}}}/>
             </div>
           </div>
-          <div className={styles.inputElementContainer}>
-            <div className = {styles.inputElement}>
-              <div className = {wizardStyles.inputBoxTitle}>
-              Title
-                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-              </div>
-              <div>
-                <input className = {styles.inputBox} value={title} type="text" onChange={ (e) => onTitleChange(e.target.value)}></input>
-              </div>
+        </div>
+        <div className={styles.inputElementContainer}>
+          <div className = {styles.inputElement}>
+            <div className = {wizardStyles.inputBoxTitle}>
+            Title
+              <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
             </div>
-            <div className = {styles.inputElement}>
-              <div className = {wizardStyles.inputBoxTitle}>
-              Author
-                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-              </div>
-              <div>
-                <input className = {styles.inputBox} value={author} type="text" onChange={ (e) => onAuthorChange(e.target.value)}></input>
-              </div>
+            <div>
+              <input className = {styles.inputBox} value={title} type="text" onChange={ (e) => onTitleChange(e.target.value)}></input>
+            </div>
+          </div>
+          <div className = {styles.inputElement}>
+            <div className = {wizardStyles.inputBoxTitle}>
+            Author
+              <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
+            </div>
+            <div>
+              <input className = {styles.inputBox} value={author} type="text" onChange={ (e) => onAuthorChange(e.target.value)}></input>
             </div>
           </div>
         </div>
