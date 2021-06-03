@@ -25,7 +25,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
   const [body, setBody] = useState< string >("");
   useEffect( () => {
     onContentChange({
-      video: video, 
+      video: video,
       body: body,
     });
   }, [body, video]);
@@ -43,11 +43,13 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
 
 
   // function to generate a new custom upload adapter for ckeditor
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   function CustomUploadAdapter( editor: any ): any {
     editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader: any ) => {
       return new ImageUploadAdapter( loader );
     };
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   const editorConfiguration = {
     toolbar: [ 'heading','|','bold','italic','strikethrough','bulletedList','numberedList', '|', 'blockQuote','imageUpload','insertTable','undo','redo'],
@@ -55,14 +57,15 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
   };
 
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   return (
-    <div>      
+    <div>
       <div className={wizardStyles.mainDivElement}>
         <div className = {styles.videoText}>
         Video
         </div>
-      
-        <input 
+
+        <input
           type="text"
           className={styles.inputField}
           value={video || ""}
@@ -75,7 +78,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
         <CKEditor
           editor= { Editor }
           config = { editorConfiguration }
-          data = {body} 
+          data = {body}
           onChange= { (event: any, editor: any) => {
             const data = editor.getData();
             setBody(data);
@@ -83,5 +86,6 @@ export const TabContentPage: React.FC<TabConentPageProps> = ( {onContentChange, 
       </div>
     </div>
   );
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 };
 

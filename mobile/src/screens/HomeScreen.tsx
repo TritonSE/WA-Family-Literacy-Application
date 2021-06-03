@@ -76,7 +76,7 @@ export const HomeScreen: React.FC = () => {
         {/* Starts at the top of the screen, containing the welcome videos and orange rounded background */}
         <View style={styles.heading}>
           <SafeAreaView edges={['top']}>
-            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.videos}>
+            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.videos} contentContainerStyle={styles.videoChildContainer}>
               {TOP_VIDEOS.map(video => (
                 <View key={video.url} style={styles.videoContainer}>
                   <YoutubeVideo url={video.url} width={0.8 * width} height={9/16 * 0.8 * width} />
@@ -155,14 +155,18 @@ const styles = StyleSheet.create({
     zIndex: -1, // needed to render behind the welcome videos
   },
   videos: {
-    width: '100%',
     height: '100%',
+    width: '100%',
+  },
+  videoChildContainer: {
+    // this + videoContainer.marginHorizontal must equal 0.1, to keep videos centered but allowing the next/previous video to peek around the edges of the screen
+    paddingHorizontal: 0.075 * width,
   },
   videoContainer: {
-    justifyContent: 'center',
+    marginTop: 16,
     alignItems: 'center',
-    paddingHorizontal: 16,
-    width: width,
+    width: 0.8 * width,
+    marginHorizontal: 0.025 * width,
     height: 300,
   },
   videoTitle: {

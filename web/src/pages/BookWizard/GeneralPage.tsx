@@ -51,7 +51,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     e.preventDefault();
     e.stopPropagation();
     const imageFile = e.dataTransfer.files[0];
-    if(acceptableMimeType.indexOf(imageFile.type) == -1) {
+    if(imageFile != null && acceptableMimeType.indexOf(imageFile.type) == -1) {
       alert("Please enter a jpeg or a png file");
       return;
     } 
