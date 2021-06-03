@@ -7,11 +7,13 @@ import styles from './UploadBooksDropdown.module.css';
 
 type UploadBookDropdownProps = {
   onLanguageChange: (data: Language) => void;
-  startedLanguages: Set<Language>
+  startedLanguages: Set<Language>   // languages that user has started editing
   currentLanguage: Language
 };
 
-
+/**
+ * Dropdown to select language for the upload books wizard
+ */
 export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLanguageChange, startedLanguages, currentLanguage}) => {
   const handleLanguageChange = (data: Language): void => {
     onLanguageChange(data);
@@ -20,8 +22,11 @@ export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLangua
   const languages = Object.keys(LanguageLabels) as Language[];
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
+  // all the languages except for the current language
   const notCurrentLanguageArray = languages.filter( (lang) => lang != currentLanguage);
 
+  // generates the html for the dropdown 
+  // line 25 done seperately b/c the length of the not current language array is necessary
   const options = notCurrentLanguageArray
     .map((lang, index) => (
       <button key={index}

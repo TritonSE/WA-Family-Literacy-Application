@@ -16,6 +16,7 @@ type UploadBooksNavigationProps = {
   changePage: (newPage: number) => void; //function to render a new page below the navigation component
   allowContinue: boolean //controls if user can move onto the next page
   pageStatus: Array<boolean>
+  //these are props passed down to the dropdown component
   changeLanguage: (newLanguage: Language) => void;
   currentLanguage: Language
   startedLanguages: Set<Language>

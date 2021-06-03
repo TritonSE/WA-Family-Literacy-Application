@@ -13,11 +13,6 @@ type OverviewPageProps = {
  * Overview Page for Book Wizard
  */
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages}) => {
-  // handles when upload is clicked. No need to display success, as page redirects when upload is succesful
-  const handleSubmit = (): void  => {
-    onSubmit(checked).catch(err => alert(err));
-  };
-
   const [showModal, setShowModal] = useState<boolean>(false);
   
   const [checked, setChecked] = useState<Map<Language, boolean>>
@@ -27,6 +22,14 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
     setChecked( (prevState) => new Map(prevState).set(lang, !prevState.get(lang))
     );
   };
+
+
+  const cancelModal = (): void => {
+    setShowModal(false);
+    setChecked(new Map(modalLanguages.map((lang) => [lang, false])));
+  };
+
+  const atLeastOneChecked = Array.from(checked.values()).includes(true);
 
 
   return (
@@ -65,8 +68,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
                     </label>
                   </div>
                 ))}
-                <button className={uploadBooksStyles.cancelBtn} type="button" onClick={() => setShowModal(false) }>Cancel</button>
-                <button className={uploadBooksStyles.deleteBtn} type="button" onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
+                <button className={uploadBooksStyles.cancelBtn} type="button" onClick={() => cancelModal() }>Cancel</button>
+                <button className={uploadBooksStyles.deleteBtn} disabled={!atLeastOneChecked} type="button" 
+                  onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
               </div>
             </div> 
           </div>

@@ -97,12 +97,14 @@ export const BookWizardPage: React.FC = () => {
   const exploreDone = isTabContentDone(exploreTabContent.get(language));
   const learnDone = isTabContentDone(learnTabContent.get(language));
 
+  // array of languages that are finishd and can be uploaded
   const doneLanguageArray: Language[] = ((Object.keys(LanguageLabels)) as Language[])
     .filter( (language) => 
       isTabContentDone(readTabContent.get(language)) && 
       isTabContentDone(exploreTabContent.get(language)) && 
       isTabContentDone(learnTabContent.get(language)));
 
+  // set of languages that have been started by the user
   const startedLanguages: Set<Language> = new Set(((Object.keys(LanguageLabels)) as Language[])
     .filter((language) => 
       readTabContent.get(language) != undefined || 
