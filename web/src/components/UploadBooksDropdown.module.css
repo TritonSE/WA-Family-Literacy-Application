@@ -8,7 +8,7 @@
     cursor: pointer;
 }
 
-.dropdownElement {
+.dropdownElementStyles {
     composes: body3 from '../App.css';
     background-color: white;
     border-color: black;
@@ -19,18 +19,21 @@
     cursor: pointer;
 }
 
+.dropdownElement {
+    composes: dropdownElementStyles;
+}
+
+.dropdownElement:last-of-type{
+    border-radius: 0 0 10px 10px;
+} 
+
 .firstDropdownElement {
-    composes: dropdownElement;
+    composes: dropdownElementStyles;
     border-radius: 10px 10px 0 0;
 }
 
-.lastDropdownElement {
-    composes: dropdownElement;
-    border-radius: 0 0 10px 10px;
-}
-
 .roundedDropdownElement {
-    composes: dropdownElement;
+    composes: dropdownElementStyles;
     border-radius: 10px;
 }
 

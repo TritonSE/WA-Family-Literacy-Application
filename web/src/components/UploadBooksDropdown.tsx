@@ -22,15 +22,10 @@ export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLangua
   const languages = Object.keys(LanguageLabels) as Language[];
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
-  // all the languages except for the current language
-  const notCurrentLanguageArray = languages.filter( (lang) => lang != currentLanguage);
-
-  // generates the html for the dropdown 
-  // line 25 done seperately b/c the length of the not current language array is necessary
-  const options = notCurrentLanguageArray
+  const options = languages.filter( (lang) => lang != currentLanguage)
     .map((lang, index) => (
       <button key={index}
-        className={index == notCurrentLanguageArray.length-1 ? styles.lastDropdownElement:styles.dropdownElement}
+        className={styles.dropdownElement}
         onClick = { () => handleLanguageChange(lang)}>
         {LanguageLabels[lang]}
         <div className={styles.imageContainer}>
@@ -41,6 +36,8 @@ export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLangua
         </div>
       </button>
     ));
+
+  // generates the html for the dropdown 
 
   return (
     <div>
