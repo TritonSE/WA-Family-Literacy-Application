@@ -8,6 +8,10 @@
     cursor: pointer;
 }
 
+/* 
+    styles split into "style" and "element" to be able to use 
+   compose and :last-of-type together 
+*/
 .dropdownElementStyles {
     composes: body3 from '../App.css';
     background-color: white;
