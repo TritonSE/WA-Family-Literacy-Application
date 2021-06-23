@@ -14,7 +14,7 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 	// Check if permission enum is valid
 	switch p {
 	case models.CanManageUsers, models.CanUploadBooks, models.CanEditBooks,
-		models.CanDeleteBooks:
+		models.CanDeleteBooks, models.CanAccessAnalytics:
 	default:
 		panic("Invalid permission enum")
 	}
@@ -49,6 +49,8 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 				permitted = perms.CanManageUsers
 			case models.CanDeleteBooks:
 				permitted = perms.CanManageUsers
+			case models.CanAccessAnalytics:
+				permitted = perms.CanAccessAnalytics
 			}
 
 			// Check selected permission

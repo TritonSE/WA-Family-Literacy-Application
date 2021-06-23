@@ -74,8 +74,18 @@ func TestMain(m *testing.M) {
 
 	// Seed admin database with primary admin
 	conn.Exec(ctx, "INSERT INTO admins (id, email, name, can_manage_users, "+
-		"can_upload_books, can_edit_books, can_delete_books, is_primary_admin) VALUES "+
-		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true)")
+		"can_upload_books, can_edit_books, can_delete_books, can_access_analytics, "+
+		"is_primary_admin) VALUES "+
+		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
+		"('b_id');")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks, last_updated) values "+
+		"('c_id', ARRAY_FILL(10, array[366]), '2020-06-01 11:18:07.978921-07');")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
+		"('catcher', ARRAY_FILL(1, array[366]));")
 
 	// Close the server
 	defer ts.Close()

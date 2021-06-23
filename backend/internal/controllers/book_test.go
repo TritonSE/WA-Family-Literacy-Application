@@ -279,5 +279,100 @@ func TestUpdateBookDetailsOnInvalidLang(t *testing.T) {
 
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/update/es", body,
 		http.StatusNotFound, nil, "test-token-primary")
-	fmt.Print("\n================ END BOOK TESTS ================\n\n")
+}
+
+// Test incrementing the book clicks count
+func TestUpdateAnalytics(t *testing.T) {
+	fmt.Print("\n---------------- UPDATE BOOK ANALYTIC TESTS ----------------\n")
+	var response []int
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 200, nil)
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/b_id?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Equal(t, 1, response[0])
+
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/b_id/inc", "", 200, nil)
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/b_id?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Equal(t, 2, response[0])
+
+}
+
+// Test incrementing the book clicks count for book on new day
+func TestUpdateResetAnalytics(t *testing.T) {
+	var response []int
+
+	// check current day is pre-populated with value 10
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/c_id?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+	require.Equal(t, 10, response[0])
+
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/c_id/inc", "", 200, nil)
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/c_id?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	// last_updated is initialized to a different day, so count should reset to 1
+	require.Equal(t, 1, response[0])
+}
+
+// Test incrementing the book clicks count for nonexistent book
+func TestUpdateNullAnalytics(t *testing.T) {
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/analytics/nonexistent/inc", "",
+		http.StatusNotFound, nil)
+}
+
+// Test getting analytics for nonexistent book
+func TestGetNullAnalytics(t *testing.T) {
+	fmt.Print("\n---------------- GET BOOK ANALYTIC TESTS ----------------\n")
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/nonexistent?range=1", "",
+		http.StatusNotFound, nil, "test-token-primary")
+}
+
+// Test getting analytics with invalid range query
+func TestGetAnalyticsNullRange(t *testing.T) {
+	// missing range query param
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// not a number
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher?range=a", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// invalid number – not [1, 366]
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher?range=0", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+}
+
+// Test auth for getting analytics
+func TestGetAnalyticsUnAuth(t *testing.T) {
+	var response string
+
+	// unauthorized user
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/analytics/catcher?range=1", "",
+		http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+	// missing analytics permission
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher?range=1", "",
+		http.StatusForbidden, &response, "test-token-admin")
+	require.Equal(t, "do not have permission", response)
+}
+
+// Test getting analytics array
+func TestGetAnalytics(t *testing.T) {
+	var response []int
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 1)
+	require.Equal(t, response[0], 1)
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/catcher?range=10", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 10)
+	require.Equal(t, response[0], 1)
 }

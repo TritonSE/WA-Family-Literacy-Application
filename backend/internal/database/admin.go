@@ -22,10 +22,11 @@ func (db *AdminDatabase) FetchAdminPermissions(ctx context.Context, id string) (
 	perms.CanUploadBooks = false
 	perms.CanEditBooks = false
 	perms.CanDeleteBooks = false
+	perms.CanAccessAnalytics = false
 
 	// Query for permissions
 	var query string = "SELECT can_manage_users, can_upload_books, can_edit_books, " +
-		"can_delete_books FROM admins WHERE id = $1"
+		"can_delete_books, can_access_analytics FROM admins WHERE id = $1"
 
 	rows, err := db.Conn.Query(ctx, query, id)
 	if err != nil {
@@ -40,7 +41,7 @@ func (db *AdminDatabase) FetchAdminPermissions(ctx context.Context, id string) (
 
 	// Scan and return permissions stored in db
 	err = rows.Scan(&perms.CanManageUsers, &perms.CanUploadBooks, &perms.CanEditBooks,
-		&perms.CanDeleteBooks)
+		&perms.CanDeleteBooks, &perms.CanAccessAnalytics)
 	if err != nil {
 		return perms, errors.Wrap(err, "error scanning in FetchAdminPermissions")
 	}
@@ -54,11 +55,11 @@ func (db *AdminDatabase) CreateAdmin(ctx context.Context, admin models.Admin) er
 	// Insert admin into database
 	var query string = "INSERT INTO admins (id, name, email, " +
 		"can_manage_users, can_upload_books, can_edit_books, can_delete_books, " +
-		"is_primary_admin) VALUES ($1, $2, $3, $4, $5, $6, $7, false)"
+		"can_access_analytics, is_primary_admin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false)"
 
 	_, err := db.Conn.Exec(ctx, query, admin.ID, admin.Name, admin.Email,
 		admin.CanManageUsers, admin.CanUploadBooks, admin.CanEditBooks,
-		admin.CanDeleteBooks)
+		admin.CanDeleteBooks, admin.CanAccessAnalytics)
 	if err != nil {
 		fmt.Println("FAILED TO CREATE ADMIN")
 		return errors.Wrap(err, "error in CreateAdmin")
@@ -73,7 +74,8 @@ func (db *AdminDatabase) FetchAdmins(ctx context.Context) ([]models.Admin, error
 
 	// Query for all admins
 	var query string = "SELECT id, name, email, can_manage_users, " +
-		"can_upload_books, can_edit_books, can_delete_books, is_primary_admin FROM " +
+		"can_upload_books, can_edit_books, can_delete_books, can_access_analytics, " +
+		"is_primary_admin FROM " +
 		"admins ORDER BY name"
 
 	rows, err := db.Conn.Query(ctx, query)
@@ -87,7 +89,7 @@ func (db *AdminDatabase) FetchAdmins(ctx context.Context) ([]models.Admin, error
 		var admin models.Admin
 		if err := rows.Scan(&admin.ID, &admin.Name, &admin.Email,
 			&admin.CanManageUsers, &admin.CanUploadBooks, &admin.CanEditBooks,
-			&admin.CanDeleteBooks, &admin.IsPrimaryAdmin); err != nil {
+			&admin.CanDeleteBooks, &admin.CanAccessAnalytics, &admin.IsPrimaryAdmin); err != nil {
 
 			fmt.Print(err)
 			return nil, errors.Wrap(err, "error scanning result of"+
@@ -106,7 +108,8 @@ func (db *AdminDatabase) FetchAdminByID(ctx context.Context, id string) (*models
 
 	// Query for admin account
 	var query string = "SELECT id, name, email, can_manage_users, can_upload_books, " +
-		"can_edit_books, can_delete_books, is_primary_admin FROM admins WHERE " +
+		"can_edit_books, can_delete_books, can_access_analytics, is_primary_admin " +
+		"FROM admins WHERE " +
 		"id = $1"
 	rows, err := db.Conn.Query(ctx, query, id)
 	if err != nil {
@@ -121,7 +124,7 @@ func (db *AdminDatabase) FetchAdminByID(ctx context.Context, id string) (*models
 
 	// Scan information into admin struct and return
 	err = rows.Scan(&admin.ID, &admin.Name, &admin.Email, &admin.CanManageUsers,
-		&admin.CanUploadBooks, &admin.CanEditBooks, &admin.CanDeleteBooks,
+		&admin.CanUploadBooks, &admin.CanEditBooks, &admin.CanDeleteBooks, &admin.CanAccessAnalytics,
 		&admin.IsPrimaryAdmin)
 	if err != nil {
 		return nil, errors.Wrap(err, "error scanning in FetchUserByID")
@@ -135,7 +138,7 @@ func (db *AdminDatabase) FetchAdminByEmail(ctx context.Context, email string) (*
 
 	// Query for admin account
 	var query string = "SELECT id, name, email, can_manage_users, can_upload_books, " +
-		"can_edit_books, can_delete_books, is_primary_admin FROM admins WHERE " +
+		"can_edit_books, can_delete_books, can_access_analytics, is_primary_admin FROM admins WHERE " +
 		"email = $1"
 	rows, err := db.Conn.Query(ctx, query, email)
 	if err != nil {
@@ -150,7 +153,7 @@ func (db *AdminDatabase) FetchAdminByEmail(ctx context.Context, email string) (*
 
 	// Scan information into admin struct and return
 	err = rows.Scan(&admin.ID, &admin.Name, &admin.Email, &admin.CanManageUsers,
-		&admin.CanUploadBooks, &admin.CanEditBooks, &admin.CanDeleteBooks,
+		&admin.CanUploadBooks, &admin.CanEditBooks, &admin.CanDeleteBooks, &admin.CanAccessAnalytics,
 		&admin.IsPrimaryAdmin)
 	if err != nil {
 		return nil, errors.Wrap(err, "error scanning in FetchUserByID")
@@ -166,11 +169,13 @@ func (db *AdminDatabase) UpdateAdmin(ctx context.Context, id string, admin model
 		"can_manage_users = COALESCE($2, can_manage_users), " +
 		"can_upload_books = COALESCE($3, can_upload_books), " +
 		"can_edit_books = COALESCE($4, can_edit_books), " +
-		"can_delete_books = COALESCE($5, can_delete_books) " +
-		"WHERE id = $6"
+		"can_delete_books = COALESCE($5, can_delete_books), " +
+		"can_access_analytics = COALESCE($6, can_access_analytics) " +
+		"WHERE id = $7"
 
 	cmd, err := db.Conn.Exec(ctx, query, admin.Name, admin.CanManageUsers,
-		admin.CanUploadBooks, admin.CanEditBooks, admin.CanDeleteBooks, id)
+		admin.CanUploadBooks, admin.CanEditBooks, admin.CanDeleteBooks,
+		admin.CanAccessAnalytics, id)
 	if err != nil {
 		return errors.Wrap(err, "error on UPDATE admin")
 	}

@@ -71,6 +71,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	admin.CanUploadBooks = cadmin.CanUploadBooks
 	admin.CanEditBooks = cadmin.CanEditBooks
 	admin.CanDeleteBooks = cadmin.CanDeleteBooks
+	admin.CanAccessAnalytics = cadmin.CanAccessAnalytics
 
 	// Create new admin in database
 	err = c.Admins.CreateAdmin(req.Context(), admin)

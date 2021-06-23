@@ -74,6 +74,13 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 		r.Get("/{id}", imageController.GetImage)
 	})
 
+	r.Route("/analytics", func(r chi.Router) {
+		r.Put("/{id}/inc", bookController.UpdateBookClicks)
+
+		// "localhost:8080/analytics/{id}?range=<days>
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanAccessAnalytics)).Get("/{id}", bookController.GetBookClicks)
+	})
+
 	r.With(middleware.RequireAuth(authenticator)).Post("/users", userController.CreateUser)
 	r.With(middleware.RequireAuth(authenticator)).Get("/users/{id}", userController.GetUser)
 	r.With(middleware.RequireAuth(authenticator)).Patch("/users/{id}", userController.UpdateUser)
