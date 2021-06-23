@@ -6,19 +6,27 @@ import GreenCircle from '../assets/images/green-circle.svg';
 import CheckedCircle from '../assets/images/check-circle.svg';
 import CancelImage from '../assets/images/times-solid.svg';
 import styles from './UploadBooksNavigation.module.css';
+import wizardStyles from '../pages/BookWizardPage.module.css';
 import '../App.css';
+import { UploadBooksDropdown } from './UploadBooksDropdown';
+import { Language, LanguageLabels } from '../models/Languages';
 
 type UploadBooksNavigationProps = {
   pageNumber: number
   changePage: (newPage: number) => void; //function to render a new page below the navigation component
   allowContinue: boolean //controls if user can move onto the next page
   pageStatus: Array<boolean>
+  //these are props passed down to the dropdown component
+  changeLanguage: (newLanguage: Language) => void;
+  currentLanguage: Language
+  startedLanguages: Set<Language>
 };
 
 /**
  * Renders the navigation wizard bar at the top of the book wizard
  */
-export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pageNumber, changePage, allowContinue, pageStatus}) => {
+export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = 
+({pageNumber, changePage, allowContinue, pageStatus, changeLanguage, currentLanguage, startedLanguages}) => {
   const pages = ["General", "Read", "Explore", "Learn", "Overview"];
   const pageName = pages[pageNumber];
   const history = useHistory();
@@ -36,7 +44,7 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
     )).flatMap((a) => [skewer, a]).slice(1);
   
   return (
-    <div>
+    <div className={wizardStyles.mainDivElement}>
       <div className={styles.navigationContainer}>
         <div className={styles.navigation}>
           <div>
@@ -53,10 +61,17 @@ export const UploadBooksNavigation: React.FC<UploadBooksNavigationProps> = ({pag
             {pageNumber != 4 ? 
               <button className = {styles.navigationButton} disabled = {!allowContinue} onClick={ () => changePage(pageNumber+1)}>
                 {allowContinue ? 
-                  <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
+                  <img src={NavigationButtonImage} alt='' className= {styles.navigationButtonRight}/> : 
+                  <img src={NavigationButtonImage} alt='' className={styles.navigationButtonRightDisabled}></img>}
               </button> : <div className={styles.navigationButtonIcon}></div>}
           </div>
         </div>
+      </div>
+      <div className={styles.dropdownContainer}>
+        {pageNumber == 1 ? <UploadBooksDropdown onLanguageChange={changeLanguage} currentLanguage={currentLanguage} startedLanguages={startedLanguages}></UploadBooksDropdown> :
+          pageNumber == 4 ? <div> <div className = "h3">Add a new language </div><button className={styles.newLangButton} onClick = {() => changePage(1)}>New Language</button> </div> :
+            pageNumber != 0 ? <div className={styles.languageLabel}> {LanguageLabels[currentLanguage]} </div> : <div></div>}
+             
       </div>
       <div className={styles.cancelImageContainer}>
         <button className = {styles.navigationButton} onClick = {() => history.push("/books")}>

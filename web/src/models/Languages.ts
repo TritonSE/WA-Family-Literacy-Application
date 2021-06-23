@@ -17,4 +17,5 @@ export const LanguageLabels = {
   ar: 'Arabic',
   am: 'Amharic',
 };
+
 export type Language = keyof typeof Languages;

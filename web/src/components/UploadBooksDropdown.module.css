@@ -1,0 +1,68 @@
+.dropdown {
+    composes: body3 from '../App.css';
+    width: 310px;
+    height: 64px;
+    background-color: white;
+    outline: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+/* 
+    styles split into "style" and "element" to be able to use 
+   compose and :last-of-type together 
+*/
+.dropdownElementStyles {
+    composes: body3 from '../App.css';
+    background-color: white;
+    border-color: black;
+    border-width: 1px;
+    width: 310px;
+    height: 60px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdownElement {
+    composes: dropdownElementStyles;
+}
+
+.dropdownElement:last-of-type{
+    border-radius: 0 0 10px 10px;
+} 
+
+.firstDropdownElement {
+    composes: dropdownElementStyles;
+    border-radius: 10px 10px 0 0;
+}
+
+.roundedDropdownElement {
+    composes: dropdownElementStyles;
+    border-radius: 10px;
+}
+
+.buttonImage {
+    width: 15px;
+    height: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.arrowUp {
+    composes: buttonImage;
+    transform: rotate(180deg);
+}
+
+.imageContainer {
+    float: right;
+}
+
+
+.dropdownContent {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+}
+

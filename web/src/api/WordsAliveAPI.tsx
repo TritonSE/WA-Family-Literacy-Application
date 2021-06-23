@@ -49,7 +49,7 @@ class WordsAliveAPI {
   async uploadBook(title: string, author: string, image: string): Promise<Book> {
     const requestConfig: AxiosRequestConfig  = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     };
     const res = await this.client.post('/books', {
