@@ -16,6 +16,7 @@ export default {
   splash: {
     image: './assets/images/icons/splash.png',
   },
+
   extra: {
     baseUrl: process.env.BASE_URL || 'http://localhost:8080',
     firebase: process.env.FB_CONFIG ? JSON.parse(process.env.FB_CONFIG) : {

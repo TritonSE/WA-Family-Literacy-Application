@@ -60,6 +60,18 @@
             ReferencedContainer = "container:LetsRead.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "BASE_URL"
+            value = "https://api.wordsalive.org"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "FB_CONFIG"
+            value = "{&quot;apiKey&quot;:&quot;AIzaSyBBhNjTHRJmGmuSnfqcVBp4EJTd3d2JIsI&quot;,&quot;authDomain&quot;:&quot;words-alive-a3392.firebaseapp.com&quot;,&quot;projectId&quot;:&quot;words-alive-a3392&quot;,&quot;appId&quot;:&quot;1:242541796284:web:06e49d66e778256577e9b9&quot;}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
