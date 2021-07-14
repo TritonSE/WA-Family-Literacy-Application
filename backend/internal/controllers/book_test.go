@@ -27,6 +27,13 @@ func TestGetBooks(t *testing.T) {
 
 }
 
+func TestGetBook(t *testing.T) {
+	var response models.Book
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/catcher", "", 200, &response)
+
+	require.Equal(t, "catcher in the rye", response.Title)
+}
+
 // Test for the book details function
 func TestGetBookDetails(t *testing.T) {
 	var response models.BookDetails
