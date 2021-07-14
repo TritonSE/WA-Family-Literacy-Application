@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Book, BookDetails, TabContent } from '../models/Book';
+import axios, { AxiosInstance } from 'axios';
+import { Book, BookDetails, BookUpdate, TabContent, TabContentUpdate } from '../models/Book';
 import { Language } from '../models/Languages';
 import { Admin, CreateAdmin, UpdateAdmin } from '../models/Admin';
 
@@ -8,7 +8,12 @@ class WordsAliveAPI {
   client: AxiosInstance;
 
   constructor(baseURL: string) {
-    this.client = axios.create({ baseURL: baseURL });
+    this.client = axios.create({
+      baseURL: baseURL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   // Set the Firebase token for future API calls
@@ -27,9 +32,23 @@ class WordsAliveAPI {
     return res.data;
   }
 
-  // returns an individual book by id
-  async getBook(id: string, lang: Language): Promise<BookDetails> {
-    const res = await this.client.get(`/books/${id}/${lang}`);
+  async getBook(id: string): Promise<Book> {
+    const res = await this.client.get(`/books/${id}`);
+    return res.data;
+  }
+
+  async uploadBook(title: string, author: string, image: string): Promise<Book> {
+    const res = await this.client.post('/books', {
+      title: title,
+      author: author,
+      image: image,
+    });
+
+    return res.data;
+  }
+
+  async updateBook(id: string, update: BookUpdate): Promise<Book> {
+    const res = await this.client.patch(`/books/${id}`, update);
     return res.data;
   }
 
@@ -39,47 +58,38 @@ class WordsAliveAPI {
     return res.data;
   }
 
-  // deletes a book by id and language
-  async deleteBookByLang(id: string, lang: Language): Promise<BookDetails> {
-    const res = await this.client.delete(`/books/${id}/${lang}`);
+  // returns an individual book by id
+  async getBookDetails(id: string, lang: Language): Promise<BookDetails> {
+    const res = await this.client.get(`/books/${id}/${lang}`);
     return res.data;
   }
 
   // uploads a book into the databsase, returning the book
-  async uploadBook(title: string, author: string, image: string): Promise<Book> {
-    const requestConfig: AxiosRequestConfig  = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const res = await this.client.post('/books', {
-      title:title, 
-      author:author,
-      image:image
-    }, requestConfig);
-
-    return res.data;
-  }
-
   // uploads all of the details of a book and its language by the id of the book
   async uploadBookDetails(id: string, lang: string, readTabContent: TabContent, exploreTabContent: TabContent, learnTabContent: TabContent): Promise<BookDetails> {
-    const requestConfig: AxiosRequestConfig  = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    };
-
     const res = await this.client.post(`/books/${id}`, {
-      lang: lang, 
-      read: readTabContent, 
-      explore:exploreTabContent, 
-      learn:learnTabContent
-    }, requestConfig);
+      lang: lang,
+      read: readTabContent,
+      explore: exploreTabContent,
+      learn: learnTabContent,
+    });
 
     return res.data;
-
-
   }
+
+  async updateBookDetails(id: string, lang: string, read?: TabContentUpdate, explore?: TabContentUpdate, learn?: TabContentUpdate): Promise<BookDetails> {
+    const res = await this.client.patch(`/books/${id}/${lang}`, {
+      read, explore, learn
+    });
+    return res.data;
+  }
+
+  // deletes a book by id and language
+  async deleteBookDetails(id: string, lang: Language): Promise<BookDetails> {
+    const res = await this.client.delete(`/books/${id}/${lang}`);
+    return res.data;
+  }
+
   // get all admins from the admin list
   async getAdmins(): Promise<Admin[]> {
     const res = await this.client.get('/admins');
