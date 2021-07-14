@@ -26,6 +26,23 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 	writeResponse(rw, http.StatusOK, books)
 }
 
+// GetBook fetches a single book from the database by its ID
+func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
+	id := chi.URLParam(req, "id")
+	if id == "" {
+		writeResponse(rw, http.StatusBadRequest, "invalid ID")
+		return
+	}
+
+	book, err := c.Books.FetchBook(req.Context(), id)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, book)
+}
+
 // Fetches contents of a book for reading (/book/{id}/{lang})
 func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Request) {
 

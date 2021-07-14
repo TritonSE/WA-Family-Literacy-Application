@@ -47,6 +47,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.Route("/books", func(r chi.Router) {
 		r.Get("/", bookController.GetBookList)
 
+		r.Get("/{id}", bookController.GetBook)
+
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
 
 		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanUploadBooks)).
