@@ -75,7 +75,7 @@ export const UploadBooksPage: React.FC = () => {
     } else {
       langs.map(async (lang) => {
         if (checked[lang]) {
-          await client.deleteBookByLang(deleteId, lang);
+          await client.deleteBookDetails(deleteId, lang);
           setBooks(books.map((book) => {
             if (book.id === deleteId) {
               const updatedBook: Book = book;

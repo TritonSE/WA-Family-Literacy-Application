@@ -23,6 +23,8 @@
 }
 
 .container {
+  border: none;
+  background: none;
   position: relative;
   display: inline-block;
 }
@@ -33,4 +35,9 @@
   height: 0;
   width: 0;
   padding-bottom: 100%;
+}
+
+.containerClickable {
+  composes: container;
+  cursor: pointer;
 }

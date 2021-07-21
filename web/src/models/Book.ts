@@ -9,6 +9,11 @@ export type Book = {
   created_at: string
 };
 
+export type BookUpdate = {
+  title?: string;
+  author?: string;
+};
+
 export type BookDetails = {
   id: string
   title: string
@@ -24,3 +29,6 @@ export type TabContent = {
   video?: string;
   body: string;
 };
+
+// Nullable TabContent
+export type TabContentUpdate = { [K in keyof TabContent]: TabContent[K] | undefined };

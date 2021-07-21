@@ -8,16 +8,16 @@ import styles from './GeneralPage.module.css';
 
 type GeneralPageProps = {
   onTitleChange: ( data: string ) => void
-  onAuthorChange: (data: string) => void 
+  onAuthorChange: (data: string) => void
   onImageChange: (data: File | null) => void
   // the current state of the fields. Used because fields dissapear when component re-renders
-  title: string 
+  title: string
   author: string
-  image: File | null 
+  image: File | null
 };
 
 /**
- * General page for the book wizard. Inputs for title, author, and image 
+ * General page for the book wizard. Inputs for title, author, and image
  */
 export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthorChange, onImageChange, title, author, image}) => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
@@ -40,7 +40,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     if (image != null) {
       setPreviewUrl(URL.createObjectURL(image));
     }
-  }, []);
+  }, [image]);
 
 
   const handleOnDragOver = (e: React.DragEvent): void => {
@@ -54,7 +54,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
     if(imageFile != null && acceptableMimeType.indexOf(imageFile.type) == -1) {
       alert("Please enter a jpeg or a png file");
       return;
-    } 
+    }
     else {
       handleFile(imageFile);
     }
@@ -75,7 +75,7 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
         Book Cover (IMG)
             <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
           </div>
-          <div 
+          <div
             className = {styles.dropZone}
             onDragOver = {handleOnDragOver}
             onDrop = {handleOnDrop}
@@ -85,11 +85,11 @@ export const GeneralPage: React.FC<GeneralPageProps> = ({onTitleChange, onAuthor
               }}}>
 
             <div className = {styles.dropZoneContent}>
-              {image != null ? 
+              {image != null ?
                 <img src={previewUrl} alt='image' className={styles.dropZoneImage}/> : <p className={styles.dropZoneText}>Upload Image Here</p>}
               <input type="file"
                 ref = {fileInput} hidden
-                accept="image/png, image/jpeg" 
+                accept="image/png, image/jpeg"
                 onChange = { (e) => {
                   if(e.target != null && e.target.files != null) {
                     handleFile(e.target.files[0]);}}}/>

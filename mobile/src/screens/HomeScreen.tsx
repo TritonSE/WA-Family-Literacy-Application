@@ -39,10 +39,10 @@ export const HomeScreen: React.FC = () => {
   // get books from backend
   const booksCtx = useContext(BookContext);
   useEffect(booksCtx.fetchBooks, []);
-  const newBooks = booksCtx.books
+  const { books, loading } = booksCtx;
+  const newBooks = [...books]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5);
-  const { books, loading } = booksCtx;
 
   //i18n Context and translate function "t"
   const i18nCtx = useContext(I18nContext);

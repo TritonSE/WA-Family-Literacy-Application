@@ -29,6 +29,9 @@ const App: React.FC = () => {
             <PrivateRoute exact path="/books/new">
               <BookWizardPage />
             </PrivateRoute>
+            <PrivateRoute path="/books/:id">
+              <BookWizardPage />
+            </PrivateRoute>
             <PrivateRoute path="/accounts">
               <ManageAccountsPage />
             </PrivateRoute>
