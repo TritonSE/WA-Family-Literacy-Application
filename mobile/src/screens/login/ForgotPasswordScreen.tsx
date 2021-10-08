@@ -10,9 +10,10 @@ import { Checkbox } from '../../components/Checkbox';
 import { LargeButton } from '../../components/LargeButton';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
+import { auth } from 'firebase';
 
 
-export const LoginScreen: React.FC = () => {
+export const ForgotPasswordScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);
   useErrorAlert(auth.error, auth.clearError);
@@ -21,16 +22,16 @@ export const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
+   /* 
 
-  const login = (): void => {
-    auth.login(email, password, rememberMe);
-  };
-
-
-  /*
   const resetPassword = (): void => {
-    if (email.length != 0){
+    if (email.length != 0){ 
+      // Send error message
       // auth.sendPasswordResetEmail();
+    }
+    else {
+      // auth.sendPasswordResetEmail(email);
+      setEmail("DONE!");
     }
   };
 
@@ -39,9 +40,9 @@ export const LoginScreen: React.FC = () => {
   // user enters confirmation code + new password  --> confirmPasswordReset(code, newPassword)
   const confirmPassword = (code: string, newPassword: string): void => {
 
-  }
+  }  
+
   */
-  
 
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -70,15 +71,12 @@ export const LoginScreen: React.FC = () => {
               <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.forgotPswdContainer} onPress={()=>{}}>
+            <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => {}}>
               <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
             </TouchableOpacity>
 
          </View>
 
-        <View style={styles.signInContainer}>
-          <LargeButton text={i18n.t('signIn')} onPress={login} border />
-        </View>
       </View>
 
     </ScrollView>
