@@ -143,8 +143,10 @@ export const AuthProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         const res: string[] = await auth.fetchSignInMethodsForEmail(email);
-        if (res) {
+        if (res.length != 0) {
           auth.sendPasswordResetEmail(email);
+        } else {
+          setError(new Error('User With Email Does Not Exist'));
         }
       } catch (e) {
         setError(new Error('Invalid Email Address'));
