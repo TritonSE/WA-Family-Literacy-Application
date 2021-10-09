@@ -26,13 +26,13 @@ const init: AuthState = {
   loggedIn: false,
   isGuest: false,
   error: null,
-  login: () => {},
-  logout: () => {},
-  signup: () => {},
-  continueAsGuest: () => {},
-  fetchUser: () => {},
-  clearError: () => {},
-  sendPasswordResetEmail: () => {},
+  login: () => { },
+  logout: () => { },
+  signup: () => { },
+  continueAsGuest: () => { },
+  fetchUser: () => { },
+  clearError: () => { },
+  sendPasswordResetEmail: () => { },
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -140,16 +140,19 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   // handle errors for invalid username emails
   const sendPasswordResetEmail = (email: string): void => {
-    try {
-      if (email.length == 0) {
-        setError(new Error('Invalid Email Address'));
-        return;
-      } 
-      auth.sendPasswordResetEmail(email);
-      // alsdjfklasdf
-    } catch (e) {
-      setError(e);
-    }
+    
+    // try {
+    //   auth.fetchSignInMethodsForEmail(email).then(res => console.log(res));
+    //   //auth.sendPasswordResetEmail(email);
+    // } catch (e) {
+    //   setError(e); 
+    // }
+
+    // (async () => {
+    //   const res: Promise<string[]> = await auth.fetchSignInMethodsForEmail(email);
+    //   console.log(res);
+    // });
+    
   };
 
   const logout = (): void => {

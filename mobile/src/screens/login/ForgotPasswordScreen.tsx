@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView, Modal, Alert } from 'react-native';
+import { Image, StyleSheet, TextInput, View, Pressable, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -10,6 +10,8 @@ import { LargeButton } from '../../components/LargeButton';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
 
+import { PopUpModal } from '../../components/PopUpModal';
+
 
 export const ForgotPasswordScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
@@ -18,12 +20,24 @@ export const ForgotPasswordScreen: React.FC = () => {
 
   const [email, setEmail] = useState('');  
   const [modalVisible, setModalVisible] = useState(false);
+  const [error, setError]  = useState(null);
 
   
   const resetPassword = (): void => {
-    auth.sendPasswordResetEmail(email);
-    setEmail('');
-    navigation.goBack();
+    
+    try {      
+      // sendPasswordResetEmail throws error if no email or if email is
+      // not linked to an account
+      auth.sendPasswordResetEmail(email);
+      // setModalVisible(true);
+      setEmail('');
+    }
+    catch (e) {
+      console.log(e);
+      setError(new Error("An error occured!"));
+    }
+    // setEmail('');
+    // navigation.goBack();
   };
 
   const navigation = useNavigation();
@@ -41,6 +55,8 @@ export const ForgotPasswordScreen: React.FC = () => {
       <View style={styles.logoContainer}>
         <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
       </View>
+
+      <PopUpModal text={"Valid email!"} setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
       <View style={styles.container}>
         <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
@@ -97,37 +113,4 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 20,
   },
-  textContainer: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rememberMeContainer: {
-    flexDirection: 'row',
-    width: '50%',
-    alignItems: 'flex-start',
-  },
-  rememberMeText: {
-    marginLeft: 10,
-    ...TextStyles.caption2,
-    color: Colors.white,
-    alignSelf: 'center',
-  },
-  forgotPswdContainer: {
-    flexDirection: 'row',
-    width: '50%',
-    justifyContent: 'flex-end'
-  },
-  forgotPasswordText: {
-    marginLeft: 10,
-    ...TextStyles.caption2,
-    color: Colors.white,
-    alignSelf: 'flex-end',
-    justifyContent: 'flex-end',
-  },
-  signInContainer: {
-    marginTop: 60,
-    marginBottom: 32,
-  }
 });
