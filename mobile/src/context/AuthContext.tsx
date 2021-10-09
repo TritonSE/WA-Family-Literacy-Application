@@ -138,9 +138,18 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
   */
 
+  // handle errors for invalid username emails
   const sendPasswordResetEmail = (email: string): void => {
-    // handle errors for invalid username emails
-    auth.sendPasswordResetEmail(email)
+    try {
+      if (email.length == 0) {
+        setError(new Error('Invalid Email Address'));
+        return;
+      } 
+      auth.sendPasswordResetEmail(email);
+      // alsdjfklasdf
+    } catch (e) {
+      setError(e);
+    }
   };
 
   const logout = (): void => {

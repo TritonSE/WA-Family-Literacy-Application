@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,20 +16,15 @@ export const ForgotPasswordScreen: React.FC = () => {
   const auth = useContext(AuthContext);
   useErrorAlert(auth.error, auth.clearError);
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');  
+  const [modalVisible, setModalVisible] = useState(false);
 
   
   const resetPassword = (): void => {
-    if (email.length != 0){
-      auth.sendPasswordResetEmail(email);
-    }
-    setEmail("");
+    auth.sendPasswordResetEmail(email);
+    setEmail('');
     navigation.goBack();
   };
-
-  /* 
-    auth.confirmPasswordReset but no confirmation code received email?
-  */
 
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
