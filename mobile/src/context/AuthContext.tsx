@@ -138,20 +138,18 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
   */
 
-  // handle errors for invalid username emails
   const sendPasswordResetEmail = (email: string): void => {
     
-    // try {
-    //   auth.fetchSignInMethodsForEmail(email).then(res => console.log(res));
-    //   //auth.sendPasswordResetEmail(email);
-    // } catch (e) {
-    //   setError(e); 
-    // }
-
-    // (async () => {
-    //   const res: Promise<string[]> = await auth.fetchSignInMethodsForEmail(email);
-    //   console.log(res);
-    // });
+    (async () => {
+      try {
+        const res: string[] = await auth.fetchSignInMethodsForEmail(email);
+        if (res) {
+          auth.sendPasswordResetEmail(email);
+        }
+      } catch (e) {
+        setError(new Error('Invalid Email Address'));
+      }
+    })();
     
   };
 

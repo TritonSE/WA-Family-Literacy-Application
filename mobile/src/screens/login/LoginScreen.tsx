@@ -49,16 +49,16 @@ export const LoginScreen: React.FC = () => {
 
         <View style={styles.textContainer}>
             
-            <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
-              <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
-              <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
+            <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
+            <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => navigation.navigate("ForgotPswd")}>
-              <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => navigation.navigate("ForgotPswd")}>
+            <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
+          </TouchableOpacity>
 
-         </View>
+        </View>
 
         <View style={styles.signInContainer}>
           <LargeButton text={i18n.t('signIn')} onPress={login} border />

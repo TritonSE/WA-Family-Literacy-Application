@@ -25,19 +25,22 @@ export const ForgotPasswordScreen: React.FC = () => {
   
   const resetPassword = (): void => {
     
+    /*
     try {      
       // sendPasswordResetEmail throws error if no email or if email is
       // not linked to an account
       auth.sendPasswordResetEmail(email);
-      // setModalVisible(true);
-      setEmail('');
+      setModalVisible(true);
     }
     catch (e) {
-      console.log(e);
       setError(new Error("An error occured!"));
     }
-    // setEmail('');
-    // navigation.goBack();
+    */
+
+    // show modal & go back if valid, else show error and stay on forgotpswd page if invalude
+    auth.sendPasswordResetEmail(email);
+    setEmail('');
+    navigation.goBack();
   };
 
   const navigation = useNavigation();
