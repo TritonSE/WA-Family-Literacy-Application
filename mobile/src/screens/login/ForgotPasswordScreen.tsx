@@ -6,11 +6,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../../styles/Colors';
 import { I18nContext } from '../../context/I18nContext';
 import { TextStyles } from '../../styles/TextStyles';
-import { Checkbox } from '../../components/Checkbox';
 import { LargeButton } from '../../components/LargeButton';
 import { AuthContext } from '../../context/AuthContext';
 import { useErrorAlert } from '../../hooks/useErrorAlert';
-import { auth } from 'firebase';
 
 
 export const ForgotPasswordScreen: React.FC = () => {
@@ -19,29 +17,18 @@ export const ForgotPasswordScreen: React.FC = () => {
   useErrorAlert(auth.error, auth.clearError);
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
-   /* 
-
+  
   const resetPassword = (): void => {
-    if (email.length != 0){ 
-      // Send error message
-      // auth.sendPasswordResetEmail();
+    if (email.length != 0){
+      auth.sendPasswordResetEmail(email);
     }
-    else {
-      // auth.sendPasswordResetEmail(email);
-      setEmail("DONE!");
-    }
+    setEmail("");
+    navigation.goBack();
   };
 
-  // sendPasswordResetEmail(email) --> sends email to user with confirmatino code
-
-  // user enters confirmation code + new password  --> confirmPasswordReset(code, newPassword)
-  const confirmPassword = (code: string, newPassword: string): void => {
-
-  }  
-
+  /* 
+    auth.confirmPasswordReset but no confirmation code received email?
   */
 
   const navigation = useNavigation();
@@ -62,20 +49,8 @@ export const ForgotPasswordScreen: React.FC = () => {
 
       <View style={styles.container}>
         <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
-        <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
 
-        <View style={styles.textContainer}>
-            
-            <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
-              <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
-              <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => {}}>
-              <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
-            </TouchableOpacity>
-
-         </View>
+        <LargeButton text={i18n.t('sendPasswordResetEmail')} onPress={resetPassword} border />
 
       </View>
 

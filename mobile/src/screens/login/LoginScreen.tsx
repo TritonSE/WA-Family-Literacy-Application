@@ -27,22 +27,6 @@ export const LoginScreen: React.FC = () => {
   };
 
 
-  /*
-  const resetPassword = (): void => {
-    if (email.length != 0){
-      // auth.sendPasswordResetEmail();
-    }
-  };
-
-  // sendPasswordResetEmail(email) --> sends email to user with confirmatino code
-
-  // user enters confirmation code + new password  --> confirmPasswordReset(code, newPassword)
-  const confirmPassword = (code: string, newPassword: string): void => {
-
-  }
-  */
-  
-
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -70,7 +54,7 @@ export const LoginScreen: React.FC = () => {
               <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.forgotPswdContainer} onPress={()=>{}}>
+            <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => navigation.navigate("ForgotPswd")}>
               <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
             </TouchableOpacity>
 
@@ -155,8 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     ...TextStyles.caption2,
     color: Colors.white,
-    alignSelf: 'flex-end',
-    justifyContent: 'flex-end',
+    alignSelf: 'center',
   },
   signInContainer: {
     marginTop: 60,

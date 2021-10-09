@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { WelcomeScreen } from '../screens/login/WelcomeScreen';
 import { LoginScreen } from '../screens/login/LoginScreen';
 import { SignUpScreen } from '../screens/login/SignUpScreen';
+import { ForgotPasswordScreen } from '../screens/login/ForgotPasswordScreen';
 import { View } from 'react-native';
 import { Colors } from '../styles/Colors';
 
@@ -23,6 +24,7 @@ export const AuthNavigator: React.FC = () => {
         <Stack.Screen name="Welcome" component={WelcomeScreen}/>
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="SignUp" component={SignUpScreen}/>
+        <Stack.Screen name="ForgotPswd" component={ForgotPasswordScreen}/>
       </Stack.Navigator>
     </View>
   );

@@ -18,6 +18,7 @@ type AuthState = {
   continueAsGuest: () => void,
   fetchUser: () => void,
   clearError: () => void,
+  sendPasswordResetEmail: (email: string) => void,
 };
 
 const init: AuthState = {
@@ -31,6 +32,7 @@ const init: AuthState = {
   continueAsGuest: () => {},
   fetchUser: () => {},
   clearError: () => {},
+  sendPasswordResetEmail: () => {},
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -121,6 +123,26 @@ export const AuthProvider: React.FC = ({ children }) => {
     })();
   };
 
+  /*
+  const actionCodeSettings = {
+    url: 'https://www.example.com/?email=user@example.com',
+    iOS: {
+      bundleId: 'com.example.ios'
+    },
+    android: {
+      packageName: 'com.example.android',
+      installApp: true,
+      minimumVersion: '12'
+    },
+    handleCodeInApp: true
+  };
+  */
+
+  const sendPasswordResetEmail = (email: string): void => {
+    // handle errors for invalid username emails
+    auth.sendPasswordResetEmail(email)
+  };
+
   const logout = (): void => {
     api.clearToken();
     SecureStore.deleteItemAsync('user');
@@ -149,7 +171,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   return (<AuthContext.Provider
-    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser, clearError }}
+    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser, clearError, sendPasswordResetEmail }}
   >
     {children}
   </AuthContext.Provider>);
