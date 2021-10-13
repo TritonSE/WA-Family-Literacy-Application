@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { Alert } from 'react-native';
 import Constants from 'expo-constants';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -145,6 +146,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         const res: string[] = await auth.fetchSignInMethodsForEmail(email);
         if (res.length != 0) {
           auth.sendPasswordResetEmail(email);
+          Alert.alert('Success', `Email sent to ${email}`);
         } else {
           setError(new Error('User With Email Does Not Exist'));
         }
