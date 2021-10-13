@@ -39,5 +39,6 @@
   "passwordsDontMatch": "Passwords do not match!",
   "errorOccurred": "An error occurred",
   "forgotPassword": "Forgot Password?",
-  "sendPasswordResetEmail": "Send Email to Reset Password"
+  "sendPasswordResetEmail": "Send Email to Reset Password",
+  "passwordResetEmailSent": "Password reset email sent"
 }

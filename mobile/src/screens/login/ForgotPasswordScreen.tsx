@@ -12,36 +12,27 @@ import { useErrorAlert } from '../../hooks/useErrorAlert';
 
 import { PopUpModal } from '../../components/PopUpModal';
 
-
+/**
+ * Screen to allow user to send password reset email 
+ * - Redirects to login page on success
+ */
 export const ForgotPasswordScreen: React.FC = () => {
   const i18n = useContext(I18nContext);
   const auth = useContext(AuthContext);
   useErrorAlert(auth.error, auth.clearError);
 
-  const [email, setEmail] = useState('');  
+  const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [error, setError]  = useState(null);
 
-  
+  // Show success modal if password email was sent
+  const showModalCallback = (): void => {
+    setModalVisible(true);
+  };
+
+  // Sends password reset email if email is valid, otherwise throws an error
   const resetPassword = (): void => {
-    
-    /*
-    try {      
-      // sendPasswordResetEmail throws error if no email or if email is
-      // not linked to an account
-      auth.sendPasswordResetEmail(email);
-      setModalVisible(true);
-    }
-    catch (e) {
-      setError(new Error("An error occured!"));
-    }
-    */
-
-    // show modal & go back if valid, else show error and stay on forgotpswd page if invalude
-    auth.sendPasswordResetEmail(email);
+    auth.sendPasswordResetEmail(email, showModalCallback);
     setEmail('');
-    // navigation.goBack();
-    
   };
 
 
@@ -57,17 +48,17 @@ export const ForgotPasswordScreen: React.FC = () => {
 
       <ScrollView style={styles.background} keyboardShouldPersistTaps='handled' contentContainerStyle={styles.backgroundChildren}>
         <Pressable
-          style={[{marginTop: insets.top}, styles.backButtonContainer]}
+          style={[{ marginTop: insets.top }, styles.backButtonContainer]}
           onPress={() => navigation.goBack()}
         >
-          <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
+          <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')} />
         </Pressable>
 
         <View style={styles.logoContainer}>
           <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
         </View>
 
-        <PopUpModal text={"Valid email!"} setModalVisible={setModalVisible} modalVisible={modalVisible} />
+        <PopUpModal text={i18n.t('passwordResetEmailSent')} setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
         <View style={styles.container}>
           <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />

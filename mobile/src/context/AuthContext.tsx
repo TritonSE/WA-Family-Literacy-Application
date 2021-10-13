@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { Alert } from 'react-native';
+// import { Alert } from 'react-native';
 import Constants from 'expo-constants';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -19,7 +19,7 @@ type AuthState = {
   continueAsGuest: () => void,
   fetchUser: () => void,
   clearError: () => void,
-  sendPasswordResetEmail: (email: string) => void,
+  sendPasswordResetEmail: (email: string, showModal: () => void ) => void,
 };
 
 const init: AuthState = {
@@ -139,14 +139,15 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
   */
 
-  const sendPasswordResetEmail = (email: string): void => {
+  const sendPasswordResetEmail = (email: string, showModal: () => void): void => {
     
     (async () => {
       try {
         const res: string[] = await auth.fetchSignInMethodsForEmail(email);
         if (res.length != 0) {
           auth.sendPasswordResetEmail(email);
-          Alert.alert('Success', `Email sent to ${email}`);
+          // Callback to set modal visibility to true (indicate success)
+          showModal();
         } else {
           setError(new Error('User With Email Does Not Exist'));
         }
