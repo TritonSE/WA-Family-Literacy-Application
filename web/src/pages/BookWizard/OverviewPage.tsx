@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { TabContent } from '../../models/Book';
 import {  Language, LanguageLabels } from '../../models/Languages';
 import uploadBooksStyles from '../UploadBooksPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
@@ -7,16 +8,30 @@ import '../../App.css';
 type OverviewPageProps = {
   onSubmit: (okLanguages: Map<Language, boolean>) => Promise<void>;
   modalLanguages: Array<Language>
+  title: string
+  author: string
+  image: File | null
+  readTab: TabContent
+  exploreTab: TabContent
+  learnTab: TabContent
 };
 
 /**
  * Overview Page for Book Wizard
  */
-export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages}) => {
+export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages, 
+  title, author, image, readTab, exploreTab, learnTab}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   
   const [checked, setChecked] = useState<Map<Language, boolean>>
   (new Map(modalLanguages.map( (lang) => [lang, false])));
+
+  useEffect( () => {
+    if (image != null) {
+      setPreviewUrl(URL.createObjectURL(image));
+    }
+  }, [image]);
 
   const toggleCheck = (lang: Language): void => {
     setChecked( (prevState) => new Map(prevState).set(lang, !prevState.get(lang))
@@ -34,15 +49,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
 
   return (
     <div>
-      <div className = {wizardStyles.mainDivElement}>   
-        <div className= {styles.center}>
-          <div className = {styles.comingSoon}>
-                Coming Soon!
-            <div className = "body3">
-              Mobile Preview is coming soon! Please double check all screens before submitting
-            </div>
-          </div>
-        </div>
+      <div className = {wizardStyles.mainDivElement}> 
 
         <div className = {styles.buttonContainer}>
           <button className={styles.uploadButton} onClick = { () => setShowModal(true)}>
