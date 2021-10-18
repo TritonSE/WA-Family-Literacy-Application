@@ -49,7 +49,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   const auth = useMemo(() => {
-    const app = firebase.apps[0] || firebase.initializeApp(Constants.manifest.extra.firebase);
+    const app = firebase.apps[0] || firebase.initializeApp(Constants.manifest?.extra?.firebase);
     return app.auth();
   }, []);
 
