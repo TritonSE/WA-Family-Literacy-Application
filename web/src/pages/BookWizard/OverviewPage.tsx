@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 import {  Language, LanguageLabels } from '../../models/Languages';
+import Editor from 'ckeditor5/build/ckeditor';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import requiredFieldImage from '../../assets/images/star-of-life-solid.svg';
 import uploadBooksStyles from '../UploadBooksPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
@@ -50,6 +53,90 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
   return (
     <div>
       <div className = {wizardStyles.mainDivElement}> 
+        <div className={styles.pageContainer}>
+          <div>
+            <div className={wizardStyles.inputBoxTitle}>
+          Book Cover (IMG)
+              <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
+            </div>
+            <div className = {styles.dropZone}>
+              <div className = {styles.dropZoneContent}>
+                <img src={previewUrl} alt='image' className={styles.dropZoneImage}/>
+              </div>
+            </div>
+          </div>
+          <div className={styles.inputElementContainer}>
+            <div className = {styles.inputElement}>
+              <div className = {wizardStyles.inputBoxTitle}>
+              Title
+                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
+              </div>
+              <div className= {styles.inputBox}></div>
+                <input className = {styles.inputBox} value={title} type="text"></input>
+              </div>
+            </div>
+            <div className = {styles.inputElement}>
+              <div className = {wizardStyles.inputBoxTitle}>
+              Author
+                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
+              </div>
+              <div>
+                <input className = {styles.inputBox} value={author} type="text"></input>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.videoText}>
+          Video
+        </div>
+        <input
+          type="text"
+          className={styles.inputField}
+          value={readTab.video}
+        />
+        <div className={styles.editorText}>
+          Body
+        </div>
+        <CKEditor
+          editor={Editor}
+          data={readTab.body}
+          disabled={true}
+        />
+
+        <div className={styles.videoText}>
+          Video
+        </div>
+        <input
+          type="text"
+          className={styles.inputField}
+          value={exploreTab.video}
+        />
+        <div className={styles.editorText}>
+          Body
+        </div>
+        <CKEditor
+          editor={Editor}
+          data={exploreTab.body}
+          disabled={true}
+        />
+
+        <div className={styles.videoText}>
+          Video
+        </div>
+        <input
+          type="text"
+          className={styles.inputField}
+          value={learnTab.video}
+        />
+        <div className={styles.editorText}>
+          Body
+        </div>
+        <CKEditor
+          editor={Editor}
+          data={learnTab.body}
+          disabled={true}
+        />
 
         <div className = {styles.buttonContainer}>
           <button className={styles.uploadButton} onClick = { () => setShowModal(true)}>
