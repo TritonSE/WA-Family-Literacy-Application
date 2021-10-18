@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Linking, Text, View, StyleSheet } from 'react-native';
+import { Linking, Text, View, StyleSheet, Image } from 'react-native';
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
@@ -11,6 +11,10 @@ export const ChatScreen: React.FC = () => {
   const i18nCtx = useContext(I18nContext);
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../../assets/images/logo-white.png')} style={styles.logo} />
+      </View>
+
       <Text style={TextStyles.heading1}>{i18nCtx.t('liveChat')}</Text>
       <Text style={TextStyles.heading2}>{i18nCtx.t('untilThen')}</Text>
 
@@ -23,9 +27,6 @@ export const ChatScreen: React.FC = () => {
 
       <Text style={TextStyles.heading2}>
         {i18nCtx.t('tel')}: <Text style={[styles.body, styles.link]} onPress={() => Linking.openURL('tel:+18582749673')}>+1 858.274.9673</Text>
-      </Text>
-      <Text style={TextStyles.heading2}>
-        {i18nCtx.t('fax')}: <Text style={styles.body}>+1 858.274.9673</Text>
       </Text>
       <Text style={TextStyles.heading2}>
         {i18nCtx.t('days')}: <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
@@ -44,12 +45,23 @@ export const ChatScreen: React.FC = () => {
       </Text>
 
       {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
-      <Text style={styles.body} selectable={true}>5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92081{'\n'}United States</Text>
+      <Text style={styles.body} selectable={true}>5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109{'\n'}United States</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  logo: {
+    width: 220,
+    height: 150,
+  },
   link: {
     color: Colors.link,
     textDecorationLine: 'underline',
@@ -67,6 +79,6 @@ const styles = StyleSheet.create({
   body: {
     fontSize: 18,
     fontFamily: 'Gotham-Light',
-    fontWeight: 'normal',
+    color: Colors.text,
   },
 });

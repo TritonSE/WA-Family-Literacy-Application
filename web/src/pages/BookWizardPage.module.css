@@ -1,0 +1,28 @@
+.mainDivElement {
+    margin-left: 170px;
+    margin-right: 170px;
+}
+
+.inputBoxTitle {
+    composes: h3 from '../App.css';
+    padding-bottom: 20px;
+}
+
+.inputBox {
+    composes: body3 from '../App.css';
+    height: 50px;
+    border-color: var(--orange);
+    outline: none;
+    border-style: solid;
+    border-radius: 15px;
+    padding: 16px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.requiredImage {
+    width: 12px;
+    height: 12px;
+    vertical-align: top;
+}

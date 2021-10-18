@@ -1,0 +1,111 @@
+.parent {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.loginContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.loginLogo {
+  width: 600px;
+  height: auto;
+  align-self: center;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  padding: 110px 130px;
+  border: 1px solid #888;
+  border-radius: 15px;
+  box-shadow: 1px 2px 5px var(--dark-grey);
+}
+
+.loginInput {
+  composes: body3 from '../App.css';
+  height: 70px;
+  margin: 15px 0px;
+  padding-left: 20px;
+  border: 1px solid var(--orange);
+  border-radius: 10px;
+  box-shadow: 1px 2px 5px var(--dark-grey);
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.loginBtn {
+  composes: body3 from '../App.css';
+  height: 70px;
+  margin: 15px 0px;
+  border: 1px solid var(--black);
+  border-radius: 10px;
+  background-color: var(--orange);
+  box-shadow: 1px 2px 5px var(--dark-grey);
+  cursor: pointer;
+}
+
+.rememberMeLabel {
+  composes: caption1 from '../App.css';
+}
+
+/* hide default checkbox */
+.checkbox > input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  justify-content: center;
+}
+
+/* custom checkbox with orange check */
+.checkmark {
+  display: inline-block;
+  top: 0;
+  left: 0;
+  background-color: var(--white);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: relative;
+  float: left;
+  border: 1px solid var(--black);
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+/* hover effect */
+.checkbox:hover input ~ .checkmark {
+  background-color: var(--light-grey);
+}
+
+/* checkmark – hidden when unchecked */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* show checkmark when checked */
+.checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* styles for checkmark */
+.checkbox > .checkmark:after {
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--orange);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(38deg);
+  -ms-transform: rotate(38deg);
+  transform: rotate(38deg);
+}

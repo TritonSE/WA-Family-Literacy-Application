@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
 
@@ -23,6 +24,23 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 	}
 
 	writeResponse(rw, http.StatusOK, books)
+}
+
+// GetBook fetches a single book from the database by its ID
+func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
+	id := chi.URLParam(req, "id")
+	if id == "" {
+		writeResponse(rw, http.StatusBadRequest, "invalid ID")
+		return
+	}
+
+	book, err := c.Books.FetchBook(req.Context(), id)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, book)
 }
 
 // Fetches contents of a book for reading (/book/{id}/{lang})
@@ -51,6 +69,7 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 // Creates a book and inserts it into the book database (/books)
 func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
+
 	var reqBook models.APICreateBook
 	err := json.NewDecoder(req.Body).Decode(&reqBook)
 	if err != nil {
@@ -70,6 +89,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 
 // Creates an entry in the book_contents table (/books/{id})
 func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Request) {
+
 	var reqBookDetail models.APICreateBookContents
 
 	var bookID string = chi.URLParam(req, "id")
@@ -105,6 +125,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 
 // deletes an entry from the book_contents table (/books/{id}/{lang})
 func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Request) {
+
 	var bookID string = chi.URLParam(req, "id")
 	var lang string = chi.URLParam(req, "lang")
 
@@ -128,6 +149,7 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 
 // deletes a book from the books table (/books/{id})
 func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
+
 	var bookID string = chi.URLParam(req, "id")
 
 	book, _ := c.Books.FetchBook(req.Context(), bookID)
@@ -203,5 +225,63 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	}
 
 	writeResponse(rw, http.StatusOK, resBookDetails)
+
+}
+
+// increments a book's click count for the current day (/analytics/{id}/inc)
+func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+
+	analytics, _ := c.Books.FetchBookAnalytics(req.Context(), bookID, 1)
+
+	if analytics == nil {
+		writeResponse(rw, http.StatusNotFound, "Book analytics not found for requested id")
+		return
+	}
+
+	err := c.Books.IncrementBookCounter(req.Context(), bookID)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, nil)
+
+}
+
+// fetches daily book clicks in a given range (/analytics/{id}?range=<days>)
+func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var bookID string = chi.URLParam(req, "id")
+	var dayRange string = req.URL.Query().Get("range")
+
+	if dayRange == "" {
+		writeResponse(rw, http.StatusBadRequest, "range missing")
+		return
+	}
+
+	numDays, err := strconv.Atoi(dayRange)
+
+	if err != nil {
+		writeResponse(rw, http.StatusBadRequest, "could not parse range")
+		return
+	} else if numDays < 1 || numDays > 366 {
+		writeResponse(rw, http.StatusBadRequest, "Range out of bounds")
+		return
+	}
+
+	bookAnalytics, err := c.Books.FetchBookAnalytics(req.Context(), bookID, numDays)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if bookAnalytics == nil {
+		writeResponse(rw, http.StatusNotFound, "book analytics not found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, bookAnalytics)
 
 }

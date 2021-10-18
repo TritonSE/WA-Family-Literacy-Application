@@ -1,0 +1,175 @@
+.container {
+    display: inline-block;
+    position: relative;
+    width: 300px;
+    height: 80px;
+}
+
+.adminName {
+    composes: body3 from '../App.css';
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.primaryAdminName {
+    composes: caption1 from '../App.css';
+    white-space: nowrap;
+}
+
+.adminCard {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    border: 1px solid var(--dark-grey);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 0 16px;
+    text-overflow: ellipsis;
+}
+
+.deleteIcon {
+    width: 26px;
+    height: 26px;
+    margin-left: 48px;
+    cursor: pointer;
+    position: absolute;
+    top: 35%;
+    left: 100%;
+}
+
+.lockIcon {
+    width: 31px;
+    height: 36px;
+    margin-left: 45px;
+    position: absolute;
+    top: 30%;
+    left: 100%;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    overflow: auto;
+    backdrop-filter: blur(5px) brightness(68%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContentManage {
+    padding: 60px;
+    width: 50%;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+    text-align: center;
+}
+
+.modalTitleManage {
+    composes: h2 from '../App.css';
+    text-align: center;
+    flex: 1;
+}
+
+.modalTextManage {
+    composes: body3 from '../App.css';
+    margin-bottom: 100px;
+    margin-top: 39px;
+
+}
+
+.modalContentDelete {
+    width: 40%;
+    padding: 40px 109px;
+    border: 1px solid var(--black);
+    border-radius: 12px;
+    background-color: var(--white);
+}
+
+.modalTitleDelete {
+    composes: h3 from '../App.css';
+    margin-bottom: 40px;
+}
+
+.buttonsContainer {
+    align-items: center;
+    text-align: center;
+    margin: 10px;
+    margin-top: 40px;
+}
+
+.cancelButton {
+    composes: body3 from '../App.css';
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--orange);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--white);
+    cursor: pointer;
+}
+
+.deleteConfirmButton {
+    composes: body3 from '../App.css';
+    width: 200px;
+    margin: 0px 17px;
+    padding: 10px 10px;
+    border: 0.5px solid var(--black);
+    border-radius: 7px;
+    box-shadow: 1px 2px 5px var(--dark-grey);
+    background-color: var(--orange);
+    cursor: pointer;
+}
+
+.manageContainer {
+    display: flex;
+    flex-direction: row;
+    composes: body1 from '../App.css';
+    padding-right: 20%;
+    padding-left: 20%;
+}
+
+.exitButton {
+    background-color: transparent;
+    border: 0px;
+    justify-content: flex-end;
+}
+
+.cancelIcon {
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+}
+
+.titleAndCancelBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.confirmContainer {
+    align-items: center;
+    text-align: center;
+}
+
+.spacing {
+    height: 300px;
+}
+
+.allCheckboxesContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: left;
+}
+
+.checkbox {
+  margin-bottom: 35px;
+}

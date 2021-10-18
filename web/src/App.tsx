@@ -1,33 +1,47 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Navbar } from './components/Navbar';
 import './App.css';
+import { LoginPage } from './pages/LoginPage';
 import { CommunicationPage } from './pages/CommunicationPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { UploadBooksPage } from './pages/UploadBooksPage';
-import { ManagePage } from './pages/ManagePage';
+import { BookWizardPage } from './pages/BookWizardPage';
+import { ManageAccountsPage } from './pages/ManageAccountsPage';
+import { APIProvider } from './context/APIContext';
+import { PrivateRoute, AuthProvider } from './context/AuthContext';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Navbar/>
-
-      <Switch>
-        <Route path="/communication">
-          <CommunicationPage/>
-        </Route>
-        <Route path="/analytics">
-          <AnalyticsPage/>
-        </Route>
-        <Route path="/upload">
-          <UploadBooksPage/>
-        </Route>
-        <Route path="/manage">
-          <ManagePage/>
-        </Route>
-      </Switch>
-    </Router>
+    <APIProvider>
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <PrivateRoute path="/communication">
+              <CommunicationPage />
+            </PrivateRoute>
+            <PrivateRoute path="/analytics">
+              <AnalyticsPage />
+            </PrivateRoute>
+            <PrivateRoute exact path="/books">
+              <UploadBooksPage />
+            </PrivateRoute>
+            <PrivateRoute exact path="/books/new">
+              <BookWizardPage />
+            </PrivateRoute>
+            <PrivateRoute path="/books/:id">
+              <BookWizardPage />
+            </PrivateRoute>
+            <PrivateRoute path="/accounts">
+              <ManageAccountsPage />
+            </PrivateRoute>
+            <Route path="/">
+              <LoginPage />
+            </Route>
+          </Switch>
+        </Router>
+      </AuthProvider>
+    </APIProvider>
   );
 };
 

@@ -1,49 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, View, Pressable } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
-import { I18nContext } from '../context/I18nContext';
 
 // button labels and callback function for passing key of active button to parent
-type ButtonGroupProps = { btn1: string, btn2: string, btn3: string, onBtnChange: (key: string) => void };
+type ButtonGroupProps = { buttons: { [key: string]: string }, onButtonChange: (key: string) => void };
 
 /**
  * Renders an inline group of three button tabs
  */
-export const ButtonGroup: React.FC<ButtonGroupProps> = ({ btn1, btn2, btn3, onBtnChange }) => {
-  const i18nCtx = useContext(I18nContext);
-
-  const buttons = [
-    {
-      key: btn1,
-      label: i18nCtx.t(btn1),
-    },
-    {
-      key: btn2,
-      label: i18nCtx.t(btn2),
-    },
-    {
-      key: btn3,
-      label: i18nCtx.t(btn3),
-    },
-  ];
-
-  const [activeButton, setActiveButton] = useState(buttons[0].key);
+export const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, onButtonChange }) => {
+  const [activeButton, setActiveButton] = useState(Object.keys(buttons)[0]);
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      {buttons.map(res => {
+      {Object.entries(buttons).map(([key, label]) => {
         return (
-          <View key={res.key}>
+          <View key={key}>
             <Pressable
-              style={[styles.button, activeButton === res.key ? styles.buttonActive : styles.buttonInactive]}
+              style={[styles.button, activeButton === key ? styles.buttonActive : styles.buttonInactive]}
               onPress={() => {
-                setActiveButton(res.key);
-                onBtnChange(res.key);
+                setActiveButton(key);
+                onButtonChange(key);
               }}
             >
-              <Text style={[activeButton === res.key ? styles.buttonTextActive : styles.buttonTextInactive, TextStyles.caption2]}>
-                {res.label}
+              <Text style={[TextStyles.caption2, activeButton === key ? styles.buttonTextActive : styles.buttonTextInactive]}>
+                {label}
               </Text>
             </Pressable>
           </View>
