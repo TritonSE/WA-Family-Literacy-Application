@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
+import { Image, Text, View, StyleSheet, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
@@ -16,6 +16,7 @@ import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { YoutubeVideo } from '../components/YoutubeVideo';
+import CachedImage from 'react-native-expo-cached-image';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
@@ -137,7 +138,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           }}
         />
         <View style={styles.imgContainer}>
-          <Image source={{ uri: book.image }} style={styles.image}/>
+          <CachedImage source={{ uri: book.image }} style={styles.image}/>
         </View>
         <Text style={[TextStyles.heading1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>
