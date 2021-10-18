@@ -71,8 +71,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
               Title
                 <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
               </div>
-              <div className= {styles.inputBox}></div>
-                <input className = {styles.inputBox} value={title} type="text"></input>
+              <div>
+                <input className = {styles.inputBox} value={title} type="text" disabled={true}></input>
               </div>
             </div>
             <div className = {styles.inputElement}>
@@ -81,12 +81,15 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
                 <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
               </div>
               <div>
-                <input className = {styles.inputBox} value={author} type="text"></input>
+                <input className = {styles.inputBox} value={author} type="text" disabled={true}></input>
               </div>
             </div>
           </div>
         </div>
 
+        <div className={styles.headerText}>
+          Read
+        </div>
         <div className={styles.videoText}>
           Video
         </div>
@@ -94,6 +97,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
           type="text"
           className={styles.inputField}
           value={readTab.video}
+          disabled={true}
         />
         <div className={styles.editorText}>
           Body
@@ -104,6 +108,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
           disabled={true}
         />
 
+        <div className={styles.headerText}>
+          Explore
+        </div>
         <div className={styles.videoText}>
           Video
         </div>
@@ -111,6 +118,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
           type="text"
           className={styles.inputField}
           value={exploreTab.video}
+          disabled={true}
         />
         <div className={styles.editorText}>
           Body
@@ -121,6 +129,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
           disabled={true}
         />
 
+        <div className={styles.headerText}>
+          Learn
+        </div>
         <div className={styles.videoText}>
           Video
         </div>
@@ -128,6 +139,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
           type="text"
           className={styles.inputField}
           value={learnTab.video}
+          disabled={true}
         />
         <div className={styles.editorText}>
           Body

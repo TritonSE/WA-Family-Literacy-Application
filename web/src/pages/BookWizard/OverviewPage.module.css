@@ -55,6 +55,11 @@
   border-color: var(--orange);
   outline: none;
 }
+
+.headerText {
+  composes: h2 from '../../App.css';
+  padding-top: 20px;
+}
 .videoText {
   composes: inputBoxTitle from '../BookWizardPage.module.css';
   padding-top:25px;
