@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, TextInput, View, Pressable, ScrollView, Platform, KeyboardAvoidingView } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View, Pressable, ScrollView, Platform, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -57,14 +57,15 @@ export const ForgotPasswordScreen: React.FC = () => {
         <View style={styles.logoContainer}>
           <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
         </View>
-
+        
         <PopUpModal text={i18n.t('passwordResetEmailSent')} setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
-        <View style={styles.container}>
-          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
 
+        <View style={styles.container}>  
+          <Text style={[TextStyles.heading1, styles.instructions]}>{i18n.t("forgotPassword")}</Text>
+          <Text style={[TextStyles.caption2, styles.instructions]}>{i18n.t('resetPasswordInstructions')}</Text>
+          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" keyboardType="email-address"/>
           <LargeButton text={i18n.t('sendPasswordResetEmail')} onPress={resetPassword} border />
-
         </View>
 
       </ScrollView>
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     width: '80%',
     flex: 1,
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 10,
   },
   input: {
     width: '100%',
@@ -117,4 +118,8 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 20,
   },
+  instructions: {
+    marginBottom: 10,
+    color: Colors.white,
+  }
 });

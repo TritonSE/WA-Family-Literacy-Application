@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-// import { Alert } from 'react-native';
 import Constants from 'expo-constants';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -124,21 +123,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     })();
   };
 
-  /*
-  const actionCodeSettings = {
-    url: 'https://www.example.com/?email=user@example.com',
-    iOS: {
-      bundleId: 'com.example.ios'
-    },
-    android: {
-      packageName: 'com.example.android',
-      installApp: true,
-      minimumVersion: '12'
-    },
-    handleCodeInApp: true
-  };
-  */
-
   const sendPasswordResetEmail = (email: string, showModal: () => void): void => {
     
     (async () => {
@@ -149,7 +133,7 @@ export const AuthProvider: React.FC = ({ children }) => {
           // Callback to set modal visibility to true (indicate success)
           showModal();
         } else {
-          setError(new Error('User With Email Does Not Exist'));
+          setError(new Error('Could Not Find An Account With That Email Address'));
         }
       } catch (e) {
         setError(new Error('Invalid Email Address'));
