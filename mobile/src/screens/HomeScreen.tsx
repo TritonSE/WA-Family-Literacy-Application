@@ -76,7 +76,7 @@ export const HomeScreen: React.FC = () => {
         {/* Starts at the top of the screen, containing the welcome videos and orange rounded background */}
         <View style={styles.heading}>
           <SafeAreaView edges={["top"]}>
-            <OfflineIndicator variant='white'>
+            <OfflineIndicator variant="white" style={{ height: "60%" }}>
               <ScrollView
                 horizontal
                 pagingEnabled
