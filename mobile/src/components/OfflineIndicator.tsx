@@ -29,7 +29,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   style,
 }) => {
   const { t } = useContext(I18nContext);
-  const [isConnected, setIsConnected] = React.useState(false);
+  const [isConnected, setIsConnected] = React.useState<boolean | null>(false);
 
   const checkIfConnected = (): void => {
     NetInfo.fetch().then((state) => {
