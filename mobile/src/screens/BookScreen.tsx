@@ -17,6 +17,7 @@ import { Language } from '../models/Languages';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { YoutubeVideo } from '../components/YoutubeVideo';
 import CachedImage from 'react-native-expo-cached-image';
+import { OfflineIndicator } from '../components/OfflineIndicator';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
@@ -89,8 +90,19 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   const tabContentView = tabContent && (
     <View style={styles.tabContentContainer}>
-      {tabContent.video && <YoutubeVideo url={tabContent.video} width={tabContentWidth} height={9 / 16 * tabContentWidth}/>}
-      <MarkdownView styles={markdownStyles} onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}>
+      {tabContent.video && (
+        <OfflineIndicator>
+          <YoutubeVideo
+            url={tabContent.video}
+            width={tabContentWidth}
+            height={(9 / 16) * tabContentWidth}
+          />
+        </OfflineIndicator>
+      )}
+      <MarkdownView
+        styles={markdownStyles}
+        onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}
+      >
         {tabContent.body}
       </MarkdownView>
     </View>
