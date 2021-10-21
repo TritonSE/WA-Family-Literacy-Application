@@ -18,6 +18,7 @@ type AuthState = {
   continueAsGuest: () => void,
   fetchUser: () => void,
   clearError: () => void,
+  sendPasswordResetEmail: (email: string, showModal: () => void ) => void,
 };
 
 const init: AuthState = {
@@ -25,12 +26,13 @@ const init: AuthState = {
   loggedIn: false,
   isGuest: false,
   error: null,
-  login: () => {},
-  logout: () => {},
-  signup: () => {},
-  continueAsGuest: () => {},
-  fetchUser: () => {},
-  clearError: () => {},
+  login: () => { },
+  logout: () => { },
+  signup: () => { },
+  continueAsGuest: () => { },
+  fetchUser: () => { },
+  clearError: () => { },
+  sendPasswordResetEmail: () => { },
 };
 
 export const AuthContext = createContext<AuthState>(init);
@@ -121,6 +123,25 @@ export const AuthProvider: React.FC = ({ children }) => {
     })();
   };
 
+  const sendPasswordResetEmail = (email: string, showModal: () => void): void => {
+    
+    (async () => {
+      try {
+        const res: string[] = await auth.fetchSignInMethodsForEmail(email);
+        if (res.length != 0) {
+          auth.sendPasswordResetEmail(email);
+          // Callback to set modal visibility to true (indicate success)
+          showModal();
+        } else {
+          setError(new Error('Could Not Find An Account With That Email Address'));
+        }
+      } catch (e) {
+        setError(new Error('Invalid Email Address'));
+      }
+    })();
+    
+  };
+
   const logout = (): void => {
     api.clearToken();
     SecureStore.deleteItemAsync('user');
@@ -149,7 +170,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   return (<AuthContext.Provider
-    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser, clearError }}
+    value={{ user, isGuest, loggedIn, error, login, logout, signup, continueAsGuest, fetchUser, clearError, sendPasswordResetEmail }}
   >
     {children}
   </AuthContext.Provider>);

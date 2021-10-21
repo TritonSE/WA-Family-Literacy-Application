@@ -37,5 +37,9 @@
   "confirmAge": "I am at least 13 years old",
   "volunteersViewThis": "Volunteers will be able to view this",
   "passwordsDontMatch": "Passwords do not match!",
-  "errorOccurred": "An error occurred"
+  "errorOccurred": "An error occurred",
+  "forgotPassword": "Forgot Password?",
+  "resetPasswordInstructions": "Please enter the email address you signed up with and we'll send you instructions on resetting your password",
+  "sendPasswordResetEmail": "Send",
+  "passwordResetEmailSent": "Password reset email sent"
 }
