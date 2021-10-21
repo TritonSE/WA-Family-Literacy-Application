@@ -1,19 +1,19 @@
-import React, { ReactElement, useEffect, useContext } from "react";
+import React, { ReactElement, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   Image,
   ViewStyle,
-} from "react-native";
-import { TextStyles } from "../styles/TextStyles";
-import { Colors } from "../styles/Colors";
-import NetInfo from "@react-native-community/netinfo";
-import { I18nContext } from "../context/I18nContext";
+} from 'react-native';
+import { TextStyles } from '../styles/TextStyles';
+import { Colors } from '../styles/Colors';
+import NetInfo from '@react-native-community/netinfo';
+import { I18nContext } from '../context/I18nContext';
 
 type OfflineIndicatorProps = {
   children: ReactElement;
-  variant?: "orange" | "white";
+  variant?: 'orange' | 'white';
   style?: ViewStyle;
 };
 
@@ -24,7 +24,7 @@ type OfflineIndicatorProps = {
  *  - Manually tapping on me will also initiate a connection check
  */
 export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
-  variant = "orange",
+  variant = 'orange',
   children,
   style,
 }) => {
@@ -54,10 +54,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
     >
       <Image
         style={[styles.reconnectIcon, { tintColor: Colors[variant] }]}
-        source={require("../../assets/images/redo-alt-solid.png")}
+        source={require('../../assets/images/redo-alt-solid.png')}
       />
       <Text style={[styles.reconnectText, { color: Colors[variant] }]}>
-        {t("pleaseReconnect")}
+        {t('pleaseReconnect')}
       </Text>
     </TouchableOpacity>
   );
@@ -70,15 +70,15 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   reconnectContainer: {
-    alignSelf: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    alignSelf: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 160,
     marginVertical: 60,
   },
   reconnectText: {
     ...TextStyles.heading3,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
