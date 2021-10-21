@@ -67,7 +67,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     () => {
       (async () => {
         setLoading(true);
-        const tuple = book.id + " " + language;
+        const tuple = `${book.id} ${language}`;
         await client.getBook(book.id, language).then( async (res) => {
           setBookDetails(res);
           await AsyncStorage.setItem(tuple, JSON.stringify(res));
