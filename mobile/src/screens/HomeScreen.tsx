@@ -67,7 +67,7 @@ export const HomeScreen: React.FC = () => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <ScrollView>
@@ -75,8 +75,8 @@ export const HomeScreen: React.FC = () => {
         <View style={styles.top} />
         {/* Starts at the top of the screen, containing the welcome videos and orange rounded background */}
         <View style={styles.heading}>
-          <SafeAreaView edges={["top"]}>
-            <OfflineIndicator variant="white" style={{ height: "60%" }}>
+          <SafeAreaView edges={['top']}>
+            <OfflineIndicator variant='white' style={{ height: '60%' }}>
               <ScrollView
                 horizontal
                 pagingEnabled
@@ -101,15 +101,15 @@ export const HomeScreen: React.FC = () => {
           </SafeAreaView>
 
           <Svg
-            height="100%"
-            width="100%"
-            viewBox="0 0 1 1"
+            height='100%'
+            width='100%'
+            viewBox='0 0 1 1'
             style={styles.circle}
           >
             <Circle
-              cx="0.5"
-              cy="-0.3"
-              r="0.8"
+              cx='0.5'
+              cy='-0.3'
+              r='0.8'
               stroke={Colors.orange}
               fill={Colors.orange}
             />
@@ -117,7 +117,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View style={styles.newBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{t("newBooks")}</Text>
+          <Text style={TextStyles.heading3}>{t('newBooks')}</Text>
         </View>
 
         <View>
@@ -129,7 +129,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View style={styles.allBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
+          <Text style={TextStyles.heading3}>{t('allBooks')}</Text>
         </View>
 
         <View>
