@@ -27,7 +27,7 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	adminDB := database.AdminDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
-	bookController := BookController{Books: bookDB}
+	bookController := BookController{Books: bookDB, Auth: authenticator}
 	imageController := ImgController{Image: imageDB}
 	userController := UserController{Users: userDB}
 	adminController := AdminController{Admins: adminDB, Auth: authenticator}
@@ -70,6 +70,15 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanEditBooks)).
 			Patch("/{id}/{lang}", bookController.UpdateBookDetails)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Get("/favorites", bookController.GetFavorites)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Put("/favorites/{id}", bookController.AddToFavorites)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Delete("/favorites/{id}", bookController.DeleteFromFavorites)
 	})
 
 	r.Route("/images", func(r chi.Router) {
