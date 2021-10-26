@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -26,37 +26,54 @@ export const LoginScreen: React.FC = () => {
     auth.login(email, password, rememberMe);
   };
 
+
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
   return (
-    <ScrollView style={styles.background} keyboardShouldPersistTaps='handled' contentContainerStyle={styles.backgroundChildren}>
-      <Pressable
-        style={[{marginTop: insets.top}, styles.backButtonContainer]}
-        onPress={() => navigation.goBack()}
-      >
-        <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
-      </Pressable>
 
-      <View style={styles.logoContainer}>
-        <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
-      </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1, height: '100%' }}
+    >
 
-      <View style={styles.container}>
-        <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
-        <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
+      <ScrollView style={styles.background} keyboardShouldPersistTaps='handled' contentContainerStyle={styles.backgroundChildren}>
+        <Pressable
+          style={[{marginTop: insets.top}, styles.backButtonContainer]}
+          onPress={() => navigation.goBack()}
+        >
+          <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
+        </Pressable>
 
-        <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
-          <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
-          <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
-        </TouchableOpacity>
-
-        <View style={styles.signInContainer}>
-          <LargeButton text={i18n.t('signIn')} onPress={login} border />
+        <View style={styles.logoContainer}>
+          <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
         </View>
-      </View>
 
-    </ScrollView>
+        <View style={styles.container}>
+          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
+          <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
+
+          <View style={styles.textContainer}>
+              
+            <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
+              <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
+              <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.forgotPswdContainer} onPress={() => navigation.navigate("ForgotPswd")}>
+              <Text style={styles.forgotPasswordText}>{i18n.t('forgotPassword')} </Text>
+            </TouchableOpacity>
+
+          </View>
+
+          <View style={styles.signInContainer}>
+            <LargeButton text={i18n.t('signIn')} onPress={login} border />
+          </View>
+        </View>
+
+      </ScrollView>
+
+    </KeyboardAvoidingView>
   );
 };
 
@@ -104,12 +121,29 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 20,
   },
+  textContainer: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   rememberMeContainer: {
     flexDirection: 'row',
-    width: '100%',
+    width: '50%',
     alignItems: 'flex-start',
   },
   rememberMeText: {
+    marginLeft: 10,
+    ...TextStyles.caption2,
+    color: Colors.white,
+    alignSelf: 'center',
+  },
+  forgotPswdContainer: {
+    flexDirection: 'row',
+    width: '50%',
+    justifyContent: 'flex-end'
+  },
+  forgotPasswordText: {
     marginLeft: 10,
     ...TextStyles.caption2,
     color: Colors.white,

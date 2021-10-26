@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { Image, Text, TextInput, View, StyleSheet, TouchableOpacity, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -34,45 +34,53 @@ export const SignUpScreen: React.FC = () => {
 
 
   return (
-    <ScrollView style={styles.background} keyboardShouldPersistTaps="handled" contentContainerStyle={styles.backgroundChildren}>
 
-      <Pressable
-        style={[{marginTop: insets.top}, styles.backButtonContainer]}
-        onPress={() => navigation.goBack()}
-      >
-        <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
-      </Pressable>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1, height: '100%' }}
+    >
 
-      <View style={styles.logoContainer}>
-        <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
-      </View>
+      <ScrollView style={styles.background} keyboardShouldPersistTaps="handled" contentContainerStyle={styles.backgroundChildren}>
 
-      <View style={styles.container}>
-        <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('volunteersViewThis')}*</Text>
+        <Pressable
+          style={[{marginTop: insets.top}, styles.backButtonContainer]}
+          onPress={() => navigation.goBack()}
+        >
+          <Image style={styles.backButton} source={require('../../../assets/images/Arrow_left.png')}/>
+        </Pressable>
 
-        <TextInput style={[styles.input, TextStyles.caption3]} value={name} onChangeText={setName} placeholder={i18n.t('preferredName')} placeholderTextColor={Colors.gray}/>
-        <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
-        <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
-        <TextInput style={[styles.input, TextStyles.caption3]} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={i18n.t('confirmPassword')} placeholderTextColor={Colors.gray} secureTextEntry />
-        {confirmPassword !== '' && password !== confirmPassword && <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('passwordsDontMatch')}</Text>}
-
-        <TouchableOpacity style={styles.checkboxContainer} onPress={() => setAgeConfirmed(ageConfirmed => !ageConfirmed)}>
-          <Checkbox value={ageConfirmed} onChange={setAgeConfirmed} inverted />
-          <Text style={styles.checkboxLabel}>{i18n.t('confirmAge')}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.checkboxContainer} onPress={() => setInSanDiego(inSanDiego => !inSanDiego)}>
-          <Checkbox value={inSanDiego} onChange={setInSanDiego} inverted />
-          <Text style={styles.checkboxLabel}>{i18n.t('inSanDiego')}</Text>
-        </TouchableOpacity>
-
-        <View style={styles.signUpContainer}>
-          <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} border />
+        <View style={styles.logoContainer}>
+          <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
         </View>
 
-      </View>
+        <View style={styles.container}>
+          <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('volunteersViewThis')}*</Text>
 
-    </ScrollView>
+          <TextInput style={[styles.input, TextStyles.caption3]} value={name} onChangeText={setName} placeholder={i18n.t('preferredName')} placeholderTextColor={Colors.gray}/>
+          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
+          <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
+          <TextInput style={[styles.input, TextStyles.caption3]} value={confirmPassword} onChangeText={setConfirmPassword} placeholder={i18n.t('confirmPassword')} placeholderTextColor={Colors.gray} secureTextEntry />
+          {confirmPassword !== '' && password !== confirmPassword && <Text style={[TextStyles.caption2, styles.caption]}>{i18n.t('passwordsDontMatch')}</Text>}
+
+          <TouchableOpacity style={styles.checkboxContainer} onPress={() => setAgeConfirmed(ageConfirmed => !ageConfirmed)}>
+            <Checkbox value={ageConfirmed} onChange={setAgeConfirmed} inverted />
+            <Text style={styles.checkboxLabel}>{i18n.t('confirmAge')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.checkboxContainer} onPress={() => setInSanDiego(inSanDiego => !inSanDiego)}>
+            <Checkbox value={inSanDiego} onChange={setInSanDiego} inverted />
+            <Text style={styles.checkboxLabel}>{i18n.t('inSanDiego')}</Text>
+          </TouchableOpacity>
+
+          <View style={styles.signUpContainer}>
+            <LargeButton text={i18n.t('signUp')} onPress={signup} disabled={!ok} border />
+          </View>
+
+        </View>
+
+      </ScrollView>
+
+    </KeyboardAvoidingView>
   );
 };
 
