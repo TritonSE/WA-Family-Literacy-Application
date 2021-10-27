@@ -297,9 +297,131 @@ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) err
  */
 func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
 	var analytics []int
+
+	var firstYearStart int
+	var firstYearEnd int
+	var secondYearEnd int
+
+	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
+
+	var query string = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
+		"FROM book_analytics WHERE id = $4"
+	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
+
+	if err != nil {
+		fmt.Print(err)
+		return analytics, errors.Wrap(err, "error on query for book analytics")
+	}
+
+	defer rows.Close()
+
+	if !rows.Next() {
+		return analytics, nil
+	}
+
+	err = rows.Scan(&analytics)
+
+	if err != nil {
+		return analytics, errors.Wrap(err, "error on Scan for book clicks array")
+	}
+
+	return analytics, err
+
+}
+
+/*
+ * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
+ */
+func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) (map[string][]int, error) {
+	var analytics map[string][]int
+	analytics = make(map[string][]int)
+
+	var firstYearStart int
+	var firstYearEnd int
+	var secondYearEnd int
+
+	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
+
+	var query string = "SELECT id, ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
+		"FROM book_analytics"
+	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd)
+
+	if err != nil {
+		fmt.Print(err)
+		return analytics, errors.Wrap(err, "error on query for all book analytics")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book_id string
+		var analytic []int
+		if err := rows.Scan(&book_id, &analytic); err != nil {
+			fmt.Print(err)
+			return analytics, errors.Wrap(err, "error on Scan for book id and clicks array in "+
+				"FetchAllBookAnalytics")
+		}
+
+		analytics[book_id] = analytic
+	}
+
+	return analytics, err
+
+}
+
+/*
+ * Gets 5 most popular books from the past 30 days based on click analytics
+ */
+func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
+	books := make([]models.Book, 0)
+
+	var dRange int = 30
+	var firstYearStart int
+	var firstYearEnd int
+	var secondYearEnd int
+
+	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
+
+	var query string = "SELECT books.id, title, author, image, created_at, " +
+		"array_remove(array_agg(lang), NULL) as languages " +
+		"FROM books LEFT JOIN book_contents ON books.id = " +
+		"book_contents.id WHERE books.id IN " +
+		"(SELECT id FROM book_analytics ORDER BY (SELECT SUM(analytics) " +
+		"FROM UNNEST(ARRAY_CAT(clicks[$1:$2], clicks[1:$3])) AS analytics) " +
+		"DESC FETCH FIRST 5 ROWS ONLY) GROUP BY books.id"
+	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd)
+
+	if err != nil {
+		fmt.Print(err)
+		return books, errors.Wrap(err, "error on query for most popular books")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book models.Book
+		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+			&book.CreatedAt, &book.Languages); err != nil {
+			fmt.Print(err)
+			return books, errors.Wrap(err, "error on Scan for book information in "+
+				"FetchPopularBooks")
+		}
+
+		books = append(books, book)
+	}
+
+	return books, err
+}
+
+/*
+ * Helper function that returns indices used to slice into clicks array
+ * to select the past <dRange> days of analytics
+ *
+ * ex: ARRAY_CAT(clicks[firstYearStart:firstYearEnd], clicks[1:secondYearEnd])
+ */
+func AnalyticsClicksIndices(dRange int) (int, int, int) {
 	var currTime = time.Now()
 	var dayInYear = currTime.YearDay()
-	var query string
 
 	var firstYearStart int
 	var firstYearEnd int
@@ -333,27 +455,5 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRang
 		secondYearEnd = 0
 	}
 
-	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
-		"FROM book_analytics WHERE id = $4"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
-
-	if err != nil {
-		fmt.Print(err)
-		return analytics, errors.Wrap(err, "error on query for book analytics")
-	}
-
-	defer rows.Close()
-
-	if !rows.Next() {
-		return analytics, nil
-	}
-
-	err = rows.Scan(&analytics)
-
-	if err != nil {
-		return analytics, errors.Wrap(err, "error on Scan for book clicks array")
-	}
-
-	return analytics, err
-
+	return firstYearStart, firstYearEnd, secondYearEnd
 }

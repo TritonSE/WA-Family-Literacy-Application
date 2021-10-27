@@ -285,3 +285,56 @@ func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request
 	writeResponse(rw, http.StatusOK, bookAnalytics)
 
 }
+
+// Fetches daily book clicks in a given range from today (/analytics?range=<days>)
+func (c *BookController) GetAllBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var dayRange string = req.URL.Query().Get("range")
+
+	if dayRange == "" {
+		writeResponse(rw, http.StatusBadRequest, "range missing")
+		return
+	}
+
+	numDays, err := strconv.Atoi(dayRange)
+
+	if err != nil {
+		writeResponse(rw, http.StatusBadRequest, "could not parse range")
+		return
+	} else if numDays < 1 || numDays > 366 {
+		writeResponse(rw, http.StatusBadRequest, "Range out of bounds")
+		return
+	}
+
+	bookAnalytics, err := c.Books.FetchAllBookAnalytics(req.Context(), numDays)
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if bookAnalytics == nil {
+		writeResponse(rw, http.StatusNotFound, "book analytics not found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, bookAnalytics)
+
+}
+
+// Fetches 5 most popular books from the past month for the home screen (/books/popular)
+func (c *BookController) GetPopularBooks(rw http.ResponseWriter, req *http.Request) {
+	popularBooks, err := c.Books.FetchPopularBooks(req.Context())
+
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if popularBooks == nil {
+		writeResponse(rw, http.StatusNotFound, "most popular books could not be found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, popularBooks)
+
+}
