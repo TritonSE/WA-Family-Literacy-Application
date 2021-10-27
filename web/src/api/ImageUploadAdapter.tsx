@@ -1,4 +1,4 @@
-import { ImageAPI } from '../api/ImageAPI';
+import { ImageAPI } from './ImageAPI';
 
 type UploadReturn = {
   default: string
@@ -6,18 +6,18 @@ type UploadReturn = {
 
 export class ImageUploadAdapter {
   imageAPI: ImageAPI;
-  // eslint-disable-next-line 
+  // eslint-disable-next-line
   loader: any; // CKeditor FileLoader instance
 
-  //eslint-disable-next-line 
-  constructor( loader: any) {
+  //eslint-disable-next-line
+  constructor(loader: any, token: string) {
     // CKEditor 5's FileLoader instance.
     this.loader = loader;
 
-    this.imageAPI= new ImageAPI( process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
+    this.imageAPI= new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080', token);
   }
 
-  // uploads a image inserted into ckeditor to database 
+  // uploads a image inserted into ckeditor to database
   async upload(): Promise<UploadReturn> {
     const file: File =  await this.loader.file;
     const array = await file.arrayBuffer();

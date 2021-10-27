@@ -7,8 +7,11 @@ export class ImageAPI {
   client: AxiosInstance;
   cancelToken: CancelTokenSource;
 
-  constructor(baseURL: string) {
-    this.client = axios.create({baseURL:baseURL});
+  constructor(baseURL: string, token: string) {
+    this.client = axios.create({ baseURL:baseURL, headers: {
+      Authorization: `Bearer ${token}`,
+    }});
+
     this.cancelToken = axios.CancelToken.source();
   }
 
@@ -21,10 +24,10 @@ export class ImageAPI {
       headers: headers,
       cancelToken: this.cancelToken.token
     };
-        
+
     const res = await this.client.post('/images', body, requestConfig);
     return res.data;
-  } 
+  }
 
   cancel(): void {
     this.cancelToken.cancel();
