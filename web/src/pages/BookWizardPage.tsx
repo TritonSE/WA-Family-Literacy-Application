@@ -92,7 +92,7 @@ export const BookWizardPage: React.FC = () => {
       }
     } else {
       try {
-        const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080');
+        const imageAPI = new ImageAPI(process.env.REACT_APP_BASE_URL || 'http://localhost:8080', client.token || '');
         // image will never equal null here - done to please Typescript type checking
         if (image != null) {
           const imageType = image.type;

@@ -44,11 +44,11 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 			case models.CanManageUsers:
 				permitted = perms.CanManageUsers
 			case models.CanUploadBooks:
-				permitted = perms.CanManageUsers
+				permitted = perms.CanUploadBooks
 			case models.CanEditBooks:
-				permitted = perms.CanManageUsers
+				permitted = perms.CanEditBooks
 			case models.CanDeleteBooks:
-				permitted = perms.CanManageUsers
+				permitted = perms.CanDeleteBooks
 			case models.CanAccessAnalytics:
 				permitted = perms.CanAccessAnalytics
 			}
