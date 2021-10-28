@@ -14,6 +14,7 @@ import { I18nContext } from '../context/I18nContext';
 import { Language } from '../models/Languages';
 import { Book } from '../models/Book';
 import { YoutubeVideo } from '../components/YoutubeVideo';
+import { OfflineIndicator } from '../components/OfflineIndicator';
 
 // how many books to display per page (in the Paginated Booklist)
 const BOOKS_PER_PAGE = 9;
@@ -65,28 +66,53 @@ export const HomeScreen: React.FC = () => {
   };
 
   return (
-
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <ScrollView>
         {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
-        <View style={styles.top}/>
+        <View style={styles.top} />
         {/* Starts at the top of the screen, containing the welcome videos and orange rounded background */}
         <View style={styles.heading}>
           <SafeAreaView edges={['top']}>
-            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={styles.videos} contentContainerStyle={styles.videoChildContainer}>
-              {TOP_VIDEOS.map(video => (
-                <View key={video.url} style={styles.videoContainer}>
-                  <YoutubeVideo url={video.url} width={0.8 * width} height={9/16 * 0.8 * width} />
-                  <Text style={[TextStyles.heading2, styles.videoTitle]}>{video.title}</Text>
-                </View>
-              ))}
-            </ScrollView>
+            <OfflineIndicator variant='white' style={{ height: '60%' }}>
+              <ScrollView
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                style={styles.videos}
+                contentContainerStyle={styles.videoChildContainer}
+              >
+                {TOP_VIDEOS.map((video) => (
+                  <View key={video.url} style={styles.videoContainer}>
+                    <YoutubeVideo
+                      url={video.url}
+                      width={0.8 * width}
+                      height={(9 / 16) * 0.8 * width}
+                    />
+                    <Text style={[TextStyles.heading2, styles.videoTitle]}>
+                      {video.title}
+                    </Text>
+                  </View>
+                ))}
+              </ScrollView>
+            </OfflineIndicator>
           </SafeAreaView>
-          <Svg height="100%" width="100%" viewBox="0 0 1 1" style={styles.circle}>
-            <Circle cx="0.5" cy="-0.3" r="0.8" stroke={Colors.orange} fill={Colors.orange}/>
+
+          <Svg
+            height='100%'
+            width='100%'
+            viewBox='0 0 1 1'
+            style={styles.circle}
+          >
+            <Circle
+              cx='0.5'
+              cy='-0.3'
+              r='0.8'
+              stroke={Colors.orange}
+              fill={Colors.orange}
+            />
           </Svg>
         </View>
 
@@ -95,28 +121,45 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View>
-          {booksCtx.loading ? <LoadingCircle/> : <HorizontalBookList books={newBooks}/>}
+          {booksCtx.loading ? (
+            <LoadingCircle />
+          ) : (
+            <HorizontalBookList books={newBooks} />
+          )}
         </View>
 
         <View style={styles.allBooksTextPadding}>
-          <Text style={TextStyles.heading3}>{t("allBooks")}</Text>
+          <Text style={TextStyles.heading3}>{t('allBooks')}</Text>
         </View>
 
         <View>
-          <BookFilter onFilter={onFilter}/>
+          <BookFilter onFilter={onFilter} />
 
           <View style={styles.bookDisplay}>
+            {loading ? (
+              <LoadingCircle />
+            ) : (
+              <PaginatedBookList
+                books={filteredBooks}
+                booksPerPage={BOOKS_PER_PAGE}
+              />
+            )}
 
-            {loading ? <LoadingCircle/> : <PaginatedBookList books={filteredBooks} booksPerPage={BOOKS_PER_PAGE}/>}
-
-            <View style={loading ? styles.loading : filteredBooks.length === 0 ? styles.loading : null}>
-              {!loading && filteredBooks.length === 0 ? <Text style={styles.noResult}>No results</Text> : null}
+            <View
+              style={
+                loading
+                  ? styles.loading
+                  : filteredBooks.length === 0
+                    ? styles.loading
+                    : null
+              }
+            >
+              {!loading && filteredBooks.length === 0 ? (
+                <Text style={styles.noResult}>No results</Text>
+              ) : null}
             </View>
-
           </View>
-
         </View>
-
       </ScrollView>
     </KeyboardAvoidingView>
   );
