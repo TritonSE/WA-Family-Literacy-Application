@@ -13,62 +13,6 @@
     float: right;
 }
 
-.dropZone {
-  height: 450px;
-  width: 450px;
-  float: left;
-  background-color: var(--orange);
-  cursor: pointer;
-  border: 2px solid black;
-  margin-bottom: 25px;
-}
-.dropZone {
-  margin: auto;
-}
-
-.dropZoneContent{
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dropZoneImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pageContainer {
-  padding-top:25px;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.inputField {
-  composes: inputBox from '../BookWizardPage.module.css';
-  width: 600px;
-}
-
-.inputField:focus {
-  border-color: var(--orange);
-  outline: none;
-}
-
-.headerText {
-  composes: h2 from '../../App.css';
-  padding-top: 20px;
-}
-.videoText {
-  composes: inputBoxTitle from '../BookWizardPage.module.css';
-  padding-top:25px;
-}
-.editorText {
-  composes: inputBoxTitle from '../BookWizardPage.module.css';
-  padding-top:40px;
-}
-
 .uploadButton {
     height: 78px;
     width: 366px;
@@ -183,17 +127,31 @@
 .buttonContainer {
   text-align: center;
 }
-  
-.inputElementContainer {
-  float: left;
-  margin-left: 80px;
+
+.pageContainer {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
-.inputBox {
-   composes: inputBox from '../BookWizardPage.module.css';
-   width: 500px;
+.tabContainer {
+  width: 300px;
+  height: 500px;
+  overflow-y: scroll;
+  border: 1px solid var(--dark-grey);
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
-.inputElement {
-   margin-top: 30px;
+.imageContainer {
+  width: 250px;
+  height: 250px;
+  box-shadow: ;
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

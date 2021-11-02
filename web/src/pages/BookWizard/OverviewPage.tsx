@@ -54,101 +54,18 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
     <div>
       <div className = {wizardStyles.mainDivElement}> 
         <div className={styles.pageContainer}>
-          <div>
-            <div className={wizardStyles.inputBoxTitle}>
-          Book Cover (IMG)
-              <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-            </div>
-            <div className = {styles.dropZone}>
-              <div className = {styles.dropZoneContent}>
-                <img src={previewUrl} alt='image' className={styles.dropZoneImage}/>
-              </div>
+          <div className={styles.tabContainer}>
+            <div className={styles.imageContainer}>
+              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
             </div>
           </div>
-          <div className={styles.inputElementContainer}>
-            <div className = {styles.inputElement}>
-              <div className = {wizardStyles.inputBoxTitle}>
-              Title
-                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-              </div>
-              <div>
-                <input className = {styles.inputBox} value={title} type="text" disabled={true}></input>
-              </div>
-            </div>
-            <div className = {styles.inputElement}>
-              <div className = {wizardStyles.inputBoxTitle}>
-              Author
-                <img src={requiredFieldImage} alt='' className={wizardStyles.requiredImage}/>
-              </div>
-              <div>
-                <input className = {styles.inputBox} value={author} type="text" disabled={true}></input>
-              </div>
-            </div>
+          <div className={styles.tabContainer}>
+            
+          </div>
+          <div className={styles.tabContainer}>
+            
           </div>
         </div>
-
-        <div className={styles.headerText}>
-          Read
-        </div>
-        <div className={styles.videoText}>
-          Video
-        </div>
-        <input
-          type="text"
-          className={styles.inputField}
-          value={readTab.video}
-          disabled={true}
-        />
-        <div className={styles.editorText}>
-          Body
-        </div>
-        <CKEditor
-          editor={Editor}
-          data={readTab.body}
-          disabled={true}
-        />
-
-        <div className={styles.headerText}>
-          Explore
-        </div>
-        <div className={styles.videoText}>
-          Video
-        </div>
-        <input
-          type="text"
-          className={styles.inputField}
-          value={exploreTab.video}
-          disabled={true}
-        />
-        <div className={styles.editorText}>
-          Body
-        </div>
-        <CKEditor
-          editor={Editor}
-          data={exploreTab.body}
-          disabled={true}
-        />
-
-        <div className={styles.headerText}>
-          Learn
-        </div>
-        <div className={styles.videoText}>
-          Video
-        </div>
-        <input
-          type="text"
-          className={styles.inputField}
-          value={learnTab.video}
-          disabled={true}
-        />
-        <div className={styles.editorText}>
-          Body
-        </div>
-        <CKEditor
-          editor={Editor}
-          data={learnTab.body}
-          disabled={true}
-        />
 
         <div className = {styles.buttonContainer}>
           <button className={styles.uploadButton} onClick = { () => setShowModal(true)}>
