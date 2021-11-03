@@ -332,9 +332,8 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRang
 /*
  * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
  */
-func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) (map[string][]int, error) {
-	var analytics map[string][]int
-	analytics = make(map[string][]int)
+func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) ([]models.Analytic, error) {
+	analytics := make([]models.Analytic, 0)
 
 	var firstYearStart int
 	var firstYearEnd int
@@ -354,15 +353,14 @@ func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) (
 	defer rows.Close()
 
 	for rows.Next() {
-		var book_id string
-		var analytic []int
-		if err := rows.Scan(&book_id, &analytic); err != nil {
+		var analytic models.Analytic
+		if err := rows.Scan(&analytic.ID, &analytic.Clicks); err != nil {
 			fmt.Print(err)
 			return analytics, errors.Wrap(err, "error on Scan for book id and clicks array in "+
 				"FetchAllBookAnalytics")
 		}
 
-		analytics[book_id] = analytic
+		analytics = append(analytics, analytic)
 	}
 
 	return analytics, err
@@ -381,14 +379,14 @@ func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, e
 	var secondYearEnd int
 
 	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
-
 	var query string = "SELECT books.id, title, author, image, created_at, " +
 		"array_remove(array_agg(lang), NULL) as languages " +
 		"FROM books LEFT JOIN book_contents ON books.id = " +
-		"book_contents.id WHERE books.id IN " +
-		"(SELECT id FROM book_analytics ORDER BY (SELECT SUM(analytics) " +
+		"book_contents.id LEFT JOIN book_analytics ON books.id = book_analytics.id " +
+		"GROUP BY books.id, book_analytics.id " +
+		"ORDER BY (SELECT SUM(analytics) " +
 		"FROM UNNEST(ARRAY_CAT(clicks[$1:$2], clicks[1:$3])) AS analytics) " +
-		"DESC FETCH FIRST 5 ROWS ONLY) GROUP BY books.id"
+		"DESC FETCH FIRST 5 ROWS ONLY"
 	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd)
 
 	if err != nil {
