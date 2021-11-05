@@ -20,10 +20,10 @@ export const Navbar: React.FC = () => {
         <li className={styles.nav_element_left}>
           <img className={styles.nav_logo} src="./img/logo.png" alt="Logo" />
         </li>
-        {/* Chat and Analytics tabs - uncomment when ready */}
-        {/*<li className={styles.nav_element_left}>*/}
-        {/*  <NavLink className={styles.nav_link} activeClassName={styles.active} to="/communication">Communication</NavLink>*/}
-        {/*</li>*/}
+        <li className={styles.nav_element_left}>
+          <NavLink className={styles.nav_link} activeClassName={styles.active} to="/communication">Communication</NavLink>
+        </li>
+        {/* Analytics tabs - uncomment when ready */}
         {/*<li className={styles.nav_element_left}>*/}
         {/*  <NavLink className={styles.nav_link} activeClassName={styles.active} to="/analytics">Analytics</NavLink>*/}
         {/*</li>*/}
