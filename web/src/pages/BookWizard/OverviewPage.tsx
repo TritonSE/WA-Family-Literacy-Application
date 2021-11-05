@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TabContent } from '../../models/Book';
 import {  Language, LanguageLabels } from '../../models/Languages';
-import Editor from 'ckeditor5/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import requiredFieldImage from '../../assets/images/star-of-life-solid.svg';
 import uploadBooksStyles from '../UploadBooksPage.module.css';
 import wizardStyles from '../BookWizardPage.module.css';
 import styles from './OverviewPage.module.css';
