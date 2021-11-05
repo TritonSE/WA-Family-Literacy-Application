@@ -58,12 +58,84 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             <div className={styles.imageContainer}>
               <img src={previewUrl} alt='image' className={styles.coverImage}/>            
             </div>
+            <div className={styles.bookTitle}>{title}</div>
+            <div className={styles.bookAuthor}>By {author}</div>
+
+            <div className={styles.buttonGroup}>
+              <div className={styles.tabButtonActive}>
+                <div className={styles.buttonActive}>Read</div>
+              </div>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Explore</div>
+              </div>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Learn</div>
+              </div>
+            </div>
+
+            <div className={styles.videoContainer}>
+              <iframe className={styles.video} src={readTab.video}></iframe>
+            </div>
+
+            <div className={styles.markdownText}>
+              {readTab.body}
+            </div>
           </div>
+
           <div className={styles.tabContainer}>
-            
+            <div className={styles.imageContainer}>
+              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
+            </div>
+            <div className={styles.bookTitle}>{title}</div>
+            <div className={styles.bookAuthor}>By {author}</div>
+
+            <div className={styles.buttonGroup}>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Read</div>
+              </div>
+              <div className={styles.tabButtonActive}>
+                <div className={styles.buttonActive}>Explore</div>
+              </div>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Learn</div>
+              </div>
+            </div>
+
+            <div className={styles.videoContainer}>
+              <iframe className={styles.video} src={exploreTab.video}></iframe>
+            </div>
+
+            <div className={styles.markdownText}>
+              {exploreTab.body}
+            </div>
           </div>
+
           <div className={styles.tabContainer}>
-            
+            <div className={styles.imageContainer}>
+              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
+            </div>
+            <div className={styles.bookTitle}>{title}</div>
+            <div className={styles.bookAuthor}>By {author}</div>
+
+            <div className={styles.buttonGroup}>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Read</div>
+              </div>
+              <div className={styles.tabButtonInactive}>
+                <div className={styles.buttonInactive}>Explore</div>
+              </div>
+              <div className={styles.tabButtonActive}>
+                <div className={styles.buttonActive}>Learn</div>
+              </div>
+            </div>
+
+            <div className={styles.videoContainer}>
+              <iframe className={styles.video} src={learnTab.video}></iframe>
+            </div>
+
+            <div className={styles.markdownText}>
+              {learnTab.body}
+            </div>
           </div>
         </div>
 

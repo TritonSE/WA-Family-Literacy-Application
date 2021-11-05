@@ -136,7 +136,7 @@
 }
 
 .tabContainer {
-  width: 300px;
+  width: 30%;
   height: 500px;
   overflow-y: scroll;
   border: 1px solid var(--dark-grey);
@@ -145,13 +145,97 @@
 }
 
 .imageContainer {
-  width: 250px;
-  height: 250px;
-  box-shadow: ;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  box-shadow: -1px -1px 16px 4px var(--light-grey);
 }
 
 .coverImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.bookTitle {
+  text-align: center;
+  font-family: 'GothamRounded - Bold';
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.bookAuthor {
+  text-align: center;
+  font-family: 'GothamRounded - Light';
+  font-size: 12px;
+  margin-bottom: 25px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-evenly;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.tabButtonActive {
+  width: 50px;
+  height: 16px;
+  background-color: var(--orange);
+  border-radius: 5px;
+  border-style: solid;
+  border-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding-top: 2px;
+  box-shadow: 2px 2px 8px var(--light-grey);
+}
+
+.tabButtonInactive {
+  width: 50px;
+  height: 16px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding-top: 2px;
+  box-shadow: 2px 2px 8px var(--light-grey);
+}
+
+.buttonActive {
+  text-align: center;
+  font-size: 11px;
+  font-family: 'GothamRounded - Bold';
+  color: var(--white);
+}
+
+.buttonInactive {
+  text-align: center;
+  font-size: 11px;
+  font-family: 'GothamRounded - Bold';
+  color: var(--orange);
+}
+
+.videoContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.markdownText {
+  font-size: 9px;
+  font-family: 'GothamRounded - Light';
+  margin-left: 10px;
+  margin-right: 10px;
+  overflow-wrap: break-word;
 }
