@@ -190,7 +190,7 @@
   border-style: solid;
   border-color: var(--orange);
   border: 1px solid var(--orange);
-  padding-top: 2px;
+  padding-top: 3px;
   box-shadow: 2px 2px 8px var(--light-grey);
 }
 
@@ -201,7 +201,7 @@
   border-style: solid;
   border-color: var(--orange);
   border: 1px solid var(--orange);
-  padding-top: 2px;
+  padding-top: 3px;
   box-shadow: 2px 2px 8px var(--light-grey);
 }
 
