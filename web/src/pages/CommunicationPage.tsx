@@ -14,12 +14,12 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
   const [messageText, setMessageText] = useState<string>("");
   const auth = useContext(AuthContext);
 
+  const onMessagesChange = (changedMessages: Message[]): void => {
+    setMessages((oldMessages) => [...oldMessages, ...changedMessages]);
+  };
+
   useEffect(() => {
-    const onMessagesChange = (messages: Message[]): void => {
-      setMessages(messages);
-    };
-    const unsubscribe = chatAPI.listenForNewMessages(roomId, onMessagesChange);
-    return unsubscribe;
+    return chatAPI.listenForNewMessages(roomId, onMessagesChange);
   }, [roomId]);
 
   const sendMessage = (): void => {
@@ -50,16 +50,16 @@ export const CommunicationPage: React.FC = () => {
   const [currentRoomId, setCurrentRoomId] = useState<string | undefined>();
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
-  const onRoomsChange = (rooms: ChatRoom[]): void => {
-    setChatRooms(rooms);
-    console.log(currentRoomId);
-    if (currentRoomId === undefined) {
-      setCurrentRoomId(rooms[0].id);
-    }
+  const onNewRooms = (newRooms: ChatRoom[]): void => {
+    setChatRooms(oldRooms => [...oldRooms, ...newRooms]);
   };
 
+  useEffect(()=>{
+    if (!currentRoomId && chatRooms.length > 0) setCurrentRoomId(chatRooms[0].id);
+  }, [chatRooms]);
+
   useEffect(() => {
-    chatAPI.listenForNewRooms(onRoomsChange);
+    return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
 
   if (currentRoomId)

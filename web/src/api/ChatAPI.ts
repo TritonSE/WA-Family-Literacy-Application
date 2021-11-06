@@ -18,28 +18,30 @@ class ChatAPI {
     this.chatRoomsCollection = db.collection('chatRooms');
   }
 
-  listenForNewRooms(callback: (rooms: ChatRoom[]) => void): void {
-    this.chatRoomsCollection
+  listenForNewRooms(callback: (newRooms: ChatRoom[]) => void): () => void {
+    const unsubscribe = this.chatRoomsCollection
       .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
         const rooms: ChatRoom[] = [];
-        querySnapshot.forEach((doc: firebase.firestore.DocumentData) => {
-          rooms.push({ id: doc.id, ...doc.data() });
+        querySnapshot.docChanges().forEach(({type, doc}: firebase.firestore.DocumentChange) => {
+          if (type == 'added')
+            rooms.push({ ...doc.data() as ChatRoom, id: doc.id });
         });
         callback(rooms);
       });
+    return unsubscribe;
   }
 
   // Listen for new messages in a chat room (calling this will initially return the current messages)
-  listenForNewMessages(roomId: string, callback: (messages: Message[]) => void): () => void {
+  listenForNewMessages(roomId: string, callback: (changedMessages: Message[]) => void): () => void {
     const room = this.chatRoomsCollection.doc(roomId);
     const unsubscribe = room
-      .collection("messages")
-      .orderBy("sentAt")
+      .collection('messages')
+      .orderBy('sentAt')
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
         const messages: Message[] = [];
-        querySnapshot.forEach((doc: firebase.firestore.DocumentData) => {
-          messages.push({ id: doc.id, ...doc.data() });
+        querySnapshot.docChanges().forEach(({ doc }: firebase.firestore.DocumentChange) => {
+          messages.push({ ...doc.data() as Message, id: doc.id });
         });
         callback(messages);
       });

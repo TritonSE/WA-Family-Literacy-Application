@@ -26,42 +26,56 @@ export const ChatScreen: React.FC = () => {
   const [roomId, setRoomId] = useState<string | undefined>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>('');
+  const [chatRoomData, setChatRoomData] = useState<ChatRoom>();
   const i18nCtx = useContext(I18nContext);
 
-  const onMessagesChange = (messages: Message[]): void => {
-    setMessages(messages);
+  const onMessagesChange = (changedMessages: Message[]): void => {
+    setMessages((oldMessages) => [...oldMessages, ...changedMessages]);
   };
 
-  const onRoomDataChange = ({ id, resolved, rating }: ChatRoom): void => {
-    if (resolved && rating) {
-      AsyncStorage.removeItem('chatRoomId');
-      setMessages([]);
-      setRoomId(undefined);
-    } else {
-      chatAPI.listenForNewMessages(id, onMessagesChange);
-    }
+  const onRoomDataChange = (room: ChatRoom): void => {
+    setChatRoomData(room);
   };
 
   // Use roomId from previous session if exist
   useEffect(() => {
-    AsyncStorage.getItem('chatRoomId').then((id) => setRoomId(id));
+    AsyncStorage.getItem('chatRoomId').then((id) => {
+      console.log('returrietd', id);
+      setRoomId(id);
+    });
   }, []);
 
-  // Keep using room unless it has been resolved and rated
+  // Subscribe to chat room data changes
   useEffect(() => {
     if (roomId) {
-      console.log(roomId);
       return chatAPI.listenForRoomDetails(roomId, onRoomDataChange);
     }
   }, [roomId]);
 
+  // Chat room data changed (ie. chat was resolved / rated)
+  useEffect(() => {
+    if (chatRoomData) {
+      const { id, resolved, rating } = chatRoomData;
+      if (resolved && rating) {
+        // Reset chat
+        AsyncStorage.removeItem('chatRoomId');
+        setMessages([]);
+        setRoomId(undefined);
+      } else if (messages.length === 0) {
+        // Subscribe to new chat messages
+        return chatAPI.listenForNewMessages(id, onMessagesChange);
+      }
+    }
+  }, [chatRoomData]);
+
   const sendMessage = async (): Promise<void> => {
     let newRoomId: string;
     if (!roomId) {
+      // Create a new room
       newRoomId = await chatAPI.createRoom(auth.user?.name || 'Guest User');
       setRoomId(newRoomId);
+      AsyncStorage.setItem('chatRoomId', newRoomId);
     }
-    console.log(roomId, newRoomId);
     chatAPI.sendMessage(
       roomId || newRoomId,
       messageText,
@@ -73,7 +87,7 @@ export const ChatScreen: React.FC = () => {
   return (
     <>
       <View style={styles.container}>
-        {messages.map(({ id, text, from, sentAt }) => {
+        {messages.map(({ id, text, from }) => {
           return (
             <Text key={id}>
               {text}, from: {from}
@@ -83,50 +97,53 @@ export const ChatScreen: React.FC = () => {
         {!roomId && (
           <Text>Have any questions or concerns? Send us a message.</Text>
         )}
+        {chatRoomData && chatRoomData.resolved && !chatRoomData.rating && (
+          <Text>Leave a rating.</Text>
+        )}
         <TextInput value={messageText} onChangeText={setMessageText} />
         <TouchableOpacity onPress={sendMessage}>
           <Text>send</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.container, { display: "none" }]}>
+      <View style={[styles.container, { display: 'none' }]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require("../../assets/images/logo-white.png")}
+            source={require('../../assets/images/logo-white.png')}
             style={styles.logo}
           />
         </View>
 
-        <Text style={TextStyles.heading1}>{i18nCtx.t("liveChat")}</Text>
-        <Text style={TextStyles.heading2}>{i18nCtx.t("untilThen")}</Text>
+        <Text style={TextStyles.heading1}>{i18nCtx.t('liveChat')}</Text>
+        <Text style={TextStyles.heading2}>{i18nCtx.t('untilThen')}</Text>
 
         {/*Use empty <Text/>s to add double vertical space where necessary*/}
         <Text />
 
-        <Text style={TextStyles.heading1}>{i18nCtx.t("letsTalk")}</Text>
+        <Text style={TextStyles.heading1}>{i18nCtx.t('letsTalk')}</Text>
 
         <Text />
 
         <Text style={TextStyles.heading2}>
-          {i18nCtx.t("tel")}:{" "}
+          {i18nCtx.t('tel')}:{' '}
           <Text
             style={[styles.body, styles.link]}
-            onPress={() => Linking.openURL("tel:+18582749673")}
+            onPress={() => Linking.openURL('tel:+18582749673')}
           >
             +1 858.274.9673
           </Text>
         </Text>
         <Text style={TextStyles.heading2}>
-          {i18nCtx.t("days")}:{" "}
-          <Text style={styles.body}>{i18nCtx.t("hours")}</Text>
+          {i18nCtx.t('days')}:{' '}
+          <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
         </Text>
 
         <Text />
 
         <Text style={TextStyles.heading2}>
-          {i18nCtx.t("emailUs")}:{" "}
+          {i18nCtx.t('emailUs')}:{' '}
           <Text
             style={[styles.body, styles.link]}
-            onPress={() => Linking.openURL("mailto:info@wordsalive.org")}
+            onPress={() => Linking.openURL('mailto:info@wordsalive.org')}
           >
             info@wordsalive.org
           </Text>
@@ -134,11 +151,11 @@ export const ChatScreen: React.FC = () => {
 
         <Text />
 
-        <Text style={TextStyles.heading2}>{i18nCtx.t("address")}:</Text>
+        <Text style={TextStyles.heading2}>{i18nCtx.t('address')}:</Text>
 
         {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
         <Text style={styles.body} selectable={true}>
-          5111 Santa Fe Street Suite 219{"\n"}San Diego, California, 92109{"\n"}
+          5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109{'\n'}
           United States
         </Text>
       </View>
