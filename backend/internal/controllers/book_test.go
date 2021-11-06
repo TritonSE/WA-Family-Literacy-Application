@@ -398,19 +398,20 @@ func TestGetAnalytics(t *testing.T) {
 
 // Test getting analytics for all books
 func TestGetAllAnalytics(t *testing.T) {
-	var response []models.Analytic
+	var response map[string][]int
 
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=1", "",
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Len(t, response, 7)
-	require.Len(t, response[0].Clicks, 1)
+	require.Len(t, response["c_id"], 1)
+	require.Equal(t, response["catcher"][0], 1)
 
 	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=10", "",
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Len(t, response, 7)
-	require.Len(t, response[0].Clicks, 10)
+	require.Len(t, response["c_id"], 10)
 }
 
 // Test auth for getting all books

@@ -31,11 +31,6 @@ type Book struct {
 	CreatedAt time.Time `json:"created_at"` // Following ISO 8601
 }
 
-type Analytic struct {
-	ID     string `json:"id"`
-	Clicks []int  `json:"clicks"`
-}
-
 type APICreateBook struct {
 	Title  string  `json:"title"`
 	Author string  `json:"author"`

@@ -295,18 +295,12 @@ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) err
 /*
  * Returns an array containing a book's daily click counts given a range from the current day
  */
-func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
+func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, numDays int) ([]int, error) {
 	var analytics []int
 
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
-
-	var query string = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
-		"FROM book_analytics WHERE id = $4"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
+	var query string = "SELECT last_n_days(clicks, $1) " +
+		"FROM book_analytics WHERE id = $2"
+	rows, err := db.Conn.Query(ctx, query, numDays, id)
 
 	if err != nil {
 		fmt.Print(err)
@@ -332,18 +326,13 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRang
 /*
  * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
  */
-func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) ([]models.Analytic, error) {
-	analytics := make([]models.Analytic, 0)
+func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, numDays int) (map[string][]int, error) {
+	var analytics map[string][]int
+	analytics = make(map[string][]int)
 
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
-
-	var query string = "SELECT id, ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
+	var query string = "SELECT id, last_n_days(clicks, $1) " +
 		"FROM book_analytics"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd)
+	rows, err := db.Conn.Query(ctx, query, numDays)
 
 	if err != nil {
 		fmt.Print(err)
@@ -353,14 +342,15 @@ func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) (
 	defer rows.Close()
 
 	for rows.Next() {
-		var analytic models.Analytic
-		if err := rows.Scan(&analytic.ID, &analytic.Clicks); err != nil {
+		var book_id string
+		var analytic []int
+		if err := rows.Scan(&book_id, &analytic); err != nil {
 			fmt.Print(err)
 			return analytics, errors.Wrap(err, "error on Scan for book id and clicks array in "+
 				"FetchAllBookAnalytics")
 		}
 
-		analytics = append(analytics, analytic)
+		analytics[book_id] = analytic
 	}
 
 	return analytics, err
@@ -373,21 +363,14 @@ func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, dRange int) (
 func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
 	books := make([]models.Book, 0)
 
-	var dRange int = 30
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	firstYearStart, firstYearEnd, secondYearEnd = AnalyticsClicksIndices(dRange)
 	var query string = "SELECT books.id, title, author, image, created_at, " +
 		"array_remove(array_agg(lang), NULL) as languages " +
 		"FROM books LEFT JOIN book_contents ON books.id = " +
-		"book_contents.id LEFT JOIN book_analytics ON books.id = book_analytics.id " +
-		"GROUP BY books.id, book_analytics.id " +
-		"ORDER BY (SELECT SUM(analytics) " +
-		"FROM UNNEST(ARRAY_CAT(clicks[$1:$2], clicks[1:$3])) AS analytics) " +
+		"book_contents.id LEFT JOIN book_analytics_last_30 ON books.id = book_analytics_last_30.id " +
+		"GROUP BY books.id, book_analytics_last_30.clicks " +
+		"ORDER BY clicks " +
 		"DESC FETCH FIRST 5 ROWS ONLY"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd)
+	rows, err := db.Conn.Query(ctx, query)
 
 	if err != nil {
 		fmt.Print(err)
@@ -409,49 +392,4 @@ func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, e
 	}
 
 	return books, err
-}
-
-/*
- * Helper function that returns indices used to slice into clicks array
- * to select the past <dRange> days of analytics
- *
- * ex: ARRAY_CAT(clicks[firstYearStart:firstYearEnd], clicks[1:secondYearEnd])
- */
-func AnalyticsClicksIndices(dRange int) (int, int, int) {
-	var currTime = time.Now()
-	var dayInYear = currTime.YearDay()
-
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	// will wrap to previous year
-	if dRange > dayInYear {
-		var prevYear = currTime.Year() - 1
-		// last day of the previous year – determines if leap year
-		var lastDay = time.Date(prevYear, time.December, 31, 0, 0, 0, 0, time.Local).YearDay()
-
-		// truncate range to 365 if user specifies 366 but last year was not leap year
-		if lastDay == 365 && dRange == 366 {
-			// ensures that today's data won't be counted twice
-			firstYearStart = lastDay - (dRange - dayInYear) + 2
-		} else {
-			firstYearStart = lastDay - (dRange - dayInYear) + 1
-		}
-
-		// slice up to 365/366 depending on whether prev year was leap year
-		firstYearEnd = lastDay
-
-		// take from the start of this year to current day
-		secondYearEnd = dayInYear
-	} else {
-		// take dRange number of days up to and including today
-		firstYearStart = dayInYear - dRange + 1
-		firstYearEnd = dayInYear
-
-		// no year wraparound
-		secondYearEnd = 0
-	}
-
-	return firstYearStart, firstYearEnd, secondYearEnd
 }
