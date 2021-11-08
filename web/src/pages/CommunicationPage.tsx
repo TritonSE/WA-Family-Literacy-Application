@@ -19,6 +19,7 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
   };
 
   useEffect(() => {
+    setMessages([]);
     return chatAPI.listenForNewMessages(roomId, onMessagesChange);
   }, [roomId]);
 
@@ -27,9 +28,13 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
     setMessageText("");
   };
 
+  const resolveChat = (): void => {
+    chatAPI.resolveChat(roomId);
+  };
+
   return (
     <div>
-      {messages.map(({ id, text, from, sentAt }) => {
+      {messages.map(({ id, text, from }) => {
         return (
           <p key={id}>
             {text}, from: {from}
@@ -42,6 +47,7 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
         onChange={(event) => setMessageText(event.target.value)}
       />
       <button onClick={sendMessage}>send</button>
+      <button onClick={resolveChat}>resolve</button>
     </div>
   );
 };

@@ -56,6 +56,13 @@ class ChatAPI {
       sentAt: new Date().toUTCString(),
     });
   }
+
+  resolveChat(roomId: string): void {
+    const room = this.chatRoomsCollection.doc(roomId);
+    room.update({
+      resolved: true
+    });
+  }
 }
 
 export { ChatAPI };
