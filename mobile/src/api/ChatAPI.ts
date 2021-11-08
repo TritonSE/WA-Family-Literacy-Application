@@ -34,7 +34,7 @@ class ChatAPI {
     return unsubscribe;
   }
 
-  async createRoom(user: string): Promise<string> { 
+  async createRoom(user: string): Promise<string> {
     const room = await this.chatRoomsCollection.add({
       user,
       resolved: false,
@@ -43,13 +43,19 @@ class ChatAPI {
     return room.id;
   }
 
-  //
   sendMessage(roomId: string, text: string, from: string): void {
     const room = this.chatRoomsCollection.doc(roomId);
     room.collection('messages').add({
       text,
       from,
       sentAt: new Date().toUTCString(),
+    });
+  }
+
+  rateChat(roomId: string, rating: number): void {
+    const room = this.chatRoomsCollection.doc(roomId);
+    room.update({
+      rating
     });
   }
 }

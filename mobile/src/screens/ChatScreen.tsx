@@ -84,6 +84,10 @@ export const ChatScreen: React.FC = () => {
     setMessageText('');
   };
 
+  const rateChat = (): void => {
+    chatAPI.rateChat(roomId, 4);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -98,7 +102,9 @@ export const ChatScreen: React.FC = () => {
           <Text>Have any questions or concerns? Send us a message.</Text>
         )}
         {chatRoomData && chatRoomData.resolved && !chatRoomData.rating && (
-          <Text>Leave a rating.</Text>
+          <TouchableOpacity onPress={rateChat}>
+            <Text>Leave a rating.</Text>
+          </TouchableOpacity>
         )}
         <TextInput value={messageText} onChangeText={setMessageText} />
         <TouchableOpacity onPress={sendMessage}>
