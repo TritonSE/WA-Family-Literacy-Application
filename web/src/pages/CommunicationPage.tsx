@@ -57,7 +57,7 @@ export const CommunicationPage: React.FC = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   const onNewRooms = (newRooms: ChatRoom[]): void => {
-    setChatRooms(oldRooms => [...oldRooms, ...newRooms]);
+    setChatRooms(oldRooms => [...newRooms,...oldRooms]);
   };
 
   useEffect(()=>{

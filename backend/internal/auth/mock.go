@@ -26,3 +26,7 @@ func (a MockAuthenticator) CreateUser(ctx context.Context, email string, pwd str
 func (a MockAuthenticator) DeleteUser(ctx context.Context, id string) error {
 	return nil
 }
+
+func (a MockAuthenticator) SetCustomUserClaims(ctx context.Context, id string, claims map[string]interface{}) error {
+	return nil
+}

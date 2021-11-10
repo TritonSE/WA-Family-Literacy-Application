@@ -20,7 +20,7 @@ class ChatAPI {
 
   listenForNewRooms(callback: (newRooms: ChatRoom[]) => void): () => void {
     const unsubscribe = this.chatRoomsCollection
-      .orderBy("createdAt", "desc")
+      .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
         const rooms: ChatRoom[] = [];
         querySnapshot.docChanges().forEach(({type, doc}: firebase.firestore.DocumentChange) => {
@@ -50,7 +50,7 @@ class ChatAPI {
 
   sendMessage(roomId: string, text: string, from: string): void {
     const room = this.chatRoomsCollection.doc(roomId);
-    room.collection("messages").add({
+    room.collection('messages').add({
       text,
       from,
       sentAt: new Date().toUTCString(),

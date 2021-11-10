@@ -72,14 +72,14 @@ export const ChatScreen: React.FC = () => {
     let newRoomId: string;
     if (!roomId) {
       // Create a new room
-      newRoomId = await chatAPI.createRoom(auth.user?.name || 'Guest User');
+      newRoomId = await chatAPI.createRoom(auth.user);
       setRoomId(newRoomId);
       AsyncStorage.setItem('chatRoomId', newRoomId);
     }
     chatAPI.sendMessage(
       roomId || newRoomId,
       messageText,
-      auth.user?.name || 'Guest User'
+      auth.user?.name
     );
     setMessageText('');
   };

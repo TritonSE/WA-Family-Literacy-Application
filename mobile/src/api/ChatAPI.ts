@@ -2,6 +2,7 @@ import Constants from 'expo-constants';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { ChatRoom, Message } from '../models/Chat';
+import { User } from '../models/User';
 
 // Class to encapsulate Chat functionality
 class ChatAPI {
@@ -34,9 +35,10 @@ class ChatAPI {
     return unsubscribe;
   }
 
-  async createRoom(user: string): Promise<string> {
+  async createRoom(user: User): Promise<string> {
     const room = await this.chatRoomsCollection.add({
-      user,
+      user: user.name,
+      userId: user.id,
       resolved: false,
       createdAt: new Date().toUTCString(),
     });

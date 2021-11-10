@@ -63,6 +63,10 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	// Add admin custom claim to Firebase Authentication user
+	adminClaim := map[string]interface{}{"admin": true}
+	c.Auth.SetCustomUserClaims(req.Context(), cuid, adminClaim)
+
 	// Populate fields of admin account
 	admin.ID = cuid
 	admin.Name = cadmin.Name
