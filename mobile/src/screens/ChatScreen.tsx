@@ -39,10 +39,7 @@ export const ChatScreen: React.FC = () => {
 
   // Use roomId from previous session if exist
   useEffect(() => {
-    AsyncStorage.getItem('chatRoomId').then((id) => {
-      console.log('returrietd', id);
-      setRoomId(id);
-    });
+    AsyncStorage.getItem('chatRoomId').then((id) => setRoomId(id));
   }, []);
 
   // Subscribe to chat room data changes
@@ -71,7 +68,7 @@ export const ChatScreen: React.FC = () => {
   const sendMessage = async (): Promise<void> => {
     let newRoomId: string;
     if (!roomId) {
-      // Create a new room
+      // Create a new room if no previous roomId
       newRoomId = await chatAPI.createRoom(auth.user);
       setRoomId(newRoomId);
       AsyncStorage.setItem('chatRoomId', newRoomId);

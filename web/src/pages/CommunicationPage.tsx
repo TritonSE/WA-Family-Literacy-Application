@@ -18,6 +18,7 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
     setMessages((oldMessages) => [...oldMessages, ...changedMessages]);
   };
 
+  // Listen for new messages in currently selected chat room
   useEffect(() => {
     setMessages([]);
     return chatAPI.listenForNewMessages(roomId, onMessagesChange);
@@ -60,10 +61,12 @@ export const CommunicationPage: React.FC = () => {
     setChatRooms(oldRooms => [...newRooms,...oldRooms]);
   };
 
+  // Automatically select first chat room if none is selected
   useEffect(()=>{
     if (!currentRoomId && chatRooms.length > 0) setCurrentRoomId(chatRooms[0].id);
   }, [chatRooms]);
 
+  // Listen for newly created chat rooms in real time
   useEffect(() => {
     return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
