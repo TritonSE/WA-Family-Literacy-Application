@@ -15,7 +15,7 @@ class ChatAPI {
   }
 
   listenForRoomDetails(roomId: string, callback: (room: ChatRoom) => void): void{
-    const unsubscribe = this.chatRoomsCollection.doc(roomId).onSnapshot(doc => callback({id: doc.id, ...doc.data()}));
+    const unsubscribe = this.chatRoomsCollection.doc(roomId).onSnapshot((doc: firebase.firestore.DocumentSnapshot) => callback({id: doc.id, ...doc.data()} as ChatRoom));
     return unsubscribe;
   }
 
@@ -28,7 +28,7 @@ class ChatAPI {
       .onSnapshot((querySnapshot: firebase.firestore.QuerySnapshot) => {
         const messages: Message[] = [];
         querySnapshot.docChanges().forEach(({ doc }: firebase.firestore.DocumentChange) => {
-          messages.push({ ...doc.data() as Message, id: doc.id });
+          messages.push({ ...doc.data(), id: doc.id } as Message);
         });
         callback(messages);
       });

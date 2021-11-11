@@ -23,7 +23,7 @@ const chatAPI = new ChatAPI();
  */
 export const ChatScreen: React.FC = () => {
   const auth = useContext(AuthContext);
-  const [roomId, setRoomId] = useState<string | undefined>();
+  const [roomId, setRoomId] = useState<string | null>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>('');
   const [chatRoomData, setChatRoomData] = useState<ChatRoom>();
@@ -57,7 +57,7 @@ export const ChatScreen: React.FC = () => {
         // Reset chat
         AsyncStorage.removeItem('chatRoomId');
         setMessages([]);
-        setRoomId(undefined);
+        setRoomId(null);
       } else if (messages.length === 0) {
         // Subscribe to new chat messages
         return chatAPI.listenForNewMessages(id, onMessagesChange);
@@ -66,23 +66,21 @@ export const ChatScreen: React.FC = () => {
   }, [chatRoomData]);
 
   const sendMessage = async (): Promise<void> => {
-    let newRoomId: string;
-    if (!roomId) {
+    let newRoomId = roomId;
+    if (!newRoomId && auth.user) {
       // Create a new room if no previous roomId
       newRoomId = await chatAPI.createRoom(auth.user);
       setRoomId(newRoomId);
-      AsyncStorage.setItem('chatRoomId', newRoomId);
+      AsyncStorage.setItem("chatRoomId", newRoomId);
     }
-    chatAPI.sendMessage(
-      roomId || newRoomId,
-      messageText,
-      auth.user?.name
-    );
-    setMessageText('');
+    if (newRoomId && auth.user) {
+      chatAPI.sendMessage(newRoomId, messageText, auth.user?.name);
+      setMessageText("");
+    }
   };
 
   const rateChat = (): void => {
-    chatAPI.rateChat(roomId, 4);
+    if (roomId) chatAPI.rateChat(roomId, 4);
   };
 
   return (
