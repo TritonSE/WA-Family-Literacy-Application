@@ -76,6 +76,13 @@ jobs:
       - name: Install dependencies
         working-directory: mobile
         run: npm ci
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          expo-cache: true
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
       - name: Build
         working-directory: mobile
         run: npm run build-android
@@ -105,6 +112,13 @@ jobs:
       - name: Install dependencies
         working-directory: mobile
         run: npm ci
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          expo-cache: true
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
       - name: Build
         working-directory: mobile
         run: npm run build-ios
