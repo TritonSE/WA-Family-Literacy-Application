@@ -102,12 +102,12 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
 
       <div className={styles.adminCard} onClick={() => !deleteMode && !admin.is_primary_admin && displayManageModal(admin.id)} style={deleteMode ? {cursor: 'default'} : {cursor: 'pointer'}}>
         <span className={styles.adminName}>{ admin.name }</span>
-        { admin.is_primary_admin && <span className={styles.primaryAdminName}>(Primary Admin)</span> }
+        { admin.is_primary_admin ? <span className={styles.primaryAdminName}>(Primary Admin)</span> : null}
       </div>
 
-      {admin.is_primary_admin && deleteMode && <img className={styles.lockIcon} role="presentation" src={LockIcon} width="20px" height="20px" alt=""/> }
+      {admin.is_primary_admin && deleteMode ? <img className={styles.lockIcon} role="presentation" src={LockIcon} width="20px" height="20px" alt=""/> : null}
 
-      {!admin.is_primary_admin && deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => displayDeleteModal(admin.id)}/>}
+      {!admin.is_primary_admin && deleteMode ? <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => displayDeleteModal(admin.id)}/> : null}
 
 
       {deleteModal &&
@@ -154,12 +154,12 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                     <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
                     <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 
-                    {uploadBooks && (
+                    {uploadBooks ? (
                       <>
                         <Checkbox className={styles.checkbox} label="&mdash; Edit Books" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks} />
                         <Checkbox className={styles.checkbox} label="&mdash; Delete Books" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks} />
                       </>
-                    )}
+                    ) : null}
 
                   </div>
                 </div>

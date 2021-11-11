@@ -14,7 +14,7 @@ type OverviewPageProps = {
  */
 export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  
+
   const [checked, setChecked] = useState<Map<Language, boolean>>
   (new Map(modalLanguages.map( (lang) => [lang, false])));
 
@@ -34,7 +34,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
 
   return (
     <div>
-      <div className = {wizardStyles.mainDivElement}>   
+      <div className = {wizardStyles.mainDivElement}>
         <div className= {styles.center}>
           <div className = {styles.comingSoon}>
                 Coming Soon!
@@ -46,14 +46,14 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
 
         <div className = {styles.buttonContainer}>
           <button className={styles.uploadButton} onClick = { () => setShowModal(true)}>
-            <span className={styles.uploadButtonText}> 
+            <span className={styles.uploadButtonText}>
                   Upload Book
             </span>
           </button>
         </div>
       </div>
 
-      {showModal && 
+      {showModal ?
         <div className={uploadBooksStyles.modal}>
           <div className={uploadBooksStyles.modalContent}>
             <div>
@@ -69,12 +69,12 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
                   </div>
                 ))}
                 <button className={uploadBooksStyles.cancelBtn} type="button" onClick={() => cancelModal() }>Cancel</button>
-                <button className={uploadBooksStyles.deleteBtn} disabled={!atLeastOneChecked} type="button" 
+                <button className={uploadBooksStyles.deleteBtn} disabled={!atLeastOneChecked} type="button"
                   onClick= { () => onSubmit(checked).catch(err => alert(err))}>Upload</button>
               </div>
-            </div> 
+            </div>
           </div>
-        </div>} 
+        </div> : null}
     </div>
   );
 };
