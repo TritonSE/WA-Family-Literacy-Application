@@ -2,7 +2,7 @@ export default {
   name: "Let's Read",
   slug: 'words-alive',
   icon: './assets/images/icons/ios.png',
-  version: '1.0.0',
+  version: '1.3.0',
   android: {
     package: 'org.wordsalive.letsread',
     adaptiveIcon: {
