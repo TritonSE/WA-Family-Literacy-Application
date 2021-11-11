@@ -48,4 +48,4 @@ func (a FirebaseAuthenticator) DeleteUser(ctx context.Context, id string) error 
 
 func (a FirebaseAuthenticator) SetCustomUserClaims(ctx context.Context, id string, claims map[string]interface{}) error {
 	return a.Client.SetCustomUserClaims(ctx, id, claims)
-}	
+}
