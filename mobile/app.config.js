@@ -1,5 +1,5 @@
 export default {
-  name: "Let's Read",
+  name: "Let’s Read",
   slug: 'words-alive',
   icon: './assets/images/icons/ios.png',
   version: '1.3.1',
