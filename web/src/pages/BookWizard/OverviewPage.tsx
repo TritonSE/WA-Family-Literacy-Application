@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { TabContent } from '../../models/Book';
 import {  Language, LanguageLabels } from '../../models/Languages';
 import uploadBooksStyles from '../UploadBooksPage.module.css';
@@ -75,7 +76,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              {readTab.body}
+              <ReactMarkdown>
+                {readTab.body}
+              </ReactMarkdown>
             </div>
           </div>
 
@@ -103,7 +106,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              {exploreTab.body}
+              <ReactMarkdown>
+                {exploreTab.body}
+              </ReactMarkdown>
             </div>
           </div>
 
@@ -131,7 +136,11 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              {learnTab.body}
+              <ReactMarkdown>
+                {learnTab.body.indexOf("<p>") == -1 ?
+                  learnTab.body : learnTab.body.substring(3, learnTab.body.length - 4)
+                }
+              </ReactMarkdown>
             </div>
           </div>
         </div>
