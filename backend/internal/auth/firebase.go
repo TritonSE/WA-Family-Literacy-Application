@@ -2,7 +2,7 @@ package auth
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	"firebase.google.com/go/v4/auth"
 	"github.com/pkg/errors"
@@ -34,7 +34,7 @@ func (a FirebaseAuthenticator) CreateUser(ctx context.Context, email string, pwd
 	// Create User
 	ur, err := a.Client.CreateUser(ctx, u)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "", errors.Wrap(err, "Error in Firebase CreateUser")
 	}
 
