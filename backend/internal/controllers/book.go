@@ -44,6 +44,7 @@ func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
 	}
 	if book == nil {
 		writeResponse(rw, http.StatusNotFound, "book not found")
+		return
 	}
 
 	writeResponse(rw, http.StatusOK, book)

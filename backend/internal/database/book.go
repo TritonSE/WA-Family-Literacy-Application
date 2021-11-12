@@ -104,6 +104,10 @@ func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book,
 		&book.CreatedAt, &book.Languages)
 
 	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return nil, nil
+		}
+
 		return nil, errors.Wrap(err, "error on FetchBook")
 	}
 

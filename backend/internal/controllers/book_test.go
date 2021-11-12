@@ -34,9 +34,9 @@ func TestGetBook(t *testing.T) {
 	require.Equal(t, "catcher in the rye", response.Title)
 }
 
-//func TestGetBookDoesNotExist(t *testing.T) {
-//	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/does_not_exist", "", 404, nil)
-//}
+func TestGetBookDoesNotExist(t *testing.T) {
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/does_not_exist", "", 404, nil)
+}
 
 // Test for the book details function
 func TestGetBookDetails(t *testing.T) {
