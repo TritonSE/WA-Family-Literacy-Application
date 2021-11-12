@@ -64,7 +64,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	}
 
 	// Add canChat custom claim to Firebase Authentication user
-	canChatClaim := map[string]interface{}{"canChat": cadmin.CanChat};
+	canChatClaim := map[string]interface{}{"canChat": cadmin.CanChat}
 	c.Auth.SetCustomUserClaims(req.Context(), cuid, canChatClaim)
 
 	// Populate fields of admin account
@@ -190,7 +190,7 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 	}
 
 	// Update canChat custom claim for Firebase Authentication user
-	canChatClaim := map[string]interface{}{"canChat": uadmin.CanChat};
+	canChatClaim := map[string]interface{}{"canChat": uadmin.CanChat}
 	c.Auth.SetCustomUserClaims(req.Context(), adminID, canChatClaim)
 
 	// Carry out update

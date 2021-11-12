@@ -10,7 +10,7 @@ type Admin struct {
 	CanEditBooks       bool   `json:"can_edit_books"`
 	CanDeleteBooks     bool   `json:"can_delete_books"`
 	CanAccessAnalytics bool   `json:"can_access_analytics"`
-	CanChat 		   bool   `json:"can_chat"`
+	CanChat            bool   `json:"can_chat"`
 	IsPrimaryAdmin     bool   `json:"is_primary_admin"`
 }
 
@@ -24,7 +24,7 @@ type CreateAdmin struct {
 	CanEditBooks       bool   `json:"can_edit_books"`
 	CanDeleteBooks     bool   `json:"can_delete_books"`
 	CanAccessAnalytics bool   `json:"can_access_analytics"`
-	CanChat 		   bool   `json:"can_chat"`
+	CanChat            bool   `json:"can_chat"`
 }
 
 // Struct to read in fields used when updating an admin
@@ -35,7 +35,7 @@ type UpdateAdmin struct {
 	CanEditBooks       *bool   `json:"can_edit_books"`
 	CanDeleteBooks     *bool   `json:"can_delete_books"`
 	CanAccessAnalytics *bool   `json:"can_access_analytics"`
-	CanChat 		   *bool   `json:"can_chat"`
+	CanChat            *bool   `json:"can_chat"`
 }
 
 // Struct used to track admin permissions
@@ -45,7 +45,7 @@ type Permissions struct {
 	CanEditBooks       bool
 	CanDeleteBooks     bool
 	CanAccessAnalytics bool
-	CanChat bool
+	CanChat            bool
 }
 
 type Permission int
