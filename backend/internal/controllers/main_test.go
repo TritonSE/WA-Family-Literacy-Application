@@ -75,8 +75,8 @@ func TestMain(m *testing.M) {
 	// Seed admin database with primary admin
 	conn.Exec(ctx, "INSERT INTO admins (id, email, name, can_manage_users, "+
 		"can_upload_books, can_edit_books, can_delete_books, can_access_analytics, "+
-		"is_primary_admin) VALUES "+
-		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
+		"can_chat, is_primary_admin) VALUES "+
+		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true, true)")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
 		"('a_id', ARRAY_FILL(20, array[366]));")
