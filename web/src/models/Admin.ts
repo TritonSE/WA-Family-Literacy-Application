@@ -6,6 +6,7 @@ export type Admin = {
   can_upload_books: boolean
   can_delete_books: boolean
   can_edit_books: boolean
+  can_chat: boolean
   is_primary_admin: boolean
 };
 
@@ -17,6 +18,7 @@ export type CreateAdmin = {
   can_upload_books: boolean
   can_delete_books: boolean
   can_edit_books: boolean
+  can_chat: boolean
 };
 
 export type UpdateAdmin = {
@@ -25,4 +27,5 @@ export type UpdateAdmin = {
   can_upload_books: boolean
   can_delete_books: boolean
   can_edit_books: boolean
+  can_chat: boolean
 };
