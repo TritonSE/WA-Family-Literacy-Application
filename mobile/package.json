@@ -53,8 +53,8 @@
   },
   "scripts": {
     "build": "tsc --strict",
-    "build-android": "expo build:android -t app-bundle",
-    "build-ios": "expo build:ios -t archive",
+    "build-android": "eas build -p android",
+    "build-ios": "eas build -p ios",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",
