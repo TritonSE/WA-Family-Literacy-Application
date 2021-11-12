@@ -30,28 +30,28 @@ export const UploadBooksDropdown: React.FC<UploadBookDropdownProps> = ({onLangua
         {LanguageLabels[lang]}
         <div className={styles.imageContainer}>
           {startedLanguages.has(lang) ? "Edit" : "New"}
-          <img src={startedLanguages.has(lang) ? editImage : newImage} 
+          <img src={startedLanguages.has(lang) ? editImage : newImage}
             className={styles.buttonImage}>
           </img>
         </div>
       </button>
     ));
 
-  // generates the html for the dropdown 
+  // generates the html for the dropdown
 
   return (
     <div>
-      <button className={showDropDown ? styles.firstDropdownElement : styles.roundedDropdownElement} onClick = {() => setShowDropDown(!showDropDown)}> 
+      <button className={showDropDown ? styles.firstDropdownElement : styles.roundedDropdownElement} onClick = {() => setShowDropDown(!showDropDown)}>
         {LanguageLabels[currentLanguage]}
         <div className={styles.imageContainer}>
-          <img src={arrow} 
+          <img src={arrow}
             className={showDropDown ? styles.arrowUp : styles.buttonImage}>
           </img>
         </div>
       </button>
-      {showDropDown && < div className={styles.dropdownContent}>
+      {showDropDown ? < div className={styles.dropdownContent}>
         {options}
-      </div>}
+      </div> : null}
     </div>
   );
-}; 
+};

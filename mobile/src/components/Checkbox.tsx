@@ -15,7 +15,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({ value, onChange, inverted = 
   return (
     <TouchableOpacity onPress={() => onChange(!value)}>
       <View style={boxStyle}>
-        {value && <Image style={checkStyle} source={require('../../assets/images/check-square-solid.png')}/> }
+        {value ? <Image style={checkStyle} source={require('../../assets/images/check-square-solid.png')}/> : null}
       </View>
     </TouchableOpacity>
   );
