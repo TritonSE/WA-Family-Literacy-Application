@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -29,7 +29,7 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println("unable to get user from request context")
+		log.Println("unable to get user from request context")
 		return
 	}
 	if uid != user.ID {
@@ -60,14 +60,14 @@ func (c *UserController) CreateUser(rw http.ResponseWriter, req *http.Request) {
 	err = c.Users.CreateUser(req.Context(), user)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
 	newUser, err := c.Users.FetchUserByID(req.Context(), user.ID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -86,7 +86,7 @@ func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
 
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println("unable to get user from request context")
+		log.Println("unable to get user from request context")
 		return
 	}
 	if uid != userID {
@@ -98,7 +98,7 @@ func (c *UserController) GetUser(rw http.ResponseWriter, req *http.Request) {
 	user, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -130,7 +130,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println("unable to get user from request context")
+		log.Println("unable to get user from request context")
 		return
 	}
 
@@ -142,7 +142,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	// Check current user info
 	currUser, err := c.Users.FetchUserByID(req.Context(), userID)
 	if err != nil {
-		fmt.Printf("Err: %s\n", err)
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -154,7 +154,7 @@ func (c *UserController) UpdateUser(rw http.ResponseWriter, req *http.Request) {
 	// Carry out the update
 	err = c.Users.UpdateUser(req.Context(), userID, user)
 	if err != nil {
-		fmt.Printf("Err: %s\n", err)
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}

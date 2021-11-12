@@ -2,8 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 
@@ -61,7 +59,6 @@ func (db *AdminDatabase) CreateAdmin(ctx context.Context, admin models.Admin) er
 		admin.CanManageUsers, admin.CanUploadBooks, admin.CanEditBooks,
 		admin.CanDeleteBooks, admin.CanAccessAnalytics)
 	if err != nil {
-		fmt.Println("FAILED TO CREATE ADMIN")
 		return errors.Wrap(err, "error in CreateAdmin")
 	}
 
@@ -90,8 +87,6 @@ func (db *AdminDatabase) FetchAdmins(ctx context.Context) ([]models.Admin, error
 		if err := rows.Scan(&admin.ID, &admin.Name, &admin.Email,
 			&admin.CanManageUsers, &admin.CanUploadBooks, &admin.CanEditBooks,
 			&admin.CanDeleteBooks, &admin.CanAccessAnalytics, &admin.IsPrimaryAdmin); err != nil {
-
-			fmt.Print(err)
 			return nil, errors.Wrap(err, "error scanning result of"+
 				" SELECT FROM admin in FetchAdmins")
 		}

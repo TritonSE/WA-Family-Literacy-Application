@@ -21,19 +21,19 @@ func TestMain(m *testing.M) {
 	ctx := context.Background()
 	database.Migrate("../../migrations")
 
-	_, _ = conn.Exec(ctx, "TRUNCATE books CASCADE")
+	_, _ = conn.Exec(ctx, "TRUNCATE book_info CASCADE")
 	_, _ = conn.Exec(ctx, "TRUNCATE book_contents")
 	_, _ = conn.Exec(ctx, "TRUNCATE users")
 	_, _ = conn.Exec(ctx, "TRUNCATE admins")
 	_, _ = conn.Exec(ctx, "TRUNCATE image")
 
 	// Populate books database
-	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('c_id', 'c','c1');")
-	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('a_id', 'a','a1');")
-	conn.Exec(ctx, "INSERT INTO books (id, title, author) values ('b_id', 'b','b1');")
-	conn.Exec(ctx, "INSERT INTO books (id, title, author) VALUES ('catcher',"+
+	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) values ('c_id', 'c','c1');")
+	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) values ('a_id', 'a','a1');")
+	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) values ('b_id', 'b','b1');")
+	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) VALUES ('catcher',"+
 		"'catcher in the rye', 'a');")
-	conn.Exec(ctx, "INSERT INTO books (id, title, author) VALUES ('update',"+
+	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) VALUES ('update',"+
 		"'update_me', 'update_me_author');")
 
 	// Populate book_contents database

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/TritonSE/words-alive/internal/database"
@@ -26,7 +26,7 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 			uid, ok := req.Context().Value("user").(string)
 			if !ok {
 				writeResponse(rw, http.StatusInternalServerError, "error")
-				fmt.Println("unable to get user from request context")
+				log.Println("unable to get user from request context")
 				return
 			}
 
@@ -34,7 +34,7 @@ func RequirePermission(adminDB database.AdminDatabase, p models.Permission) func
 			perms, err := adminDB.FetchAdminPermissions(req.Context(), uid)
 			if err != nil {
 				writeResponse(rw, http.StatusInternalServerError, "error")
-				fmt.Println(err)
+				log.Println(err)
 				return
 			}
 
