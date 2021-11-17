@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TabContent } from '../../models/Book';
 import Editor from 'ckeditor5/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -8,6 +8,7 @@ import styles from './TabContentPage.module.css';
 import '../../App.css';
 import wizardStyles from '../BookWizardPage.module.css';
 import { Language } from '../../models/Languages';
+import { APIContext } from '../../context/APIContext';
 
 type TabConentPageProps = {
   onContentChange: (data: TabContent) => void
@@ -20,6 +21,7 @@ type TabConentPageProps = {
  * Read, Explore, and Learn page for the Upload Books Wizard
  */
 export const TabContentPage: React.FC<TabConentPageProps> = ({ onContentChange, currentContent, language }) => {
+  const api = useContext(APIContext);
 
   const [video, setVideo] = useState<string | undefined>(undefined);
   const [body, setBody] = useState('');
@@ -45,7 +47,7 @@ export const TabContentPage: React.FC<TabConentPageProps> = ({ onContentChange, 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   function CustomUploadAdapter(editor: any): any {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader: any) => {
-      return new ImageUploadAdapter(loader);
+      return new ImageUploadAdapter(loader, api.token || '');
     };
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */

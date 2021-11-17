@@ -6,6 +6,7 @@ import { Admin, CreateAdmin, UpdateAdmin } from '../models/Admin';
 // Class to encapsulate the handler for the Words Alive API
 class WordsAliveAPI {
   client: AxiosInstance;
+  token?: string;
 
   constructor(baseURL: string) {
     this.client = axios.create({
@@ -18,11 +19,13 @@ class WordsAliveAPI {
 
   // Set the Firebase token for future API calls
   setToken(token: string): void {
+    this.token = token;
     this.client.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
   // Unset the Firebase token
   clearToken(): void {
+    delete this.token;
     delete this.client.defaults.headers.Authorization;
   }
 

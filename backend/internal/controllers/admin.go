@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	fbAuth "firebase.google.com/go/v4/auth"
@@ -27,7 +27,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	// Pull CreateAdmin fields from request body
 	if err := json.NewDecoder(req.Body).Decode(&cadmin); err != nil {
 		writeResponse(rw, http.StatusBadRequest, "bad input!")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -35,11 +35,11 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	dupAdmin, err := c.Admins.FetchAdminByEmail(req.Context(), cadmin.Email)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	if dupAdmin != nil {
-		fmt.Printf("Duplicate: %s, %s, %s\n\n\n", dupAdmin.ID, dupAdmin.Email, dupAdmin.Name)
+		log.Printf("Duplicate: %s, %s, %s\n\n\n", dupAdmin.ID, dupAdmin.Email, dupAdmin.Name)
 		writeResponse(rw, http.StatusBadRequest, "duplicate email")
 		return
 	}
@@ -59,7 +59,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 			return
 		}
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -77,7 +77,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	err = c.Admins.CreateAdmin(req.Context(), admin)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -101,7 +101,7 @@ func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request
 	uid, ok := req.Context().Value("user").(string)
 	if !ok {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println("unable to get user from request context")
+		log.Println("unable to get user from request context")
 		return
 	}
 
@@ -109,7 +109,7 @@ func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request
 	perms, err := c.Admins.FetchAdminPermissions(req.Context(), uid)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -123,7 +123,7 @@ func (c *AdminController) GetAdminByID(rw http.ResponseWriter, req *http.Request
 	admin, err := c.Admins.FetchAdminByID(req.Context(), adminID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	if admin == nil {
@@ -149,7 +149,7 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 	admin, err := c.Admins.FetchAdminByID(req.Context(), adminID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	if admin == nil {
@@ -188,7 +188,7 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 	err = c.Admins.UpdateAdmin(req.Context(), adminID, uadmin)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
@@ -203,7 +203,7 @@ func (c *AdminController) DeleteAdmin(rw http.ResponseWriter, req *http.Request)
 	admin, err := c.Admins.FetchAdminByID(req.Context(), adminID)
 	if err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	if admin == nil {
@@ -217,14 +217,14 @@ func (c *AdminController) DeleteAdmin(rw http.ResponseWriter, req *http.Request)
 
 	if err := c.Auth.DeleteUser(req.Context(), adminID); err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
 	// Delete the admin
 	if err = c.Admins.RemoveAdmin(req.Context(), adminID); err != nil {
 		writeResponse(rw, http.StatusInternalServerError, "error")
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 

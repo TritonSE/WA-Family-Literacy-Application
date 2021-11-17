@@ -77,7 +77,7 @@ export const BookFilter: React.FC<BookFilterProps> = ({ onFilter }) => {
         </View>
       </TouchableOpacity>
 
-      {dropdownVisible && dropdown}
+      {dropdownVisible ? dropdown : null}
 
       <View style={styles.searchBarContainer}>
 

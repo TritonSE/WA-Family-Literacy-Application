@@ -177,12 +177,12 @@ export const ManageAccountsPage: React.FC = () => {
                       <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
                       <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 
-                      {uploadBooks && (
+                      {uploadBooks ? (
                         <>
                           <Checkbox className={styles.checkbox} label="&mdash; Edit Books" id="editBooksBox" onChange={() => setEditBooks(prevEdit => !prevEdit)} checked={editBooks} />
                           <Checkbox className={styles.checkbox} label="&mdash; Delete Books" id="deleteBooksBox" onChange={() => setDeleteBooks(prevDelete => !prevDelete)} checked={deleteBooks} />
                         </>
-                      )}
+                      ) : null}
 
                     </div>
 

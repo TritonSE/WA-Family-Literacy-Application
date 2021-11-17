@@ -46,6 +46,10 @@ func TestGetBook(t *testing.T) {
 	require.Equal(t, "catcher in the rye", response.Title)
 }
 
+func TestGetBookDoesNotExist(t *testing.T) {
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/does_not_exist", "", 404, nil)
+}
+
 // Test for the book details function
 func TestGetBookDetails(t *testing.T) {
 	var response models.BookDetails
@@ -116,7 +120,7 @@ func TestCreateBookandBookDetails(t *testing.T) {
 	require.Equal(t, "JK Rowling", createdBook.Author)
 	require.Equal(t, []string{}, createdBook.Languages)
 
-	body = `{"language": "en", 
+	body = `{"lang": "en", 
 	"read": {"video": null, "body":"hp_rb"}, 
 	"explore": {"video": null, "body":"hp_eb"},  
 	"learn": {"video": null, "body":"hp_lb"}}`
@@ -130,7 +134,7 @@ func TestCreateBookandBookDetails(t *testing.T) {
 
 // Make sure foreign key constraint is working
 func TestBookDetailsForeignKey(t *testing.T) {
-	body := `{"language": "en", 
+	body := `{"lang": "en", 
 	"read": {"video": null, "body":"bad_rb"}, 
 	"explore": {"video": null, "body":"bad_eb"},  
 	"learn": {"video": null, "body":"bad_lb"}}`
@@ -145,7 +149,7 @@ func TestDuplicateBookDetails(t *testing.T) {
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/books", body, http.StatusCreated,
 		&createdBook, "test-token-primary")
 
-	body = `{"language": "en", 
+	body = `{"lang": "en", 
 		"read": {"video": null, "body":"rbody"}, 
 		"explore": {"video": null, "body":"ebody"},  
 		"learn": {"video": null, "body":"lbody"}}`

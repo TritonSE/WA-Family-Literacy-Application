@@ -27,15 +27,15 @@ export const Navbar: React.FC = () => {
         {/*<li className={styles.nav_element_left}>*/}
         {/*  <NavLink className={styles.nav_link} activeClassName={styles.active} to="/analytics">Analytics</NavLink>*/}
         {/*</li>*/}
-        {canAccessBooks && <li className={styles.nav_element_left}>
+        {canAccessBooks ? <li className={styles.nav_element_left}>
           <NavLink className={styles.nav_link} activeClassName={styles.active} to="/books" isActive={(
             (match, location) => {
               return location.pathname == '/books/new' || location.pathname == '/books';
             })}>Upload Books</NavLink>
-        </li>}
-        {canAccessAccounts && <li className={styles.nav_element_left}>
+        </li> : null}
+        {canAccessAccounts ? <li className={styles.nav_element_left}>
           <NavLink className={styles.nav_link} activeClassName={styles.active} to="/accounts">Manage Accounts</NavLink>
-        </li>}
+        </li> : null}
         <li className={styles.nav_element_right}>
           <button
             className={styles.nav_button}

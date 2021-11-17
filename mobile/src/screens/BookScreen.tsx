@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, StyleSheet, Image, Pressable, ScrollView, Dimensions } from 'react-native';
+import { Image, Text, View, StyleSheet, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MarkdownView } from 'react-native-markdown-view';
@@ -14,7 +14,10 @@ import { LanguageButtons } from '../components/LanguageButtons';
 import { Colors } from '../styles/Colors';
 import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { YoutubeVideo } from '../components/YoutubeVideo';
+import CachedImage from 'react-native-expo-cached-image';
+import { OfflineIndicator } from '../components/OfflineIndicator';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
 
@@ -64,8 +67,18 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     () => {
       (async () => {
         setLoading(true);
-        const res = await client.getBook(book.id, language);
-        setBookDetails(res);
+        const tuple = `${book.id} ${language}`;
+        await client.getBook(book.id, language).then( async (res) => {
+          setBookDetails(res);
+          await AsyncStorage.setItem(tuple, JSON.stringify(res));
+        }).catch(async (err) => {
+          const result = await AsyncStorage.getItem(tuple);
+          if (result != null) {
+            setBookDetails(JSON.parse(result));
+          } else {
+            console.log(err);
+          }
+        });
         setLoading(false);
       })();
     },
@@ -75,14 +88,25 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   // Get the tab content (video and body) for the selected tab
   const tabContent = bookDetails !== null && bookDetails[activeButton];
 
-  const tabContentView = tabContent && (
+  const tabContentView = tabContent ? (
     <View style={styles.tabContentContainer}>
-      {tabContent.video && <YoutubeVideo url={tabContent.video} width={tabContentWidth} height={9 / 16 * tabContentWidth}/>}
-      <MarkdownView styles={markdownStyles} onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}>
+      {tabContent.video ? (
+        <OfflineIndicator>
+          <YoutubeVideo
+            url={tabContent.video}
+            width={tabContentWidth}
+            height={(9 / 16) * tabContentWidth}
+          />
+        </OfflineIndicator>
+      ) : null}
+      <MarkdownView
+        styles={markdownStyles}
+        onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}
+      >
         {tabContent.body}
       </MarkdownView>
     </View>
-  );
+  ) : null;
 
   const tabButtons = {
     read: i18n.t('read'),
@@ -102,7 +126,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           }}
         />
         <View style={styles.imgContainer}>
-          <Image source={{ uri: book.image }} style={styles.image}/>
+          <CachedImage source={{ uri: book.image }} style={styles.image}/>
         </View>
         <Text style={[TextStyles.heading1, styles.title]}>{book.title}</Text>
         <Text style={[TextStyles.body1, styles.author]}>By {book.author}</Text>

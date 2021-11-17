@@ -95,9 +95,9 @@ export const PaginatedBookList: React.FC<PaginatedBookListProps> = ({ books, boo
       </ScrollView>
 
       {/* Current page indicator, hidden when list of pages is empty */}
-      {bookPages.length > 0 && (<View style={styles.text}>
+      {bookPages.length > 0 ? (<View style={styles.text}>
         <Text style={TextStyles.heading3}>{i18n.t('pageMofN', { m: currentPage, n: bookPages.length })}</Text>
-      </View>)}
+      </View>) : null}
     </View>
   );
 };
