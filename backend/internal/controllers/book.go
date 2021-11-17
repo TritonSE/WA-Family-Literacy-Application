@@ -365,6 +365,24 @@ func (c *BookController) GetAllBookClicks(rw http.ResponseWriter, req *http.Requ
 	writeResponse(rw, http.StatusOK, bookAnalytics)
 }
 
+// Fetches 5 most popular books from the past month for the home screen (/books/popular)
+func (c *BookController) GetPopularBooks(rw http.ResponseWriter, req *http.Request) {
+	popularBooks, err := c.Books.FetchPopularBooks(req.Context())
+
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if popularBooks == nil {
+		writeResponse(rw, http.StatusNotFound, "most popular books could not be found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, popularBooks)
+}
+
 // fetches favorite books for the currently authenticated user (/books/favorite)
 func (c *BookController) GetFavorites(rw http.ResponseWriter, req *http.Request) {
 	userID, ok := req.Context().Value("user").(string)

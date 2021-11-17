@@ -327,8 +327,7 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, numDa
  * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
  */
 func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, numDays int) (map[string][]int, error) {
-	var analytics map[string][]int
-	analytics = make(map[string][]int)
+	var analytics map[string][]int = make(map[string][]int)
 
 	query := "SELECT id, last_n_days(clicks, $1) FROM book_analytics"
 	rows, err := db.Conn.Query(ctx, query, numDays)
@@ -351,6 +350,40 @@ func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, numDays int) 
 	}
 
 	return analytics, err
+}
+
+/*
+ * Gets 5 most popular books from the past 30 days based on click analytics
+ */
+func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
+	books := make([]models.Book, 0)
+
+	var query string = "SELECT books.id, title, author, image, created_at, " +
+		"languages FROM books LEFT JOIN book_analytics_last_30 ON " +
+		"books.id = book_analytics_last_30.id " +
+		"ORDER BY clicks DESC FETCH FIRST 5 ROWS ONLY"
+	rows, err := db.Conn.Query(ctx, query)
+
+	if err != nil {
+		fmt.Print(err)
+		return books, errors.Wrap(err, "error on query for most popular books")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book models.Book
+		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+			&book.CreatedAt, &book.Languages); err != nil {
+			fmt.Print(err)
+			return books, errors.Wrap(err, "error on Scan for book information in "+
+				"FetchPopularBooks")
+		}
+
+		books = append(books, book)
+	}
+
+	return books, err
 }
 
 /*
@@ -386,40 +419,6 @@ func (db *BookDatabase) FetchFavorites(ctx context.Context, userID string) ([]mo
 	}
 
 	return favoriteBooks, nil
-}
-
-/*
- * Gets 5 most popular books from the past 30 days based on click analytics
- */
-func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
-	books := make([]models.Book, 0)
-
-	var query string = "SELECT books.id, title, author, image, created_at, " +
-		"languages FROM books LEFT JOIN book_analytics_last_30 ON " +
-		"books.id = book_analytics_last_30.id " +
-		"ORDER BY clicks DESC FETCH FIRST 5 ROWS ONLY"
-	rows, err := db.Conn.Query(ctx, query)
-
-	if err != nil {
-		fmt.Print(err)
-		return books, errors.Wrap(err, "error on query for most popular books")
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var book models.Book
-		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
-			&book.CreatedAt, &book.Languages); err != nil {
-			fmt.Print(err)
-			return books, errors.Wrap(err, "error on Scan for book information in "+
-				"FetchPopularBooks")
-		}
-
-		books = append(books, book)
-	}
-
-	return books, err
 }
 
 /*

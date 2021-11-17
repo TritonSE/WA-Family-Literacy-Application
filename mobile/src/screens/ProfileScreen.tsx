@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
-import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Circle, Svg } from 'react-native-svg';
 
@@ -13,17 +14,84 @@ import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
 import { AuthContext } from '../context/AuthContext';
 import { APIContext } from '../context/APIContext';
+import { Book } from '../models/Book';
+import { PaginatedBookList } from '../components/PaginatedBookList';
+import { useIsFocused } from '@react-navigation/native';
 
+const BOOKS_PER_PAGE = 9; 
+// or to simulate column book list, BOOKS_PER_PAGE = favorites.length + (3 - favorites.length % 3)
+
+/**
+ * comment
+ */
 const SavedTab: React.FC = () => {
+
+  const client = useContext(APIContext);
+  const auth = useContext(AuthContext);
+  const i18n = useContext(I18nContext);
+
+  // comment
+  const [favorites, setFavorites] = useState<Book[]>([]);
+
+  // comment
+  const isFocused = useIsFocused();
+
+  // comment
+  useEffect(
+    () => {
+      (async () => {
+        try {
+          if (auth.user !== null) {
+            const res = await client.getFavorites();
+            setFavorites(res);
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
+      })();
+    }, [isFocused]
+  );
+
+
   return (
     <View>
-      <Text>
-        Saved
-      </Text>
-      <View style={{ height: 300 }} />
+      {auth.user === null ? (
+        <View style={styles.unAuthenticatedContainer}>
+          <Text style={TextStyles.caption1}>{i18n.t("loginToSave")}</Text>
+          <View style={{ height: 300 }} />
+        </View>
+      )
+        :
+        (Array.isArray(favorites) && favorites.length > 0 ?
+          (
+            <View>
+              <PaginatedBookList books={favorites} booksPerPage={BOOKS_PER_PAGE} />
+            </View>
+          )
+          :
+          (
+            <View style={styles.authenticatedContainer} >
+
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[styles.text, styles.textClick]}>{i18n.t("savedTextClick")}</Text>
+                <Image style={styles.bookmarkButton} source={require('../../assets/images/bookmark-regular.png')} />
+                <Text style={[styles.text, styles.textWithin]}>{i18n.t("savedTextWithin")}</Text>
+              </View>
+              <Text style={[styles.text, styles.textToSave]}>{i18n.t("savedTextToSave")}</Text>
+
+              <View style={{ height: 300 }} />
+
+            </View>
+          )
+        )
+      }
     </View>
   );
+
+
 };
+
+
 
 /**
  * Settings Tab to set app locale (language)
@@ -156,6 +224,7 @@ export const ProfileScreen: React.FC = () => {
 
   const [selectedTab, selectTab] = React.useState('settings');
   const tabButtons = {
+    saved: i18n.t('saved'),
     settings: i18n.t('settings'),
     moreInfo: i18n.t('moreInfo'),
   };
@@ -177,7 +246,7 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.buttonGroup}>
           <ButtonGroup buttons={tabButtons} onButtonChange={(btn) => {
             selectTab(btn);
-          }} />
+          }} index={1} />
         </View>
         {TabScreens[selectedTab]}
       </ScrollView>
@@ -292,4 +361,32 @@ const styles = StyleSheet.create({
   inSDLabel: {
     marginLeft: 8,
   },
+  unAuthenticatedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  authenticatedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bookmarkButton: {
+    height: 40,
+    width: 30,
+    tintColor: Colors.orange,
+  },
+  text: {
+    ...TextStyles.heading2,
+    color: Colors.gray,
+  },
+  textClick: {
+    marginRight: 10
+  },
+  textWithin: {
+    marginLeft: 10
+  },
+  textToSave: {
+    marginTop: 10
+  }
 });

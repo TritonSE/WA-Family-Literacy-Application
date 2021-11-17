@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 /**
  * Renders a vertical list of books with 3 books per row.
  */
-export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
+export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books}) => {
   const navigation = useNavigation();
   return (
     <FlatList

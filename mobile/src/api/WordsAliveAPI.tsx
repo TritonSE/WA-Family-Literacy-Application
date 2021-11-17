@@ -39,6 +39,30 @@ class WordsAliveAPI {
     return res.data;
   }
 
+  // returns an individual book by id
+  async getBookFavorite(id: string): Promise<Book> {
+    const res = await this.client.get(`/books/${id}`);
+    return res.data;
+  }
+
+  // gets all books favorited by a user
+  async getFavorites(): Promise<Book[]> {
+    const res = await this.client.get('/books/favorites');
+    return res.data;
+  }
+
+  // favorites a book
+  async favoriteBook(id: string): Promise<void> {
+    await this.client.put(`/books/favorites/${id}`);
+    return;
+  }
+
+  // unfavorite a book
+  async unfavoriteBook(id: string): Promise<void> {
+    await this.client.delete(`/books/favorites/${id}`);
+    return;
+  } 
+
   async getUser(id: string): Promise<User> {
     const res = await this.client.get(`/users/${id}`);
     return res.data;
