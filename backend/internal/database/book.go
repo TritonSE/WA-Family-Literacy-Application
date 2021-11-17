@@ -363,12 +363,9 @@ func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, e
 	books := make([]models.Book, 0)
 
 	var query string = "SELECT books.id, title, author, image, created_at, " +
-		"array_remove(array_agg(lang), NULL) as languages " +
-		"FROM books LEFT JOIN book_contents ON books.id = " +
-		"book_contents.id LEFT JOIN book_analytics_last_30 ON books.id = book_analytics_last_30.id " +
-		"GROUP BY books.id, book_analytics_last_30.clicks " +
-		"ORDER BY clicks " +
-		"DESC FETCH FIRST 5 ROWS ONLY"
+		"languages FROM books LEFT JOIN book_analytics_last_30 ON " +
+		"books.id = book_analytics_last_30.id " +
+		"ORDER BY clicks DESC FETCH FIRST 5 ROWS ONLY"
 	rows, err := db.Conn.Query(ctx, query)
 
 	if err != nil {
