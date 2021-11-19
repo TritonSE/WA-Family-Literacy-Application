@@ -80,7 +80,7 @@ const SettingsTab: React.FC = () => {
               onPress={() => i18n.setLocale(lang)}
               style={styles.box}
             >
-              {lang === i18n.locale && <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')} />}
+              {lang === i18n.locale ? <Image style={styles.boxChecked} source={require('../../assets/images/check-square-solid.png')} /> : null}
             </Pressable>
 
           </View>

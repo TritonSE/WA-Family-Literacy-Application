@@ -41,7 +41,12 @@ func main() {
 }
 
 func authClient() fbAuth.Client {
-	credentials, err := google.CredentialsFromJSON(context.Background(), []byte(os.Getenv("FIREBASE_CREDENTIALS_JSON")), "https://www.googleapis.com/auth/cloud-platform")
+	json, ok := os.LookupEnv("FIREBASE_CREDENTIALS_JSON")
+	if !ok {
+		log.Fatalf("FIREBASE_CREDENTIALS_JSON is unset")
+	}
+
+	credentials, err := google.CredentialsFromJSON(context.Background(), []byte(json), "https://www.googleapis.com/auth/cloud-platform")
 	if err != nil {
 		log.Fatalf("unable to parse firebase credentials: %v\n", err)
 	}

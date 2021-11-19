@@ -78,7 +78,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           } else {
             console.log(err);
           }
-        }); 
+        });
         setLoading(false);
       })();
     },
@@ -88,9 +88,9 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   // Get the tab content (video and body) for the selected tab
   const tabContent = bookDetails !== null && bookDetails[activeButton];
 
-  const tabContentView = tabContent && (
+  const tabContentView = tabContent ? (
     <View style={styles.tabContentContainer}>
-      {tabContent.video && (
+      {tabContent.video ? (
         <OfflineIndicator>
           <YoutubeVideo
             url={tabContent.video}
@@ -98,7 +98,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
             height={(9 / 16) * tabContentWidth}
           />
         </OfflineIndicator>
-      )}
+      ) : null}
       <MarkdownView
         styles={markdownStyles}
         onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}
@@ -106,7 +106,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
         {tabContent.body}
       </MarkdownView>
     </View>
-  );
+  ) : null;
 
   const tabButtons = {
     read: i18n.t('read'),

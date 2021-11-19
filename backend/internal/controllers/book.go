@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -19,6 +20,7 @@ type BookController struct {
 func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) {
 	books, err := c.Books.FetchBookList(req.Context())
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -36,7 +38,12 @@ func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
 
 	book, err := c.Books.FetchBook(req.Context(), id)
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+	if book == nil {
+		writeResponse(rw, http.StatusNotFound, "book not found")
 		return
 	}
 
@@ -51,6 +58,7 @@ func (c *BookController) GetBookDetails(rw http.ResponseWriter, req *http.Reques
 
 	bookDetails, wrongLang, err := c.Books.FetchBookDetails(req.Context(), bookID, lang)
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -80,6 +88,7 @@ func (c *BookController) CreateBook(rw http.ResponseWriter, req *http.Request) {
 	resBook, err := c.Books.InsertBook(req.Context(), reqBook)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -105,6 +114,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 
 	// test for duplicate (id, lang)
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -116,6 +126,7 @@ func (c *BookController) CreateBookDetail(rw http.ResponseWriter, req *http.Requ
 
 	resBookDetail, err := c.Books.InsertBookDetails(req.Context(), bookID, reqBookDetail)
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -139,6 +150,7 @@ func (c *BookController) DeleteBookDetail(rw http.ResponseWriter, req *http.Requ
 	err := c.Books.DeleteBookContent(req.Context(), bookID, lang)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -162,6 +174,7 @@ func (c *BookController) DeleteBook(rw http.ResponseWriter, req *http.Request) {
 	err := c.Books.DeleteBook(req.Context(), bookID)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -190,6 +203,7 @@ func (c *BookController) UpdateBook(rw http.ResponseWriter, req *http.Request) {
 	resBook, err := c.Books.UpdateBook(req.Context(), bookID, reqBook)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -220,6 +234,7 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 	resBookDetails, err := c.Books.UpdateBookDetails(req.Context(), bookID, lang, reqBookDetails)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -242,6 +257,7 @@ func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Requ
 	err := c.Books.IncrementBookCounter(req.Context(), bookID)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}
@@ -273,6 +289,7 @@ func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request
 	bookAnalytics, err := c.Books.FetchBookAnalytics(req.Context(), bookID, numDays)
 
 	if err != nil {
+		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
 		return
 	}

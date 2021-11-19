@@ -74,47 +74,38 @@ jobs:
       - name: Install dependencies
         working-directory: mobile
         run: npm ci
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          expo-cache: true
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
       - name: Build
         working-directory: mobile
         run: npm run build-android
         env:
           BASE_URL: https://api.wordsalive.org
           FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
-      - name: Copy package
-        working-directory: mobile
-        run: mv android/app/build/outputs/apk/release/app-release.apk lets-read-android.apk
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: mobile/lets-read-android.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#  ios:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Clone
-#        uses: actions/checkout@v2
-#      - name: Import codesign certs
-#        uses: apple-actions/import-codesign-certs@v1
-#        with:
-#          p12-file-base64: ${{ secrets.IOS_CERTIFICATES_P12 }}
-#          p12-password: ${{ secrets.IOS_CERTIFICATES_P12_PASSWORD }}
-#      - name: Install dependencies
-#        working-directory: mobile
-#        run: npm ci
-#      - name: Build
-#        working-directory: mobile
-#        run: npm run build-ios
-#        env:
-#          BASE_URL: https://api.wordsalive.org
-#          FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
-#      - name: Copy package
-#        working-directory: mobile
-#        run: mv ios/build/lets-read.ipa lets-read-ios.ipa
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: mobile/lets-read-ios.ipa
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ios:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+      - name: Set up Expo
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          expo-cache: true
+          packager: npm
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Build
+        working-directory: mobile
+        run: npm run build-ios
+        env:
+          BASE_URL: https://api.wordsalive.org
+          FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}

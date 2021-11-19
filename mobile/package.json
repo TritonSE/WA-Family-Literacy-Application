@@ -29,7 +29,6 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-svg": "12.1.1",
-    "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
     "react-native-webview": "11.6.2",
     "react-native-youtube-iframe": "^1.4.1"
@@ -54,8 +53,8 @@
   },
   "scripts": {
     "build": "tsc --strict",
-    "build-android": "( cd android; ./gradlew assembleRelease )",
-    "build-ios": "( cd ios; ./build.sh ) ",
+    "build-android": "expo build:android -t app-bundle",
+    "build-ios": "expo build:ios -t archive",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "start": "expo start",
@@ -65,5 +64,5 @@
     "prod": "BASE_URL=https://api.wordsalive.org npm start"
   },
   "private": true,
-  "version": "1.0.0"
+  "version": "1.3.1"
 }

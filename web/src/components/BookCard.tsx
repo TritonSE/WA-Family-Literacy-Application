@@ -22,12 +22,12 @@ export const BookCard: React.FC<BookCardProps> = ({ book, size = 150, deleteMode
       auth.admin?.can_edit_books ?
         <button className={styles.containerClickable} onClick={() => history.push(`/books/${book.id}`)}>
           <img className={styles.bookImg} src={book.image} alt="" width={size} height={size} style={{ objectFit: 'cover' }} />
-          {deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => onDelete(book.id, book.languages)} />}
+          {deleteMode ? <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => onDelete(book.id, book.languages)} /> : null}
         </button>
         :
         <div className={styles.container}>
           <img className={styles.bookImg} src={book.image} alt="" width={size} height={size} style={{ objectFit: 'cover' }} />
-          {deleteMode && <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => onDelete(book.id, book.languages)} />}
+          {deleteMode ? <img className={styles.deleteIcon} role="presentation" src={DeleteIcon} width="20px" height="20px" alt="" onClick={() => onDelete(book.id, book.languages)} /> : null}
         </div>
     }
   </>;
