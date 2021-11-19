@@ -294,47 +294,12 @@ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) err
 /*
  * Returns an array containing a book's daily click counts given a range from the current day
  */
-func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
+func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, numDays int) ([]int, error) {
 	var analytics []int
-	var currTime = time.Now()
-	var dayInYear = currTime.YearDay()
-	var query string
 
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	// will wrap to previous year
-	if dRange > dayInYear {
-		var prevYear = currTime.Year() - 1
-		// last day of the previous year – determines if leap year
-		var lastDay = time.Date(prevYear, time.December, 31, 0, 0, 0, 0, time.Local).YearDay()
-
-		// truncate range to 365 if user specifies 366 but last year was not leap year
-		if lastDay == 365 && dRange == 366 {
-			// ensures that today's data won't be counted twice
-			firstYearStart = lastDay - (dRange - dayInYear) + 2
-		} else {
-			firstYearStart = lastDay - (dRange - dayInYear) + 1
-		}
-
-		// slice up to 365/366 depending on whether prev year was leap year
-		firstYearEnd = lastDay
-
-		// take from the start of this year to current day
-		secondYearEnd = dayInYear
-	} else {
-		// take dRange number of days up to and including today
-		firstYearStart = dayInYear - dRange + 1
-		firstYearEnd = dayInYear
-
-		// no year wraparound
-		secondYearEnd = 0
-	}
-
-	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
-		"FROM book_analytics WHERE id = $4"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
+	var query string = "SELECT last_n_days(clicks, $1) " +
+		"FROM book_analytics WHERE id = $2"
+	rows, err := db.Conn.Query(ctx, query, numDays, id)
 
 	if err != nil {
 		fmt.Print(err)
@@ -355,4 +320,72 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRang
 
 	return analytics, err
 
+}
+
+/*
+ * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
+ */
+func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, numDays int) (map[string][]int, error) {
+	var analytics map[string][]int
+	analytics = make(map[string][]int)
+
+	var query string = "SELECT id, last_n_days(clicks, $1) " +
+		"FROM book_analytics"
+	rows, err := db.Conn.Query(ctx, query, numDays)
+
+	if err != nil {
+		fmt.Print(err)
+		return analytics, errors.Wrap(err, "error on query for all book analytics")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book_id string
+		var analytic []int
+		if err := rows.Scan(&book_id, &analytic); err != nil {
+			fmt.Print(err)
+			return analytics, errors.Wrap(err, "error on Scan for book id and clicks array in "+
+				"FetchAllBookAnalytics")
+		}
+
+		analytics[book_id] = analytic
+	}
+
+	return analytics, err
+
+}
+
+/*
+ * Gets 5 most popular books from the past 30 days based on click analytics
+ */
+func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
+	books := make([]models.Book, 0)
+
+	var query string = "SELECT books.id, title, author, image, created_at, " +
+		"languages FROM books LEFT JOIN book_analytics_last_30 ON " +
+		"books.id = book_analytics_last_30.id " +
+		"ORDER BY clicks DESC FETCH FIRST 5 ROWS ONLY"
+	rows, err := db.Conn.Query(ctx, query)
+
+	if err != nil {
+		fmt.Print(err)
+		return books, errors.Wrap(err, "error on query for most popular books")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book models.Book
+		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+			&book.CreatedAt, &book.Languages); err != nil {
+			fmt.Print(err)
+			return books, errors.Wrap(err, "error on Scan for book information in "+
+				"FetchPopularBooks")
+		}
+
+		books = append(books, book)
+	}
+
+	return books, err
 }

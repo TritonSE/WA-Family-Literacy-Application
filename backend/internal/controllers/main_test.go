@@ -78,6 +78,9 @@ func TestMain(m *testing.M) {
 		"is_primary_admin) VALUES "+
 		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
 
+	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
+		"('a_id', ARRAY_FILL(20, array[366]));")
+
 	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
 		"('b_id');")
 
@@ -86,6 +89,9 @@ func TestMain(m *testing.M) {
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
 		"('catcher', ARRAY_FILL(1, array[366]));")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
+		"('update');")
 
 	// Close the server
 	defer ts.Close()

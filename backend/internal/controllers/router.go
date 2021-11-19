@@ -47,6 +47,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	r.Route("/books", func(r chi.Router) {
 		r.Get("/", bookController.GetBookList)
 
+		r.Get("/popular", bookController.GetPopularBooks)
+
 		r.Get("/{id}", bookController.GetBook)
 
 		r.Get("/{id}/{lang}", bookController.GetBookDetails)
@@ -79,6 +81,10 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 	r.Route("/analytics", func(r chi.Router) {
 		r.Put("/{id}/inc", bookController.UpdateBookClicks)
+
+		// /analytics?range=<days>
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanAccessAnalytics)).
+			Get("/", bookController.GetAllBookClicks)
 
 		// "localhost:8080/analytics/{id}?range=<days>
 		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanAccessAnalytics)).Get("/{id}", bookController.GetBookClicks)

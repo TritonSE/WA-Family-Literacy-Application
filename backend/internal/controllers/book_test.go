@@ -27,6 +27,18 @@ func TestGetBooks(t *testing.T) {
 
 }
 
+// Test for popular books list
+func TestGetPopularBooks(t *testing.T) {
+	var response []models.Book
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/popular", "", 200, &response)
+
+	// Check for correct number of elements and sorting by popularity
+	require.Len(t, response, 5)
+	require.Equal(t, "a", response[0].Title)
+	require.Equal(t, "c", response[1].Title)
+	require.Equal(t, "catcher in the rye", response[2].Title)
+}
+
 func TestGetBook(t *testing.T) {
 	var response models.Book
 	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/catcher", "", 200, &response)
@@ -386,4 +398,55 @@ func TestGetAnalytics(t *testing.T) {
 
 	require.Len(t, response, 10)
 	require.Equal(t, response[0], 1)
+}
+
+// Test getting analytics for all books
+func TestGetAllAnalytics(t *testing.T) {
+	var response map[string][]int
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 7)
+	require.Len(t, response["c_id"], 1)
+	require.Equal(t, response["catcher"][0], 1)
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=10", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 7)
+	require.Len(t, response["c_id"], 10)
+}
+
+// Test auth for getting all books
+func TestGetAllAnalyticsUnAuth(t *testing.T) {
+	var response string
+
+	// unauthorized user
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+	// missing analytics permission
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusForbidden, &response, "test-token-admin")
+	require.Equal(t, "do not have permission", response)
+}
+
+// Test getting analytics for all books using invalid range
+func TestGetAllAnalyticsNullRange(t *testing.T) {
+	// no range provided
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// range not a valid number
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=test", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// range is out of bounds
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=0", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=377", "",
+		http.StatusBadRequest, nil, "test-token-primary")
 }
