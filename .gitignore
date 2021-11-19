@@ -1,5 +1,8 @@
 .idea/
 .DS_Store
 *.env
+<<<<<<< HEAD
 .vscode/
+=======
+>>>>>>> 1fe9713c4aa6ad57a3df26aec369dd2c8f236879
 .expo
