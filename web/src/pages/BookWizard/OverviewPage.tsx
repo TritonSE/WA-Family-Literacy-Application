@@ -47,6 +47,15 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
 
   const atLeastOneChecked = Array.from(checked.values()).includes(true);
 
+  const mdComponents = {
+    img: ({...props}) => {
+      return (
+        <div className={styles.mdImgContainer}>
+          <img src={props.src} className={styles.mdImage}/>
+        </div>
+      );
+    },
+  };
 
   return (
     <div>
@@ -76,7 +85,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              <ReactMarkdown>
+              <ReactMarkdown components={mdComponents}>
                 {readTab.body}
               </ReactMarkdown>
             </div>
@@ -106,7 +115,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              <ReactMarkdown>
+              <ReactMarkdown components={mdComponents}>
                 {exploreTab.body}
               </ReactMarkdown>
             </div>
@@ -136,7 +145,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
             </div>
 
             <div className={styles.markdownText}>
-              <ReactMarkdown>
+              <ReactMarkdown components={mdComponents}>
                 {learnTab.body.indexOf("<p>") == -1 ?
                   learnTab.body : learnTab.body.substring(3, learnTab.body.length - 4)
                 }
