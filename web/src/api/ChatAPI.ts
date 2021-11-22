@@ -50,10 +50,10 @@ class ChatAPI {
 
   sendMessage(roomId: string, text: string, from: string): void {
     const room = this.chatRoomsCollection.doc(roomId);
-    room.collection('messages').add({
+    room.collection("messages").add({
       text,
       from,
-      sentAt: new Date().toUTCString(),
+      sentAt: Date.now(),
     });
   }
 

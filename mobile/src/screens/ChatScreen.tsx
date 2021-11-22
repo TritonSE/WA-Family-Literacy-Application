@@ -8,6 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
@@ -30,6 +34,7 @@ export const ChatScreen: React.FC = () => {
   const [messageText, setMessageText] = useState<string>('');
   const [chatRoomData, setChatRoomData] = useState<ChatRoom>();
   const [showMoreHelp, setShowMoreHelp] = useState(false);
+  const messagesViewRef = React.useRef(null);
   const i18nCtx = useContext(I18nContext);
 
   const onMessagesChange = (changedMessages: Message[]): void => {
@@ -93,45 +98,101 @@ export const ChatScreen: React.FC = () => {
           <Text style={TextStyles.heading2}>{i18nCtx.t("needMoreHelp")}</Text>
         </TouchableOpacity>
       </View>
+      <KeyboardAvoidingView
+        style={styles.chatContainer}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <>
+            {roomId ? (
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                ref={messagesViewRef}
+                onContentSizeChange={() =>
+                  (
+                    messagesViewRef.current as unknown as ScrollView
+                  )?.scrollToEnd({
+                    animated: true,
+                  })
+                }
+              >
+                {messages.map(({ id, text, from }, index) => {
+                  return (
+                    <View key={id}>
+                      {from !== auth.user.name &&
+                      messages[index - 1].from !== from ? (
+                          <Text style={styles.senderNameText}>{from}</Text>
+                        ) : null}
+                      <View
+                        style={[
+                          styles.mainChatBubble,
+                          from === auth.user.name
+                            ? styles.rightChatBubble
+                            : styles.leftChatBubble,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            TextStyles.caption2,
+                            {
+                              color:
+                                from === auth.user.name
+                                  ? Colors.white
+                                  : Colors.shadowColor,
+                            },
+                          ]}
+                        >
+                          {text}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            ) : (
+              <View style={styles.chatPromptContainer}>
+                <Image
+                  style={styles.chatBubbleIcon}
+                  source={require("../../assets/images/Chat_bubble.png")}
+                />
+                <Text
+                  style={[
+                    TextStyles.heading3,
+                    { color: Colors.gray, textAlign: "center" },
+                  ]}
+                >
+                  {i18nCtx.t("sendUsAMessage")}
+                </Text>
+              </View>
+            )}
 
-      <View style={styles.chatContainer}>
-        <ScrollView>
-          {messages.map(({ id, text, from }) => {
-            
-            return (
-              <Text key={id}>
-                {text}, from: {from}
-              </Text>
-            );
-          })}
-        </ScrollView>
-
-        {!roomId && (
-          <Text>Have any questions or concerns? Send us a message.</Text>
-        )}
-        {chatRoomData && chatRoomData.resolved && !chatRoomData.rating && (
-          <TouchableOpacity onPress={rateChat}>
-            <Text>Leave a rating.</Text>
-          </TouchableOpacity>
-        )}
-        <View style={styles.newMessageContainer}>
-          <TextInput
-            value={messageText}
-            onChangeText={setMessageText}
-            style={[styles.messageInput, TextStyles.caption3]}
-            placeholder="Enter a message"
-          />
-          <TouchableOpacity
-            onPress={sendMessage}
-            style={styles.sendButtonContainer}
-          >
-            <Image
-              style={styles.sendIcon}
-              source={require("../../assets/images/paper-plane-solid.png")}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+            {chatRoomData && chatRoomData.resolved && !chatRoomData.rating && (
+              <TouchableOpacity onPress={rateChat}>
+                <Text>
+                  {i18nCtx.t("conversationResolved", { name })}
+                </Text>
+              </TouchableOpacity>
+            )}
+            <View style={styles.newMessageContainer}>
+              <TextInput
+                value={messageText}
+                onChangeText={setMessageText}
+                style={[styles.messageInput, TextStyles.caption3]}
+                placeholder={i18nCtx.t("enterAMessage")}
+              />
+              <TouchableOpacity
+                onPress={sendMessage}
+                style={styles.sendButtonContainer}
+              >
+                <Image
+                  style={styles.sendIcon}
+                  source={require("../../assets/images/paper-plane-solid.png")}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
 
       {showMoreHelp ? (
         <View style={styles.moreHelpContainer}>
@@ -197,9 +258,7 @@ export const ChatScreen: React.FC = () => {
             />
           </TouchableOpacity>
         </View>
-      ) : (
-        null
-      )}
+      ) : null}
     </SafeAreaView>
   );
 };
@@ -216,30 +275,45 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chatContainer: {
+    paddingHorizontal: 14,
     height: "100%",
     backgroundColor: Colors.white,
     justifyContent: "space-between",
     marginBottom: -36,
+    // flex: 1,
+    //       flexDirection: "column",
+    //       width: "100%",
+  },
+  mainChatBubble: {
+    borderRadius: 12,
+    padding: 18,
+    width: "85%",
+    marginVertical: 10,
+  },
+  senderNameText: {
+    ...TextStyles.caption3,
+    marginLeft: 14,
+    marginBottom: -4,
   },
   leftChatBubble: {
-    backgroundColor: Colors.lightGray,
-    padding: 8,
+    backgroundColor: Colors.mediumGray,
   },
   rightChatBubble: {
     backgroundColor: Colors.orange,
-    padding: 8,
+    marginLeft: "auto",
   },
   messageInput: {
     flex: 1,
     borderWidth: 2,
-    borderColor: Colors.lightGray,
+    borderColor: Colors.mediumGray,
     borderRadius: 5,
     padding: 8,
-    marginBottom: 20,
   },
   newMessageContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 10,
     flexDirection: "row",
-    paddingHorizontal: 20,
+    alignItems: "flex-end",
   },
   sendButtonContainer: {
     height: 38,
@@ -254,6 +328,19 @@ const styles = StyleSheet.create({
     tintColor: Colors.white,
     width: 22,
     height: 22,
+  },
+  chatPromptContainer: {
+    alignSelf: 'center',
+    height: '80%',
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  chatBubbleIcon: {
+    marginBottom: 16,
+    tintColor: Colors.gray,
+    width: 30,
+    height: 30,
   },
   logoContainer: {
     width: "100%",
