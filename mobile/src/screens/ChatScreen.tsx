@@ -56,17 +56,12 @@ export const ChatScreen: React.FC = () => {
       return chatAPI.listenForRoomDetails(roomId, onRoomDataChange);
     }
   }, [roomId]);
-
-  // Chat room data changed (ie. chat was resolved / rated)
+  AsyncStorage.removeItem("chatRoomId");
+  // Chat room data changed
   useEffect(() => {
     if (chatRoomData) {
-      const { id, resolved, rating } = chatRoomData;
-      if (resolved && rating) {
-        // Reset chat
-        AsyncStorage.removeItem('chatRoomId');
-        setMessages([]);
-        setRoomId(null);
-      } else if (messages.length === 0) {
+      const { id } = chatRoomData;
+      if (messages.length === 0) {
         // Subscribe to new chat messages
         return chatAPI.listenForNewMessages(id, onMessagesChange);
       }
@@ -75,8 +70,13 @@ export const ChatScreen: React.FC = () => {
 
   const sendMessage = async (): Promise<void> => {
     let newRoomId = roomId;
-    if (!newRoomId && auth.user) {
-      // Create a new room if no previous roomId
+    console.log(chatRoomData);
+    if ((!newRoomId && auth.user ) || (chatRoomData && chatRoomData.resolved)) {
+      if (chatRoomData && chatRoomData.resolved) {
+        // Reset messages if current chat was resolved
+        setMessages([]);
+      }
+      // Create a new room if no previous roomId OR if current chat is resolved
       newRoomId = await chatAPI.createRoom(auth.user);
       setRoomId(newRoomId);
       AsyncStorage.setItem('chatRoomId', newRoomId);
@@ -148,9 +148,20 @@ export const ChatScreen: React.FC = () => {
                     </View>
                   );
                 })}
+                {chatRoomData && chatRoomData.resolved ? (
+                  <Text style={styles.conversationResolvedText}>
+                    {i18nCtx.t("conversationResolved")}
+                  </Text>
+                ) : null}
               </ScrollView>
-            ) : (
-              <View style={styles.chatPromptContainer}>
+            ) : null}
+            {!roomId || (chatRoomData && chatRoomData.resolved) ? (
+              <View
+                style={[
+                  styles.chatPromptContainer,
+                  (chatRoomData && chatRoomData.resolved) && { height: "20%" },
+                ]}
+              >
                 <Image
                   style={styles.chatBubbleIcon}
                   source={require("../../assets/images/Chat_bubble.png")}
@@ -164,15 +175,7 @@ export const ChatScreen: React.FC = () => {
                   {i18nCtx.t("sendUsAMessage")}
                 </Text>
               </View>
-            )}
-
-            {chatRoomData && chatRoomData.resolved && !chatRoomData.rating && (
-              <TouchableOpacity onPress={rateChat}>
-                <Text>
-                  {i18nCtx.t("conversationResolved", { name })}
-                </Text>
-              </TouchableOpacity>
-            )}
+            ) : null}
             <View style={styles.newMessageContainer}>
               <TextInput
                 value={messageText}
@@ -280,9 +283,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     justifyContent: "space-between",
     marginBottom: -36,
-    // flex: 1,
-    //       flexDirection: "column",
-    //       width: "100%",
   },
   mainChatBubble: {
     borderRadius: 12,
@@ -314,6 +314,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "flex-end",
+  },
+  conversationResolvedText: {
+    ...TextStyles.caption2, 
+    marginTop: 20,
+    color: Colors.orange,
+    width: '70%',
+    textAlign: 'center',
+    alignSelf: 'center'
   },
   sendButtonContainer: {
     height: 38,
