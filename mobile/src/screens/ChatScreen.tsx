@@ -61,28 +61,24 @@ export const ChatScreen: React.FC = () => {
   // Chat room data changed
   useEffect(() => {
     if (chatRoomData) {
-      const { id } = chatRoomData;
       if (messages.length === 0) {
         // Subscribe to new chat messages
-        return chatAPI.listenForNewMessages(id, onMessagesChange);
+        return chatAPI.listenForNewMessages(chatRoomData.id, onMessagesChange);
       }
     }
   }, [chatRoomData]);
 
   const sendMessage = async (): Promise<void> => {
     let newRoomId = roomId;
-    if ((!newRoomId && auth.user) || (chatRoomData && chatRoomData.resolved)) {
-      if (chatRoomData && chatRoomData.resolved) {
-        // Reset messages if current chat was resolved
-        setMessages([]);
-      }
+    if (auth.user) {
       // Create a new room if no previous roomId OR if current chat is resolved
-      newRoomId = await chatAPI.createRoom(auth.user);
-      setRoomId(newRoomId);
-      AsyncStorage.setItem('chatRoomId', newRoomId);
-    }
-    if (newRoomId && auth.user) {
-      chatAPI.sendMessage(newRoomId, messageText, auth.user?.name);
+      if (!newRoomId || (chatRoomData && chatRoomData.resolved)) {
+        setMessages([]);
+        newRoomId = await chatAPI.createRoom(auth.user);
+        setRoomId(newRoomId);
+        AsyncStorage.setItem('chatRoomId', newRoomId);
+      }
+      chatAPI.sendMessage(newRoomId, messageText, auth.user.name);
       setMessageText('');
     }
   };
@@ -115,36 +111,37 @@ export const ChatScreen: React.FC = () => {
                   }
                 >
                   {messages.map(({ id, text, from }, index) => {
-                    return (
-                      <View key={id}>
-                        {from !== auth.user.name &&
-                        messages[index - 1].from !== from ? (
-                            <Text style={styles.senderNameText}>{from}</Text>
-                          ) : null}
-                        <View
-                          style={[
-                            styles.mainChatBubble,
-                            from === auth.user.name
-                              ? styles.rightChatBubble
-                              : styles.leftChatBubble,
-                          ]}
-                        >
-                          <Text
+                    if (auth.user)
+                      return (
+                        <View key={id}>
+                          {from !== auth.user.name &&
+                          messages[index - 1].from !== from ? (
+                              <Text style={styles.senderNameText}>{from}</Text>
+                            ) : null}
+                          <View
                             style={[
-                              TextStyles.caption2,
-                              {
-                                color:
-                                  from === auth.user.name
-                                    ? Colors.white
-                                    : Colors.shadowColor,
-                              },
+                              styles.mainChatBubble,
+                              from === auth.user.name
+                                ? styles.rightChatBubble
+                                : styles.leftChatBubble,
                             ]}
                           >
-                            {text}
-                          </Text>
+                            <Text
+                              style={[
+                                TextStyles.caption2,
+                                {
+                                  color:
+                                    from === auth.user.name
+                                      ? Colors.white
+                                      : Colors.shadowColor,
+                                },
+                              ]}
+                            >
+                              {text}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    );
+                      );
                   })}
                   {chatRoomData && chatRoomData.resolved ? (
                     <Text style={styles.conversationResolvedText}>
