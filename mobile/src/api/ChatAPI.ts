@@ -53,13 +53,6 @@ class ChatAPI {
       sentAt: Date.now(),
     });
   }
-
-  rateChat(roomId: string, rating: number): void {
-    const room = this.chatRoomsCollection.doc(roomId);
-    room.update({
-      rating
-    });
-  }
 }
 
 export { ChatAPI };

@@ -56,7 +56,7 @@ export const ChatScreen: React.FC = () => {
       return chatAPI.listenForRoomDetails(roomId, onRoomDataChange);
     }
   }, [roomId]);
-  AsyncStorage.removeItem("chatRoomId");
+
   // Chat room data changed
   useEffect(() => {
     if (chatRoomData) {
@@ -70,7 +70,6 @@ export const ChatScreen: React.FC = () => {
 
   const sendMessage = async (): Promise<void> => {
     let newRoomId = roomId;
-    console.log(chatRoomData);
     if ((!newRoomId && auth.user ) || (chatRoomData && chatRoomData.resolved)) {
       if (chatRoomData && chatRoomData.resolved) {
         // Reset messages if current chat was resolved
@@ -85,10 +84,6 @@ export const ChatScreen: React.FC = () => {
       chatAPI.sendMessage(newRoomId, messageText, auth.user?.name);
       setMessageText('');
     }
-  };
-
-  const rateChat = (): void => {
-    if (roomId) chatAPI.rateChat(roomId, 4);
   };
 
   return (
