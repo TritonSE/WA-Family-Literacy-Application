@@ -12,7 +12,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
+} from 'react-native';
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
@@ -21,6 +21,7 @@ import { ChatRoom, Message } from '../models/Chat';
 import { AuthContext } from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { OfflineIndicator } from '../components/OfflineIndicator';
 
 const chatAPI = new ChatAPI();
 
@@ -70,7 +71,7 @@ export const ChatScreen: React.FC = () => {
 
   const sendMessage = async (): Promise<void> => {
     let newRoomId = roomId;
-    if ((!newRoomId && auth.user ) || (chatRoomData && chatRoomData.resolved)) {
+    if ((!newRoomId && auth.user) || (chatRoomData && chatRoomData.resolved)) {
       if (chatRoomData && chatRoomData.resolved) {
         // Reset messages if current chat was resolved
         setMessages([]);
@@ -90,105 +91,108 @@ export const ChatScreen: React.FC = () => {
     <SafeAreaView style={styles.contentContainer}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => setShowMoreHelp(true)}>
-          <Text style={TextStyles.heading2}>{i18nCtx.t("needMoreHelp")}</Text>
+          <Text style={TextStyles.heading2}>{i18nCtx.t('needMoreHelp')}</Text>
         </TouchableOpacity>
       </View>
+
       <KeyboardAvoidingView
         style={styles.chatContainer}
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       >
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <>
-            {roomId ? (
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                ref={messagesViewRef}
-                onContentSizeChange={() =>
-                  (
-                    messagesViewRef.current as unknown as ScrollView
-                  )?.scrollToEnd({
-                    animated: true,
-                  })
-                }
-              >
-                {messages.map(({ id, text, from }, index) => {
-                  return (
-                    <View key={id}>
-                      {from !== auth.user.name &&
-                      messages[index - 1].from !== from ? (
-                          <Text style={styles.senderNameText}>{from}</Text>
-                        ) : null}
-                      <View
-                        style={[
-                          styles.mainChatBubble,
-                          from === auth.user.name
-                            ? styles.rightChatBubble
-                            : styles.leftChatBubble,
-                        ]}
-                      >
-                        <Text
+          <OfflineIndicator style={{height: '80%'}}>
+            <>
+              {roomId ? (
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  ref={messagesViewRef}
+                  onContentSizeChange={() =>
+                    (
+                      messagesViewRef.current as unknown as ScrollView
+                    )?.scrollToEnd({
+                      animated: true,
+                    })
+                  }
+                >
+                  {messages.map(({ id, text, from }, index) => {
+                    return (
+                      <View key={id}>
+                        {from !== auth.user.name &&
+                        messages[index - 1].from !== from ? (
+                            <Text style={styles.senderNameText}>{from}</Text>
+                          ) : null}
+                        <View
                           style={[
-                            TextStyles.caption2,
-                            {
-                              color:
-                                from === auth.user.name
-                                  ? Colors.white
-                                  : Colors.shadowColor,
-                            },
+                            styles.mainChatBubble,
+                            from === auth.user.name
+                              ? styles.rightChatBubble
+                              : styles.leftChatBubble,
                           ]}
                         >
-                          {text}
-                        </Text>
+                          <Text
+                            style={[
+                              TextStyles.caption2,
+                              {
+                                color:
+                                  from === auth.user.name
+                                    ? Colors.white
+                                    : Colors.shadowColor,
+                              },
+                            ]}
+                          >
+                            {text}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
-                  );
-                })}
-                {chatRoomData && chatRoomData.resolved ? (
-                  <Text style={styles.conversationResolvedText}>
-                    {i18nCtx.t("conversationResolved")}
-                  </Text>
-                ) : null}
-              </ScrollView>
-            ) : null}
-            {!roomId || (chatRoomData && chatRoomData.resolved) ? (
-              <View
-                style={[
-                  styles.chatPromptContainer,
-                  (chatRoomData && chatRoomData.resolved) && { height: "20%" },
-                ]}
-              >
-                <Image
-                  style={styles.chatBubbleIcon}
-                  source={require("../../assets/images/Chat_bubble.png")}
-                />
-                <Text
+                    );
+                  })}
+                  {chatRoomData && chatRoomData.resolved ? (
+                    <Text style={styles.conversationResolvedText}>
+                      {i18nCtx.t('conversationResolved')}
+                    </Text>
+                  ) : null}
+                </ScrollView>
+              ) : null}
+              {!roomId || (chatRoomData && chatRoomData.resolved) ? (
+                <View
                   style={[
-                    TextStyles.heading3,
-                    { color: Colors.gray, textAlign: "center" },
+                    styles.chatPromptContainer,
+                    chatRoomData && chatRoomData.resolved && { height: '20%' },
                   ]}
                 >
-                  {i18nCtx.t("sendUsAMessage")}
-                </Text>
-              </View>
-            ) : null}
-            <View style={styles.newMessageContainer}>
-              <TextInput
-                value={messageText}
-                onChangeText={setMessageText}
-                style={[styles.messageInput, TextStyles.caption3]}
-                placeholder={i18nCtx.t("enterAMessage")}
-              />
-              <TouchableOpacity
-                onPress={sendMessage}
-                style={styles.sendButtonContainer}
-              >
-                <Image
-                  style={styles.sendIcon}
-                  source={require("../../assets/images/paper-plane-solid.png")}
+                  <Image
+                    style={styles.chatBubbleIcon}
+                    source={require('../../assets/images/Chat_bubble.png')}
+                  />
+                  <Text
+                    style={[
+                      TextStyles.heading3,
+                      { color: Colors.gray, textAlign: 'center' },
+                    ]}
+                  >
+                    {i18nCtx.t('sendUsAMessage')}
+                  </Text>
+                </View>
+              ) : null}
+              <View style={styles.newMessageContainer}>
+                <TextInput
+                  value={messageText}
+                  onChangeText={setMessageText}
+                  style={[styles.messageInput, TextStyles.caption3]}
+                  placeholder={i18nCtx.t('enterAMessage')}
                 />
-              </TouchableOpacity>
-            </View>
-          </>
+                <TouchableOpacity
+                  onPress={sendMessage}
+                  style={styles.sendButtonContainer}
+                >
+                  <Image
+                    style={styles.sendIcon}
+                    source={require('../../assets/images/paper-plane-solid.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+            </>
+          </OfflineIndicator>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
 
@@ -198,37 +202,37 @@ export const ChatScreen: React.FC = () => {
 
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../assets/images/logo-white.png")}
+              source={require('../../assets/images/logo-white.png')}
               style={styles.logo}
             />
           </View>
           {/*Use empty <Text/>s to add double vertical space where necessary*/}
           <View>
-            <Text style={TextStyles.heading1}>{i18nCtx.t("letsTalk")}</Text>
+            <Text style={TextStyles.heading1}>{i18nCtx.t('letsTalk')}</Text>
 
             <Text />
 
             <Text style={TextStyles.heading2}>
-              {i18nCtx.t("tel")}:{" "}
+              {i18nCtx.t('tel')}:{' '}
               <Text
                 style={[styles.body, styles.link]}
-                onPress={() => Linking.openURL("tel:+18582749673")}
+                onPress={() => Linking.openURL('tel:+18582749673')}
               >
                 +1 858.274.9673
               </Text>
             </Text>
             <Text style={TextStyles.heading2}>
-              {i18nCtx.t("days")}:{" "}
-              <Text style={styles.body}>{i18nCtx.t("hours")}</Text>
+              {i18nCtx.t('days')}:{' '}
+              <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
             </Text>
 
             <Text />
 
             <Text style={TextStyles.heading2}>
-              {i18nCtx.t("emailUs")}:{" "}
+              {i18nCtx.t('emailUs')}:{' '}
               <Text
                 style={[styles.body, styles.link]}
-                onPress={() => Linking.openURL("mailto:info@wordsalive.org")}
+                onPress={() => Linking.openURL('mailto:info@wordsalive.org')}
               >
                 info@wordsalive.org
               </Text>
@@ -236,12 +240,12 @@ export const ChatScreen: React.FC = () => {
 
             <Text />
 
-            <Text style={TextStyles.heading2}>{i18nCtx.t("address")}:</Text>
+            <Text style={TextStyles.heading2}>{i18nCtx.t('address')}:</Text>
 
             {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
             <Text style={styles.body} selectable={true}>
-              5111 Santa Fe Street Suite 219{"\n"}San Diego, California, 92109
-              {"\n"}
+              5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109
+              {'\n'}
               United States
             </Text>
           </View>
@@ -252,7 +256,7 @@ export const ChatScreen: React.FC = () => {
           >
             <Image
               style={styles.closeButtonIcon}
-              source={require("../../assets/images/times-solid.png")}
+              source={require('../../assets/images/times-solid.png')}
             />
           </TouchableOpacity>
         </View>
@@ -264,25 +268,25 @@ export const ChatScreen: React.FC = () => {
 const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: Colors.orange,
-    width: "100%",
-    height: "100%",
-    justifyContent: "space-between",
-    flexDirection: "column",
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   headerContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   chatContainer: {
     paddingHorizontal: 14,
-    height: "100%",
+    height: '100%',
     backgroundColor: Colors.white,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     marginBottom: -36,
   },
   mainChatBubble: {
     borderRadius: 12,
     padding: 18,
-    width: "85%",
+    width: '85%',
     marginVertical: 10,
   },
   senderNameText: {
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
   },
   rightChatBubble: {
     backgroundColor: Colors.orange,
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
   messageInput: {
     flex: 1,
@@ -307,16 +311,16 @@ const styles = StyleSheet.create({
   newMessageContainer: {
     paddingVertical: 20,
     paddingHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   conversationResolvedText: {
-    ...TextStyles.caption2, 
+    ...TextStyles.caption2,
     marginTop: 20,
     color: Colors.orange,
     width: '70%',
     textAlign: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   sendButtonContainer: {
     height: 38,
@@ -324,8 +328,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     borderRadius: 5,
     backgroundColor: Colors.orange,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sendIcon: {
     tintColor: Colors.white,
@@ -337,7 +341,7 @@ const styles = StyleSheet.create({
     height: '80%',
     width: '80%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   chatBubbleIcon: {
     marginBottom: 16,
@@ -346,10 +350,10 @@ const styles = StyleSheet.create({
     height: 30,
   },
   logoContainer: {
-    width: "100%",
+    width: '100%',
     height: 200,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 50,
   },
   logo: {
@@ -358,26 +362,26 @@ const styles = StyleSheet.create({
   },
   link: {
     color: Colors.link,
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
   moreHelpContainer: {
-    position: "absolute",
-    justifyContent: "space-around",
+    position: 'absolute',
+    justifyContent: 'space-around',
     top: 0,
     bottom: 0,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     backgroundColor: Colors.orange,
-    width: "100%",
+    width: '100%',
     paddingLeft: 24,
     paddingRight: 24,
   },
   closeButtonContainer: {
-    alignSelf: "center",
+    alignSelf: 'center',
     width: 40,
     height: 40,
     backgroundColor: Colors.white,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 20,
   },
   closeButtonIcon: {
@@ -387,7 +391,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 18,
-    fontFamily: "Gotham-Light",
+    fontFamily: 'Gotham-Light',
     color: Colors.text,
   },
 });
