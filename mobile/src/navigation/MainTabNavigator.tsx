@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { Colors } from '../styles/Colors';
+import { AuthContext } from '../context/AuthContext';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -12,6 +14,7 @@ const Tab = createBottomTabNavigator();
  * Main bottom tab navigator
  */
 export const MainTabNavigator: React.FC = () => {
+  const { isGuest } = useContext(AuthContext);
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -38,11 +41,10 @@ export const MainTabNavigator: React.FC = () => {
         tabStyle: styles.tab,
       }}
     >
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      {!isGuest ? <Tab.Screen name="Chat" component={ChatScreen} /> : null }
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
-
   );
 };
 
