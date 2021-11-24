@@ -17,22 +17,89 @@ type OverviewPageProps = {
   learnTab: TabContent
 };
 
-/**
- * Overview Page for Book Wizard
- */
-export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages, 
-  title, author, image, readTab, exploreTab, learnTab}) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+type TabPreviewProps = {
+  tab: TabContent
+  type: string
+  title: string
+  author: string
+  image: File | null
+};
+
+const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}) => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
-  
-  const [checked, setChecked] = useState<Map<Language, boolean>>
-  (new Map(modalLanguages.map( (lang) => [lang, false])));
+
+  const mdComponents = {
+    img: ({...props}) => {
+      return (
+        <div className={styles.mdImgContainer}>
+          <img src={props.src} className={styles.mdImage}/>
+        </div>
+      );
+    },
+  };
 
   useEffect( () => {
     if (image != null) {
       setPreviewUrl(URL.createObjectURL(image));
     }
   }, [image]);
+
+  return (
+    <div className={styles.tabContainer}>
+      <div className={styles.imageContainer}>
+        <img src={previewUrl} alt='image' className={styles.coverImage}/>            
+      </div>
+      <div className={styles.bookTitle}>{title}</div>
+      <div className={styles.bookAuthor}>By {author}</div>
+
+      <div className={styles.buttonGroup}>
+        {type == "read" ? 
+          (<div className={styles.tabButtonActive}>
+            <div className={styles.buttonActive}>Read</div>
+          </div>) : 
+          (<div className={styles.tabButtonInactive}>
+            <div className={styles.buttonInactive}>Read</div>
+          </div>)}
+
+        {type == "explore" ? 
+          (<div className={styles.tabButtonActive}>
+            <div className={styles.buttonActive}>Explore</div>
+          </div>) : 
+          (<div className={styles.tabButtonInactive}>
+            <div className={styles.buttonInactive}>Explore</div>
+          </div>)}
+
+        {type == "learn" ? 
+          (<div className={styles.tabButtonActive}>
+            <div className={styles.buttonActive}>Learn</div>
+          </div>) : 
+          (<div className={styles.tabButtonInactive}>
+            <div className={styles.buttonInactive}>Learn</div>
+          </div>)} 
+      </div>
+
+      {tab.video ? (<div className={styles.videoContainer}>
+        <iframe className={styles.video} src={tab.video}></iframe>
+      </div>) : null}
+
+      <div className={styles.markdownText}>
+        <ReactMarkdown components={mdComponents}>
+          {tab.body}
+        </ReactMarkdown>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Overview Page for Book Wizard
+ */
+export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages, 
+  title, author, image, readTab, exploreTab, learnTab}) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  
+  const [checked, setChecked] = useState<Map<Language, boolean>>
+  (new Map(modalLanguages.map( (lang) => [lang, false])));
 
   const toggleCheck = (lang: Language): void => {
     setChecked( (prevState) => new Map(prevState).set(lang, !prevState.get(lang))
@@ -47,111 +114,30 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLangua
 
   const atLeastOneChecked = Array.from(checked.values()).includes(true);
 
-  const mdComponents = {
-    img: ({...props}) => {
-      return (
-        <div className={styles.mdImgContainer}>
-          <img src={props.src} className={styles.mdImage}/>
-        </div>
-      );
-    },
-  };
-
   return (
     <div>
       <div className = {wizardStyles.mainDivElement}> 
         <div className={styles.pageContainer}>
-          <div className={styles.tabContainer}>
-            <div className={styles.imageContainer}>
-              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
-            </div>
-            <div className={styles.bookTitle}>{title}</div>
-            <div className={styles.bookAuthor}>By {author}</div>
+          <TabPreview 
+            tab={readTab} 
+            type={"read"} 
+            title={title} 
+            author={author} 
+            image={image}/>
 
-            <div className={styles.buttonGroup}>
-              <div className={styles.tabButtonActive}>
-                <div className={styles.buttonActive}>Read</div>
-              </div>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Explore</div>
-              </div>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Learn</div>
-              </div>
-            </div>
+          <TabPreview 
+            tab={exploreTab} 
+            type={"explore"} 
+            title={title} 
+            author={author} 
+            image={image}/>
 
-            <div className={styles.videoContainer}>
-              <iframe className={styles.video} src={readTab.video}></iframe>
-            </div>
-
-            <div className={styles.markdownText}>
-              <ReactMarkdown components={mdComponents}>
-                {readTab.body}
-              </ReactMarkdown>
-            </div>
-          </div>
-
-          <div className={styles.tabContainer}>
-            <div className={styles.imageContainer}>
-              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
-            </div>
-            <div className={styles.bookTitle}>{title}</div>
-            <div className={styles.bookAuthor}>By {author}</div>
-
-            <div className={styles.buttonGroup}>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Read</div>
-              </div>
-              <div className={styles.tabButtonActive}>
-                <div className={styles.buttonActive}>Explore</div>
-              </div>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Learn</div>
-              </div>
-            </div>
-
-            <div className={styles.videoContainer}>
-              <iframe className={styles.video} src={exploreTab.video}></iframe>
-            </div>
-
-            <div className={styles.markdownText}>
-              <ReactMarkdown components={mdComponents}>
-                {exploreTab.body}
-              </ReactMarkdown>
-            </div>
-          </div>
-
-          <div className={styles.tabContainer}>
-            <div className={styles.imageContainer}>
-              <img src={previewUrl} alt='image' className={styles.coverImage}/>            
-            </div>
-            <div className={styles.bookTitle}>{title}</div>
-            <div className={styles.bookAuthor}>By {author}</div>
-
-            <div className={styles.buttonGroup}>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Read</div>
-              </div>
-              <div className={styles.tabButtonInactive}>
-                <div className={styles.buttonInactive}>Explore</div>
-              </div>
-              <div className={styles.tabButtonActive}>
-                <div className={styles.buttonActive}>Learn</div>
-              </div>
-            </div>
-
-            <div className={styles.videoContainer}>
-              <iframe className={styles.video} src={learnTab.video}></iframe>
-            </div>
-
-            <div className={styles.markdownText}>
-              <ReactMarkdown components={mdComponents}>
-                {learnTab.body.indexOf("<p>") == -1 ?
-                  learnTab.body : learnTab.body.substring(3, learnTab.body.length - 4)
-                }
-              </ReactMarkdown>
-            </div>
-          </div>
+          <TabPreview 
+            tab={learnTab} 
+            type={"learn"} 
+            title={title} 
+            author={author} 
+            image={image}/>
         </div>
 
         <div className = {styles.buttonContainer}>
