@@ -57,6 +57,7 @@ jobs:
         working-directory: web
         run: npm run build:prod
         env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
           REACT_APP_BASE_URL: https://api.wordsalive.org
           REACT_APP_FB_CONFIG: ${{ secrets.PROD_FB_CONFIG }}
       - name: Publish
