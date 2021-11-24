@@ -26,9 +26,10 @@ type TabPreviewProps = {
 };
 
 const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}) => {
-  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const mdComponents = {
+    // TODO inc markdown size
     img: ({...props}) => {
       return (
         <div className={styles.mdImgContainer}>
@@ -40,50 +41,50 @@ const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}
 
   useEffect( () => {
     if (image != null) {
-      setPreviewUrl(URL.createObjectURL(image));
+      setImageUrl(URL.createObjectURL(image));
     }
   }, [image]);
 
   return (
     <div className={styles.tabContainer}>
       <div className={styles.imageContainer}>
-        <img src={previewUrl} alt='image' className={styles.coverImage}/>            
+        <img src={imageUrl} alt='image' className={styles.coverImage}/>            
       </div>
       <div className={styles.bookTitle}>{title}</div>
       <div className={styles.bookAuthor}>By {author}</div>
 
       <div className={styles.buttonGroup}>
-        {type == "read" ? 
+        {type === "read" ? 
           (<div className={styles.tabButtonActive}>
             <div className={styles.buttonActive}>Read</div>
-          </div>) : 
+          </div>) :
           (<div className={styles.tabButtonInactive}>
             <div className={styles.buttonInactive}>Read</div>
           </div>)}
 
-        {type == "explore" ? 
+        {type === "explore" ? 
           (<div className={styles.tabButtonActive}>
             <div className={styles.buttonActive}>Explore</div>
-          </div>) : 
+          </div>) :
           (<div className={styles.tabButtonInactive}>
             <div className={styles.buttonInactive}>Explore</div>
           </div>)}
 
-        {type == "learn" ? 
+        {type === "learn" ? 
           (<div className={styles.tabButtonActive}>
             <div className={styles.buttonActive}>Learn</div>
-          </div>) : 
+          </div>) :
           (<div className={styles.tabButtonInactive}>
             <div className={styles.buttonInactive}>Learn</div>
-          </div>)} 
+          </div>)}
       </div>
 
       {tab.video ? (<div className={styles.videoContainer}>
-        <iframe className={styles.video} src={tab.video}></iframe>
+        <iframe className={styles.video} src={tab.video}/>
       </div>) : null}
 
       <div className={styles.markdownText}>
-        <ReactMarkdown components={mdComponents}>
+        <ReactMarkdown components={mdComponents} linkTarget='_blank'>
           {tab.body}
         </ReactMarkdown>
       </div>
@@ -94,10 +95,10 @@ const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}
 /**
  * Overview Page for Book Wizard
  */
-export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages, 
+export const OverviewPage: React.FC<OverviewPageProps> = ({onSubmit, modalLanguages,
   title, author, image, readTab, exploreTab, learnTab}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  
+
   const [checked, setChecked] = useState<Map<Language, boolean>>
   (new Map(modalLanguages.map( (lang) => [lang, false])));
 

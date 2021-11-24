@@ -136,8 +136,8 @@
 }
 
 .tabContainer {
-  width: 30%;
-  height: 500px;
+  width: 18em;
+  height: 30em;
   overflow-y: scroll;
   border: 1px solid var(--dark-grey);
   margin-left: 20px;
@@ -146,11 +146,8 @@
 
 .imageContainer {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  width: 12em;
+  margin: 30px auto;
   box-shadow: -1px -1px 16px 4px var(--light-grey);
 }
 
@@ -163,14 +160,14 @@
 .bookTitle {
   text-align: center;
   font-family: 'GothamRounded - Bold';
-  font-size: 20px;
+  font-size: 1.5em;
   margin-bottom: 6px;
 }
 
 .bookAuthor {
   text-align: center;
   font-family: 'GothamRounded - Light';
-  font-size: 12px;
+  font-size: 1em;
   margin-bottom: 25px;
 }
 
@@ -183,8 +180,8 @@
 }
 
 .tabButtonActive {
-  width: 50px;
-  height: 16px;
+  width: 3em;
+  height: 1em;
   background-color: var(--orange);
   border-radius: 5px;
   border-style: solid;
@@ -195,8 +192,8 @@
 }
 
 .tabButtonInactive {
-  width: 50px;
-  height: 16px;
+  width: 3em;
+  height: 1em;
   border-radius: 5px;
   border-style: solid;
   border-color: var(--orange);
@@ -207,14 +204,14 @@
 
 .buttonActive {
   text-align: center;
-  font-size: 11px;
+  font-size: 0.7em;
   font-family: 'GothamRounded - Bold';
   color: var(--white);
 }
 
 .buttonInactive {
   text-align: center;
-  font-size: 11px;
+  font-size: 0.7em;
   font-family: 'GothamRounded - Bold';
   color: var(--orange);
 }
