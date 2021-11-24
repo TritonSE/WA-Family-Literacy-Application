@@ -65,6 +65,7 @@ jobs:
         working-directory: web
         run: npm run build:prod
         env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
           REACT_APP_BASE_URL: https://api-staging.wordsalive.org
       - name: Publish
         uses: cloudflare/wrangler-action@1.2.0
