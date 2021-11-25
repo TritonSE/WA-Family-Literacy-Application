@@ -22,8 +22,52 @@ import { AuthContext } from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OfflineIndicator } from '../components/OfflineIndicator';
+import { User } from '../models/User';
 
 const chatAPI = new ChatAPI();
+
+type ChatBubbleProps = {
+  message: string;
+  from: string;
+  currentUser: User;
+  isFirstInChain: boolean;
+};
+
+const ChatBubble: React.FC<ChatBubbleProps> = ({
+  message,
+  from,
+  currentUser,
+  isFirstInChain,
+}) => {
+  return (
+    <View>
+      {/* Show the volunteers name above the chat bubble */}
+      {from !== currentUser.name && isFirstInChain ? (
+        <Text style={styles.senderNameText}>{from}</Text>
+      ) : null}
+      <View
+        style={[
+          styles.mainChatBubble,
+          from === currentUser.name
+            ? styles.rightChatBubble
+            : styles.leftChatBubble,
+        ]}
+      >
+        <Text
+          style={[
+            TextStyles.caption2,
+            {
+              color:
+                from === currentUser.name ? Colors.white : Colors.shadowColor,
+            },
+          ]}
+        >
+          {message}
+        </Text>
+      </View>
+    </View>
+  );
+};
 
 /**
  * Left tab on navbar for chatting with volunteers
@@ -85,182 +129,177 @@ export const ChatScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.contentContainer}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => setShowMoreHelp(true)}>
-          <Text style={TextStyles.heading2}>{i18nCtx.t('needMoreHelp')}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <KeyboardAvoidingView
-        style={styles.chatContainer}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      >
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-          <OfflineIndicator style={{height: '80%'}}>
-            <>
-              {roomId ? (
-                <ScrollView
-                  showsVerticalScrollIndicator={false}
-                  ref={messagesViewRef}
-                  onContentSizeChange={() =>
-                    (
-                      messagesViewRef.current as unknown as ScrollView
-                    )?.scrollToEnd({
-                      animated: true,
-                    })
-                  }
-                >
-                  {messages.map(({ id, text, from }, index) => {
-                    if (auth.user)
-                      return (
-                        <View key={id}>
-                          {from !== auth.user.name &&
-                          messages[index - 1].from !== from ? (
-                              <Text style={styles.senderNameText}>{from}</Text>
-                            ) : null}
-                          <View
-                            style={[
-                              styles.mainChatBubble,
-                              from === auth.user.name
-                                ? styles.rightChatBubble
-                                : styles.leftChatBubble,
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                TextStyles.caption2,
-                                {
-                                  color:
-                                    from === auth.user.name
-                                      ? Colors.white
-                                      : Colors.shadowColor,
-                                },
-                              ]}
-                            >
-                              {text}
-                            </Text>
-                          </View>
-                        </View>
-                      );
-                  })}
-                  {chatRoomData && chatRoomData.resolved ? (
-                    <Text style={styles.conversationResolvedText}>
-                      {i18nCtx.t('conversationResolved')}
-                    </Text>
-                  ) : null}
-                </ScrollView>
-              ) : null}
-              {!roomId || (chatRoomData && chatRoomData.resolved) ? (
-                <View
-                  style={[
-                    styles.chatPromptContainer,
-                    chatRoomData && chatRoomData.resolved && { height: '20%' },
-                  ]}
-                >
-                  <Image
-                    style={styles.chatBubbleIcon}
-                    source={require('../../assets/images/Chat_bubble.png')}
-                  />
-                  <Text
-                    style={[
-                      TextStyles.heading3,
-                      { color: Colors.gray, textAlign: 'center' },
-                    ]}
-                  >
-                    {i18nCtx.t('sendUsAMessage')}
-                  </Text>
-                </View>
-              ) : null}
-              <View style={styles.newMessageContainer}>
-                <TextInput
-                  value={messageText}
-                  onChangeText={setMessageText}
-                  style={[styles.messageInput, TextStyles.caption3]}
-                  placeholder={i18nCtx.t('enterAMessage')}
-                />
-                <TouchableOpacity
-                  onPress={sendMessage}
-                  style={styles.sendButtonContainer}
-                >
-                  <Image
-                    style={styles.sendIcon}
-                    source={require('../../assets/images/paper-plane-solid.png')}
-                  />
-                </TouchableOpacity>
-              </View>
-            </>
-          </OfflineIndicator>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-
-      {showMoreHelp ? (
-        <View style={styles.moreHelpContainer}>
-          <Text />
-
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../../assets/images/logo-white.png')}
-              style={styles.logo}
-            />
-          </View>
-          {/*Use empty <Text/>s to add double vertical space where necessary*/}
-          <View>
-            <Text style={TextStyles.heading1}>{i18nCtx.t('letsTalk')}</Text>
-
-            <Text />
-
-            <Text style={TextStyles.heading2}>
-              {i18nCtx.t('tel')}:{' '}
-              <Text
-                style={[styles.body, styles.link]}
-                onPress={() => Linking.openURL('tel:+18582749673')}
-              >
-                +1 858.274.9673
-              </Text>
-            </Text>
-            <Text style={TextStyles.heading2}>
-              {i18nCtx.t('days')}:{' '}
-              <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
-            </Text>
-
-            <Text />
-
-            <Text style={TextStyles.heading2}>
-              {i18nCtx.t('emailUs')}:{' '}
-              <Text
-                style={[styles.body, styles.link]}
-                onPress={() => Linking.openURL('mailto:info@wordsalive.org')}
-              >
-                info@wordsalive.org
-              </Text>
-            </Text>
-
-            <Text />
-
-            <Text style={TextStyles.heading2}>{i18nCtx.t('address')}:</Text>
-
-            {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
-            <Text style={styles.body} selectable={true}>
-              5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109
-              {'\n'}
-              United States
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => setShowMoreHelp(false)}
-            style={styles.closeButtonContainer}
-          >
-            <Image
-              style={styles.closeButtonIcon}
-              source={require('../../assets/images/times-solid.png')}
-            />
+    <>
+      <SafeAreaView style={styles.contentContainer}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => setShowMoreHelp(true)}>
+            <Text style={TextStyles.heading2}>{i18nCtx.t('needMoreHelp')}</Text>
           </TouchableOpacity>
         </View>
-      ) : null}
-    </SafeAreaView>
+        <KeyboardAvoidingView
+          style={styles.chatContainer}
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        >
+          <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <OfflineIndicator style={{ height: '80%' }}>
+              <>
+                {roomId ? (
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    ref={messagesViewRef}
+                    onContentSizeChange={() =>
+                      messagesViewRef.current?.scrollToEnd({
+                        animated: true,
+                      })
+                    }
+                  >
+                    {/* Render chat bubbles */}
+                    {messages.map(({ id, text, from }, index) => (
+                      <ChatBubble
+                        key={id}
+                        message={text}
+                        from={from}
+                        currentUser={auth.user}
+                        isFirstInChain={
+                          index - 1 >= 0 && messages[index - 1].from !== from
+                        }
+                      />
+                    ))}
+                    {/* Show conversation resolved text */}
+                    {chatRoomData && chatRoomData.resolved ? (
+                      <Text style={styles.conversationResolvedText}>
+                        {i18nCtx.t('conversationResolved')}
+                      </Text>
+                    ) : null}
+                  </ScrollView>
+                ) : null}
+                {/* Prompt user to send a message */}
+                {!roomId || (chatRoomData && chatRoomData.resolved) ? (
+                  <View
+                    style={[
+                      styles.chatPromptContainer,
+                      chatRoomData &&
+                        chatRoomData.resolved && { height: '20%' },
+                    ]}
+                  >
+                    <Image
+                      style={styles.chatBubbleIcon}
+                      source={require('../../assets/images/Chat_bubble.png')}
+                    />
+                    <Text
+                      style={[
+                        TextStyles.heading3,
+                        { color: Colors.gray, textAlign: 'center' },
+                      ]}
+                    >
+                      {i18nCtx.t('sendUsAMessage')}
+                    </Text>
+                  </View>
+                ) : null}
+                <View style={styles.newMessageContainer}>
+                  <TextInput
+                    value={messageText}
+                    onChangeText={setMessageText}
+                    style={[styles.messageInput, TextStyles.caption3]}
+                    placeholder={i18nCtx.t('enterAMessage')}
+                  />
+                  <TouchableOpacity
+                    onPress={sendMessage}
+                    style={styles.sendButtonContainer}
+                  >
+                    <Image
+                      style={styles.sendIcon}
+                      source={require('../../assets/images/paper-plane-solid.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </>
+            </OfflineIndicator>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+      <MoreHelpPopup visible={showMoreHelp} setVisible={setShowMoreHelp} />
+    </>
   );
+};
+
+type MoreHelpPopupProps = {
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
+};
+
+const MoreHelpPopup: React.FC<MoreHelpPopupProps> = ({
+  visible,
+  setVisible,
+}) => {
+  const i18nCtx = useContext(I18nContext);
+  if (visible)
+    return (
+      <View style={styles.moreHelpContainer}>
+        <Text />
+
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../assets/images/logo-white.png')}
+            style={styles.logo}
+          />
+        </View>
+        {/*Use empty <Text/>s to add double vertical space where necessary*/}
+        <View>
+          <Text style={TextStyles.heading1}>{i18nCtx.t('letsTalk')}</Text>
+
+          <Text />
+
+          <Text style={TextStyles.heading2}>
+            {i18nCtx.t('tel')}:{' '}
+            <Text
+              style={[styles.body, styles.link]}
+              onPress={() => Linking.openURL('tel:+18582749673')}
+            >
+              +1 858.274.9673
+            </Text>
+          </Text>
+          <Text style={TextStyles.heading2}>
+            {i18nCtx.t('days')}:{' '}
+            <Text style={styles.body}>{i18nCtx.t('hours')}</Text>
+          </Text>
+
+          <Text />
+
+          <Text style={TextStyles.heading2}>
+            {i18nCtx.t('emailUs')}:{' '}
+            <Text
+              style={[styles.body, styles.link]}
+              onPress={() => Linking.openURL('mailto:info@wordsalive.org')}
+            >
+              info@wordsalive.org
+            </Text>
+          </Text>
+
+          <Text />
+
+          <Text style={TextStyles.heading2}>{i18nCtx.t('address')}:</Text>
+
+          {/*We would use separate <Text> tags instead of \n's here, but we want the entire address to be selectable as one element so it can be copied or opened in Maps*/}
+          <Text style={styles.body} selectable={true}>
+            5111 Santa Fe Street Suite 219{'\n'}San Diego, California, 92109
+            {'\n'}
+            United States
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => setVisible(false)}
+          style={styles.closeButtonContainer}
+        >
+          <Image
+            style={styles.closeButtonIcon}
+            source={require('../../assets/images/times-solid.png')}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  return null;
 };
 
 const styles = StyleSheet.create({
