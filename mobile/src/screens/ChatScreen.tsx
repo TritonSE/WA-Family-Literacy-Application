@@ -29,7 +29,7 @@ const chatAPI = new ChatAPI();
 type ChatBubbleProps = {
   message: string;
   from: string;
-  currentUser: User;
+  currentUser: User | null;
   isFirstInChain: boolean;
 };
 
@@ -130,12 +130,13 @@ export const ChatScreen: React.FC = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.contentContainer}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => setShowMoreHelp(true)}>
-            <Text style={TextStyles.heading2}>{i18nCtx.t('needMoreHelp')}</Text>
-          </TouchableOpacity>
-        </View>
+      <SafeAreaView style={styles.contentContainer} edges={['top']}>
+        <TouchableOpacity
+          style={styles.headerContainer}
+          onPress={() => setShowMoreHelp(true)}
+        >
+          <Text style={TextStyles.heading2}>{i18nCtx.t('needMoreHelp')}</Text>
+        </TouchableOpacity>
         <KeyboardAvoidingView
           style={styles.chatContainer}
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -173,7 +174,7 @@ export const ChatScreen: React.FC = () => {
                     ) : null}
                   </ScrollView>
                 ) : null}
-                {/* Prompt user to send a message */}
+                {/* Show send message prompt */}
                 {!roomId || (chatRoomData && chatRoomData.resolved) ? (
                   <View
                     style={[
@@ -304,21 +305,19 @@ const MoreHelpPopup: React.FC<MoreHelpPopupProps> = ({
 
 const styles = StyleSheet.create({
   contentContainer: {
+    flex: 1,
     backgroundColor: Colors.orange,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'space-between',
     flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   headerContainer: {
+    height: 30,
     alignItems: 'center',
   },
   chatContainer: {
     paddingHorizontal: 14,
-    height: '100%',
+    flex: 1,
     backgroundColor: Colors.white,
-    justifyContent: 'space-between',
-    marginBottom: -36,
   },
   mainChatBubble: {
     borderRadius: 12,
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   newMessageContainer: {
-    paddingVertical: 20,
+    paddingVertical: 14,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -374,8 +373,8 @@ const styles = StyleSheet.create({
     height: 22,
   },
   chatPromptContainer: {
+    flex: 1,
     alignSelf: 'center',
-    height: '80%',
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
