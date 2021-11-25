@@ -30,6 +30,7 @@ const chatAPI = new ChatAPI();
  */
 export const ChatScreen: React.FC = () => {
   const auth = useContext(AuthContext);
+  const chatRoomIdKey = `chatRoomId-${auth.user?.id}`;
   const [roomId, setRoomId] = useState<string | null>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>('');
@@ -48,7 +49,7 @@ export const ChatScreen: React.FC = () => {
 
   // Use roomId from previous session if exist
   useEffect(() => {
-    AsyncStorage.getItem('chatRoomId').then((id) => setRoomId(id));
+    AsyncStorage.getItem(chatRoomIdKey).then((id) => setRoomId(id));
   }, []);
 
   // Subscribe to chat room data changes
@@ -76,7 +77,7 @@ export const ChatScreen: React.FC = () => {
         setMessages([]);
         newRoomId = await chatAPI.createRoom(auth.user);
         setRoomId(newRoomId);
-        AsyncStorage.setItem('chatRoomId', newRoomId);
+        AsyncStorage.setItem(chatRoomIdKey, newRoomId);
       }
       chatAPI.sendMessage(newRoomId, messageText, auth.user.name);
       setMessageText('');
