@@ -39,34 +39,36 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
   currentUser,
   isFirstInChain,
 }) => {
-  return (
-    <View>
-      {/* Show the volunteers name above the chat bubble */}
-      {from !== currentUser.name && isFirstInChain ? (
-        <Text style={styles.senderNameText}>{from}</Text>
-      ) : null}
-      <View
-        style={[
-          styles.mainChatBubble,
-          from === currentUser.name
-            ? styles.rightChatBubble
-            : styles.leftChatBubble,
-        ]}
-      >
-        <Text
+  if (currentUser)
+    return (
+      <View>
+        {/* Show the volunteers name above the chat bubble */}
+        {from !== currentUser.name && isFirstInChain ? (
+          <Text style={styles.senderNameText}>{from}</Text>
+        ) : null}
+        <View
           style={[
-            TextStyles.caption2,
-            {
-              color:
-                from === currentUser.name ? Colors.white : Colors.shadowColor,
-            },
+            styles.mainChatBubble,
+            from === currentUser.name
+              ? styles.rightChatBubble
+              : styles.leftChatBubble,
           ]}
         >
-          {message}
-        </Text>
+          <Text
+            style={[
+              TextStyles.caption2,
+              {
+                color:
+                from === currentUser.name ? Colors.white : Colors.shadowColor,
+              },
+            ]}
+          >
+            {message}
+          </Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  return null;
 };
 
 /**
@@ -80,7 +82,7 @@ export const ChatScreen: React.FC = () => {
   const [messageText, setMessageText] = useState<string>('');
   const [chatRoomData, setChatRoomData] = useState<ChatRoom>();
   const [showMoreHelp, setShowMoreHelp] = useState(false);
-  const messagesViewRef = React.useRef(null);
+  const messagesViewRef = React.useRef<ScrollView>(null);
   const i18nCtx = useContext(I18nContext);
 
   const onMessagesChange = (changedMessages: Message[]): void => {
@@ -149,7 +151,7 @@ export const ChatScreen: React.FC = () => {
                     showsVerticalScrollIndicator={false}
                     ref={messagesViewRef}
                     onContentSizeChange={() =>
-                      messagesViewRef.current?.scrollToEnd({
+                      messagesViewRef?.current?.scrollToEnd({
                         animated: true,
                       })
                     }
