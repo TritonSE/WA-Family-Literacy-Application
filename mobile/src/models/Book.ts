@@ -7,6 +7,7 @@ export type Book = {
   author: string;
   image?: string;
   languages: Language[];
+  favorite?: boolean | undefined
   created_at: string;
 };
 
