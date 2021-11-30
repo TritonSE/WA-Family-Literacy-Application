@@ -25,6 +25,15 @@ type TabPreviewProps = {
   image: File | null
 };
 
+function parseYoutubeURL(url: string): string {
+  const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const m = url.match(regExp);
+  if (m && m[2].length == 11) {
+    return m[2];
+  }
+  return "";
+}
+
 const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}) => {
   const [imageUrl, setImageUrl] = useState("");
 
@@ -80,7 +89,12 @@ const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}
       </div>
 
       {tab.video ? (<div className={styles.videoContainer}>
-        <iframe className={styles.video} src={tab.video}/>
+
+        <iframe className={styles.video}
+          src={`https://www.youtube.com/embed/${parseYoutubeURL(tab.video)}`}
+          title="YouTube video player" frameBorder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowFullScreen></iframe>
       </div>) : null}
 
       <div className={styles.markdownText}>
