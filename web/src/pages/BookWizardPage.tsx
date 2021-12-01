@@ -87,7 +87,7 @@ export const BookWizardPage: React.FC = () => {
 
         history.push('/books');
         return;
-      } catch (e) {
+      } catch (e: any) {
         alert(`Unable to update book: ${e.message}`);
       }
     } else {
@@ -107,7 +107,7 @@ export const BookWizardPage: React.FC = () => {
         history.push('/books');
         return;
       }
-      catch (e) {
+      catch (e: any) {
         alert(`Unable to Upload Book: ${e.message}`);
       }
     }
