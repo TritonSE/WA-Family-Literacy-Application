@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Constants from 'expo-constants';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 import * as SecureStore from 'expo-secure-store';
 
 import { User } from '../models/User';
@@ -124,7 +124,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   const sendPasswordResetEmail = (email: string, showModal: () => void): void => {
-    
+
     (async () => {
       try {
         const res: string[] = await auth.fetchSignInMethodsForEmail(email);
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         setError(new Error('Invalid Email Address'));
       }
     })();
-    
+
   };
 
   const logout = (): void => {
