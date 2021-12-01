@@ -15,4 +15,3 @@ CREATE INDEX favorite_books_idx_user_id ON favorite_books(user_id);
 DROP INDEX favorite_books_idx_user_id;
 DROP TABLE favorite_books;
 -- +goose StatementEnd
-
