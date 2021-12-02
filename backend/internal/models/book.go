@@ -28,6 +28,7 @@ type Book struct {
 	Author    string    `json:"author"`
 	Image     *string   `json:"image"`      // image link
 	Languages []string  `json:"languages"`  // Array of languages (ISO 639-1)
+	Favorite  bool      `json:"favorite"`   // if book is favorited
 	CreatedAt time.Time `json:"created_at"` // Following ISO 8601
 }
 

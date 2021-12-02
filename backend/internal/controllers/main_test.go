@@ -27,6 +27,10 @@ func TestMain(m *testing.M) {
 	_, _ = conn.Exec(ctx, "TRUNCATE admins")
 	_, _ = conn.Exec(ctx, "TRUNCATE image")
 
+	//add user
+	conn.Exec(ctx, "INSERT INTO users (id, email, name, in_san_diego) values ('test_user',"+
+		"'test_user@gmail.com', 'Test User', true)")
+
 	// Populate books database
 	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) values ('c_id', 'c','c1');")
 	conn.Exec(ctx, "INSERT INTO book_info (id, title, author) values ('a_id', 'a','a1');")
@@ -75,8 +79,11 @@ func TestMain(m *testing.M) {
 	// Seed admin database with primary admin
 	conn.Exec(ctx, "INSERT INTO admins (id, email, name, can_manage_users, "+
 		"can_upload_books, can_edit_books, can_delete_books, can_access_analytics, "+
-		"is_primary_admin) VALUES "+
-		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true)")
+		"can_chat, is_primary_admin) VALUES "+
+		"('primary', 'admin@words.alive', 'admin', true, true, true, true, true, true, true)")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
+		"('a_id', ARRAY_FILL(20, array[366]));")
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
 		"('b_id');")
@@ -86,6 +93,9 @@ func TestMain(m *testing.M) {
 
 	conn.Exec(ctx, "INSERT INTO book_analytics (id, clicks) values "+
 		"('catcher', ARRAY_FILL(1, array[366]));")
+
+	conn.Exec(ctx, "INSERT INTO book_analytics (id) values "+
+		"('update');")
 
 	// Close the server
 	defer ts.Close()

@@ -27,7 +27,7 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 	adminDB := database.AdminDatabase{Conn: dbConn}
 
 	// Set up the controller, which receives and responds to HTTP requests
-	bookController := BookController{Books: bookDB}
+	bookController := BookController{Books: bookDB, Auth: authenticator}
 	imageController := ImgController{Image: imageDB}
 	userController := UserController{Users: userDB}
 	adminController := AdminController{Admins: adminDB, Auth: authenticator}
@@ -46,6 +46,8 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 	r.Route("/books", func(r chi.Router) {
 		r.Get("/", bookController.GetBookList)
+
+		r.Get("/popular", bookController.GetPopularBooks)
 
 		r.Get("/{id}", bookController.GetBook)
 
@@ -68,6 +70,15 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanEditBooks)).
 			Patch("/{id}/{lang}", bookController.UpdateBookDetails)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Get("/favorites", bookController.GetFavorites)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Put("/favorites/{id}", bookController.AddToFavorites)
+
+		r.With(middleware.RequireAuth(authenticator)).
+			Delete("/favorites/{id}", bookController.DeleteFromFavorites)
 	})
 
 	r.Route("/images", func(r chi.Router) {
@@ -79,6 +90,10 @@ func GetRouter(authenticator auth.Authenticator) chi.Router {
 
 	r.Route("/analytics", func(r chi.Router) {
 		r.Put("/{id}/inc", bookController.UpdateBookClicks)
+
+		// /analytics?range=<days>
+		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanAccessAnalytics)).
+			Get("/", bookController.GetAllBookClicks)
 
 		// "localhost:8080/analytics/{id}?range=<days>
 		r.With(middleware.RequireAuth(authenticator), middleware.RequirePermission(adminDB, models.CanAccessAnalytics)).Get("/{id}", bookController.GetBookClicks)

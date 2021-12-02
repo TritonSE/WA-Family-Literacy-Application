@@ -52,6 +52,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
   const [uploadBooks, setUploadBooks] = useState(false);
   const [editBooks, setEditBooks] = useState(false);
   const [deleteBooks, setDeleteBooks] = useState(false);
+  const [canChat, setCanChat] = useState(false);
 
 
   // upload books toggle
@@ -61,7 +62,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setDeleteBooks(false);
   };
 
-  // diplay the modal for managing and set the current permissions for the admin
+  // display the modal for managing and set the current permissions for the admin
   const displayManageModal = (id: string): void => {
     setManageId(id);
     setManageModal(true);
@@ -70,6 +71,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setUploadBooks(admin.can_upload_books);
     setDeleteBooks(admin.can_delete_books);
     setEditBooks(admin.can_edit_books);
+    setCanChat(admin.can_chat);
   };
 
   // update an admin with call to backend
@@ -83,6 +85,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       can_upload_books: uploadBooks,
       can_edit_books: editBooks,
       can_delete_books: deleteBooks,
+      can_chat: canChat
     };
 
     try {
@@ -152,6 +155,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                   <div className={styles.allCheckboxesContainer}>
 
                     <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
+                    <Checkbox className={styles.checkbox} label="Chat" id="chatBox" onChange={() => setCanChat(prevChat => !prevChat)} checked={canChat} />
                     <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 
                     {uploadBooks ? (
