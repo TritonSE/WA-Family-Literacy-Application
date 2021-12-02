@@ -38,7 +38,6 @@ const TabPreview: React.FC<TabPreviewProps> = ({tab, type, title, author, image}
   const [imageUrl, setImageUrl] = useState("");
 
   const mdComponents = {
-    // TODO inc markdown size
     img: ({...props}) => {
       return (
         <div className={styles.mdImgContainer}>
