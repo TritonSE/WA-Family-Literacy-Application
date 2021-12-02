@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -36,7 +37,7 @@ func (db *BookDatabase) FetchBookList(ctx context.Context) ([]models.Book, error
 		var book models.Book
 		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
 			&book.CreatedAt, &book.Languages); err != nil {
-			fmt.Print(err)
+			log.Println(err)
 			return nil, errors.Wrap(err, "error scanning result of"+
 				" SELECT FROM books in FetchBookList")
 		}
@@ -97,7 +98,6 @@ func (db *BookDatabase) FetchBookDetails(ctx context.Context, id string, lang st
  */
 func (db *BookDatabase) FetchBook(ctx context.Context, id string) (*models.Book, error) {
 	var book models.Book
-
 	query := "SELECT id, title, author, image, created_at, languages FROM books WHERE id = $1"
 
 	err := db.Conn.QueryRow(ctx, query, id).Scan(&book.ID, &book.Title, &book.Author, &book.Image,
@@ -244,7 +244,7 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string, lang s
 		book.Learn.Video, book.Learn.Body, id, lang)
 
 	if err != nil {
-		fmt.Print(err)
+		log.Println(err)
 		return nil, errors.Wrap(err, "error on updating book_contents")
 	}
 
@@ -259,18 +259,18 @@ func (db *BookDatabase) UpdateBookDetails(ctx context.Context, id string, lang s
  */
 func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) error {
 	var lastUpdated time.Time
-	var time = time.Now()
-	var dayInYear = time.YearDay()
-	var query string = "SELECT last_updated FROM book_analytics WHERE id = $1"
+	now := time.Now().UTC()
+	dayInYear := now.YearDay()
+	query := "SELECT last_updated FROM book_analytics WHERE id = $1"
 
 	err := db.Conn.QueryRow(ctx, query, id).Scan(&lastUpdated)
-
 	if err != nil {
-		fmt.Print(err)
+		log.Println(err)
 		return errors.Wrap(err, "error on accessing book_analytics")
 	}
+	lastUpdated = lastUpdated.UTC()
 
-	if lastUpdated.YearDay() == time.YearDay() && lastUpdated.Year() == time.Year() {
+	if lastUpdated.YearDay() == dayInYear && lastUpdated.Year() == now.Year() {
 		query = "UPDATE book_analytics SET " +
 			"clicks[$1] = clicks[$1] + 1," +
 			"last_updated = $2 WHERE id = $3"
@@ -280,10 +280,10 @@ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) err
 			"last_updated = $2 WHERE id = $3"
 	}
 
-	_, err = db.Conn.Exec(ctx, query, dayInYear, time, id)
+	_, err = db.Conn.Exec(ctx, query, dayInYear, now, id)
 
 	if err != nil {
-		fmt.Print(err)
+		log.Println(err)
 		return errors.Wrap(err, "error on updating book_analytics")
 	}
 
@@ -294,50 +294,15 @@ func (db *BookDatabase) IncrementBookCounter(ctx context.Context, id string) err
 /*
  * Returns an array containing a book's daily click counts given a range from the current day
  */
-func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRange int) ([]int, error) {
+func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, numDays int) ([]int, error) {
 	var analytics []int
-	var currTime = time.Now()
-	var dayInYear = currTime.YearDay()
-	var query string
 
-	var firstYearStart int
-	var firstYearEnd int
-	var secondYearEnd int
-
-	// will wrap to previous year
-	if dRange > dayInYear {
-		var prevYear = currTime.Year() - 1
-		// last day of the previous year – determines if leap year
-		var lastDay = time.Date(prevYear, time.December, 31, 0, 0, 0, 0, time.Local).YearDay()
-
-		// truncate range to 365 if user specifies 366 but last year was not leap year
-		if lastDay == 365 && dRange == 366 {
-			// ensures that today's data won't be counted twice
-			firstYearStart = lastDay - (dRange - dayInYear) + 2
-		} else {
-			firstYearStart = lastDay - (dRange - dayInYear) + 1
-		}
-
-		// slice up to 365/366 depending on whether prev year was leap year
-		firstYearEnd = lastDay
-
-		// take from the start of this year to current day
-		secondYearEnd = dayInYear
-	} else {
-		// take dRange number of days up to and including today
-		firstYearStart = dayInYear - dRange + 1
-		firstYearEnd = dayInYear
-
-		// no year wraparound
-		secondYearEnd = 0
-	}
-
-	query = "SELECT ARRAY_CAT(clicks[$1:$2], clicks[1:$3]) " +
-		"FROM book_analytics WHERE id = $4"
-	rows, err := db.Conn.Query(ctx, query, firstYearStart, firstYearEnd, secondYearEnd, id)
+	var query string = "SELECT last_n_days(clicks, $1) " +
+		"FROM book_analytics WHERE id = $2"
+	rows, err := db.Conn.Query(ctx, query, numDays, id)
 
 	if err != nil {
-		fmt.Print(err)
+		log.Println(err)
 		return analytics, errors.Wrap(err, "error on query for book analytics")
 	}
 
@@ -350,9 +315,169 @@ func (db *BookDatabase) FetchBookAnalytics(ctx context.Context, id string, dRang
 	err = rows.Scan(&analytics)
 
 	if err != nil {
+		log.Println(err)
 		return analytics, errors.Wrap(err, "error on Scan for book clicks array")
 	}
 
 	return analytics, err
 
+}
+
+/*
+ * Returns a dictionary mapping each book's id to its daily click counts given a range from the current day
+ */
+func (db *BookDatabase) FetchAllBookAnalytics(ctx context.Context, numDays int) (map[string][]int, error) {
+	var analytics map[string][]int
+	analytics = make(map[string][]int)
+
+	query := "SELECT id, last_n_days(clicks, $1) FROM book_analytics"
+	rows, err := db.Conn.Query(ctx, query, numDays)
+
+	if err != nil {
+		return analytics, errors.Wrap(err, "error on query for all book analytics")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book_id string
+		var analytic []int
+		if err := rows.Scan(&book_id, &analytic); err != nil {
+			return analytics, errors.Wrap(err, "error on Scan for book id and clicks array in "+
+				"FetchAllBookAnalytics")
+		}
+
+		analytics[book_id] = analytic
+	}
+
+	return analytics, err
+}
+
+/*
+ * Returns an array containing the favorite books for the given userID
+ */
+func (db *BookDatabase) FetchFavorites(ctx context.Context, userID string) ([]models.Book, error) {
+	var favoriteBooks []models.Book
+
+	query := "SELECT id, title, author, image, created_at, languages " +
+		"FROM books " +
+		"WHERE id IN (SELECT book_id FROM favorite_books WHERE user_id = $1) " +
+		"ORDER BY title "
+
+	rows, err := db.Conn.Query(ctx, query, userID)
+	if err != nil {
+		return nil, errors.Wrap(err, "error on query in FetchFavorites")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book models.Book
+
+		err = rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+			&book.CreatedAt, &book.Languages)
+
+		if err != nil {
+			log.Println(err)
+			return nil, errors.Wrap(err, "error scanning in FetchFavorites")
+		}
+
+		favoriteBooks = append(favoriteBooks, book)
+	}
+
+	return favoriteBooks, nil
+}
+
+/*
+ * Gets 5 most popular books from the past 30 days based on click analytics
+ */
+func (db *BookDatabase) FetchPopularBooks(ctx context.Context) ([]models.Book, error) {
+	books := make([]models.Book, 0)
+
+	var query string = "SELECT books.id, title, author, image, created_at, " +
+		"languages FROM books LEFT JOIN book_analytics_last_30 ON " +
+		"books.id = book_analytics_last_30.id " +
+		"ORDER BY clicks DESC FETCH FIRST 5 ROWS ONLY"
+	rows, err := db.Conn.Query(ctx, query)
+
+	if err != nil {
+		fmt.Print(err)
+		return books, errors.Wrap(err, "error on query for most popular books")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book models.Book
+		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Image,
+			&book.CreatedAt, &book.Languages); err != nil {
+			fmt.Print(err)
+			return books, errors.Wrap(err, "error on Scan for book information in "+
+				"FetchPopularBooks")
+		}
+
+		books = append(books, book)
+	}
+
+	return books, err
+}
+
+/*
+ * Fetches a single favorited book for the user, if it is favorited
+ */
+func (db *BookDatabase) FetchFavoritedBook(ctx context.Context,
+	userID string, bookID string) (bool, error) {
+
+	var favorited bool
+
+	query := "SELECT COUNT(*) > 0 FROM favorite_books WHERE user_id=$1 AND book_id=$2 "
+
+	err := db.Conn.QueryRow(ctx, query, userID, bookID).Scan(&favorited)
+
+	if err != nil {
+		log.Println(err)
+		return false, errors.Wrap(err, "error on FetchFavoritedBook")
+	}
+
+	return favorited, nil
+}
+
+/*
+ * Inserts a book into the favorite books table
+ */
+func (db *BookDatabase) InsertFavoriteBook(ctx context.Context, userID string,
+	bookID string) error {
+
+	query := "INSERT INTO favorite_books (user_id, book_id) VALUES ($1, $2)"
+
+	_, err := db.Conn.Exec(ctx, query, userID, bookID)
+
+	if err != nil {
+		log.Println(err)
+		return errors.Wrap(err, "error on INSERT INTO favorite_books in InsertFavoriteBook")
+	}
+
+	return nil
+}
+
+/*
+ * Deletes a book from the favorite books table
+ */
+func (db *BookDatabase) DeleteFavorite(ctx context.Context,
+	userID string, bookID string) error {
+
+	query := "DELETE from favorite_books WHERE user_id = $1 AND book_id = $2"
+
+	commandTag, err := db.Conn.Exec(ctx, query, userID, bookID)
+
+	if err != nil {
+		log.Println(err)
+		return errors.Wrap(err, "error on delete from favorite books")
+	}
+
+	if commandTag.RowsAffected() != 1 {
+		return errors.New("No row found to delete")
+	}
+
+	return nil
 }

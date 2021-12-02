@@ -42,19 +42,22 @@ func TestPostAdmin(t *testing.T) {
 
 	body := `{"email": "admin1@test.com", "password": "p@ssw0rd!", "name": "adam", 
     "can_manage_users": true, "can_upload_books": true, "can_edit_books": true,
-    "can_delete_books" : false}`
+    "can_delete_books" : false, "can_chat": false}`
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Equal(t, "admin1", response.ID)
+	require.Equal(t, false, response.CanChat)
 
 	body = `{"email": "intern1@test.com", "password": "p@ssw0rd!", "name": "ian", 
-    "can_manage_users": false, "can_upload_books": false, "can_delete_books" : false}`
+    "can_manage_users": false, "can_upload_books": false,
+	"can_chat": true, "can_delete_books" : false}`
 
 	testutils.MakeAuthenticatedRequest(t, "POST", ts.URL+"/admins", body,
 		http.StatusOK, &response, "test-token-primary")
 
 	require.Equal(t, "intern1", response.ID)
+	require.Equal(t, true, response.CanChat)
 }
 
 func TestPostAdminDuplicateEmail(t *testing.T) {
@@ -151,7 +154,7 @@ func TestUpdateAdmin(t *testing.T) {
 
 	require.Equal(t, true, response.CanEditBooks)
 
-	body := `{"can_edit_books": false}`
+	body := `{"can_edit_books": false, "can_chat": true}`
 	testutils.MakeAuthenticatedRequest(t, "PATCH", ts.URL+"/admins/admin1", body,
 		http.StatusOK, nil, "test-token-admin1")
 
@@ -159,6 +162,7 @@ func TestUpdateAdmin(t *testing.T) {
 		http.StatusOK, &response, "test-token-admin1")
 
 	require.Equal(t, false, response.CanEditBooks)
+	require.Equal(t, true, response.CanChat)
 }
 
 // Test delete request unauthorized

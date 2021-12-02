@@ -5,15 +5,18 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi"
 
+	"github.com/TritonSE/words-alive/internal/auth"
 	"github.com/TritonSE/words-alive/internal/database"
 	"github.com/TritonSE/words-alive/internal/models"
 )
 
 type BookController struct {
 	Books database.BookDatabase
+	Auth  auth.Authenticator
 }
 
 // Fetches a list of all books sorted by title for the main page (/books)
@@ -30,13 +33,15 @@ func (c *BookController) GetBookList(rw http.ResponseWriter, req *http.Request) 
 
 // GetBook fetches a single book from the database by its ID
 func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
-	id := chi.URLParam(req, "id")
-	if id == "" {
+
+	var bookID string = chi.URLParam(req, "id")
+
+	if bookID == "" {
 		writeResponse(rw, http.StatusBadRequest, "invalid ID")
 		return
 	}
 
-	book, err := c.Books.FetchBook(req.Context(), id)
+	book, err := c.Books.FetchBook(req.Context(), bookID)
 	if err != nil {
 		log.Println(err)
 		writeResponse(rw, http.StatusInternalServerError, "error")
@@ -45,6 +50,32 @@ func (c *BookController) GetBook(rw http.ResponseWriter, req *http.Request) {
 	if book == nil {
 		writeResponse(rw, http.StatusNotFound, "book not found")
 		return
+	}
+
+	// if user is authenticated, check if the book is favorited
+	authHeader := req.Header.Get("Authorization")
+	if authHeader != "" {
+
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			writeResponse(rw, http.StatusBadRequest, "Unauthenticated requests should unset the header")
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		userID, ok := c.Auth.VerifyToken(req.Context(), tokenString)
+		if !ok {
+			writeResponse(rw, http.StatusForbidden, "Token was invalid")
+			return
+		}
+
+		// check if the book is favorited if userID not empty
+		book.Favorite, err = c.Books.FetchFavoritedBook(req.Context(), userID, bookID)
+
+		if err != nil {
+			log.Println(err)
+			writeResponse(rw, http.StatusInternalServerError, "error")
+			return
+		}
 	}
 
 	writeResponse(rw, http.StatusOK, book)
@@ -245,7 +276,7 @@ func (c *BookController) UpdateBookDetails(rw http.ResponseWriter, req *http.Req
 
 // increments a book's click count for the current day (/analytics/{id}/inc)
 func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Request) {
-	var bookID string = chi.URLParam(req, "id")
+	bookID := chi.URLParam(req, "id")
 
 	analytics, _ := c.Books.FetchBookAnalytics(req.Context(), bookID, 1)
 
@@ -263,7 +294,6 @@ func (c *BookController) UpdateBookClicks(rw http.ResponseWriter, req *http.Requ
 	}
 
 	writeResponse(rw, http.StatusOK, nil)
-
 }
 
 // fetches daily book clicks in a given range (/analytics/{id}?range=<days>)
@@ -300,5 +330,139 @@ func (c *BookController) GetBookClicks(rw http.ResponseWriter, req *http.Request
 	}
 
 	writeResponse(rw, http.StatusOK, bookAnalytics)
+}
+
+// Fetches daily book clicks in a given range from today (/analytics?range=<days>)
+func (c *BookController) GetAllBookClicks(rw http.ResponseWriter, req *http.Request) {
+	var dayRange string = req.URL.Query().Get("range")
+
+	if dayRange == "" {
+		writeResponse(rw, http.StatusBadRequest, "range missing")
+		return
+	}
+
+	numDays, err := strconv.Atoi(dayRange)
+
+	if err != nil {
+		writeResponse(rw, http.StatusBadRequest, "could not parse range")
+		return
+	} else if numDays < 1 || numDays > 366 {
+		writeResponse(rw, http.StatusBadRequest, "Range out of bounds")
+		return
+	}
+
+	bookAnalytics, err := c.Books.FetchAllBookAnalytics(req.Context(), numDays)
+	if err != nil {
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if bookAnalytics == nil {
+		writeResponse(rw, http.StatusNotFound, "book analytics not found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, bookAnalytics)
+}
+
+// fetches favorite books for the currently authenticated user (/books/favorite)
+func (c *BookController) GetFavorites(rw http.ResponseWriter, req *http.Request) {
+	userID, ok := req.Context().Value("user").(string)
+
+	if !ok {
+		log.Println("unable to get user from request context")
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	favorites, err := c.Books.FetchFavorites(req.Context(), userID)
+
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, favorites)
+}
+
+// Fetches 5 most popular books from the past month for the home screen (/books/popular)
+func (c *BookController) GetPopularBooks(rw http.ResponseWriter, req *http.Request) {
+	popularBooks, err := c.Books.FetchPopularBooks(req.Context())
+
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	if popularBooks == nil {
+		writeResponse(rw, http.StatusNotFound, "most popular books could not be found")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, popularBooks)
+}
+
+// creates a new entry in the favorite books table (/books/favorites/{id})
+func (c *BookController) AddToFavorites(rw http.ResponseWriter, req *http.Request) {
+
+	userID, ok := req.Context().Value("user").(string)
+	var bookID string = chi.URLParam(req, "id")
+
+	if !ok {
+		log.Println("unable to get user from request context")
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	// Validate bookID (ensures book with given id exists in table)
+	_, err := c.Books.FetchBook(req.Context(), bookID)
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusBadRequest, "error")
+		return
+	}
+
+	err = c.Books.InsertFavoriteBook(req.Context(), userID, bookID)
+
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusOK, nil)
+
+}
+
+// removes an entry in the favorite books table (/books/favorites/{id})
+func (c *BookController) DeleteFromFavorites(rw http.ResponseWriter, req *http.Request) {
+
+	userID, ok := req.Context().Value("user").(string)
+	var bookID string = chi.URLParam(req, "id")
+
+	if !ok {
+		log.Println("unable to get user from request context")
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	favorited, _ := c.Books.FetchFavoritedBook(req.Context(), userID, bookID)
+
+	if !favorited {
+		writeResponse(rw, http.StatusNotFound, "Favorited book with requested ID for user was not found")
+		return
+	}
+
+	err := c.Books.DeleteFavorite(req.Context(), userID, bookID)
+
+	if err != nil {
+		log.Println(err)
+		writeResponse(rw, http.StatusInternalServerError, "error")
+		return
+	}
+
+	writeResponse(rw, http.StatusNoContent, nil)
 
 }

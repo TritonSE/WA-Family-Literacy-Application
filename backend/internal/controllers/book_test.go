@@ -27,6 +27,18 @@ func TestGetBooks(t *testing.T) {
 
 }
 
+// Test for popular books list
+func TestGetPopularBooks(t *testing.T) {
+	var response []models.Book
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/popular", "", 200, &response)
+
+	// Check for correct number of elements and sorting by popularity
+	require.Len(t, response, 5)
+	require.Equal(t, "a", response[0].Title)
+	require.Equal(t, "c", response[1].Title)
+	require.Equal(t, "catcher in the rye", response[2].Title)
+}
+
 func TestGetBook(t *testing.T) {
 	var response models.Book
 	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/catcher", "", 200, &response)
@@ -386,4 +398,145 @@ func TestGetAnalytics(t *testing.T) {
 
 	require.Len(t, response, 10)
 	require.Equal(t, response[0], 1)
+}
+
+// Test getting analytics for all books
+func TestGetAllAnalytics(t *testing.T) {
+	var response map[string][]int
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 7)
+	require.Len(t, response["c_id"], 1)
+	require.Equal(t, response["catcher"][0], 1)
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=10", "",
+		http.StatusOK, &response, "test-token-primary")
+
+	require.Len(t, response, 7)
+	require.Len(t, response["c_id"], 10)
+}
+
+// Test auth for getting all books
+func TestGetAllAnalyticsUnAuth(t *testing.T) {
+	var response string
+
+	// unauthorized user
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+	// missing analytics permission
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=1", "",
+		http.StatusForbidden, &response, "test-token-admin")
+	require.Equal(t, "do not have permission", response)
+}
+
+// Test getting analytics for all books using invalid range
+func TestGetAllAnalyticsNullRange(t *testing.T) {
+	// no range provided
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics/", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// range not a valid number
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=test", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	// range is out of bounds
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=0", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/analytics?range=377", "",
+		http.StatusBadRequest, nil, "test-token-primary")
+}
+
+// GET FAVORITES TEST
+func TestFavoritesUnAuth(t *testing.T) {
+	fmt.Print("\n---------------- FAVORITE BOOKS TESTS ----------------\n")
+
+	var response string
+
+	// Test unauthorized get request (get favorites)s
+	testutils.MakeHttpRequest(t, "GET", ts.URL+"/books/favorites", "", http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+	// Test unauthorized put request (add to favorites)
+	testutils.MakeHttpRequest(t, "PUT", ts.URL+"/books/favorites/{id}", "", http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+	// Test unauthorized deletes request (delete from favorites)
+	testutils.MakeHttpRequest(t, "DELETE", ts.URL+"/books/favorites/{id}", "", http.StatusUnauthorized, &response)
+	require.Equal(t, "User needs to be authenticated", response)
+
+}
+
+// Test get favorites
+
+// Test authenticated get favorites
+func TestGetFavorites(t *testing.T) {
+
+	var response []models.Book
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/books/favorites", "", http.StatusOK,
+		&response, "test-token-test_user")
+
+	// Check for correct number of favorited books (should be 0)
+	require.Len(t, response, 0)
+}
+
+func TestGetUnfavoritedBook(t *testing.T) {
+	var response models.Book
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/books/catcher", "", 200, &response,
+		"test-token-test_user")
+
+	require.Equal(t, "catcher in the rye", response.Title)
+	require.Equal(t, false, response.Favorite)
+}
+
+// Test favoriting book
+func TestAddToFavorites(t *testing.T) {
+
+	var response []models.Book
+
+	testutils.MakeAuthenticatedRequest(t, "PUT", ts.URL+"/books/favorites/catcher", "", http.StatusOK,
+		nil, "test-token-test_user")
+
+	testutils.MakeAuthenticatedRequest(t, "PUT", ts.URL+"/books/favorites/b_id", "", http.StatusOK,
+		nil, "test-token-test_user")
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/books/favorites", "", http.StatusOK,
+		&response, "test-token-test_user")
+
+	// Check that entries added to table properly
+	require.Len(t, response, 2)
+	require.Equal(t, "b", response[0].Title)
+	require.Equal(t, "catcher in the rye", response[1].Title)
+}
+
+func TestGetFavoritedBook(t *testing.T) {
+	var response models.Book
+
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/books/catcher", "", 200, &response,
+		"test-token-test_user")
+
+	require.Equal(t, "catcher in the rye", response.Title)
+	require.Equal(t, true, response.Favorite)
+}
+
+// Test unfavoriting book
+func TestDeleteFavorite(t *testing.T) {
+
+	testutils.MakeAuthenticatedRequest(t, "DELETE", ts.URL+"/books/favorites/catcher", "", http.StatusNoContent,
+		nil, "test-token-test_user")
+
+	testutils.MakeAuthenticatedRequest(t, "DELETE", ts.URL+"/books/favorites/b_id", "", http.StatusNoContent,
+		nil, "test-token-test_user")
+
+	var response []models.Book
+	testutils.MakeAuthenticatedRequest(t, "GET", ts.URL+"/books/favorites", "", http.StatusOK,
+		&response, "test-token-test_user")
+
+	// Check for correct number of favorited books (should be 0)
+	require.Len(t, response, 0)
 }
