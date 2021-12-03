@@ -49,9 +49,9 @@ const SavedTab: React.FC = () => {
   // fetch favorite books from backend
   const fetchFavoritesAPI = async (): Promise<void> => {
     try {
-        const res = await client.getFavorites();
-        setFavorites(res);
-        await AsyncStorage.setItem('favorites', JSON.stringify(res));
+      const res = await client.getFavorites();
+      setFavorites(res);
+      await AsyncStorage.setItem('favorites', JSON.stringify(res));
     } catch (e) {
       console.log(e.message);
     }

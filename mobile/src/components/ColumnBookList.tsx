@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, View, Pressable } from 'react-native';
+import { Dimensions, StyleSheet, View, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
