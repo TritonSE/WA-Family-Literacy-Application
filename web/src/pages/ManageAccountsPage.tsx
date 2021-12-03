@@ -53,6 +53,7 @@ export const ManageAccountsPage: React.FC = () => {
   const [uploadBooks, setUploadBooks] = useState(false);
   const [editBooks, setEditBooks] = useState(false);
   const [deleteBooks, setDeleteBooks] = useState(false);
+  const [accessAnalytics, setAccessAnalytics] = useState(false);
 
   // new admin with call to backend
   const handleNewAccount = async (): Promise<void> => {
@@ -74,6 +75,7 @@ export const ManageAccountsPage: React.FC = () => {
         can_upload_books: uploadBooks,
         can_edit_books: editBooks,
         can_delete_books: deleteBooks,
+        can_access_analytics: accessAnalytics,
       };
 
       try {
@@ -99,6 +101,7 @@ export const ManageAccountsPage: React.FC = () => {
     setUploadBooks(false);
     setEditBooks(false);
     setDeleteBooks(false);
+    setAccessAnalytics(false);
   };
 
   // upload books toggle
@@ -175,6 +178,7 @@ export const ManageAccountsPage: React.FC = () => {
                     <div className={styles.allCheckboxesContainer}>
 
                       <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
+                      <Checkbox className={styles.checkbox} label="Analytics" id="analyticsBox" onChange={() => setAccessAnalytics(prevAccess => !prevAccess)} checked={accessAnalytics} />
                       <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 
                       {uploadBooks ? (
