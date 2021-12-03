@@ -3,7 +3,7 @@
 
 CREATE TABLE favorite_books (
     user_id text REFERENCES users(id) ON DELETE CASCADE,
-    book_id text REFERENCES books(id) ON DELETE CASCADE,
+    book_id text REFERENCES book_info(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, book_id) 
 );
 
