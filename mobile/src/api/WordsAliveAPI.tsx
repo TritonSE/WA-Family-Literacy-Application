@@ -39,7 +39,7 @@ class WordsAliveAPI {
     return res.data;
   }
 
-  // returns an individual book by id
+  // returns an individual book by id to determine if its favorited
   async getBookFavorite(id: string): Promise<Book> {
     const res = await this.client.get(`/books/${id}`);
     return res.data;

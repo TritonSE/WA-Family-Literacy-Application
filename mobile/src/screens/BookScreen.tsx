@@ -56,7 +56,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const [favorited, setFavorited] = useState<boolean | undefined>(undefined);
   const [modalVisible, setModalVisible] = useState(false);
 
-  // comment
+  // determines if the book screen is unfocused/focused
   const isFocused = useIsFocused();
 
   const tabContentWidth = 0.83 * width;
@@ -75,7 +75,9 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     del: {},
   };
 
-  // comment
+  // Rerender screen and get updated favorited field for book whenever
+  // favorited state or isFocused changes
+  // (Ensure that Profile AND Book Screens have synchronised favorites info)
   useEffect(
     () => {
       (async () => {
@@ -88,7 +90,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           console.log(e.message);
         }
       })();
-    }, [favorited, isFocused] //do we need favorited?
+    }, [favorited, isFocused]
   );
 
   // if book is unfavorited, favorite it
@@ -162,7 +164,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     learn: i18n.t('learn'),
   };
 
-  // comment
+  // whether the books is favorited or not (solid vs empty bookmark)
   const favoriteIconView =  favorited ? (
 
     <TouchableOpacity style={styles.bookmarkContainer} onPress={() => {unfavoriteBook(book.id);}}>

@@ -22,7 +22,7 @@ const BOOKS_PER_PAGE = 9;
 // or to simulate column book list, BOOKS_PER_PAGE = favorites.length + (3 - favorites.length % 3)
 
 /**
- * comment
+ * Saved Tab to display user's favorited books
  */
 const SavedTab: React.FC = () => {
 
@@ -30,13 +30,14 @@ const SavedTab: React.FC = () => {
   const auth = useContext(AuthContext);
   const i18n = useContext(I18nContext);
 
-  // comment
+  // Favorite/saved books state
   const [favorites, setFavorites] = useState<Book[]>([]);
 
-  // comment
+  // determines if the saved tab is unfocused/focused
   const isFocused = useIsFocused();
 
-  // comment
+  // Rerender tab and get updated favorites when isFocused changes
+  // (Ensure that Profile AND Book Screens have synchronised favorites info)
   useEffect(
     () => {
       (async () => {

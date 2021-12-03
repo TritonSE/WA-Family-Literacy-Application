@@ -404,24 +404,6 @@ func (c *BookController) GetFavorites(rw http.ResponseWriter, req *http.Request)
 	writeResponse(rw, http.StatusOK, favorites)
 }
 
-// Fetches 5 most popular books from the past month for the home screen (/books/popular)
-func (c *BookController) GetPopularBooks(rw http.ResponseWriter, req *http.Request) {
-	popularBooks, err := c.Books.FetchPopularBooks(req.Context())
-
-	if err != nil {
-		log.Println(err)
-		writeResponse(rw, http.StatusInternalServerError, "error")
-		return
-	}
-
-	if popularBooks == nil {
-		writeResponse(rw, http.StatusNotFound, "most popular books could not be found")
-		return
-	}
-
-	writeResponse(rw, http.StatusOK, popularBooks)
-}
-
 // creates a new entry in the favorite books table (/books/favorites/{id})
 func (c *BookController) AddToFavorites(rw http.ResponseWriter, req *http.Request) {
 
