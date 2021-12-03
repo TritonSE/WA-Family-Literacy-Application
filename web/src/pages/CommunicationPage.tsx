@@ -91,8 +91,14 @@ export const CommunicationPage: React.FC = () => {
     <div>
       <div className={styles.titleBar}>
         <h1>Chat</h1>
-        <div className={styles.chatWith}>You're chatting with {}</div>
-        <Button></Button>
+      </div>
+      <div className={styles.chatWindowContainer}>
+        <div className={styles.sideBar}>
+          sideBar
+        </div>
+        <div className={styles.chatWindow}>
+          chatWindow
+        </div>
       </div>
     </div>
   );

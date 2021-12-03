@@ -2,6 +2,15 @@
     margin-top: 20px;
 }
 
-.chatWith {
-    
+.chatWindowContainer {
+    width: 100%;
+    display: flex;
+}
+
+.sideBar {
+    width: 20%;
+}
+
+.chatWindow {
+    width: 80%;
 }
