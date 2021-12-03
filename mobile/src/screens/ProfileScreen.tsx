@@ -15,11 +15,10 @@ import { Language, Languages } from '../models/Languages';
 import { AuthContext } from '../context/AuthContext';
 import { APIContext } from '../context/APIContext';
 import { Book } from '../models/Book';
-import { PaginatedBookList } from '../components/PaginatedBookList';
+import { ColumnBookList } from '../components/ColumnBookList';
 import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BOOKS_PER_PAGE = 9; 
-// or to simulate column book list, BOOKS_PER_PAGE = favorites.length + (3 - favorites.length % 3)
 
 /**
  * Saved Tab to display user's favorited books
@@ -40,25 +39,44 @@ const SavedTab: React.FC = () => {
   // (Ensure that Profile AND Book Screens have synchronised favorites info)
   useEffect(
     () => {
-      (async () => {
-        try {
-          if (auth.user !== null) {
-            const res = await client.getFavorites();
-            setFavorites(res);
-          }
-        } catch (e) {
-          console.log(e.message);
-        }
-      })();
+      if (auth.user !== null) {
+        fetchFavoritesStorage();
+        fetchFavoritesAPI();
+      }
     }, [isFocused]
   );
+
+  // fetch favorite books from backend
+  const fetchFavoritesAPI = async (): Promise<void> => {
+    try {
+        const res = await client.getFavorites();
+        setFavorites(res);
+        await AsyncStorage.setItem('favorites', JSON.stringify(res));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  // fetch cached favorite books from storage
+  const fetchFavoritesStorage = async (): Promise<void> => {
+    try {
+      const result = await AsyncStorage.getItem('favorites');
+      if (result != null) setFavorites(JSON.parse(result));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
 
 
   return (
     <View>
       {auth.user === null ? (
         <View style={styles.unAuthenticatedContainer}>
-          <Text style={TextStyles.caption1}>{i18n.t("loginToSave")}</Text>
+          <View style={styles.login}>
+            <Text style={[TextStyles.caption1, { marginBottom: 10 }]}>{i18n.t('signupToSave')}</Text>
+            <LargeButton text={i18n.t('signUp')} onPress={() => auth.logout()} underline />
+          </View>
           <View style={{ height: 300 }} />
         </View>
       )
@@ -66,7 +84,7 @@ const SavedTab: React.FC = () => {
         (Array.isArray(favorites) && favorites.length > 0 ?
           (
             <View>
-              <PaginatedBookList books={favorites} booksPerPage={BOOKS_PER_PAGE} />
+              <ColumnBookList books={favorites} />
             </View>
           )
           :

@@ -21,7 +21,6 @@ import { BookDetails } from '../models/Book';
 import { Language } from '../models/Languages';
 import { YoutubeVideo } from '../components/YoutubeVideo';
 import { OfflineIndicator } from '../components/OfflineIndicator';
-import { PopUpModal } from '../components/PopUpModal';
 import { AuthContext } from '../context/AuthContext';
 
 type BookScreenProps = StackScreenProps<HomeStackParams, 'Book'>;
@@ -54,7 +53,6 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
   // bookmark favorited states
   const [favorited, setFavorited] = useState<boolean | undefined>(undefined);
-  const [modalVisible, setModalVisible] = useState(false);
 
   // determines if the book screen is unfocused/focused
   const isFocused = useIsFocused();
@@ -98,7 +96,6 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     (async () => {
       await client.favoriteBook(bookID);
       setFavorited(true);
-      setModalVisible(true);
     })();
   };
 
@@ -107,7 +104,6 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     (async () => {
       await client.unfavoriteBook(bookID);
       setFavorited(false);
-      setModalVisible(true);
     })();
   };
 
@@ -169,14 +165,12 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
 
     <TouchableOpacity style={styles.bookmarkContainer} onPress={() => {unfavoriteBook(book.id);}}>
       <Image style={styles.bookmarkButton} source={require('../../assets/images/bookmark-solid.png')} />
-      <PopUpModal text={i18n.t('saved')} setModalVisible={setModalVisible} modalVisible={modalVisible} goBack={false}/>
     </TouchableOpacity>
   )
     :
     (
       <TouchableOpacity style={styles.bookmarkContainer} onPress={() => {favoriteBook(book.id);}}>
         <Image style={styles.bookmarkButton} source={require('../../assets/images/bookmark-regular.png')} />
-        <PopUpModal text={i18n.t('unsaved')} setModalVisible={setModalVisible} modalVisible={modalVisible} goBack={false}/>
       </TouchableOpacity>
     );
 
@@ -253,8 +247,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   bookmarkButton: {
-    height: 40,
-    width: 30,
+    height: 32,
+    width: 24,
     tintColor: Colors.orange,
   },
   loadingCircle: {

@@ -11,34 +11,33 @@ const { width } = Dimensions.get('window');
 /**
  * Renders a vertical list of books with 3 books per row.
  */
-export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books}) => {
+export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
   const navigation = useNavigation();
+
+  const bookCards = books.map(book =>
+    <Pressable key={book.id} onPress={() => navigation.navigate('Book', { book })}>
+      <View style={styles.bookCard}>
+        <BookCard book={book} size={0.28 * width} />
+      </View>
+    </Pressable>
+  );
+
   return (
-    <FlatList
-      data={books}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => navigation.navigate('Book', {
-          book: item,
-        })}
-        >
-          <View style={styles.bookCard}>
-            <BookCard book={item} size={0.28 * width} />
-          </View>
-        </Pressable>
-      )}
-      numColumns={3}
-      scrollEnabled={false}
-      keyExtractor={book => book.id}
-      columnWrapperStyle={styles.spaceColumns}
-    />
+    <View style={styles.list}>
+      {bookCards}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  spaceColumns: {
-    justifyContent: 'space-between',
-  },
   bookCard: {
     marginBottom: 12,
+    margin: 0.026 * width
   },
+  list: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }
 });
