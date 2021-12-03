@@ -9,7 +9,6 @@ type MockAuthenticator struct{}
 
 // This is an authenticator that takes tokens of the form test-token<user ID>
 func (a MockAuthenticator) VerifyToken(ctx context.Context, token string) (string, bool) {
-
 	if strings.HasPrefix(token, "test-token-") {
 		return strings.TrimPrefix(token, "test-token-"), true
 	}
@@ -24,5 +23,9 @@ func (a MockAuthenticator) CreateUser(ctx context.Context, email string, pwd str
 }
 
 func (a MockAuthenticator) DeleteUser(ctx context.Context, id string) error {
+	return nil
+}
+
+func (a MockAuthenticator) SetCustomUserClaims(ctx context.Context, id string, claims map[string]interface{}) error {
 	return nil
 }

@@ -5,8 +5,8 @@ import {
   RouteProps,
   RouteComponentProps,
 } from "react-router-dom";
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
 import { Navbar } from '../components/Navbar';
 import { Admin } from '../models/Admin';
@@ -102,7 +102,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
         const admin = await api.getAdmin(uid);
         setAdmin(admin);
-      } catch (e) {
+      } catch (e: any) {
         setError(e);
         setAdmin(null);
         auth.signOut();

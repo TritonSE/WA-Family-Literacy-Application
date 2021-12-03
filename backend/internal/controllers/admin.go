@@ -63,6 +63,10 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 		return
 	}
 
+	// Add canChat custom claim to Firebase Authentication user
+	canChatClaim := map[string]interface{}{"canChat": cadmin.CanChat}
+	c.Auth.SetCustomUserClaims(req.Context(), cuid, canChatClaim)
+
 	// Populate fields of admin account
 	admin.ID = cuid
 	admin.Name = cadmin.Name
@@ -72,6 +76,7 @@ func (c *AdminController) CreateAdmin(rw http.ResponseWriter, req *http.Request)
 	admin.CanEditBooks = cadmin.CanEditBooks
 	admin.CanDeleteBooks = cadmin.CanDeleteBooks
 	admin.CanAccessAnalytics = cadmin.CanAccessAnalytics
+	admin.CanChat = cadmin.CanChat
 
 	// Create new admin in database
 	err = c.Admins.CreateAdmin(req.Context(), admin)
@@ -183,6 +188,10 @@ func (c *AdminController) UpdateAdmin(rw http.ResponseWriter, req *http.Request)
 		writeResponse(rw, http.StatusBadRequest, "must be able to upload to edit/delete books")
 		return
 	}
+
+	// Update canChat custom claim for Firebase Authentication user
+	canChatClaim := map[string]interface{}{"canChat": uadmin.CanChat}
+	c.Auth.SetCustomUserClaims(req.Context(), adminID, canChatClaim)
 
 	// Carry out update
 	err = c.Admins.UpdateAdmin(req.Context(), adminID, uadmin)
