@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ChatAPI } from "../api/ChatAPI";
 import { AuthContext } from "../context/AuthContext";
 import { ChatRoom, Message } from "../models/Chat";
+import styles from './CommunicationPage.module.css';
 
 interface ChatProps {
   roomId: string;
@@ -86,5 +87,13 @@ export const CommunicationPage: React.FC = () => {
         <Chat roomId={currentRoomId} />
       </div>
     );
-  return <div></div>;
+  return (
+    <div>
+      <div className={styles.titleBar}>
+        <h1>Chat</h1>
+        <div className={styles.chatWith}>You're chatting with {}</div>
+        <Button></Button>
+      </div>
+    </div>
+  );
 };
