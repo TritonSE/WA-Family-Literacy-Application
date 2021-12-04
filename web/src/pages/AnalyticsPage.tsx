@@ -19,7 +19,7 @@ export const AnalyticsPage: React.FC = () => {
   function dateToString(dateStr: string): string {
     const date = new Date(dateStr);
     const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
-    return month + "/" + day + "/" + year;
+    return (month + 1) + "/" + day + "/" + year;
   }
 
   // generates mm/dd date string for day offset from current day
@@ -27,7 +27,7 @@ export const AnalyticsPage: React.FC = () => {
     const date = new Date();
     date.setDate(date.getDate() - offset);
     const [month, day] = [date.getMonth(), date.getDate()];
-    return month + "/" + day;
+    return (month + 1) + "/" + day;
   }
 
   useEffect(
@@ -60,9 +60,9 @@ export const AnalyticsPage: React.FC = () => {
             title: book.title,
             date: book.created_at,
             // sum of last 7 days
-            week: analyticsRes[book.id].slice(-7).reduce((pv, cv) => pv + cv, 0),
+            week: analyticsRes[book.id].slice(-7).reduce((a, b) => a + b, 0),
             // sum of last 30 days
-            month: analyticsRes[book.id].reduce((pv, cv) => pv + cv, 0),
+            month: analyticsRes[book.id].reduce((a, b) => a + b, 0),
           })
         ));
       })();
@@ -94,7 +94,7 @@ export const AnalyticsPage: React.FC = () => {
               className={styles.graphLabel}
               position="bottom"
             >
-              Days
+              Date
             </Label>
           </XAxis>
           <YAxis axisLine={false} tickLine={false} >
@@ -104,11 +104,11 @@ export const AnalyticsPage: React.FC = () => {
               position='left'
               style={{ textAnchor: 'middle' }}
             >
-              Overall Clicks
+              All Book Clicks
             </Label>
           </YAxis>
           <Tooltip />
-          <Line type="monotone" dataKey="clicks" stroke="#8884d8" dot={false} activeDot={{ r: 6 }} />
+          <Line type="monotone" dataKey="clicks" stroke="#E89228" strokeWidth={5} dot={false} activeDot={{ r: 6 }} />
         </LineChart>
       </ResponsiveContainer>
 
@@ -116,8 +116,8 @@ export const AnalyticsPage: React.FC = () => {
       <table className={styles.analyticsTable}>
         <tr className={styles.tableHeader}>
           <td>Title</td>
-          <td>Clicks</td>
-          <td>When Released</td>
+          <td>Clicks (last 30 days)</td>
+          <td>Released</td>
         </tr>
         {bookAnalytics.sort((a, b) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -157,8 +157,8 @@ export const AnalyticsPage: React.FC = () => {
       <table className={styles.analyticsTable}>
         <tr className={styles.tableHeader}>
           <td>Title</td>
-          <td>Clicks</td>
-          <td>When Released</td>
+          {weekView ? <td>Clicks (last 7 days)</td> : <td>Clicks (last 30 days)</td>}
+          <td>Released</td>
         </tr>
         {bookAnalytics.sort((a, b) => {
           let itemA;
