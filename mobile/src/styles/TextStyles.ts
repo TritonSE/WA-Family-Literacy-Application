@@ -60,7 +60,7 @@ export const TextStyles = StyleSheet.create({
   mdHeading: {
     fontFamily: 'Gotham-Bold',
     fontWeight: 'normal',
-    color: Colors.text,
+    color: Colors.text
   },
   mdStrong: {
     fontFamily: 'Gotham-Bold',
@@ -79,3 +79,81 @@ export const TextStyles = StyleSheet.create({
     minWidth: 16,
   },
 });
+
+export const MarkdownStyles = {
+  text: {
+    fontFamily: 'Gotham-Light',
+    fontWeight: 'normal',
+    color: Colors.text,
+  },
+  h1: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 32,
+    marginTop: 22,
+    marginBottom: 22,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  h2: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 24,
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  h3: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  h4: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 16,
+    marginTop: 22,
+    marginBottom: 22,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  h5: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 14,
+    marginTop: 22,
+    marginBottom: 22,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  h6: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+    fontSize: 11,
+    marginTop: 24,
+    marginBottom: 24,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  strong: {
+    fontFamily: 'Gotham-Bold',
+    fontWeight: 'normal',
+    color: Colors.text,
+  },
+  em: {
+    fontFamily: 'Gotham-Italic',
+    fontStyle: 'normal',
+    color: Colors.text,
+  },
+};
