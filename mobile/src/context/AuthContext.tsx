@@ -58,7 +58,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   // so we can create the backend profile, or the api.getUser() will fail with a 404
   let unsubscribe: FBA.Unsubscribe | null = null;
   const subscribeToAuth = (): void => {
-    unsubscribe = FBA.onAuthStateChanged(auth, async (fbUser: FBA.User) => {
+    unsubscribe = FBA.onAuthStateChanged(auth, async (fbUser: FBA.User | null) => {
       if (fbUser === null) {
         setUser(null);
         return;
@@ -112,7 +112,8 @@ export const AuthProvider: React.FC = ({ children }) => {
     (async () => {
       try {
         // Don't let Firebase try to auto-login, we need to create the backend user first
-        unsubscribe();
+        if (unsubscribe !== null) unsubscribe();
+
         const { user: fbUser } = await FBA.createUserWithEmailAndPassword(auth, email, password);
         if (fbUser === null) {
           setError(new Error('Error signing up, please try again'));
