@@ -87,7 +87,7 @@ export const BookWizardPage: React.FC = () => {
 
         history.push('/books');
         return;
-      } catch (e) {
+      } catch (e: any) {
         alert(`Unable to update book: ${e.message}`);
       }
     } else {
@@ -107,7 +107,7 @@ export const BookWizardPage: React.FC = () => {
         history.push('/books');
         return;
       }
-      catch (e) {
+      catch (e: any) {
         alert(`Unable to Upload Book: ${e.message}`);
       }
     }
@@ -188,8 +188,12 @@ export const BookWizardPage: React.FC = () => {
       currentContent={readTabContent.get(language) || emptyTabContent} language={language}></TabContentPage>,
     <TabContentPage onContentChange={handleExploreTabContentChange}
       currentContent={exploreTabContent.get(language) || emptyTabContent} language={language} key={2}></TabContentPage>,
-    <TabContentPage onContentChange={handleLearnTabContentChange} language={language} currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
-    <OverviewPage onSubmit={submitPage} modalLanguages={doneLanguageArray} key={4}></OverviewPage>
+    <TabContentPage onContentChange={handleLearnTabContentChange} language={language} 
+      currentContent={learnTabContent.get(language) || emptyTabContent} key={3}></TabContentPage>,
+    <OverviewPage onSubmit={submitPage} modalLanguages={doneLanguageArray} 
+      image={image} title={title} author={author} readTab={readTabContent.get(language) || emptyTabContent} 
+      exploreTab={exploreTabContent.get(language) || emptyTabContent} learnTab={learnTabContent.get(language) || emptyTabContent} 
+      key={4}></OverviewPage>
   ];
 
   return (

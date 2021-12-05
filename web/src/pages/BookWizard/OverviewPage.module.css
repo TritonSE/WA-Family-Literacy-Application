@@ -127,5 +127,134 @@
 .buttonContainer {
   text-align: center;
 }
-  
-  
+
+.pageContainer {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.tabContainer {
+  width: 18em;
+  height: 30em;
+  overflow-y: scroll;
+  border: 1px solid var(--dark-grey);
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.imageContainer {
+  display: block;
+  width: 12em;
+  margin: 30px auto;
+  box-shadow: -1px -1px 16px 4px var(--light-grey);
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bookTitle {
+  text-align: center;
+  font-family: 'GothamRounded - Bold';
+  font-size: 1.5em;
+  margin-bottom: 6px;
+}
+
+.bookAuthor {
+  text-align: center;
+  font-family: 'GothamRounded - Light';
+  font-size: 1em;
+  margin-bottom: 25px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-evenly;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.tabButtonActive {
+  width: 3em;
+  height: 1em;
+  background-color: var(--orange);
+  border-radius: 5px;
+  border-style: solid;
+  border-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding-top: 3px;
+  box-shadow: 2px 2px 8px var(--light-grey);
+}
+
+.tabButtonInactive {
+  width: 3em;
+  height: 1em;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: var(--orange);
+  border: 1px solid var(--orange);
+  padding-top: 3px;
+  box-shadow: 2px 2px 8px var(--light-grey);
+}
+
+.buttonActive {
+  text-align: center;
+  font-size: 0.7em;
+  font-family: 'GothamRounded - Bold';
+  color: var(--white);
+}
+
+.buttonInactive {
+  text-align: center;
+  font-size: 0.7em;
+  font-family: 'GothamRounded - Bold';
+  color: var(--orange);
+}
+
+.videoContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.markdownText {
+  font-size: 0.7em;
+  font-family: 'GothamRounded - Light';
+  margin-left: 10px;
+  margin-right: 10px;
+  overflow-wrap: break-word;
+  margin-bottom: 10px;
+}
+
+.mdImgContainer {
+  position: relative;
+  width: 90%;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mdImgContainer:after {
+  display: block;
+  padding-bottom: 100%;
+  content:"";
+}
+
+.mdImage {
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  object-fit: cover;
+}

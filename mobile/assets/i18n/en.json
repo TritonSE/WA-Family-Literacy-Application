@@ -44,5 +44,10 @@
   "needMoreHelp": "Need more help? Tap here.",
   "sendUsAMessage": "Have any questions or concerns? Send us a message.",
   "enterAMessage": "Enter a message",
-  "conversationResolved": "Your conversation has been marked as resolved."
+  "conversationResolved": "Your conversation has been marked as resolved.",
+  "signupToSave": "Sign up to bookmark your favorite books",
+  "savedTextClick": "Click on the",
+  "savedTextWithin": "within a book",
+  "savedTextToSave": "to save it here.",
+  "unsaved": "Unsaved"
 }
