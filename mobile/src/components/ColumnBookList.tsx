@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, View, Pressable } from 'react-native';
+import { Dimensions, StyleSheet, View, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Book } from '../models/Book';
 import { BookCard } from './BookCard';
@@ -13,32 +13,31 @@ const { width } = Dimensions.get('window');
  */
 export const ColumnBookList: React.FC<ColumnBookListProps> = ({ books }) => {
   const navigation = useNavigation();
+
+  const bookCards = books.map(book =>
+    <Pressable key={book.id} onPress={() => navigation.navigate('Book', { book })}>
+      <View style={styles.bookCard}>
+        <BookCard book={book} size={0.28 * width} />
+      </View>
+    </Pressable>
+  );
+
   return (
-    <FlatList
-      data={books}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => navigation.navigate('Book', {
-          book: item,
-        })}
-        >
-          <View style={styles.bookCard}>
-            <BookCard book={item} size={0.28 * width} />
-          </View>
-        </Pressable>
-      )}
-      numColumns={3}
-      scrollEnabled={false}
-      keyExtractor={book => book.id}
-      columnWrapperStyle={styles.spaceColumns}
-    />
+    <View style={styles.list}>
+      {bookCards}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  spaceColumns: {
-    justifyContent: 'space-between',
-  },
   bookCard: {
     marginBottom: 12,
+    margin: 0.026 * width
   },
+  list: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }
 });

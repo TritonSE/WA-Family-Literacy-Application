@@ -42,5 +42,10 @@
   "forgotPassword": "Forgot Password?",
   "resetPasswordInstructions": "Please enter the email address you signed up with and we'll send you instructions on resetting your password",
   "sendPasswordResetEmail": "Send",
-  "passwordResetEmailSent": "Password reset email sent"
+  "passwordResetEmailSent": "Password reset email sent",
+  "signupToSave": "Sign up to bookmark your favorite books",
+  "savedTextClick": "Click on the",
+  "savedTextWithin": "within a book",
+  "savedTextToSave": "to save it here.",
+  "unsaved": "Unsaved"
 }

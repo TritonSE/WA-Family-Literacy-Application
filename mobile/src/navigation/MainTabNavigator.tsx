@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { Colors } from '../styles/Colors';
+import { ProfileNavigator } from './ProfileNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +40,7 @@ export const MainTabNavigator: React.FC = () => {
     >
       <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Home" component={HomeStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileNavigator} />
     </Tab.Navigator>
 
   );
