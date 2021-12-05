@@ -33,7 +33,7 @@ export const LoginScreen: React.FC = () => {
   return (
 
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={{ flex: 1, height: '100%' }}
     >
 
@@ -54,7 +54,7 @@ export const LoginScreen: React.FC = () => {
           <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
 
           <View style={styles.textContainer}>
-              
+
             <TouchableOpacity style={styles.rememberMeContainer} onPress={() => setRememberMe(!rememberMe)}>
               <Checkbox value={rememberMe} onChange={setRememberMe} inverted />
               <Text style={styles.rememberMeText}>{i18n.t('rememberMe')}</Text>

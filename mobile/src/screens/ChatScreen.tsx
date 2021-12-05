@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+
 import { I18nContext } from '../context/I18nContext';
 import { TextStyles } from '../styles/TextStyles';
 import { Colors } from '../styles/Colors';
@@ -141,7 +142,7 @@ export const ChatScreen: React.FC = () => {
         </TouchableOpacity>
         <KeyboardAvoidingView
           style={styles.chatContainer}
-          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
         >
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <OfflineIndicator style={{ height: '80%' }}>
