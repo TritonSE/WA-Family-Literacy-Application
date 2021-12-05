@@ -93,6 +93,12 @@ class WordsAliveAPI {
     return res.data;
   }
 
+  // gets click arrays for all books
+  async getAllBookAnalytics(days: number): Promise<{ [id: string]: number[] }> {
+    const res = await this.client.get(`/analytics?range=${days}`);
+    return res.data;
+  }
+
   // get all admins from the admin list
   async getAdmins(): Promise<Admin[]> {
     const res = await this.client.get('/admins');

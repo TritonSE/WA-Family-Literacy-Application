@@ -52,6 +52,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
   const [uploadBooks, setUploadBooks] = useState(false);
   const [editBooks, setEditBooks] = useState(false);
   const [deleteBooks, setDeleteBooks] = useState(false);
+  const [accessAnalytics, setAccessAnalytics] = useState(false);
   const [canChat, setCanChat] = useState(false);
 
 
@@ -71,6 +72,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
     setUploadBooks(admin.can_upload_books);
     setDeleteBooks(admin.can_delete_books);
     setEditBooks(admin.can_edit_books);
+    setAccessAnalytics(admin.can_access_analytics);
     setCanChat(admin.can_chat);
   };
 
@@ -85,6 +87,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
       can_upload_books: uploadBooks,
       can_edit_books: editBooks,
       can_delete_books: deleteBooks,
+      can_access_analytics: accessAnalytics,
       can_chat: canChat
     };
 
@@ -155,6 +158,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({ admin, deleteMode, fetchAd
                   <div className={styles.allCheckboxesContainer}>
 
                     <Checkbox className={styles.checkbox} label="Manage" id="manageBox" onChange={() => setManageAdmins(prevManage => !prevManage)} checked={manageAdmins} />
+                    <Checkbox className={styles.checkbox} label="Analytics" id="analyticsBox" onChange={() => setAccessAnalytics(prevAccess => !prevAccess)} checked={accessAnalytics} />
                     <Checkbox className={styles.checkbox} label="Chat" id="chatBox" onChange={() => setCanChat(prevChat => !prevChat)} checked={canChat} />
                     <Checkbox className={styles.checkbox} label="Upload Books" id="uploadBooksBox" onChange={handleUploadToggle} checked={uploadBooks} />
 

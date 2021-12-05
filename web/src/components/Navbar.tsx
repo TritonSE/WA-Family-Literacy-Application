@@ -13,6 +13,7 @@ export const Navbar: React.FC = () => {
 
   const canAccessBooks = auth.admin?.can_upload_books;
   const canAccessAccounts = auth.admin?.can_manage_users;
+  const canAccessAnalytics = auth.admin?.can_access_analytics;
 
   return (
     <nav className={styles.navbar}>
@@ -23,10 +24,9 @@ export const Navbar: React.FC = () => {
         <li className={styles.nav_element_left}>
           <NavLink className={styles.nav_link} activeClassName={styles.active} to="/communication">Communication</NavLink>
         </li>
-        {/* Analytics tabs - uncomment when ready */}
-        {/*<li className={styles.nav_element_left}>*/}
-        {/*  <NavLink className={styles.nav_link} activeClassName={styles.active} to="/analytics">Analytics</NavLink>*/}
-        {/*</li>*/}
+        {canAccessAnalytics ? <li className={styles.nav_element_left}>
+          <NavLink className={styles.nav_link} activeClassName={styles.active} to="/analytics">Analytics</NavLink>
+        </li> : null}
         {canAccessBooks ? <li className={styles.nav_element_left}>
           <NavLink className={styles.nav_link} activeClassName={styles.active} to="/books" isActive={(
             (match, location) => {
