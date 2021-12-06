@@ -43,6 +43,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isGuest, setIsGuest] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [rememberMe, setRememberMe] = useState(true);
   const loggedIn = user !== null || isGuest;
   const clearError = (): void => {
     setError(null);
@@ -74,7 +75,9 @@ export const AuthProvider: React.FC = ({ children }) => {
 
         const user = await api.getUser(uid);
         setUser(user);
-        AsyncStorage.setItem('USER', JSON.stringify(user));
+        if (rememberMe) {
+          AsyncStorage.setItem('USER', JSON.stringify(user));
+        }
       } catch (e) {
         setError(e);
         setUser(null);
@@ -99,6 +102,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const login = (email: string, password: string, rememberMe: boolean): void => {
     (async () => {
       try {
+        setRememberMe(rememberMe);
         // Firebase will auto-save credentials locally, turn this off if rememberMe is unchecked
         if (!rememberMe) {
           await FBA.setPersistence(auth, FBA.inMemoryPersistence);
@@ -176,7 +180,9 @@ export const AuthProvider: React.FC = ({ children }) => {
       try {
         const apiUser = await api.getUser(user.id);
         setUser(apiUser);
-        AsyncStorage.setItem('USER', JSON.stringify(user));
+        if (rememberMe) {
+          AsyncStorage.setItem('USER', JSON.stringify(user));
+        }
       } catch (e) {
         setError(e);
         setUser(null);
