@@ -5,6 +5,7 @@ import * as FBA from 'firebase/auth';
 
 import { User } from '../models/User';
 import { APIContext } from './APIContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthState = {
   user: User | null;
@@ -61,6 +62,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     unsubscribe = FBA.onAuthStateChanged(auth, async (fbUser: FBA.User | null) => {
       if (fbUser === null) {
         setUser(null);
+        AsyncStorage.removeItem('USER');
         return;
       }
 
@@ -72,14 +74,27 @@ export const AuthProvider: React.FC = ({ children }) => {
 
         const user = await api.getUser(uid);
         setUser(user);
+        AsyncStorage.setItem('USER', JSON.stringify(user));
       } catch (e) {
         setError(e);
         setUser(null);
+        AsyncStorage.removeItem('USER');
       }
     });
   };
 
   useEffect(subscribeToAuth, [auth]);
+
+  // For offline support, check if we have a cached user object and use it.
+  // If we are online, Firebase will refetch and overwrite the user var if needed
+  useEffect(() => {
+    (async () => {
+      const userJSON = await AsyncStorage.getItem('USER');
+      if (userJSON) {
+        setUser(JSON.parse(userJSON) as User);
+      }
+    })();
+  }, []);
 
   const login = (email: string, password: string, rememberMe: boolean): void => {
     (async () => {
@@ -93,6 +108,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       } catch (e) {
         setError(e);
         setUser(null);
+        AsyncStorage.removeItem('USER');
       }
     })();
   };
@@ -101,6 +117,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     FBA.signOut(auth);
     setError(null);
     setUser(null);
+    AsyncStorage.removeItem('USER');
     setIsGuest(false);
   };
 
@@ -118,6 +135,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         if (fbUser === null) {
           setError(new Error('Error signing up, please try again'));
           setUser(null);
+          AsyncStorage.removeItem('USER');
           return;
         }
         const jwt = await fbUser.getIdToken();
@@ -135,6 +153,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       } catch (e) {
         setError(e);
         setUser(null);
+        AsyncStorage.removeItem('USER');
       }
     })();
   };
@@ -157,9 +176,11 @@ export const AuthProvider: React.FC = ({ children }) => {
       try {
         const apiUser = await api.getUser(user.id);
         setUser(apiUser);
+        AsyncStorage.setItem('USER', JSON.stringify(user));
       } catch (e) {
         setError(e);
         setUser(null);
+        AsyncStorage.removeItem('USER');
       }
     })();
   };
