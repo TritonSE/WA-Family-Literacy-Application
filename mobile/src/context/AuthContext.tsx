@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Constants from 'expo-constants';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import * as SecureStore from 'expo-secure-store';
+import * as FB from 'firebase/app';
+import * as FBA from 'firebase/auth';
 
 import { User } from '../models/User';
 import { APIContext } from './APIContext';
@@ -48,46 +47,49 @@ export const AuthProvider: React.FC = ({ children }) => {
     setError(null);
   };
 
-  const auth = useMemo(() => {
-    const app = firebase.apps[0] || firebase.initializeApp(Constants.manifest?.extra?.firebase);
-    return app.auth();
+  const app = useMemo(() => {
+    return FB.getApps()[0] || FB.initializeApp(Constants.manifest?.extra?.firebase);
   }, []);
+  const auth = useMemo(() => FBA.getAuth(app), []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const [userJSON, token] = await Promise.all([SecureStore.getItemAsync('user'), SecureStore.getItemAsync('apiToken')]);
-        if (userJSON && token) {
-          const user = JSON.parse(userJSON) as User;
-          api.setToken(token);
-          setUser(user);
-        }
-      } catch (e) {
-        // Don't set error state var, ignore, user can just re-login
-        console.log(e.message);
+  // In general, when Firebase's internal user state updates we want to be notified
+  // so we can fetch the user from the backend, set the API token, etc.
+  // But when registering a new account, we need to briefly unregister this listener
+  // so we can create the backend profile, or the api.getUser() will fail with a 404
+  let unsubscribe: FBA.Unsubscribe | null = null;
+  const subscribeToAuth = (): void => {
+    unsubscribe = FBA.onAuthStateChanged(auth, async (fbUser: FBA.User) => {
+      if (fbUser === null) {
+        setUser(null);
+        return;
       }
-    })();
-  }, [auth]);
+
+      const { uid } = fbUser;
+
+      try {
+        const token = await FBA.getIdToken(fbUser);
+
+        api.setToken(token);
+        const user = await api.getUser(uid);
+        setUser(user);
+      } catch (e) {
+        setError(e);
+        setUser(null);
+      }
+    });
+  };
+
+  useEffect(subscribeToAuth, [auth]);
 
   const login = (email: string, password: string, rememberMe: boolean): void => {
     (async () => {
       try {
-        const { user: fbUser } = await auth.signInWithEmailAndPassword(email, password);
-        if (fbUser === null) {
-          setError(new Error('User does not exist'));
-          setUser(null);
-          return;
+        // Firebase will auto-save credentials locally, turn this off if rememberMe is unchecked
+        if (!rememberMe) {
+          await FBA.setPersistence(auth, FBA.inMemoryPersistence);
         }
-        const jwt = await fbUser.getIdToken();
-        api.setToken(jwt);
-
-        const uid = fbUser.uid;
-        const user = await api.getUser(uid);
-        setUser(user);
-
-        if (rememberMe) {
-          await Promise.all([SecureStore.setItemAsync('user', JSON.stringify(user)), SecureStore.setItemAsync('apiToken', jwt)]);
-        }
+        await FBA.signInWithEmailAndPassword(auth, email, password);
+        // will automatically call onAuthStateChanged, fetching the token, profile info, etc.
       } catch (e) {
         setError(e);
         setUser(null);
@@ -98,24 +100,26 @@ export const AuthProvider: React.FC = ({ children }) => {
   const signup = (name: string, email: string, password: string, inSanDiego: boolean): void => {
     (async () => {
       try {
-        const { user: fbUser } = await auth.createUserWithEmailAndPassword(email, password);
+        // Don't let Firebase try to auto-login, we need to create the backend user first
+        unsubscribe();
+        const { user: fbUser } = await FBA.createUserWithEmailAndPassword(auth, email, password);
         if (fbUser === null) {
-          setError(new Error('Unknown error creating user'));
+          setError(new Error('Error signing up, please try again'));
           setUser(null);
           return;
         }
         const jwt = await fbUser.getIdToken();
         api.setToken(jwt);
 
-        const uid = fbUser.uid;
-        const user = await api.createUser({
-          id: uid,
+        await api.createUser({
+          id: fbUser.uid,
           email: email,
           name: name,
           in_san_diego: inSanDiego,
         });
 
-        setUser(user);
+        // Good to go now, resubscribe to auth events
+        subscribeToAuth();
       } catch (e) {
         setError(e);
         setUser(null);
@@ -124,28 +128,18 @@ export const AuthProvider: React.FC = ({ children }) => {
   };
 
   const sendPasswordResetEmail = (email: string, showModal: () => void): void => {
-
     (async () => {
       try {
-        const res: string[] = await auth.fetchSignInMethodsForEmail(email);
-        if (res.length != 0) {
-          auth.sendPasswordResetEmail(email);
-          // Callback to set modal visibility to true (indicate success)
-          showModal();
-        } else {
-          setError(new Error('Could Not Find An Account With That Email Address'));
-        }
+        await FBA.sendPasswordResetEmail(auth, email);
+        showModal();
       } catch (e) {
         setError(new Error('Invalid Email Address'));
       }
     })();
-
   };
 
   const logout = (): void => {
-    api.clearToken();
-    SecureStore.deleteItemAsync('user');
-    SecureStore.deleteItemAsync('apiToken');
+    FBA.signOut(auth);
     setError(null);
     setUser(null);
     setIsGuest(false);
