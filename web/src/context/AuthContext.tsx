@@ -1,12 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
-import {
-  Route,
-  Redirect,
-  RouteProps,
-  RouteComponentProps,
-} from "react-router-dom";
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { Route, Redirect, RouteProps, RouteComponentProps } from "react-router-dom";
+import * as FB from 'firebase/app';
+import * as FBA from 'firebase/auth';
 
 import { Navbar } from '../components/Navbar';
 import { Admin } from '../models/Admin';
@@ -52,72 +47,50 @@ export const AuthProvider: React.FC = ({ children }) => {
       appId: process.env.REACT_APP_FB_APP_ID || '1:1534285739:web:2bada99614d9126d7224ee',
     };
 
-    const app = firebase.apps[0] || firebase.initializeApp(fbConfig);
-    return app.auth();
+    const app = FB.getApps()[0] || FB.initializeApp(fbConfig);
+    return FBA.getAuth(app);
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const uid = sessionStorage.getItem('userId');
-      const token = sessionStorage.getItem('apiToken');
-      if (uid && token) {
-        api.setToken(token);
-        const admin = await api.getAdmin(uid);
-        setAdmin(admin);
-        setError(null);
-      } else {
-        const uid = localStorage.getItem('userId');
-        const token = localStorage.getItem('apiToken');
-
-        if (uid && token) {
-          api.setToken(token);
-          const admin = await api.getAdmin(uid);
-          setAdmin(admin);
-          setError(null);
-        }
+    FBA.onAuthStateChanged(auth, async (fbUser: FBA.User | null) => {
+      if (fbUser === null) {
+        setAdmin(null);
+        return;
       }
-    })();
-  }, []);
 
-  const login = (email: string, password: string, rememberMe: boolean): void => {
-    (async () => {
+      const { uid } = fbUser;
+
       try {
-        const { user: fbUser } = await auth.signInWithEmailAndPassword(email, password);
-        if (fbUser === null) {
-          setAdmin(null);
-          setError(new Error('Firebase user does not exist'));
-          return;
-        }
-        const uid = fbUser.uid;
-        const jwt = await fbUser.getIdToken();
-        api.setToken(jwt);
-
-        if (rememberMe) {
-          localStorage.setItem('userId', uid);
-          localStorage.setItem('apiToken', jwt);
-        } else {
-          sessionStorage.setItem('userId', uid);
-          sessionStorage.setItem('apiToken', jwt);
-        }
+        const token = await FBA.getIdToken(fbUser);
+        api.setToken(token);
 
         const admin = await api.getAdmin(uid);
         setAdmin(admin);
       } catch (e: any) {
         setError(e);
         setAdmin(null);
-        auth.signOut();
+      }
+    });
+  }, []);
+
+  const login = (email: string, password: string, rememberMe: boolean): void => {
+    (async () => {
+      try {
+        if (!rememberMe) {
+          await FBA.setPersistence(auth, FBA.inMemoryPersistence);
+        }
+        await FBA.signInWithEmailAndPassword(auth, email, password);
+      } catch (e: any) {
+        setError(e);
+        setAdmin(null);
       }
     })();
   };
 
   const logout = (): void => {
+    auth.signOut();
     setAdmin(null);
     setError(null);
-    localStorage.removeItem('userId');
-    localStorage.removeItem('apiToken');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('apiToken');
-    auth.signOut();
   };
 
   return (

@@ -47,10 +47,10 @@ export const AuthProvider: React.FC = ({ children }) => {
     setError(null);
   };
 
-  const app = useMemo(() => {
-    return FB.getApps()[0] || FB.initializeApp(Constants.manifest?.extra?.firebase);
+  const auth = useMemo(() => {
+    const app = FB.getApps()[0] || FB.initializeApp(Constants.manifest?.extra?.firebase);
+    return FBA.getAuth(app);
   }, []);
-  const auth = useMemo(() => FBA.getAuth(app), []);
 
   // In general, when Firebase's internal user state updates we want to be notified
   // so we can fetch the user from the backend, set the API token, etc.
@@ -68,8 +68,8 @@ export const AuthProvider: React.FC = ({ children }) => {
 
       try {
         const token = await FBA.getIdToken(fbUser);
-
         api.setToken(token);
+
         const user = await api.getUser(uid);
         setUser(user);
       } catch (e) {
@@ -95,6 +95,17 @@ export const AuthProvider: React.FC = ({ children }) => {
         setUser(null);
       }
     })();
+  };
+
+  const logout = (): void => {
+    FBA.signOut(auth);
+    setError(null);
+    setUser(null);
+    setIsGuest(false);
+  };
+
+  const continueAsGuest = (): void => {
+    setIsGuest(true);
   };
 
   const signup = (name: string, email: string, password: string, inSanDiego: boolean): void => {
@@ -136,17 +147,6 @@ export const AuthProvider: React.FC = ({ children }) => {
         setError(new Error('Invalid Email Address'));
       }
     })();
-  };
-
-  const logout = (): void => {
-    FBA.signOut(auth);
-    setError(null);
-    setUser(null);
-    setIsGuest(false);
-  };
-
-  const continueAsGuest = (): void => {
-    setIsGuest(true);
   };
 
   const fetchUser = (): void => {
