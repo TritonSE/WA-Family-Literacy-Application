@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import * as FB from 'firebase/app';
 import * as FBA from 'firebase/auth';
 
 import { User } from '../models/User';
 import { APIContext } from './APIContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthState = {
   user: User | null;
