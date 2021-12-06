@@ -50,7 +50,7 @@ export const LoginScreen: React.FC = () => {
         </View>
 
         <View style={styles.container}>
-          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" />
+          <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" keyboardType="email-address" />
           <TextInput style={[styles.input, TextStyles.caption3]} value={password} onChangeText={setPassword} placeholder={i18n.t('password')} placeholderTextColor={Colors.gray} secureTextEntry />
 
           <View style={styles.textContainer}>
