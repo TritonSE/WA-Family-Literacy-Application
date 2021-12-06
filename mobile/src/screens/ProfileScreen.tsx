@@ -120,6 +120,31 @@ const SettingsTab: React.FC = () => {
   const api = useContext(APIContext);
   const auth = useContext(AuthContext);
 
+  const [allowAnalytics , setAllow] = useState(true);
+
+  const getAllowAnalytics = async () => {
+    var value = await AsyncStorage.getItem('allowAnalytics');
+    return JSON.parse(value);
+  }
+
+  useEffect(() => {
+    (async () => {
+      const value = getAllowAnalytics();
+      if (value === null) {
+        await AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
+      } else {
+        const allow = await getAllowAnalytics();
+        setAllow(allow);
+      }
+    })();
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      await AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
+    })();
+  }, [allowAnalytics])
+
   const languages = Object.keys(i18n.i18n.translations) as Language[];
 
   const setInSanDiego = (inSanDiego: boolean): void => {
@@ -172,6 +197,16 @@ const SettingsTab: React.FC = () => {
 
           </View>
         ))}
+
+      </View>
+          <View style={styles.langSelector}>
+            <Text style={TextStyles.heading3}>{i18n.t('analytics')}</Text>
+            <View style={styles.langElem}>
+              <Text style={TextStyles.body1}>{i18n.t('anonymousData')}</Text>
+              <Checkbox value={allowAnalytics} onChange={() => setAllow(!allowAnalytics)} />
+            </View>
+          </View>
+      <View>
 
       </View>
 

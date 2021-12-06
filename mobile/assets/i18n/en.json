@@ -1,5 +1,6 @@
 {
   "newBooks": "New Books for You",
+  "popularBooks": "Popular Books",
   "allBooks": "All Books",
   "letsTalk": "Let's Talk",
   "tel": "Tel",
@@ -49,5 +50,7 @@
   "savedTextClick": "Click on the",
   "savedTextWithin": "within a book",
   "savedTextToSave": "to save it here.",
-  "unsaved": "Unsaved"
+  "unsaved": "Unsaved",
+  "anonymousData": "Anonymous data collection",
+  "analytics": "Analytics"
 }

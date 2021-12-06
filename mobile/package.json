@@ -1,6 +1,7 @@
 {
   "name": "words-alive-mobile",
   "dependencies": {
+    "@expo/ngrok": "^4.1.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/masked-view": "0.1.11",
     "@react-native-community/netinfo": "6.0.2",

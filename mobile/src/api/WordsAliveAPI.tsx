@@ -77,6 +77,16 @@ class WordsAliveAPI {
     const res = await this.client.patch(`/users/${id}`, update);
     return res.data;
   }
+
+  async incrementClicks(id: string): Promise<void> {
+    const res = await this.client.put(`/analytics/${id}/inc`, '', {headers: {}});
+  }
+
+  // Returns book array of top 5 most clicked books
+  async getPopularBooks(): Promise<Book[]> {
+    const res = await this.client.get('/books/popular');
+    return res.data;
+  }
 }
 
 export { WordsAliveAPI };

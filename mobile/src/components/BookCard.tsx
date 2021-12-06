@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Book } from '../models/Book';
-import CachedImage from 'react-native-expo-cached-image';
 
 type BookCardProps = { book: Book, size?: number };
 
@@ -12,7 +11,7 @@ export const BookCard: React.FC<BookCardProps> = ({ book, size = 100 }) => {
   const imageSize = { width: size, height: size };
   return (
     <View style={styles.container}>
-      <CachedImage source={{ uri: book.image }} style={[styles.image, imageSize]} />
+      <Image source={{ uri: book.image }} style={[styles.image, imageSize]} />
     </View>
   );
 };

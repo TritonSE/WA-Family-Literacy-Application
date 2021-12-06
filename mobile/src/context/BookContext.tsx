@@ -5,15 +5,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type BookState = {
   books: Book[], // holds all the books we have stored
+  popularBooks: Book[], // holds the popular books stored
   fetchBooks: () => void, // api call to get books
+  fetchPopularBooks: () => void, // api call to get popular books
   loading: boolean, // lets us know if the books are being loaded or not
+  popularLoading: boolean,
   error: boolean,
 };
 
 const initialState: BookState = {
   books: [],
+  popularBooks: [],
   fetchBooks: () => {},
+  fetchPopularBooks: () => {},
   loading: false,
+  popularLoading: false,
   error: false,
 };
 
@@ -47,12 +53,38 @@ export const BookProvider: React.FC = ({ children }) => {
     });
   }
 
+  function fetchPopularBooks(): void {
+    dispatch({ type: 'API_CALL_STARTED' });
+    
+    client.getPopularBooks().then(async (res) => {
+      dispatch({ type: 'POPULAR_BOOKS_RETURNED', payload: res });
+      // cache response in async
+      await AsyncStorage.setItem('popularBooks', JSON.stringify(res));
+    }).catch(async (err) => {
+      const result = await AsyncStorage.getItem('popularBooks');
+      if (result != null) {
+        // we aren't connected but have the result cached
+        // somehow return the result
+        dispatch({ type: 'POPULAR_BOOKS_RETURNED', payload: JSON.parse(result) });
+        
+      } else {
+        // error case 
+        state.error = true;
+        console.log(err);
+      }
+      
+    });
+  }
+
   return (
     <BookContext.Provider
       value={{
         books: state.books,
+        popularBooks: state.popularBooks,
         fetchBooks,
+        fetchPopularBooks,
         loading: state.loading,
+        popularLoading: state.popularLoading,
         error: state.error,
       }}
     >
@@ -63,7 +95,8 @@ export const BookProvider: React.FC = ({ children }) => {
 
 type BookAction
   = { type: 'API_CALL_STARTED' }
-  | { type: 'BOOKS_RETURNED', payload: Book[] };
+  | { type: 'BOOKS_RETURNED', payload: Book[] }
+  | { type: 'POPULAR_BOOKS_RETURNED', payload: Book[]};
 
 const reducer = (state: BookState, action: BookAction): BookState => {
   switch (action.type) {
@@ -71,6 +104,8 @@ const reducer = (state: BookState, action: BookAction): BookState => {
       return { ...state, loading: true };
     case 'BOOKS_RETURNED':
       return { ...state, books: action.payload, loading: false };
+    case 'POPULAR_BOOKS_RETURNED':
+      return { ...state, popularBooks: action.payload, popularLoading: false };
     default:
       return state;
   }
