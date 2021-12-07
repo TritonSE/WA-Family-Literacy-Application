@@ -13,7 +13,7 @@ import { useErrorAlert } from '../../hooks/useErrorAlert';
 import { PopUpModal } from '../../components/PopUpModal';
 
 /**
- * Screen to allow user to send password reset email 
+ * Screen to allow user to send password reset email
  * - Redirects to login page on success
  */
 export const ForgotPasswordScreen: React.FC = () => {
@@ -42,7 +42,7 @@ export const ForgotPasswordScreen: React.FC = () => {
   return (
 
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={{ flex: 1, height: '100%' }}
     >
 
@@ -57,11 +57,11 @@ export const ForgotPasswordScreen: React.FC = () => {
         <View style={styles.logoContainer}>
           <Image source={require('../../../assets/images/logo-white.png')} style={styles.logo} />
         </View>
-        
+
         <PopUpModal text={i18n.t('passwordResetEmailSent')} setModalVisible={setModalVisible} modalVisible={modalVisible} />
 
 
-        <View style={styles.container}>  
+        <View style={styles.container}>
           <Text style={[TextStyles.heading1, styles.instructions]}>{i18n.t("forgotPassword")}</Text>
           <Text style={[TextStyles.caption2, styles.instructions]}>{i18n.t('resetPasswordInstructions')}</Text>
           <TextInput style={[styles.input, TextStyles.caption3]} value={email} onChangeText={setEmail} placeholder={i18n.t('email')} placeholderTextColor={Colors.gray} textContentType="emailAddress" keyboardType="email-address"/>

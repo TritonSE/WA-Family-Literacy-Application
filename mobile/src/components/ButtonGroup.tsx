@@ -4,13 +4,13 @@ import { Colors } from '../styles/Colors';
 import { TextStyles } from '../styles/TextStyles';
 
 // button labels and callback function for passing key of active button to parent
-type ButtonGroupProps = { buttons: { [key: string]: string }, onButtonChange: (key: string) => void };
+type ButtonGroupProps = { buttons: { [key: string]: string }, onButtonChange: (key: string) => void, index?: number };
 
 /**
  * Renders an inline group of three button tabs
  */
-export const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, onButtonChange }) => {
-  const [activeButton, setActiveButton] = useState(Object.keys(buttons)[0]);
+export const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, onButtonChange, index = 0 }) => {
+  const [activeButton, setActiveButton] = useState(Object.keys(buttons)[index]);
 
   return (
     <View style={{ flexDirection: 'row' }}>
