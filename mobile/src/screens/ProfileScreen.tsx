@@ -134,8 +134,8 @@ const SettingsTab: React.FC = () => {
   }, []);
 
   const toggleAllowAnalytics = (): void => {
-    setAllow(allowAnalytics => !allowAnalytics);
     AsyncStorage.setItem("allowAnalytics", JSON.stringify(!allowAnalytics));
+    setAllow(allowAnalytics => !allowAnalytics);
   };
 
   const languages = Object.keys(i18n.i18n.translations) as Language[];
@@ -204,12 +204,6 @@ const SettingsTab: React.FC = () => {
           <Checkbox value={allowAnalytics} onChange={toggleAllowAnalytics} />
         </View>
       </View>
-      <View>
-
-      </View>
-
-      <View style={{ height: 300 }} />
-
     </View>
 
   );
