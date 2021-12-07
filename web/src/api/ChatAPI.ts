@@ -32,6 +32,11 @@ class ChatAPI {
       });
     return unsubscribe;
   }
+  
+  listenForRoomDetails(roomId: string, callback: (room: ChatRoom) => void): void{
+    const unsubscribe = this.chatRoomsCollection.doc(roomId).onSnapshot((doc: firebase.firestore.DocumentSnapshot) => callback({id: doc.id, ...doc.data()} as ChatRoom));
+    return unsubscribe;
+  }
 
   // Listen for new messages in a chat room (calling this will initially return the current messages)
   listenForNewMessages(roomId: string, callback: (changedMessages: Message[]) => void): () => void {

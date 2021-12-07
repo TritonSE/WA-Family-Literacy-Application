@@ -1,5 +1,13 @@
 .titleBar {
-  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatDetails {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
 }
 
 .chatWindowContainer {
@@ -15,11 +23,39 @@
   width: 80%;
 }
 
+.chatPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  row-gap: 10px;
+  margin: auto;
+}
+
+.messagesContainer {
+  border: 1px solid var(--black);
+  padding: 10px;
+  height: 65vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.messagesView {
+  flex: 1;
+  overflow: scroll;
+}
+
 .mainChatBubble {
+  font-family: "GothamRounded - Light";
   border-radius: 12px;
   padding: 18px;
   width: 35%;
   margin: 10px 0;
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .rightChatBubble {
@@ -29,4 +65,53 @@
 
 .leftChatBubble {
   background-color: var(--light-grey);
+}
+
+.chatEndedText {
+  font-family: "GothamRounded - Bold";
+  font-size: 14px;
+  width: 100%;
+  margin: 50px 0;
+  text-align: center;
+}
+
+.newMessageContainer {
+  border: 1px solid var(--dark-grey);
+  border-radius: 10px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resolveButton {
+  font-family: "GothamRounded - Light";
+  font-size: 16px;
+  padding: 10px 20px;
+  background-color: var(--orange);
+  border-width: 2px;
+  box-shadow: 1px 1px;
+  cursor: pointer;
+  border: 0.5px solid var(--black);
+  border-radius: 7px;
+  box-shadow: 1px 2px 5px var(--dark-grey);
+}
+
+.resolveButton:disabled {
+  cursor: not-allowed;
+}
+
+.sendButton {
+  outline: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.messageInput {
+  border: none;
+  outline-width: 0;
+  font-family: "GothamRounded - Light";
+  font-size: 16px;
+  flex: 1;
 }
