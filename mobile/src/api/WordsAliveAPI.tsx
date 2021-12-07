@@ -79,7 +79,7 @@ class WordsAliveAPI {
   }
 
   async incrementClicks(id: string): Promise<void> {
-    const res = await this.client.put(`/analytics/${id}/inc`, '', {headers: {}});
+    await this.client.put(`/analytics/${id}/inc`, '', {headers: {}});
   }
 
   // Returns book array of top 5 most clicked books

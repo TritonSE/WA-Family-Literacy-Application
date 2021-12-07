@@ -1,7 +1,6 @@
 {
   "name": "words-alive-mobile",
   "dependencies": {
-    "@expo/ngrok": "^4.1.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/masked-view": "0.1.11",
     "@react-native-community/netinfo": "6.0.2",
@@ -19,6 +18,7 @@
     "expo-status-bar": "~1.1.0",
     "expo-web-browser": "~10.0.3",
     "firebase": "9.5.0",
+    "fsevents": "^2.3.2",
     "i18n-js": "^3.8.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",

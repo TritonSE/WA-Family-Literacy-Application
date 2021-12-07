@@ -110,12 +110,12 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   // Check in profile screen if data collection is allowed
   useEffect(() => {
     (async () => {
-      var allow = await AsyncStorage.getItem("allowAnalytics");
+      const allow = await AsyncStorage.getItem("allowAnalytics");
       if (allow) {
         await client.incrementClicks(book.id);
       }
     })();
-  }, [])
+  }, []);
 
   // fetches book details on language change
   useEffect(

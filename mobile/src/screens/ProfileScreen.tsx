@@ -122,28 +122,26 @@ const SettingsTab: React.FC = () => {
 
   const [allowAnalytics , setAllow] = useState(true);
 
-  const getAllowAnalytics = async () => {
-    var value = await AsyncStorage.getItem('allowAnalytics');
+  const getAllowAnalytics = async (): Promise<boolean> => {
+    const value = await AsyncStorage.getItem('allowAnalytics');
     return JSON.parse(value);
-  }
+  };
 
   useEffect(() => {
     (async () => {
-      const value = getAllowAnalytics();
+      const value = await getAllowAnalytics();
       if (value === null) {
         await AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
       } else {
-        const allow = await getAllowAnalytics();
-        setAllow(allow);
+        setAllow(value);
       }
     })();
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    (async () => {
-      await AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
-    })();
-  }, [allowAnalytics])
+  const toggleAllowAnalytics = (): void => {
+    setAllow(allowAnalytics => !allowAnalytics);
+    AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
+  };
 
   const languages = Object.keys(i18n.i18n.translations) as Language[];
 
@@ -199,13 +197,13 @@ const SettingsTab: React.FC = () => {
         ))}
 
       </View>
-          <View style={styles.langSelector}>
-            <Text style={TextStyles.heading3}>{i18n.t('analytics')}</Text>
-            <View style={styles.langElem}>
-              <Text style={TextStyles.body1}>{i18n.t('anonymousData')}</Text>
-              <Checkbox value={allowAnalytics} onChange={() => setAllow(!allowAnalytics)} />
-            </View>
-          </View>
+      <View style={styles.langSelector}>
+        <Text style={TextStyles.heading3}>{i18n.t('analytics')}</Text>
+        <View style={styles.langElem}>
+          <Text style={TextStyles.body1}>{i18n.t('anonymousData')}</Text>
+          <Checkbox value={allowAnalytics} onChange={toggleAllowAnalytics} />
+        </View>
+      </View>
       <View>
 
       </View>

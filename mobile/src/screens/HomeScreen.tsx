@@ -139,11 +139,11 @@ export const HomeScreen: React.FC = () => {
           ) : (
             <HorizontalBookList books={popularBooks} />
           )}
-          </View>
+        </View>
 
         <View style={styles.allBooksTextPadding}>
           <Text style={TextStyles.heading3}>{t('allBooks')}</Text>
-          </View>
+        </View>
 
         <View>
           <BookFilter onFilter={onFilter} />

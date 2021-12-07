@@ -54,7 +54,7 @@ export const BookProvider: React.FC = ({ children }) => {
   }
 
   function fetchPopularBooks(): void {
-    dispatch({ type: 'API_CALL_STARTED' });
+    dispatch({ type: 'POPULAR_API_CALL_STARTED' });
     
     client.getPopularBooks().then(async (res) => {
       dispatch({ type: 'POPULAR_BOOKS_RETURNED', payload: res });
@@ -95,6 +95,7 @@ export const BookProvider: React.FC = ({ children }) => {
 
 type BookAction
   = { type: 'API_CALL_STARTED' }
+  | { type: 'POPULAR_API_CALL_STARTED' }
   | { type: 'BOOKS_RETURNED', payload: Book[] }
   | { type: 'POPULAR_BOOKS_RETURNED', payload: Book[]};
 
@@ -102,6 +103,8 @@ const reducer = (state: BookState, action: BookAction): BookState => {
   switch (action.type) {
     case 'API_CALL_STARTED':
       return { ...state, loading: true };
+    case 'POPULAR_API_CALL_STARTED':
+      return { ...state, popularLoading: true};
     case 'BOOKS_RETURNED':
       return { ...state, books: action.payload, loading: false };
     case 'POPULAR_BOOKS_RETURNED':
