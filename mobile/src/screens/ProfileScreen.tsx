@@ -124,10 +124,7 @@ const SettingsTab: React.FC = () => {
 
   const getAllowAnalytics = async (): Promise<boolean> => {
     const value = await AsyncStorage.getItem('allowAnalytics');
-    if (value == null) {
-      return null as boolean;
-    }
-    return JSON.parse(value);
+    return value;
   };
 
   useEffect(() => {
