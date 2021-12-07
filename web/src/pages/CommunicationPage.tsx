@@ -1,14 +1,44 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ChatAPI } from "../api/ChatAPI";
 import { AuthContext } from "../context/AuthContext";
+import { Admin } from "../models/Admin";
 import { ChatRoom, Message } from "../models/Chat";
-import styles from './CommunicationPage.module.css';
+import styles from "./CommunicationPage.module.css";
 
 interface ChatProps {
   roomId: string;
 }
 
 const chatAPI = new ChatAPI();
+
+type ChatBubbleProps = {
+  message: string;
+  from: string;
+  currentUser: Admin | null;
+};
+
+const ChatBubble: React.FC<ChatBubbleProps> = ({
+  message,
+  from,
+  currentUser,
+}) => {
+  if (currentUser)
+    return (
+      <div>
+        <div
+          className={[
+            styles.mainChatBubble,
+            from === currentUser.name
+              ? styles.rightChatBubble
+              : styles.leftChatBubble,
+          ].join(" ")}
+        >
+          <p className="caption2">{message}</p>
+        </div>
+      </div>
+    );
+  return null;
+};
 
 const Chat: React.FC<ChatProps> = ({ roomId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -26,7 +56,7 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
   }, [roomId]);
 
   const sendMessage = (): void => {
-    chatAPI.sendMessage(roomId, messageText, auth.admin?.name || '');
+    chatAPI.sendMessage(roomId, messageText, auth.admin?.name || "");
     setMessageText("");
   };
 
@@ -38,9 +68,12 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
     <div>
       {messages.map(({ id, text, from }) => {
         return (
-          <p key={id}>
-            {text}, from: {from}
-          </p>
+          <ChatBubble
+            key={id}
+            message={text}
+            from={from}
+            currentUser={auth.admin}
+          />
         );
       })}
       <input
@@ -59,45 +92,35 @@ export const CommunicationPage: React.FC = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   const onNewRooms = (newRooms: ChatRoom[]): void => {
-    setChatRooms(oldRooms => [...newRooms,...oldRooms]);
+    setChatRooms((oldRooms) => [...newRooms, ...oldRooms]);
   };
 
   // Automatically select first chat room if none is selected
-  useEffect(()=>{
-    if (!currentRoomId && chatRooms.length > 0) setCurrentRoomId(chatRooms[0].id);
+  useEffect(() => {
+    if (!currentRoomId && chatRooms.length > 0)
+      setCurrentRoomId(chatRooms[0].id);
   }, [chatRooms]);
 
   // Listen for newly created chat rooms in real time
   useEffect(() => {
     return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
-
-  if (currentRoomId)
-    return (
-      <div>
-        <h1>Communication</h1>
-        {chatRooms.map(({ id, user }: ChatRoom) => {
-          return (
-            <p key={id} onClick={() => setCurrentRoomId(id)}>
-              {user}
-            </p>
-          );
-        })}
-        <h2>chat</h2>
-        <Chat roomId={currentRoomId} />
-      </div>
-    );
   return (
     <div>
+      {chatRooms.map(({ id, user }: ChatRoom) => {
+        return (
+          <p key={id} onClick={() => setCurrentRoomId(id)}>
+            {user}
+          </p>
+        );
+      })}
       <div className={styles.titleBar}>
         <h1>Chat</h1>
       </div>
       <div className={styles.chatWindowContainer}>
-        <div className={styles.sideBar}>
-          sideBar
-        </div>
+        <div className={styles.sideBar}>sideBar</div>
         <div className={styles.chatWindow}>
-          chatWindow
+          {currentRoomId && <Chat roomId={currentRoomId} />}
         </div>
       </div>
     </div>
