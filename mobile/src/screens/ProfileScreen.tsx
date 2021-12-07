@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView } from 'react-native';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Circle, Svg } from 'react-native-svg';
@@ -171,13 +171,13 @@ const SettingsTab: React.FC = () => {
         </View>
       )}
 
-      <View style={styles.langSelector}>
+      <View style={styles.configSection}>
         <View style={styles.languageText}>
           <Text style={TextStyles.heading3}>{i18n.t('language')}</Text>
         </View>
 
         {languages.map((lang: Language) => (
-          <View key={`lang${lang}`} style={styles.langElem}>
+          <View key={`lang${lang}`} style={styles.configOption}>
 
             <Text style={TextStyles.body1}>{Languages[lang]}</Text>
 
@@ -192,10 +192,15 @@ const SettingsTab: React.FC = () => {
         ))}
 
       </View>
-      <View style={styles.langSelector}>
-        <Text style={TextStyles.heading3}>{i18n.t('analytics')}</Text>
-        <View style={styles.langElem}>
-          <Text style={TextStyles.body1}>{i18n.t('anonymousData')}</Text>
+      <View style={styles.configSection}>
+        <Text style={TextStyles.heading3}>{i18n.t('privacy')}</Text>
+        <View style={styles.configOption}>
+          <Text style={[styles.configOptionText, TextStyles.body1]}>
+            {i18n.t('allowAnalytics')}
+            <Pressable onPress={() => Alert.alert(i18n.t('allowAnalytics'), i18n.t('analyticsExplainer'))}>
+              <Image style={styles.questionIcon} source={require('../../assets/images/question-circle-solid.png')}/>
+            </Pressable>
+          </Text>
           <Checkbox value={allowAnalytics} onChange={toggleAllowAnalytics} />
         </View>
       </View>
@@ -341,6 +346,11 @@ const styles = StyleSheet.create({
   notLeftPic: {
     marginLeft: 20,
   },
+  questionIcon: {
+    height: 16,
+    width: 16,
+    marginLeft: 8,
+  },
   textBox: {
     height: 170,
     width: 298,
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 298,
   },
-  langSelector: {
+  configSection: {
     marginTop: 30,
     alignSelf: 'center',
     width: 298,
@@ -367,11 +377,14 @@ const styles = StyleSheet.create({
   languageText: {
     marginBottom: 10,
   },
-  langElem: {
+  configOption: {
     marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  configOptionText: {
+    marginRight: 64,
   },
   box: {
     height: 24,
@@ -435,5 +448,5 @@ const styles = StyleSheet.create({
   },
   textToSave: {
     marginTop: 10
-  }
+  },
 });

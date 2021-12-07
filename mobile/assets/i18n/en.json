@@ -51,6 +51,7 @@
   "savedTextWithin": "within a book",
   "savedTextToSave": "to save it here.",
   "unsaved": "Unsaved",
-  "anonymousData": "Anonymous data collection",
-  "analytics": "Analytics"
+  "privacy": "Privacy",
+  "allowAnalytics": "Allow anonymous data collection?",
+  "analyticsExplainer": "If enabled, Let's Read will record which books you open within the app. This information is anonymous, not tied to your account, and is only used so we can track which books are having the most impact."
 }
