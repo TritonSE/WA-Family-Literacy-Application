@@ -115,7 +115,7 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
         try {
           await client.incrementClicks(book.id);
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
     })();
