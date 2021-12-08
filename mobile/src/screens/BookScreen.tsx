@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Image, Text, View, StyleSheet, Pressable, ScrollView, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MarkdownView } from 'react-native-markdown-view';
-import * as WebBrowser from 'expo-web-browser';
+import Markdown from 'react-native-easy-markdown';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CachedImage from 'react-native-expo-cached-image';
@@ -60,17 +59,84 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
   const tabContentWidth = 0.83 * width;
 
   const markdownStyles = {
-    heading: TextStyles.mdHeading,
-    paragraph: TextStyles.mdRegular,
-    strong: TextStyles.mdStrong,
-    listItemNumber: TextStyles.listItem,
-    listItemBullet: TextStyles.listItem,
-    listItemOrderedContent: TextStyles.mdRegular,
-    listItemUnorderedContent: TextStyles.mdRegular,
-    em: TextStyles.mdEm,
-    imageWrapper: { width: tabContentWidth },
-    tableHeaderCellContent: { fontWeight: 'normal' },
-    del: {},
+    text: {
+      fontFamily: 'Gotham-Light',
+      fontWeight: 'normal',
+      color: Colors.text,
+    },
+    h1: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 32,
+      marginTop: 22,
+      marginBottom: 22,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    h2: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 24,
+      marginTop: 20,
+      marginBottom: 20,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    h3: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 20,
+      marginTop: 20,
+      marginBottom: 20,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    h4: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 16,
+      marginTop: 22,
+      marginBottom: 22,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    h5: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 14,
+      marginTop: 22,
+      marginBottom: 22,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    h6: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+      fontSize: 11,
+      marginTop: 24,
+      marginBottom: 24,
+      marginLeft: 0,
+      marginRight: 0,
+    },
+    strong: {
+      fontFamily: 'Gotham-Bold',
+      fontWeight: 'normal',
+      color: Colors.text,
+    },
+    em: {
+      fontFamily: 'Gotham-Italic',
+      fontStyle: 'normal',
+      color: Colors.text,
+    },
+    link: {
+      color: Colors.link,
+    },
   };
 
   // Rerender screen and get updated favorited field for book whenever
@@ -159,12 +225,12 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
           />
         </OfflineIndicator>
       ) : null}
-      <MarkdownView
-        styles={markdownStyles}
-        onLinkPress={(url: string) => WebBrowser.openBrowserAsync(url)}
+      <Markdown
+        useDefaultStyles={true}
+        markdownStyles={markdownStyles}
       >
         {tabContent.body}
-      </MarkdownView>
+      </Markdown>
     </View>
   ) : null;
 
