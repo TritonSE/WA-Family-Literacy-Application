@@ -142,7 +142,7 @@ export const ChatScreen: React.FC = () => {
         </TouchableOpacity>
         <KeyboardAvoidingView
           style={styles.chatContainer}
-          behavior={Platform.OS === 'ios' ? 'padding' : null}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <OfflineIndicator style={{ height: '80%' }}>

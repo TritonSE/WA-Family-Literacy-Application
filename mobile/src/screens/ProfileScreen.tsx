@@ -277,7 +277,7 @@ export const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === 'ios' ? 'padding' : null}>
+    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView>
         {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
         <View style={styles.top} />
