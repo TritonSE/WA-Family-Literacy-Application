@@ -112,7 +112,10 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
     (async () => {
       const allow = await AsyncStorage.getItem("allowAnalytics");
       if (allow) {
-        await client.incrementClicks(book.id);
+        try {
+          await client.incrementClicks(book.id);
+        } catch (error) {
+        }
       }
     })();
   }, []);

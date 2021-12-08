@@ -41,7 +41,7 @@ export const HomeScreen: React.FC = () => {
   const booksCtx = useContext(BookContext);
   useEffect(booksCtx.fetchBooks, []);
   useEffect(booksCtx.fetchPopularBooks, []);
-  const { books, popularBooks, loading } = booksCtx;
+  const { books, popularBooks, loading, popularLoading } = booksCtx;
   const newBooks = [...books]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5);
@@ -134,7 +134,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <View>
-          {booksCtx.popularLoading ? (
+          {popularLoading ? (
             <LoadingCircle />
           ) : (
             <HorizontalBookList books={popularBooks} />

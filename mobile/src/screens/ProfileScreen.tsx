@@ -135,7 +135,7 @@ const SettingsTab: React.FC = () => {
 
   const toggleAllowAnalytics = (): void => {
     setAllow(allowAnalytics => !allowAnalytics);
-    AsyncStorage.setItem("allowAnalytics", JSON.stringify(allowAnalytics));
+    AsyncStorage.setItem("allowAnalytics", JSON.stringify(!allowAnalytics));
   };
 
   const languages = Object.keys(i18n.i18n.translations) as Language[];
