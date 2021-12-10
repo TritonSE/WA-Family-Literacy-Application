@@ -72,6 +72,10 @@ export const CommunicationPage: React.FC = () => {
     return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
 
+  const sideBarList = chatRooms.map((chatRoom) =>
+    <li className={styles.sideBarElement}>{chatRoom.user}</li>
+  );
+
   if (currentRoomId)
     return (
       <div>

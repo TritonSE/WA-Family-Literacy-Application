@@ -14,3 +14,7 @@
 .chatWindow {
     width: 80%;
 }
+
+.sideBarElement {
+    border: 1px grey;
+}
