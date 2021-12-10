@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
-import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Circle, Svg } from 'react-native-svg';
 
@@ -13,17 +14,103 @@ import { I18nContext } from '../context/I18nContext';
 import { Language, Languages } from '../models/Languages';
 import { AuthContext } from '../context/AuthContext';
 import { APIContext } from '../context/APIContext';
+import { Book } from '../models/Book';
+import { ColumnBookList } from '../components/ColumnBookList';
+import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+/**
+ * Saved Tab to display user's favorited books
+ */
 const SavedTab: React.FC = () => {
+
+  const client = useContext(APIContext);
+  const auth = useContext(AuthContext);
+  const i18n = useContext(I18nContext);
+
+  // Favorite/saved books state
+  const [favorites, setFavorites] = useState<Book[]>([]);
+
+  // determines if the saved tab is unfocused/focused
+  const isFocused = useIsFocused();
+
+  // Rerender tab and get updated favorites when isFocused changes
+  // (Ensure that Profile AND Book Screens have synchronised favorites info)
+  useEffect(
+    () => {
+      if (auth.user !== null) {
+        fetchFavoritesStorage();
+        fetchFavoritesAPI();
+      }
+    }, [isFocused]
+  );
+
+  // fetch favorite books from backend
+  const fetchFavoritesAPI = async (): Promise<void> => {
+    try {
+      const res = await client.getFavorites();
+      setFavorites(res);
+      await AsyncStorage.setItem('favorites', JSON.stringify(res));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  // fetch cached favorite books from storage
+  const fetchFavoritesStorage = async (): Promise<void> => {
+    try {
+      const result = await AsyncStorage.getItem('favorites');
+      if (result != null) setFavorites(JSON.parse(result));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+
+
   return (
     <View>
-      <Text>
-        Saved
-      </Text>
-      <View style={{ height: 300 }} />
+      {auth.user === null ? (
+        <View style={styles.unAuthenticatedContainer}>
+          <View style={styles.login}>
+            <Text style={[TextStyles.caption1, { marginBottom: 10 }]}>{i18n.t('signupToSave')}</Text>
+            <LargeButton text={i18n.t('signUp')} onPress={() => auth.logout()} underline />
+          </View>
+          <View style={{ height: 300 }} />
+        </View>
+      )
+        :
+        (Array.isArray(favorites) && favorites.length > 0 ?
+          (
+            <View>
+              <ColumnBookList books={favorites} />
+            </View>
+          )
+          :
+          (
+            <View style={styles.authenticatedContainer} >
+
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[styles.text, styles.textClick]}>{i18n.t("savedTextClick")}</Text>
+                <Image style={styles.bookmarkButton} source={require('../../assets/images/bookmark-regular.png')} />
+                <Text style={[styles.text, styles.textWithin]}>{i18n.t("savedTextWithin")}</Text>
+              </View>
+              <Text style={[styles.text, styles.textToSave]}>{i18n.t("savedTextToSave")}</Text>
+
+              <View style={{ height: 300 }} />
+
+            </View>
+          )
+        )
+      }
     </View>
   );
+
+
 };
+
+
 
 /**
  * Settings Tab to set app locale (language)
@@ -156,12 +243,13 @@ export const ProfileScreen: React.FC = () => {
 
   const [selectedTab, selectTab] = React.useState('settings');
   const tabButtons = {
+    saved: i18n.t('saved'),
     settings: i18n.t('settings'),
     moreInfo: i18n.t('moreInfo'),
   };
 
   return (
-    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView style={styles.background} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView>
         {/* Orange box above the screen, in case the user scrolls past the top of the screen */}
         <View style={styles.top} />
@@ -177,7 +265,7 @@ export const ProfileScreen: React.FC = () => {
         <View style={styles.buttonGroup}>
           <ButtonGroup buttons={tabButtons} onButtonChange={(btn) => {
             selectTab(btn);
-          }} />
+          }} index={1} />
         </View>
         {TabScreens[selectedTab]}
       </ScrollView>
@@ -292,4 +380,32 @@ const styles = StyleSheet.create({
   inSDLabel: {
     marginLeft: 8,
   },
+  unAuthenticatedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  authenticatedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bookmarkButton: {
+    height: 40,
+    width: 30,
+    tintColor: Colors.orange,
+  },
+  text: {
+    ...TextStyles.heading2,
+    color: Colors.gray,
+  },
+  textClick: {
+    marginRight: 10
+  },
+  textWithin: {
+    marginLeft: 10
+  },
+  textToSave: {
+    marginTop: 10
+  }
 });

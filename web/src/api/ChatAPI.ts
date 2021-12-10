@@ -32,6 +32,11 @@ class ChatAPI {
       });
     return unsubscribe;
   }
+  
+  listenForRoomDetails(roomId: string, callback: (room: ChatRoom) => void): void{
+    const unsubscribe = this.chatRoomsCollection.doc(roomId).onSnapshot((doc: firebase.firestore.DocumentSnapshot) => callback({id: doc.id, ...doc.data()} as ChatRoom));
+    return unsubscribe;
+  }
 
   // Listen for new messages in a chat room (calling this will initially return the current messages)
   listenForNewMessages(roomId: string, callback: (changedMessages: Message[]) => void): () => void {
@@ -51,10 +56,10 @@ class ChatAPI {
 
   sendMessage(roomId: string, text: string, from: string): void {
     const room = this.chatRoomsCollection.doc(roomId);
-    room.collection('messages').add({
+    room.collection("messages").add({
       text,
       from,
-      sentAt: new Date().toUTCString(),
+      sentAt: Date.now(),
     });
   }
 

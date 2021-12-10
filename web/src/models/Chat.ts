@@ -3,7 +3,6 @@ export type ChatRoom = {
   resolved: boolean;
   messages: Message[];
   user: string;
-  rating: number;
   createdAt: Date;
 };
 

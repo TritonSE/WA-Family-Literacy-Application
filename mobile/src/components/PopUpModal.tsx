@@ -8,13 +8,14 @@ type PopUpModalProps = {
   text: string,
   setModalVisible: (modalVisible: boolean) => void, 
   modalVisible: boolean, 
+  goBack?: boolean
 };
 
 /**
  * General purpose modal, redirects to previous screen 
  * - Used in ForgotPasswordScreen to indicate success
  */
-export const PopUpModal: React.FC<PopUpModalProps> = ({text, setModalVisible, modalVisible}) => {
+export const PopUpModal: React.FC<PopUpModalProps> = ({text, setModalVisible, modalVisible, goBack = true}) => {
   
   const navigation = useNavigation();
 
@@ -34,7 +35,7 @@ export const PopUpModal: React.FC<PopUpModalProps> = ({text, setModalVisible, mo
             <Text style={[styles.modalText, TextStyles.body1]}>{text}</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {setModalVisible(!modalVisible), navigation.goBack();}}
+              onPress={() => {setModalVisible(!modalVisible), goBack && navigation.goBack();}}
             >
               <Text style={styles.textStyle}>Close</Text>
             </Pressable>
