@@ -172,20 +172,18 @@ export const CommunicationPage: React.FC = () => {
     return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
 
-  const sideBarList = chatRooms.map((chatRoom) =>
-    <li className={styles.sideBarElement}>{chatRoom.user}</li>
-  );
+  const sideBarList = chatRooms.map(({ id, user }: ChatRoom) => {
+    return (
+      <p key={id} className={styles.sideBarElement} onClick={() => setCurrentRoomId(id)}>
+        {user}
+      </p>
+    );
+  });
 
   return (
     <div className={styles.chatWindowContainer}>
       <div className={styles.sideBar}>
-        {chatRooms.map(({ id, user }: ChatRoom) => {
-          return (
-            <p key={id} onClick={() => setCurrentRoomId(id)}>
-              {user}
-            </p>
-          );
-        })}
+        <div className={styles.chatList}>{sideBarList}</div>
       </div>
       <div className={styles.chatWindow}>
         <Chat roomId={currentRoomId} />

@@ -23,10 +23,6 @@
     width: 80%;
 }
 
-.sideBarElement {
-    border: 1px grey;
-}
-
 .chatPrompt {
   display: flex;
   flex-direction: column;
@@ -118,4 +114,18 @@
   font-family: "GothamRounded - Light";
   font-size: 16px;
   flex: 1;
+}
+
+.chatList {
+  margin-top: 5em;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 30em;
+  list-style-type: none;
+}
+
+.sideBarElement {
+  font-size: 1.3em;
+  border: 10px grey;
+  padding: 0.8em;
 }
