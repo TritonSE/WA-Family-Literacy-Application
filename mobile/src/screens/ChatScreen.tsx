@@ -202,6 +202,7 @@ export const ChatScreen: React.FC = () => {
                 ) : null}
                 <View style={styles.newMessageContainer}>
                   <TextInput
+                    multiline={true}
                     value={messageText}
                     onChangeText={setMessageText}
                     style={[styles.messageInput, TextStyles.caption3]}
