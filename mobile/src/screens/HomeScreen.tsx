@@ -37,10 +37,11 @@ const TOP_VIDEOS = [
  * Renders the homescreen for the app. Currently displays heading, new books, all books.
  */
 export const HomeScreen: React.FC = () => {
-  // get books from backend
+  // get books and popularBooks from backend
   const booksCtx = useContext(BookContext);
   useEffect(booksCtx.fetchBooks, []);
-  const { books, loading } = booksCtx;
+  useEffect(booksCtx.fetchPopularBooks, []);
+  const { books, popularBooks, loading, popularLoading } = booksCtx;
   const newBooks = [...books]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 5);
@@ -125,6 +126,18 @@ export const HomeScreen: React.FC = () => {
             <LoadingCircle />
           ) : (
             <HorizontalBookList books={newBooks} />
+          )}
+        </View>
+
+        <View style={styles.newBooksTextPadding}>
+          <Text style={TextStyles.heading3}>{t('popularBooks')}</Text>
+        </View>
+
+        <View>
+          {popularLoading ? (
+            <LoadingCircle />
+          ) : (
+            <HorizontalBookList books={popularBooks} />
           )}
         </View>
 

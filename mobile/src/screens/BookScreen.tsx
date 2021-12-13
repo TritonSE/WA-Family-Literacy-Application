@@ -172,6 +172,20 @@ export const BookScreen: React.FC<BookScreenProps> = ({ route, navigation }) => 
       setFavorited(false);
     })();
   };
+  // increments click on book analytics
+  // Check in profile screen if data collection is allowed
+  useEffect(() => {
+    (async () => {
+      const allow = await AsyncStorage.getItem("allowAnalytics");
+      if (allow) {
+        try {
+          await client.incrementClicks(book.id);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
+  }, []);
 
   // fetches book details on language change
   useEffect(

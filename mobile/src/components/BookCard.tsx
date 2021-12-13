@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import { Book } from '../models/Book';
 import CachedImage from 'react-native-expo-cached-image';
 
