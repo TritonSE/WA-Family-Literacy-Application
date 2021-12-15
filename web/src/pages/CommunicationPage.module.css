@@ -125,7 +125,25 @@
 }
 
 .sideBarElement {
-  font-size: 1.3em;
-  border: 10px grey;
-  padding: 0.8em;
+  font-size: 1em;
+  border: 1px solid var(--dark-grey);
+  padding-top: 1.2em;
+  padding-bottom: 1.2em;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  display: flex;
+  font-family: "GothamRounded - Light";
+}
+
+.sideBarResolved {
+  width: 10%;
+}
+
+.sideBarUser {
+  width: 30%;
+}
+
+.sideBarTime {
+  width: 60%;
+  text-align: right;
 }

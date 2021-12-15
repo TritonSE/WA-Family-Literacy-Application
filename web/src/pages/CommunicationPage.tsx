@@ -39,6 +39,17 @@ interface ChatProps {
   roomId?: string;
 }
 
+function getTimeDifference(messages: Message[]): string {
+  if (messages == undefined) {
+    return "0";
+  }
+  // Get last message
+  const m = messages[messages.length-1];
+  const curTime = new Date();
+  const diff = (curTime.getTime()-m.sentAt.getTime())/(1000*60);
+  return diff.toString();
+}
+
 const Chat: React.FC<ChatProps> = ({ roomId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
@@ -172,11 +183,16 @@ export const CommunicationPage: React.FC = () => {
     return chatAPI.listenForNewRooms(onNewRooms);
   }, []);
 
-  const sideBarList = chatRooms.map(({ id, user }: ChatRoom) => {
+  const sideBarList = chatRooms.map(({ id, user, resolved, messages }: ChatRoom) => {
     return (
-      <p key={id} className={styles.sideBarElement} onClick={() => setCurrentRoomId(id)}>
-        {user}
-      </p>
+      <div key={id} className={styles.sideBarElement} onClick={() => setCurrentRoomId(id)}>
+        <div className={styles.sideBarResolved}>{!resolved ?
+          (<img src="./img/logo.png" width={8}/>)
+          :(<div></div>)}
+        </div>
+        <div className={styles.sideBarUser}>{user}</div>
+        <div className={styles.sideBarTime}>{getTimeDifference(messages)} min ago</div>
+      </div>
     );
   });
 
@@ -186,7 +202,7 @@ export const CommunicationPage: React.FC = () => {
         <div className={styles.chatList}>{sideBarList}</div>
       </div>
       <div className={styles.chatWindow}>
-        <Chat roomId={currentRoomId} />
+        <Chat roomId={currentRoomId}/>
       </div>
     </div>
   );
